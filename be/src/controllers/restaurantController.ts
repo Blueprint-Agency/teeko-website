@@ -47,20 +47,41 @@ export const getRestaurants = async (req: Request, res: Response) => {
 
 export const getRestaurantBySlug = async (req: Request, res: Response) => {
     const { slug } = req.params;
-    try {
-        const restaurant = await db.select().from(restaurants).where(eq(restaurants.slug, slug as string));
 
-        if (restaurant.length === 0) {
+    try {
+        const result = await db.select({
+            id: restaurants.id,
+            name: restaurants.name,
+            slug: restaurants.slug,
+            description: restaurants.description,
+            address: restaurants.address,
+            priceRange: restaurants.priceRange,
+            contactInfo: restaurants.contactInfo,
+            reservationUrl: restaurants.reservationUrl,
+            operatingHours: restaurants.operatingHours,
+            seoTitle: restaurants.seoTitle,
+            seoDescription: restaurants.seoDescription,
+            location: {
+                id: locations.id,
+                name: locations.name,
+                slug: locations.slug
+            }
+        })
+            .from(restaurants)
+            .leftJoin(locations, eq(restaurants.locationId, locations.id))
+            .where(eq(restaurants.slug, slug as string));
+
+        if (result.length === 0) {
             res.status(404).json({ message: "Restaurant not found" });
             return;
         }
 
-        const images = await db.select().from(restaurantImages).where(eq(restaurantImages.restaurantId, restaurant[0].id));
+        const images = await db.select().from(restaurantImages).where(eq(restaurantImages.restaurantId, result[0].id));
 
-        res.json({ ...restaurant[0], restaurantImages: images });
+        res.json({ ...result[0], restaurantImages: images });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Server error while fetching restaurant" });
     }
 };
 
