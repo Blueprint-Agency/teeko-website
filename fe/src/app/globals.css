@@ -1,26 +1,66 @@
 @import "tailwindcss";
-@variant dark (&:where(.dark, .dark *));
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-primary: #ef4444;
-  /* Red-500 - More vibrant */
-  --color-primary-hover: #dc2626;
-  /* Red-600 */
+  /* Primary Colors */
+  --color-primary-50: #fef2f2;
+  --color-primary-100: #fee2e2;
+  --color-primary-200: #fecaca;
+  --color-primary-300: #fca5a5;
+  --color-primary-400: #f87171;
+  --color-primary-500: #ef4444;
+  --color-primary-600: #dc2626;
+  --color-primary-700: #b91c1c;
+  --color-primary-800: #991b1b;
+  --color-primary-900: #7f1d1d;
+  --color-primary: var(--color-primary-500);
+
+  /* Secondary Colors */
+  --color-secondary-50: #fefce8;
+  --color-secondary-100: #fef3c7;
+  --color-secondary-200: #fee68a;
+  --color-secondary-300: #fde047;
+  --color-secondary-400: #facc15;
+  --color-secondary-500: #eab308;
+  --color-secondary-600: #ca8a04;
+  --color-secondary-700: #a16207;
+  --color-secondary-800: #854d0e;
+  --color-secondary-900: #713f12;
+  --color-secondary: var(--color-secondary-400);
+
+  /* Container */
+  --container-max-width: 1440px;
 }
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #0f172a;
+  }
+
+  .dark {
+    --background: #0b0f14;
+    --foreground: #f9fafb;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  .max-w-container {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

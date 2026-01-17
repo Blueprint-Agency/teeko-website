@@ -1,144 +1,175 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/Button";
+import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
+import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 
 export default function RegisterPage() {
-    const router = useRouter();
-    const [formData, setFormData] = useState({ email: "", password: "", confirmPassword: "" });
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
-        setLoading(true);
-
-        if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match");
-            setLoading(false);
-            return;
-        }
-
-        try {
-            const res = await fetch("http://127.0.0.1:5000/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: formData.email, password: formData.password }),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                throw new Error(data.message || "Registration failed");
-            }
-
-            setSuccess(true);
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
+        // TODO: Implement registration logic
+        console.log("Register:", formData);
     };
 
-    if (success) {
-        return (
-            <div className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gray-50 px-4 py-12 dark:bg-black sm:px-6 lg:px-8">
-                <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 text-center">
-                    <h2 className="text-2xl font-bold text-green-600">Registration Successful!</h2>
-                    <p className="mt-2 text-gray-600 dark:text-gray-400">
-                        Please check your email ({formData.email}) to verify your account before logging in.
-                    </p>
-                    <div className="mt-6">
-                        <Link href="/auth/login">
-                            <Button variant="primary">Go to Login</Button>
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gray-50 px-4 py-12 dark:bg-black sm:px-6 lg:px-8">
-            <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800">
-                <div className="text-center">
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        Create an account
-                    </h2>
-                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                        Join Teeko Advisor to discover and share
-                    </p>
+        <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
+            <Navigation />
+            <main className="flex-1 flex items-center justify-center px-4 py-12">
+                <div className="w-full max-w-md">
+                    <div className="text-center mb-8">
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                            Create Account
+                        </h1>
+                        <p className="text-gray-600 dark:text-gray-400">
+                            Join Teeko Advisor to discover amazing restaurants
+                        </p>
+                    </div>
+
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 border border-gray-200 dark:border-gray-700">
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            {/* Name Field */}
+                            <div>
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Full Name
+                                </label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        id="name"
+                                        type="text"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        required
+                                        className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="John Doe"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Email Field */}
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Email Address
+                                </label>
+                                <div className="relative">
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        required
+                                        className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="you@example.com"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Password Field */}
+                            <div>
+                                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Password
+                                </label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        id="password"
+                                        type={showPassword ? "text" : "password"}
+                                        value={formData.password}
+                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                        required
+                                        className="w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="••••••••"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                    >
+                                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Confirm Password Field */}
+                            <div>
+                                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Confirm Password
+                                </label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                    <input
+                                        id="confirmPassword"
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        value={formData.confirmPassword}
+                                        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                                        required
+                                        className="w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                        placeholder="••••••••"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                    >
+                                        {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Terms Checkbox */}
+                            <div className="flex items-start">
+                                <input
+                                    type="checkbox"
+                                    required
+                                    className="w-4 h-4 mt-1 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
+                                />
+                                <label className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                                    I agree to the{" "}
+                                    <Link href="/terms" className="text-primary-500 hover:text-primary-600">
+                                        Terms of Service
+                                    </Link>{" "}
+                                    and{" "}
+                                    <Link href="/privacy" className="text-primary-500 hover:text-primary-600">
+                                        Privacy Policy
+                                    </Link>
+                                </label>
+                            </div>
+
+                            {/* Submit Button */}
+                            <button
+                                type="submit"
+                                className="w-full py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-lg transition-colors shadow-sm"
+                            >
+                                Create Account
+                            </button>
+                        </form>
+
+                        {/* Login Link */}
+                        <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+                            Already have an account?{" "}
+                            <Link
+                                href="/auth/login"
+                                className="text-primary-500 hover:text-primary-600 font-medium"
+                            >
+                                Sign in
+                            </Link>
+                        </p>
+                    </div>
                 </div>
-
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="space-y-4">
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Email address
-                            </label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Password
-                            </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                required
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Confirm Password
-                            </label>
-                            <input
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                type="password"
-                                required
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
-                                value={formData.confirmPassword}
-                                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                            />
-                        </div>
-                    </div>
-
-                    {error && (
-                        <div className="rounded-md bg-red-50 p-3 text-sm text-red-600 dark:bg-red-900/30 dark:text-red-400">
-                            {error}
-                        </div>
-                    )}
-
-                    <Button type="submit" className="w-full" disabled={loading}>
-                        {loading ? "Creating account..." : "Sign up"}
-                    </Button>
-
-                    <div className="text-center text-sm">
-                        <span className="text-gray-500 dark:text-gray-400">Already have an account? </span>
-                        <Link href="/auth/login" className="font-medium text-primary hover:text-red-700">
-                            Sign in
-                        </Link>
-                    </div>
-                </form>
-            </div>
+            </main>
+            <Footer />
         </div>
     );
 }

@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Star, Heart } from "lucide-react";
 import { API_BASE_URL } from "@/utils/constants";
+import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 
 async function getLocation(slug: string) {
     console.log(`[LocationPage] Fetching slug: ${slug}`);
@@ -50,7 +52,8 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
     const restaurants = await getRestaurantsByLocation(slug);
 
     return (
-        <div className="min-h-screen pb-20 bg-white dark:bg-black">
+        <div className="min-h-screen bg-white dark:bg-gray-900">
+            <Navigation />
             {/* Minimalist Header with a bit more punch */}
             <div className="relative py-16 md:py-24 w-full bg-white dark:bg-black border-b border-gray-100 dark:border-zinc-900">
                 <div className="container mx-auto px-4">
@@ -196,6 +199,7 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
                 </div>
 
             </div>
+            <Footer />
         </div>
     );
 }
