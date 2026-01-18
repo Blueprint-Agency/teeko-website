@@ -34,6 +34,7 @@ const RestaurantDetailsPage = () => {
             // discount: "20% off",
             phone: "+60 3-2264 2264",
             website: "https://www.sevenrooms.com/reservations/iketeru/tripadvisor",
+            reserve_website: "https://www.sevenrooms.com/reservations/iketeru/tripadvisor",
             isOpen: true,
             description: "Embark on a gastronomic adventure that showcases the finest nuances of Japanese cuisine. With a dedicated team led by Chef Tokuhisa Naotaka, Iketeru stands as one of the city's culinary gems, renowned for curated multi-course menus, fresh air-flown produce sashimi and an emphasis on quality ingredients and innovation.",
             features: [
@@ -85,6 +86,7 @@ const RestaurantDetailsPage = () => {
             },
             phone: "+60 3-2789 7777",
             website: "https://www.eqkualalumpur.equatorial.com/dining/sky51/",
+            reserve_website: "https://www.sevenrooms.com/explore/sky51andblue/reservations/create/search",
             isOpen: true,
             description: "The eye-popping Sky51 is an entire floor dedicated to fine dining, fine wines, creative cocktails, and unrivalled views. Featured here are Sabayon, specializing in gourmet Continental cuisine, and Blue, an open-air rooftop lounge. All of which, promises a memorable experience. Sabayon Contemporary European dining reaches a whole new level – literally and lavishly. Sabayon is on most everyone’s places to eat. The cuisine is best described as the perfect combination of classic and contemporary. The award-winning restaurant serves degustation menus with an option for wine pairing. Be delighted in Sabayon’s fine-dining journey. For those requiring a private setting, our team will be happy to arrange a more personal dining experience for parties of any size. Give the special occasion that extra shine. Blue KL’s top bespoke outdoor rooftop bar at Sky51 offers tantalising snacks and handcrafted cocktails prepared by seasoned mixologists. The picture-perfect skybar provides the best panoramic views of the city, spanning from the KL Tower to the Petronas Twin Towers. There are three main areas: Lounge to unwind and watch live performances, Sky Deck where one gets a front-row seat to the city skyline and VIP Deck for private parties.",
             features: [
@@ -127,6 +129,7 @@ const RestaurantDetailsPage = () => {
             // discount: "Free Dessert",
             phone: "+60 3-2264 2264",
             website: "https://www.sevenrooms.com/reservations/vascos/tripadvisor",
+            reserve_website: "https://www.sevenrooms.com/reservations/vascos/tripadvisor",
             isOpen: true,
             description: "An innovative all-day-dining restaurant designed with an \"al fresco\" urban park feel. Impressive buffet showcase with choice selection of Asian and international favourites.",
             features: [
@@ -178,6 +181,7 @@ const RestaurantDetailsPage = () => {
             },
             phone: "+60 3-2789 7722",
             website: "http://www.kampachi.com.my/",
+            reserve_website: "https://www.sevenrooms.com/explore/kampachieq/reservations/create/search",
             isOpen: true,
             description: "The latest and finest version of Kampachi Restaurants after the great remake. Features a sophisticated Hinoki Wood Sushi counter that will surely bring your Sushi Omakase dining experience to the next level.",
             features: [
@@ -232,6 +236,7 @@ const RestaurantDetailsPage = () => {
             },
             phone: "+60 3-2706 9099",
             website: "http://www.themeshkl.com",
+            reserve_website: "https://www.sevenrooms.com/reservations/themesh/tripadvisor",
             isOpen: true,
             description: "Embrace the communal spirit and savour authentic Malaysian cuisine at The Mesh. Our all-day dining venue blends traditional dishes with a modern twist in a unique, inviting atmosphere, celebrating community and culture, fit for a capacity of over 200 persons.",
             features: [
@@ -266,7 +271,7 @@ const RestaurantDetailsPage = () => {
     ];
 
     // Mock data for a single restaurant (would normally fetch based on ID)
-    const restaurant = MOCK_RESTAURANTS.find(restaurant => restaurant.id === Number(id));
+    const restaurant = MOCK_RESTAURANTS.find(restaurant => restaurant.id === Number(id)) || MOCK_RESTAURANTS[0];
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans text-gray-900 pb-12 pt-20">
@@ -449,7 +454,7 @@ const RestaurantDetailsPage = () => {
                                 </div>
                             </div>
 
-                            <button className="w-full bg-red-600 text-white font-bold py-3.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                            <button onClick={() => window.open(restaurant.reserve_website, "_blank")} className="w-full bg-red-600 text-white font-bold py-3.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2">
                                 Reserve a Table
                             </button>
                         </div>
