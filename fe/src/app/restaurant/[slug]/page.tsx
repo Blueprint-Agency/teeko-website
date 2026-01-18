@@ -8,7 +8,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
     return {
-        title: `Restaurant Details | Teeko TripAdvisor`,
+        title: `Restaurant Details | Teeko`,
         description: `Details for restaurant ${slug}`,
     };
 }

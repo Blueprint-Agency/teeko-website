@@ -2,7 +2,7 @@ import RestaurantsPage from "./RestaurantsPage";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Restaurants | Teeko TripAdvisor',
+    title: 'Restaurants | Teeko',
     description: 'Find the best restaurants in Kuala Lumpur',
 };
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "./Button";
 import { User, Search } from "lucide-react"; // Start by using lucide-react (standard in shadcn/next)
 
@@ -8,10 +9,15 @@ export const Navbar = () => {
             <div className="container mx-auto flex h-[72px] items-center justify-between px-4 lg:px-8">
                 {/* Left: Logo */}
                 <Link href="/" className="flex items-center gap-2 group">
-                    <div className="relative h-8 w-8 overflow-hidden rounded-full bg-primary flex items-center justify-center text-white">
-                        <span className="font-bold text-lg">T</span>
+                    <div className="relative h-8 w-8 overflow-hidden rounded-full">
+                        <Image
+                            src="/teeko-icon.png"
+                            alt="Teeko"
+                            fill
+                            className="object-cover"
+                        />
                     </div>
-                    <span className="text-xl font-bold text-gray-900 tracking-tight group-hover:text-primary transition-colors">Teeko<span className="font-normal text-gray-600">Advisor</span></span>
+                    <span className="text-xl font-bold text-gray-900 tracking-tight group-hover:text-primary transition-colors">Teeko</span>
                 </Link>
 
                 {/* Center: Menu Links (Desktop) */}

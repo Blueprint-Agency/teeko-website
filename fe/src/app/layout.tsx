@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Teeko Advisor - Discover Malaysia",
+  title: "Teeko - Discover Malaysia",
   description: "Find the best places and destinations in Malaysia.",
 };
 

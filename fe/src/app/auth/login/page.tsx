@@ -27,7 +27,7 @@ export default function LoginPage() {
                             Welcome Back
                         </h1>
                         <p className="text-gray-600 dark:text-gray-400">
-                            Sign in to your Teeko Advisor account
+                            Sign in to your Teeko account
                         </p>
                     </div>
 

@@ -32,7 +32,7 @@ export default function RegisterPage() {
                             Create Account
                         </h1>
                         <p className="text-gray-600 dark:text-gray-400">
-                            Join Teeko Advisor to discover amazing restaurants
+                            Join Teeko to discover amazing restaurants
                         </p>
                     </div>
 

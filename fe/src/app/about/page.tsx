@@ -8,12 +8,12 @@ export default function AboutPage() {
             <main className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
                 <div className="max-w-3xl mx-auto">
                     <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                        About Teeko Advisor
+                        About Teeko
                     </h1>
 
                     <div className="prose prose-lg dark:prose-invert max-w-none">
                         <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-                            Teeko Advisor is Malaysia's premier restaurant discovery platform, dedicated to helping
+                            Teeko is Malaysia's premier restaurant discovery platform, dedicated to helping
                             food lovers find their next favorite dining experience.
                         </p>
 
@@ -41,7 +41,7 @@ export default function AboutPage() {
                         </h2>
                         <p className="text-gray-600 dark:text-gray-400 mb-6">
                             Whether you're a local foodie or a traveler exploring Malaysia's culinary scene,
-                            Teeko Advisor is your trusted companion for discovering exceptional dining experiences.
+                            Teeko is your trusted companion for discovering exceptional dining experiences.
                         </p>
                     </div>
                 </div>

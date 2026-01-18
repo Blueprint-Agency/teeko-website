@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeSwitch } from "./ThemeSwitch";
@@ -38,17 +39,19 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                 <div className="flex items-center justify-between h-16">
                     {/* Logo - Left */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold text-lg">T</span>
+                        <div className="relative w-8 h-8 rounded-full overflow-hidden">
+                            <Image
+                                src="/teeko-icon.png"
+                                alt="Teeko"
+                                fill
+                                className="object-cover"
+                            />
                         </div>
                         <span className={`text-xl font-bold transition-colors ${isScrolled
                             ? "text-gray-900 dark:text-white"
                             : "text-white"
                             }`}>
-                            Teeko<span className={`font-normal ${isScrolled
-                                ? "text-gray-600 dark:text-gray-400"
-                                : "text-white/70"
-                                }`}>Advisor</span>
+                            Teeko
                         </span>
                     </Link>
 

@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     if (!location) return { title: "Location Not Found" };
 
     return {
-        title: `Best Food & Places in ${location.name} - Teeko Advisor`,
+        title: `Best Food & Places in ${location.name} - Teeko`,
         description: location.seoDescription || `Discover top rated restaurants and attractions in ${location.name}, Malaysia.`,
     };
 }

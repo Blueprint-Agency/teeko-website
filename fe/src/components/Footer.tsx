@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 
 export function Footer() {
@@ -12,11 +13,16 @@ export function Footer() {
                     {/* Brand Column */}
                     <div className="lg:col-span-1">
                         <div className="flex items-center gap-2 mb-4">
-                            <div className="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center">
-                                <span className="text-white font-bold text-lg">T</span>
+                            <div className="relative w-8 h-8 rounded-full overflow-hidden">
+                                <Image
+                                    src="/teeko-icon.png"
+                                    alt="Teeko"
+                                    fill
+                                    className="object-cover"
+                                />
                             </div>
                             <span className="text-xl font-bold text-white">
-                                Teeko<span className="font-normal text-gray-400">Advisor</span>
+                                Teeko
                             </span>
                         </div>
                         <p className="text-sm text-gray-400 mb-6">
@@ -121,7 +127,7 @@ export function Footer() {
                 <div className="pt-8 border-t border-gray-800">
                     <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                         <p className="text-sm text-gray-400">
-                            © {currentYear} TeekoAdvisor. All rights reserved.
+                            © {currentYear} Teeko. All rights reserved.
                         </p>
                         <div className="flex gap-6">
                             <Link href="/privacy" className="text-sm text-gray-400 hover:text-white transition-colors">
