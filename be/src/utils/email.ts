@@ -14,14 +14,14 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendVerificationEmail = async (email: string, token: string) => {
-    const verificationUrl = `http://localhost:3000/auth/verify?token=${token}`;
+    const verificationUrl = `http://localhost:3010/auth/verify?token=${token}`;
 
     const mailOptions = {
-        from: '"Teeko Advisor" <no-reply@teekoadvisor.com>',
+        from: '"Teeko" <no-reply@teeko.ai>',
         to: email,
         subject: "Verify your email address",
         html: `
-      <h1>Welcome to Teeko Advisor!</h1>
+      <h1>Welcome to Teeko!</h1>
       <p>Please verify your email address by clicking the link below:</p>
       <a href="${verificationUrl}">Verify Email</a>
       <p>If you did not create an account, please ignore this email.</p>

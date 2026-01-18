@@ -19,7 +19,7 @@ app.use("/locations", locationRoutes);
 app.use("/restaurants", restaurantRoutes);
 
 app.get("/", (req, res) => {
-    res.json({ message: "Teeko Advisor API is running" });
+    res.json({ message: "Teeko API is running" });
 });
 
 app.listen(PORT, () => {
