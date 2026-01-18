@@ -274,14 +274,14 @@ const RestaurantDetailsPage = () => {
     const restaurant = MOCK_RESTAURANTS.find(restaurant => restaurant.id === Number(id)) || MOCK_RESTAURANTS[0];
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans text-gray-900 pb-12 pt-20">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans text-gray-900 dark:text-gray-100 pb-12 pt-20">
             <Navigation forceSolid />
             {/* Breadcrumbs */}
             <div className="max-w-7xl mx-auto px-6 py-4">
-                <div className="flex items-center text-sm text-gray-500 gap-2">
-                    <span className="cursor-pointer hover:text-red-600" onClick={() => router.push('/restaurants')}>Restaurants</span>
+                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 gap-2">
+                    <span className="cursor-pointer hover:text-red-600 dark:hover:text-red-400" onClick={() => router.push('/restaurants')}>Restaurants</span>
                     <ChevronRight className="w-4 h-4" />
-                    <span className="font-medium text-gray-900">{restaurant?.name}</span>
+                    <span className="font-medium text-gray-900 dark:text-gray-200">{restaurant?.name}</span>
                 </div>
             </div>
 
@@ -315,15 +315,15 @@ const RestaurantDetailsPage = () => {
                     {/* Main Content */}
                     <div className="flex-1">
                         {/* Header Info */}
-                        <div className="mb-8 border-b border-gray-200 pb-8">
+                        <div className="mb-8 border-b border-gray-200 dark:border-gray-700 pb-8">
                             <div className="flex justify-between items-start mb-4">
-                                <h1 className="text-4xl font-extrabold text-gray-900">{restaurant?.name}</h1>
+                                <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">{restaurant?.name}</h1>
                                 <div className="flex gap-2">
-                                    <button className="p-2 rounded-full border border-gray-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all">
-                                        <Share2 className="w-5 h-5" />
+                                    <button className="p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-200 dark:hover:border-red-800 hover:text-red-600 dark:hover:text-red-400 transition-all">
+                                        <Share2 className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-red-600" />
                                     </button>
-                                    <button className="p-2 rounded-full border border-gray-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all">
-                                        <Heart className="w-5 h-5" />
+                                    <button className="p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-200 dark:hover:border-red-800 hover:text-red-600 dark:hover:text-red-400 transition-all">
+                                        <Heart className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-red-600" />
                                     </button>
                                 </div>
                             </div>
@@ -333,17 +333,17 @@ const RestaurantDetailsPage = () => {
                                     <div className="flex text-red-500">
                                         {[1, 2, 3, 4, 5].map(star => <Star key={star} className={`w-5 h-5 ${star <= Math.floor(restaurant?.rating || 0) ? 'fill-current' : 'text-gray-300'}`} />)}
                                     </div>
-                                    <span className="font-bold text-gray-900 text-lg">{restaurant?.rating}</span>
-                                    <span className="text-gray-500 underline cursor-pointer">{restaurant?.reviewCount} reviews</span>
+                                    <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">{restaurant?.rating}</span>
+                                    <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{restaurant?.reviewCount} reviews</span>
                                 </div>
 
-                                <div className="flex items-center gap-1.5 text-gray-600">
+                                <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
                                     <Utensils className="w-4 h-4" />
                                     <span>{restaurant?.cuisine}</span>
                                 </div>
 
-                                <div className="flex items-center gap-1.5 text-gray-600">
-                                    <span className="font-medium text-gray-900">{restaurant?.priceRange}</span>
+                                <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
+                                    <span className="font-medium text-gray-900 dark:text-gray-100">{restaurant?.priceRange}</span>
                                 </div>
 
                                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${restaurant?.isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
@@ -351,19 +351,19 @@ const RestaurantDetailsPage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-2 text-gray-600">
+                            <div className="flex items-start gap-2 text-gray-600 dark:text-gray-300">
                                 <MapPin className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
                                 <span className="text-base">{restaurant?.address}</span>
                             </div>
                         </div>
 
                         {/* Tabs */}
-                        <div className="flex gap-8 border-b border-gray-200 mb-8 overflow-x-auto">
+                        <div className="flex gap-8 border-b border-gray-200 dark:border-gray-700 mb-8 overflow-x-auto">
                             {['Overview', 'Menu', 'Reviews', 'Photos', 'Q&A'].map(tab => (
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab.toLowerCase())}
-                                    className={`pb-4 font-bold text-base whitespace-nowrap transition-all border-b-2 ${activeTab === tab.toLowerCase() ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
+                                    className={`pb-4 font-bold text-base whitespace-nowrap transition-all border-b-2 ${activeTab === tab.toLowerCase() ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
                                 >
                                     {tab}
                                 </button>
@@ -373,8 +373,8 @@ const RestaurantDetailsPage = () => {
                         {/* Tab Content: Overview */}
                         <div className="space-y-10">
                             <section>
-                                <h2 className="text-2xl font-bold text-gray-900 mb-4">About</h2>
-                                <p className="text-gray-600 leading-relaxed text-lg">{restaurant?.description}</p>
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">About</h2>
+                                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">{restaurant?.description}</p>
                             </section>
 
                             {/* <section>
@@ -394,10 +394,10 @@ const RestaurantDetailsPage = () => {
                             </section> */}
 
                             <section>
-                                <h2 className="text-2xl font-bold text-gray-900 mb-4">Features & Amenities</h2>
+                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features & Amenities</h2>
                                 <div className="grid grid-cols-2 gap-y-3">
                                     {restaurant?.features.map(feature => (
-                                        <div key={feature} className="flex items-center gap-3 text-gray-600">
+                                        <div key={feature} className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
                                             <Award className="w-5 h-5 text-red-500" />
                                             {feature}
                                         </div>
@@ -409,8 +409,8 @@ const RestaurantDetailsPage = () => {
 
                     {/* Sticky Sidebar */}
                     <div className="w-full lg:w-80 shrink-0 space-y-6">
-                        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 sticky top-8">
-                            <h3 className="text-xl font-bold text-gray-900 mb-4">Location & Contact</h3>
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 sticky top-8">
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Location & Contact</h3>
 
                             {/* Map Placeholder */}
                             <div className="h-48 bg-gray-100 rounded-xl mb-6 relative overflow-hidden group">
@@ -426,11 +426,11 @@ const RestaurantDetailsPage = () => {
                             <div className="space-y-4 mb-6">
                                 <div className="flex items-start gap-3">
                                     <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
-                                    <p className="text-gray-600 text-sm">{restaurant?.address}</p>
+                                    <p className="text-gray-600 dark:text-gray-300 text-sm">{restaurant?.address}</p>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <Phone className="w-5 h-5 text-gray-400" />
-                                    <p className="text-gray-600 text-sm font-medium">{restaurant?.phone}</p>
+                                    <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">{restaurant?.phone}</p>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <Globe className="w-5 h-5 text-gray-400" />
@@ -438,17 +438,17 @@ const RestaurantDetailsPage = () => {
                                 </div>
                             </div>
 
-                            <hr className="border-gray-100 my-4" />
+                            <hr className="border-gray-100 dark:border-gray-700 my-4" />
 
                             <div className="mb-6">
-                                <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                <h4 className="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                                     <Clock className="w-4 h-4 text-red-500" /> Opening Hours
                                 </h4>
                                 <div className="space-y-2 text-sm">
                                     {restaurant?.hours?.map((h, i) => (
                                         <div key={i} className="flex justify-between">
-                                            <span className="text-gray-500 w-20">{h.day}</span>
-                                            <span className="text-gray-900 font-medium">{h.time}</span>
+                                            <span className="text-gray-500 dark:text-gray-400 w-20">{h.day}</span>
+                                            <span className="text-gray-900 dark:text-gray-200 font-medium">{h.time}</span>
                                         </div>
                                     ))}
                                 </div>

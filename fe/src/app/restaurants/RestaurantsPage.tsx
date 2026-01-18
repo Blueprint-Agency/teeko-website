@@ -140,41 +140,8 @@ const RestaurantsPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans text-gray-900 pt-20">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans text-gray-900 dark:text-gray-100 pt-20">
             <Navigation forceSolid />
-            {/* Hero Header */}
-            {/* <div className="bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-6 py-8">
-                    <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
-                        Find the Best Restaurants
-                    </h1>
-                    <p className="text-lg text-gray-500 mb-8 max-w-2xl">
-                        Discover top-rated dining experiences curated just for you. From local favorites to world-class gastronomy.
-                    </p>
-
-                    <div className="flex items-center gap-4 bg-white p-2 rounded-2xl shadow-lg border border-gray-100 max-w-3xl">
-                        <div className="flex-1 flex items-center px-4 gap-3 border-r border-gray-200">
-                            <Search className="text-gray-400 w-5 h-5" />
-                            <input
-                                type="text"
-                                placeholder="Cuisine, restaurant, or dish..."
-                                className="w-full py-3 outline-none text-gray-700 bg-transparent placeholder:text-gray-400 border-none focus:ring-0"
-                            />
-                        </div>
-                        <div className="flex-1 flex items-center px-4 gap-3">
-                            <MapPin className="text-gray-400 w-5 h-5" />
-                            <input
-                                type="text"
-                                placeholder="Location"
-                                className="w-full py-3 outline-none text-gray-700 bg-transparent placeholder:text-gray-400 border-none focus:ring-0"
-                            />
-                        </div>
-                        <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg">
-                            Search
-                        </button>
-                    </div>
-                </div>
-            </div> */}
 
             {/* Main Content */}
             <div className="max-w-7xl mx-auto px-6 py-12 mb-20">
@@ -185,7 +152,7 @@ const RestaurantsPage = () => {
                         <div className="space-y-8">
                             {/* Filter Group: Categories */}
                             <div>
-                                <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <h3 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                                     <SlidersHorizontal className="w-4 h-4" /> Filters
                                 </h3>
                                 <div className="space-y-3">
@@ -193,8 +160,8 @@ const RestaurantsPage = () => {
                                         <label key={cuisine} className="flex items-center gap-3 cursor-pointer group">
                                             <div
                                                 className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedCuisines.includes(cuisine)
-                                                    ? "bg-red-600 border-red-600"
-                                                    : "border-gray-300 group-hover:border-red-500"
+                                                        ? "bg-red-600 border-red-600"
+                                                        : "border-gray-300 dark:border-gray-600 group-hover:border-red-500"
                                                     }`}
                                                 onClick={() => toggleCuisine(cuisine)}
                                             >
@@ -204,7 +171,7 @@ const RestaurantsPage = () => {
                                                     </svg>
                                                 )}
                                             </div>
-                                            <span className="text-gray-600 group-hover:text-red-600 transition-colors">{cuisine}</span>
+                                            <span className="text-gray-600 dark:text-gray-300 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">{cuisine}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -212,15 +179,15 @@ const RestaurantsPage = () => {
 
                             {/* Filter Group: Price */}
                             <div>
-                                <h3 className="font-bold text-gray-900 mb-4">Price</h3>
+                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Price</h3>
                                 <div className="flex gap-2">
                                     {['$', '$$', '$$$', '$$$$'].map(price => (
                                         <button
                                             key={price}
                                             onClick={() => setSelectedPrice(selectedPrice === price ? null : price)}
                                             className={`px-4 py-2 border rounded-lg text-sm font-semibold transition-all ${selectedPrice === price
-                                                ? "bg-red-600 border-red-600 text-white"
-                                                : "bg-white border-gray-200 text-gray-700 hover:border-red-500 hover:text-red-600"
+                                                    ? "bg-red-600 border-red-600 text-white"
+                                                    : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 dark:hover:text-red-400"
                                                 }`}
                                         >
                                             {price}
@@ -243,21 +210,21 @@ const RestaurantsPage = () => {
                     <div className="flex-1">
                         {/* Tabs / Sort */}
                         <div className="flex items-center justify-between mb-8">
-                            <div className="flex gap-6 border-b border-gray-200">
+                            <div className="flex gap-6 border-b border-gray-200 dark:border-gray-700">
                                 {['All Restaurants', 'Top Rated', 'Most Reviewed'].map(tab => (
                                     <button
                                         key={tab}
                                         onClick={() => setActiveTab(tab.toLowerCase())}
                                         className={`pb-3 font-semibold text-sm transition-all border-b-2 ${activeTab === tab.toLowerCase()
                                             ? 'border-red-600 text-red-600'
-                                            : 'border-transparent text-gray-500 hover:text-gray-800'
+                                            : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
                                             }`}
                                     >
                                         {tab}
                                     </button>
                                 ))}
                             </div>
-                            <span className="text-gray-500 text-sm font-medium">Showing {filteredRestaurants.length} of {MOCK_RESTAURANTS.length} results</span>
+                            <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">Showing {filteredRestaurants.length} of {MOCK_RESTAURANTS.length} results</span>
                         </div>
 
                         {/* Restaurant Grid */}

@@ -29,7 +29,7 @@ const RestaurantCard = ({
     return (
         <div
             onClick={() => router.push(`/restaurant/${id}`)}
-            className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full cursor-pointer relative"
+            className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col h-full cursor-pointer relative"
         >
             {/* Image Section */}
             <div className="relative h-56 overflow-hidden">
@@ -54,10 +54,10 @@ const RestaurantCard = ({
             <div className="p-5 flex flex-col flex-grow">
                 <div className="flex justify-between items-start mb-2">
                     <div>
-                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors line-clamp-1">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-1">
                             {name}
                         </h3>
-                        <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mt-1">
                             <span>{cuisine}</span>
                             <span>•</span>
                             <span>{priceRange}</span>
@@ -65,12 +65,12 @@ const RestaurantCard = ({
                     </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-gray-500 text-sm mt-3 mb-4">
+                <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm mt-3 mb-4">
                     <MapPin className="w-4 h-4 text-red-500 shrink-0" />
                     <span className="line-clamp-1">{address}</span>
                 </div>
 
-                <div className="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-3">
+                <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-col gap-3">
                     <span className="text-gray-400 text-xs font-medium">{reviewCount} reviews</span>
                     <div className="flex gap-2">
                         <button
@@ -87,7 +87,7 @@ const RestaurantCard = ({
                                 e.stopPropagation();
                                 router.push(`/restaurant/${id}`);
                             }}
-                            className="flex-1 border border-gray-200 text-gray-700 text-sm font-bold py-2 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                            className="flex-1 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-sm font-bold py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm"
                         >
                             Menu
                         </button>
