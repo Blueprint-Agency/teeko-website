@@ -10,11 +10,10 @@ export const Navbar = () => {
                 {/* Left: Logo */}
                 <Link href="/" className="flex items-center gap-2 group">
                     <div className="relative h-8 w-8 overflow-hidden rounded-full">
-                        <Image
+                        <img
                             src="/teeko-icon.png"
                             alt="Teeko"
-                            fill
-                            className="object-cover"
+                            className="w-full h-full object-cover"
                         />
                     </div>
                     <span className="text-xl font-bold text-gray-900 tracking-tight group-hover:text-primary transition-colors">Teeko</span>

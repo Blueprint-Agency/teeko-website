@@ -62,30 +62,24 @@ export function CTASection() {
                         <div className="hidden lg:block relative">
                             <div className="relative w-full h-80">
                                 <div className="absolute top-0 right-0 w-48 h-48 rounded-2xl overflow-hidden shadow-2xl transform rotate-6">
-                                    <Image
+                                    <img
                                         src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80"
                                         alt="Discover places"
-                                        fill
-                                        className="object-cover"
-                                        unoptimized
+                                        className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="absolute bottom-0 left-0 w-56 h-56 rounded-2xl overflow-hidden shadow-2xl transform -rotate-3">
-                                    <Image
+                                    <img
                                         src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80"
                                         alt="Explore destinations"
-                                        fill
-                                        className="object-cover"
-                                        unoptimized
+                                        className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-2xl overflow-hidden shadow-2xl">
-                                    <Image
+                                    <img
                                         src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&q=80"
                                         alt="Find places"
-                                        fill
-                                        className="object-cover"
-                                        unoptimized
+                                        className="w-full h-full object-cover"
                                     />
                                 </div>
                             </div>

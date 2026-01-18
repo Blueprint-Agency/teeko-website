@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeSwitch } from "./ThemeSwitch";
 
@@ -26,6 +26,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
         { label: "Locations", href: "/locations" },
         { label: "Restaurants", href: "/restaurants" },
         { label: "About", href: "/about" },
+        { label: "Teeko App", href: process.env.NEXT_PUBLIC_AI_APP_URL || "#", external: true, special: true },
     ];
 
     return (
@@ -40,11 +41,10 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                     {/* Logo - Left */}
                     <Link href="/" className="flex items-center gap-2 group">
                         <div className="relative w-8 h-8 rounded-full overflow-hidden">
-                            <Image
+                            <img
                                 src="/teeko-icon.png"
                                 alt="Teeko"
-                                fill
-                                className="object-cover"
+                                className="w-full h-full object-cover"
                             />
                         </div>
                         <span className={`text-xl font-bold transition-colors ${isScrolled
@@ -57,17 +57,34 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
 
                     {/* Center Menu - Desktop */}
                     <div className="hidden md:flex items-center gap-1">
-                        {menuItems.map((item) => (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${isScrolled
-                                    ? "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                                    : "text-white/90 hover:text-white hover:bg-white/10"
-                                    }`}
-                            >
-                                {item.label}
-                            </Link>
+                        {menuItems.map((item: any) => (
+                            item.external ? (
+                                <a
+                                    key={item.href}
+                                    href={item.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${item.special
+                                        ? "bg-primary-500/10 dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 border border-primary-500/20 hover:bg-primary-500/20 dark:hover:bg-primary-500/30 backdrop-blur-sm shadow-sm hover:shadow-primary-500/20 ring-1 ring-primary-500/10 hover:ring-primary-500/30"
+                                        : isScrolled
+                                            ? "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                                            : "text-white/90 hover:text-white hover:bg-white/10"
+                                        }`}
+                                >
+                                    {item.label}
+                                </a>
+                            ) : (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${isScrolled
+                                        ? "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                                        : "text-white/90 hover:text-white hover:bg-white/10"
+                                        }`}
+                                >
+                                    {item.label}
+                                </Link>
+                            )
                         ))}
                     </div>
 
@@ -111,15 +128,31 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                     {/* Menu Panel */}
                     <div className="relative bg-white dark:bg-gray-900 shadow-xl mx-4 mt-2 rounded-2xl overflow-hidden">
                         <div className="p-4 space-y-1">
-                            {menuItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className="block px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                >
-                                    {item.label}
-                                </Link>
+                            {menuItems.map((item: any) => (
+                                item.external ? (
+                                    <a
+                                        key={item.href}
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`block px-4 py-3 text-base font-medium rounded-xl transition-colors ${item.special
+                                            ? "bg-primary-500/10 text-primary-600 border border-primary-500/20"
+                                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                            }`}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        {item.label}
+                                    </a>
+                                ) : (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className="block px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                )
                             ))}
                         </div>
                         <div className="p-4 pt-0">

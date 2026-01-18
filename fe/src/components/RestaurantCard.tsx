@@ -29,12 +29,10 @@ export function RestaurantCard({
         >
             {/* Image */}
             <div className="relative aspect-[4/3] overflow-hidden bg-gray-200 dark:bg-gray-700">
-                <Image
+                <img
                     src={imageUrl}
                     alt={name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    unoptimized
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
             </div>
 

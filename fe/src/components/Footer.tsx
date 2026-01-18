@@ -14,11 +14,10 @@ export function Footer() {
                     <div className="lg:col-span-1">
                         <div className="flex items-center gap-2 mb-4">
                             <div className="relative w-8 h-8 rounded-full overflow-hidden">
-                                <Image
+                                <img
                                     src="/teeko-icon.png"
                                     alt="Teeko"
-                                    fill
-                                    className="object-cover"
+                                    className="w-full h-full object-cover"
                                 />
                             </div>
                             <span className="text-xl font-bold text-white">
