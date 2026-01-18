@@ -5,13 +5,15 @@ import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeSwitch } from "./ThemeSwitch";
 
-export function Navigation() {
+export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
+    const [isScrolledState, setIsScrolledState] = useState(false);
+
+    const isScrolled = isScrolledState || forceSolid;
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
+            setIsScrolledState(window.scrollY > 50);
         };
 
         window.addEventListener("scroll", handleScroll);
@@ -28,8 +30,8 @@ export function Navigation() {
     return (
         <nav
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                    ? "bg-white dark:bg-gray-900 shadow-md"
-                    : "bg-transparent"
+                ? "bg-white dark:bg-gray-900 shadow-md"
+                : "bg-transparent"
                 }`}
         >
             <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,12 +42,12 @@ export function Navigation() {
                             <span className="text-white font-bold text-lg">T</span>
                         </div>
                         <span className={`text-xl font-bold transition-colors ${isScrolled
-                                ? "text-gray-900 dark:text-white"
-                                : "text-white"
+                            ? "text-gray-900 dark:text-white"
+                            : "text-white"
                             }`}>
                             Teeko<span className={`font-normal ${isScrolled
-                                    ? "text-gray-600 dark:text-gray-400"
-                                    : "text-white/70"
+                                ? "text-gray-600 dark:text-gray-400"
+                                : "text-white/70"
                                 }`}>Advisor</span>
                         </span>
                     </Link>
@@ -57,8 +59,8 @@ export function Navigation() {
                                 key={item.href}
                                 href={item.href}
                                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${isScrolled
-                                        ? "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-                                        : "text-white/90 hover:text-white hover:bg-white/10"
+                                    ? "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                                    : "text-white/90 hover:text-white hover:bg-white/10"
                                     }`}
                             >
                                 {item.label}
@@ -80,8 +82,8 @@ export function Navigation() {
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             className={`md:hidden p-2 rounded-lg transition-colors ${isScrolled
-                                    ? "hover:bg-gray-100 dark:hover:bg-gray-800"
-                                    : "hover:bg-white/10"
+                                ? "hover:bg-gray-100 dark:hover:bg-gray-800"
+                                : "hover:bg-white/10"
                                 }`}
                         >
                             {mobileMenuOpen ? (
