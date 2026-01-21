@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensils, Award } from 'lucide-react';
+import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensils, Award, BookOpen } from 'lucide-react';
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { ReviewsTab } from "@/components/restaurant/ReviewsTab";
@@ -149,7 +149,7 @@ const RestaurantDetailsPage = () => {
                         title: "POV: Fine dining at its best",
                         author: "iketeru_kl",
                         likes: 560,
-                        link: "#"
+                        link: "https://www.instagram.com/reel/DS5VSfbErvV/?utm_source=ig_embed&amp;utm_campaign=loading"
                     },
                     {
                         id: "i2",
@@ -158,7 +158,7 @@ const RestaurantDetailsPage = () => {
                         title: "Chef's Special 🥢",
                         author: "iketeru_kl",
                         likes: 890,
-                        link: "#"
+                        link: "https://www.instagram.com/reel/DTjuS7LknBd/?utm_source=ig_embed&amp;utm_campaign=loading"
                     },
                     {
                         id: "i3",
@@ -490,7 +490,7 @@ const RestaurantDetailsPage = () => {
 
                         {/* Tabs */}
                         <div className="flex gap-8 border-b border-gray-200 dark:border-gray-700 mb-8 overflow-x-auto sticky top-20 bg-gray-50 dark:bg-gray-900 z-10 py-2">
-                            {['Overview', 'Menu', 'Reviews', 'Photos', 'Q&A'].map(tab => (
+                            {['Overview', 'Reviews', 'Photos', 'Q&A'].map(tab => (
                                 <button
                                     key={tab}
                                     onClick={() => {
@@ -527,13 +527,7 @@ const RestaurantDetailsPage = () => {
                                 </section>
                             </div>
 
-                            {/* Menu Section (Placeholder) */}
-                            <div id="menu" className="scroll-mt-48">
-                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Menu</h2>
-                                <div className="p-8 border border-dashed border-gray-300 rounded-xl text-center text-gray-500">
-                                    Menu content would go here
-                                </div>
-                            </div>
+
 
                             {/* Reviews Section */}
                             <div id="reviews" className="scroll-mt-48">
@@ -581,6 +575,11 @@ const RestaurantDetailsPage = () => {
                                     <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
                                     <p className="text-gray-600 dark:text-gray-300 text-sm">{restaurant?.address}</p>
                                 </div>
+
+                                <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-semibold text-gray-700 dark:text-gray-200">
+                                    <BookOpen className="w-4 h-4" />
+                                    View Menu
+                                </button>
                                 <div className="flex items-center gap-3">
                                     <Phone className="w-5 h-5 text-gray-400" />
                                     <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">{restaurant?.phone}</p>

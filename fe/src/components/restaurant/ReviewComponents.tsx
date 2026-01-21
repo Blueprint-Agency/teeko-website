@@ -125,14 +125,87 @@ export const GoogleReviewsList = ({ reviews }: { reviews: GoogleReview[] }) => {
     );
 };
 
+
+// Simple heart icon for the overlay
+const HeartIcon = ({ className }: { className?: string }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className={className}
+    >
+        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+    </svg>
+);
+
+export const InstagramEmbed = ({ url }: { url: string }) => {
+    React.useEffect(() => {
+        // Load Instagram Embed Script if not already loaded
+        if (!(window as any).instgrm) {
+            const script = document.createElement('script');
+            script.src = "//www.instagram.com/embed.js";
+            script.async = true;
+            document.body.appendChild(script);
+        } else {
+            // If already loaded, process new embeds
+            (window as any).instgrm.Embeds.process();
+        }
+    }, [url]);
+
+    return (
+        <div className="instagram-embed-container flex justify-center">
+            <blockquote
+                className="instagram-media"
+                data-instgrm-permalink={url}
+                data-instgrm-version="14"
+                style={{
+                    background: '#FFF',
+                    border: '0',
+                    borderRadius: '3px',
+                    boxShadow: '0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)',
+                    margin: '1px',
+                    maxWidth: '540px',
+                    minWidth: '326px',
+                    padding: '0',
+                    width: 'calc(100% - 2px)'
+                }}
+            >
+            </blockquote>
+        </div>
+    );
+};
+
 export const SocialMediaGrid = ({ posts, type }: { posts: SocialPost[], type: 'xhs' | 'ig' }) => {
     const isXHS = type === 'xhs';
+
+    if (type === 'ig') {
+        return (
+            <div className="space-y-4">
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                    Instagram Reels
+                </h3>
+                {/* 
+                   For IG, we can either:
+                   1. Show a grid of embeds (can be heavy if many)
+                   2. Show thumbnail grid (like before) and open modal
+                   3. Render them directly (as requested)
+                   Let's render them in a responsive grid, but maybe limit to 1 column on mobile, 2 on desktop to fit width 
+                */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {posts.map((post) => (
+                        <div key={post.id} className="min-w-[320px]">
+                            <InstagramEmbed url={post.link} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-4">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
-                {isXHS ? 'Trending on XiaoHongShu' : 'Instagram Reels'}
-                {/* Icons would ideally be proper SVGs for brands */}
+                Trending on XiaoHongShu
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -154,11 +227,7 @@ export const SocialMediaGrid = ({ posts, type }: { posts: SocialPost[], type: 'x
                         {/* Overlay Content */}
                         <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                             <div className="flex items-center gap-2 mb-2">
-                                {isXHS ? (
-                                    <span className="text-xs font-bold bg-red-500 px-1.5 py-0.5 rounded">XHS</span>
-                                ) : (
-                                    <Play className="w-4 h-4 fill-white" />
-                                )}
+                                <span className="text-xs font-bold bg-red-500 px-1.5 py-0.5 rounded">XHS</span>
                             </div>
                             {post.title && (
                                 <p className="font-bold text-sm line-clamp-2 mb-2 text-white/90">
@@ -182,14 +251,3 @@ export const SocialMediaGrid = ({ posts, type }: { posts: SocialPost[], type: 'x
     );
 };
 
-// Simple heart icon for the overlay
-const HeartIcon = ({ className }: { className?: string }) => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className={className}
-    >
-        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-    </svg>
-);
