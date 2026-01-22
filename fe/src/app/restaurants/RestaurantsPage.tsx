@@ -7,115 +7,24 @@ import { Search, SlidersHorizontal, Map, MapPin } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 
-// Mock Data
-const MOCK_RESTAURANTS = [
-    {
-        id: 1,
-        name: "Iketeru Restaurant",
-        image: "https://media-cdn.tripadvisor.com/media/photo-o/17/f8/75/34/iketeru-restaurant.jpg",
-        rating: 4.8,
-        reviewCount: 2704,
-        cuisine: "Japanese",
-        priceRange: "$$$$",
-        address: "3 Jalan Stesen Sentral Level 8, Hilton Hotel, Kuala Lumpur 50470 Malaysia",
-        address_obj: {
-            street1: "3 Jalan Stesen Sentral",
-            street2: "Level 8, Hilton Hotel",
-            city: "Kuala Lumpur",
-            country: "Malaysia",
-            postalcode: "50470",
-            address_string: "3 Jalan Stesen Sentral Level 8, Hilton Hotel, Kuala Lumpur 50470 Malaysia"
-        },
-        // discount: "20% off",
-    },
-    {
-        id: 2,
-        name: "Sky51",
-        image: "https://media-cdn.tripadvisor.com/media/photo-o/26/96/bc/92/sky51-facade.jpg",
-        rating: 4.8,
-        reviewCount: 461,
-        cuisine: "International",
-        priceRange: "$$$$",
-        address: "Jalan Sultan Ismail Equatorial Plaza, Kuala Lumpur 50250 Malaysia",
-        address_obj: {
-            street1: "Jalan Sultan Ismail",
-            street2: "Equatorial Plaza",
-            city: "Kuala Lumpur",
-            country: "Malaysia",
-            postalcode: "50250",
-            address_string: "Jalan Sultan Ismail Equatorial Plaza, Kuala Lumpur 50250 Malaysia"
-        },
-    },
-    {
-        id: 3,
-        name: "Vasco's",
-        image: "https://media-cdn.tripadvisor.com/media/photo-o/06/11/bf/f5/vasco-s-kl-hilton.jpg",
-        rating: 4.8,
-        reviewCount: 3242,
-        cuisine: "International",
-        priceRange: "$$ - $$$",
-        address: "3 Jalan Stesen Sentral Lobby Level, Hilton Kuala Lumpur, Kuala Lumpur 50470 Malaysia",
-        address_obj: {
-            street1: "3 Jalan Stesen Sentral",
-            street2: "Lobby Level, Hilton Kuala Lumpur",
-            city: "Kuala Lumpur",
-            country: "Malaysia",
-            postalcode: "50470",
-            address_string: "3 Jalan Stesen Sentral Lobby Level, Hilton Kuala Lumpur, Kuala Lumpur 50470 Malaysia"
-        },
-        // discount: "Free Dessert",
-    },
-    {
-        id: 4,
-        name: "Kampachi EQ",
-        image: "https://media-cdn.tripadvisor.com/media/photo-m/1280/22/29/f8/19/magnificent-sushi-counter.jpg",
-        rating: 4.9,
-        reviewCount: 716,
-        cuisine: "Japanese",
-        priceRange: "$$$$",
-        address: "Equatorial Hotel 27 Jalan Sultan Ismail, Kuala Lumpur 50250 Malaysia",
-        address_obj: {
-            street1: "Equatorial Hotel",
-            street2: "27 Jalan Sultan Ismail",
-            city: "Kuala Lumpur",
-            country: "Malaysia",
-            postalcode: "50250",
-            address_string: "Equatorial Hotel 27 Jalan Sultan Ismail, Kuala Lumpur 50250 Malaysia"
-        },
-    },
-    {
-        id: 5,
-        name: "The Mesh",
-        image: "https://media-cdn.tripadvisor.com/media/photo-m/1280/2a/c6/ec/a4/merasa-kembali-kenangan.jpg",
-        rating: 4.9,
-        reviewCount: 345,
-        cuisine: "International",
-        priceRange: "$$$$",
-        address: "Jalan Ampang Ground Floor, Four Points By Sheraton Kuala Lumpur, City Centre Corner of Jalan Sultan Ismail, Kuala Lumpur 50450 Malaysia",
-        "address_obj": {
-            "street1": "Jalan Ampang",
-            "street2": "Ground Floor, Four Points By Sheraton Kuala Lumpur, City Centre Corner of Jalan Sultan Ismail",
-            "city": "Kuala Lumpur",
-            "country": "Malaysia",
-            "postalcode": "50450",
-            "address_string": "Jalan Ampang Ground Floor, Four Points By Sheraton Kuala Lumpur, City Centre Corner of Jalan Sultan Ismail, Kuala Lumpur 50450 Malaysia"
-        },
-    },
-];
+interface RestaurantsPageProps {
+    initialRestaurants: any[];
+}
 
-const RestaurantsPage = () => {
+const RestaurantsPage = ({ initialRestaurants }: RestaurantsPageProps) => {
+    const [restaurants] = useState(initialRestaurants);
     const [activeTab, setActiveTab] = useState("all");
     const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
     const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
 
-    const filteredRestaurants = MOCK_RESTAURANTS.filter(restaurant => {
+    const filteredRestaurants = (restaurants || []).filter(restaurant => {
         // Filter by Cuisine
         if (selectedCuisines.length > 0 && !selectedCuisines.includes(restaurant.cuisine)) {
             return false;
         }
         // Filter by Price
         if (selectedPrice) {
-            const priceParts = restaurant.priceRange.split("-").map(p => p.trim());
+            const priceParts = restaurant.priceRange.split("-").map((p: string) => p.trim());
             if (!priceParts.includes(selectedPrice)) {
                 return false;
             }
@@ -155,13 +64,13 @@ const RestaurantsPage = () => {
                                 <h3 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                                     <SlidersHorizontal className="w-4 h-4" /> Filters
                                 </h3>
-                                <div className="space-y-3">
-                                    {Array.from(new Set(MOCK_RESTAURANTS.map(r => r.cuisine))).map(cuisine => (
+                                {/* <div className="space-y-3">
+                                    {Array.from(new Set((restaurants || []).map(r => r.cuisine))).map(cuisine => (
                                         <label key={cuisine} className="flex items-center gap-3 cursor-pointer group">
                                             <div
                                                 className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedCuisines.includes(cuisine)
-                                                        ? "bg-red-600 border-red-600"
-                                                        : "border-gray-300 dark:border-gray-600 group-hover:border-red-500"
+                                                    ? "bg-red-600 border-red-600"
+                                                    : "border-gray-300 dark:border-gray-600 group-hover:border-red-500"
                                                     }`}
                                                 onClick={() => toggleCuisine(cuisine)}
                                             >
@@ -174,7 +83,7 @@ const RestaurantsPage = () => {
                                             <span className="text-gray-600 dark:text-gray-300 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">{cuisine}</span>
                                         </label>
                                     ))}
-                                </div>
+                                </div> */}
                             </div>
 
                             {/* Filter Group: Price */}
@@ -186,8 +95,8 @@ const RestaurantsPage = () => {
                                             key={price}
                                             onClick={() => setSelectedPrice(selectedPrice === price ? null : price)}
                                             className={`px-4 py-2 border rounded-lg text-sm font-semibold transition-all ${selectedPrice === price
-                                                    ? "bg-red-600 border-red-600 text-white"
-                                                    : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 dark:hover:text-red-400"
+                                                ? "bg-red-600 border-red-600 text-white"
+                                                : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 dark:hover:text-red-400"
                                                 }`}
                                         >
                                             {price}
@@ -224,7 +133,7 @@ const RestaurantsPage = () => {
                                     </button>
                                 ))}
                             </div>
-                            <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">Showing {filteredRestaurants.length} of {MOCK_RESTAURANTS.length} results</span>
+                            <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">Showing {filteredRestaurants.length} of {restaurants?.length || 0} results</span>
                         </div>
 
                         {/* Restaurant Grid */}

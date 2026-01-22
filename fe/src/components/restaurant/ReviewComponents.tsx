@@ -32,7 +32,8 @@ export interface SocialPost {
 // --- Components ---
 
 export const ReviewStatsCard = ({ stats }: { stats: ReviewStats }) => {
-    const isGoogle = stats.source === 'Google';
+    if (!stats) return null;
+    const isGoogle = stats.source?.toLowerCase() === 'google';
 
     return (
         <a
@@ -60,14 +61,14 @@ export const ReviewStatsCard = ({ stats }: { stats: ReviewStats }) => {
 
             <div className="mt-auto">
                 <div className="flex items-center gap-2 mb-1">
-                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">{stats.rating.toFixed(1)}</span>
+                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">{stats.rating?.toFixed(1) || '0.0'}</span>
                     <div className="flex flex-col">
                         <div className="flex text-yellow-400">
                             {[1, 2, 3, 4, 5].map(star => (
-                                <Star key={star} className={`w-3 h-3 ${star <= Math.round(stats.rating) ? 'fill-current' : 'text-gray-300 dark:text-gray-600'}`} />
+                                <Star key={star} className={`w-3 h-3 ${star <= Math.round(stats.rating || 0) ? 'fill-current' : 'text-gray-300 dark:text-gray-600'}`} />
                             ))}
                         </div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{stats.totalReviews.toLocaleString()} reviews</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{(stats.totalReviews || 0).toLocaleString()} reviews</span>
                     </div>
                 </div>
             </div>
@@ -125,7 +126,6 @@ export const GoogleReviewsList = ({ reviews }: { reviews: GoogleReview[] }) => {
     );
 };
 
-
 // Simple heart icon for the overlay
 const HeartIcon = ({ className }: { className?: string }) => (
     <svg
@@ -138,116 +138,81 @@ const HeartIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
-export const InstagramEmbed = ({ url }: { url: string }) => {
-    React.useEffect(() => {
-        // Load Instagram Embed Script if not already loaded
-        if (!(window as any).instgrm) {
-            const script = document.createElement('script');
-            script.src = "//www.instagram.com/embed.js";
-            script.async = true;
-            document.body.appendChild(script);
-        } else {
-            // If already loaded, process new embeds
-            (window as any).instgrm.Embeds.process();
-        }
-    }, [url]);
-
+const SocialCard = ({ post }: { post: SocialPost }) => {
+    const isXHS = post.type === 'xhs';
     return (
-        <div className="instagram-embed-container flex justify-center">
-            <blockquote
-                className="instagram-media"
-                data-instgrm-permalink={url}
-                data-instgrm-version="14"
-                style={{
-                    background: '#FFF',
-                    border: '0',
-                    borderRadius: '3px',
-                    boxShadow: '0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)',
-                    margin: '1px',
-                    maxWidth: '540px',
-                    minWidth: '326px',
-                    padding: '0',
-                    width: 'calc(100% - 2px)'
-                }}
-            >
-            </blockquote>
-        </div>
+        <a
+            href={post.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer block"
+        >
+            <img
+                src={post.thumbnail}
+                alt={post.title || "Social Media Post"}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+
+            {/* Overlay Content */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <div className="flex items-center gap-2 mb-2">
+                    {isXHS ? (
+                        <span className="text-[10px] font-bold bg-red-600 text-white px-2 py-0.5 rounded shadow-sm">
+                            XHS
+                        </span>
+                    ) : (
+                        <span className="text-[10px] font-bold bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white px-2 py-0.5 rounded shadow-sm">
+                            REELS
+                        </span>
+                    )}
+                </div>
+                {post.title && (
+                    <p className="font-bold text-sm line-clamp-2 mb-2 text-white/95 leading-snug">
+                        {post.title}
+                    </p>
+                )}
+                <div className="flex items-center justify-between text-xs text-white/80">
+                    <span className="font-medium">@{post.author}</span>
+                    {post.likes !== undefined && (
+                        <div className="flex items-center gap-1 bg-black/20 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
+                            <HeartIcon className="w-3 h-3 text-red-500" />
+                            <span>{post.likes}</span>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Play Button Overlay for Reels */}
+            {!isXHS && (
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-white/20 backdrop-blur-md p-3 rounded-full border border-white/30">
+                        <Play className="w-8 h-8 text-white fill-current" />
+                    </div>
+                </div>
+            )}
+        </a>
     );
 };
 
 export const SocialMediaGrid = ({ posts, type }: { posts: SocialPost[], type: 'xhs' | 'ig' }) => {
     const isXHS = type === 'xhs';
-
-    if (type === 'ig') {
-        return (
-            <div className="space-y-4">
-                <h3 className="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
-                    Instagram Reels
-                </h3>
-                {/* 
-                   For IG, we can either:
-                   1. Show a grid of embeds (can be heavy if many)
-                   2. Show thumbnail grid (like before) and open modal
-                   3. Render them directly (as requested)
-                   Let's render them in a responsive grid, but maybe limit to 1 column on mobile, 2 on desktop to fit width 
-                */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {posts.map((post) => (
-                        <div key={post.id} className="min-w-[320px]">
-                            <InstagramEmbed url={post.link} />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    }
+    const title = isXHS ? "Trending on XiaoHongShu" : "Instagram Reels";
 
     return (
         <div className="space-y-4">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
-                Trending on XiaoHongShu
+                {title}
+                {!isXHS && <Play className="w-4 h-4 text-gray-400" />}
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 {posts.map((post) => (
-                    <a
-                        key={post.id}
-                        href={post.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer"
-                    >
-                        <img
-                            src={post.thumbnail}
-                            alt={post.title || "Social Media Post"}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-
-                        {/* Overlay Content */}
-                        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="text-xs font-bold bg-red-500 px-1.5 py-0.5 rounded">XHS</span>
-                            </div>
-                            {post.title && (
-                                <p className="font-bold text-sm line-clamp-2 mb-2 text-white/90">
-                                    {post.title}
-                                </p>
-                            )}
-                            <div className="flex items-center justify-between text-xs text-white/70">
-                                <span>{post.author}</span>
-                                {post.likes && (
-                                    <div className="flex items-center gap-1">
-                                        <HeartIcon className="w-3 h-3" />
-                                        <span>{post.likes}</span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </a>
+                    <SocialCard key={post.id} post={post} />
                 ))}
             </div>
         </div>
     );
 };
+
 

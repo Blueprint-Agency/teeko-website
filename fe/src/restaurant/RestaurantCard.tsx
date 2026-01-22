@@ -1,40 +1,47 @@
 import { Star, MapPin, BadgePercent } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+interface RestaurantImage {
+    caption: string;
+    isPrimary: boolean;
+    url: string;
+}
 interface RestaurantCardProps {
     name: string;
-    image: string;
+    restaurantImages: RestaurantImage[];
     rating: number;
     reviewCount: number;
     cuisine: string;
     priceRange: string;
     address: string;
     discount?: string;
+    slug: string;
     id: number;
 }
 
 const RestaurantCard = ({
     name,
-    image,
+    restaurantImages,
     rating,
     reviewCount,
     cuisine,
     priceRange,
     address,
     discount,
+    slug,
     id,
 }: RestaurantCardProps) => {
     const router = useRouter();
 
     return (
         <div
-            onClick={() => router.push(`/restaurant/${id}`)}
+            onClick={() => router.push(`/restaurant/${slug}`)}
             className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col h-full cursor-pointer relative"
         >
             {/* Image Section */}
             <div className="relative h-56 overflow-hidden">
                 <img
-                    src={image}
+                    src={restaurantImages[0].url}
                     alt={name}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
