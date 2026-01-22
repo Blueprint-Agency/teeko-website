@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { db } from "../db";
-import { restaurants, restaurantImages, locations } from "../db/schema";
+import { restaurants, restaurantImages, locations, restaurantStats } from "../db/schema";
 import { eq } from "drizzle-orm";
 
 export const getRestaurants = async (req: Request, res: Response) => {
@@ -15,15 +15,22 @@ export const getRestaurants = async (req: Request, res: Response) => {
             address: restaurants.address,
             priceRange: restaurants.priceRange,
             contactInfo: restaurants.contactInfo,
+            reservationUrl: restaurants.reservationUrl,
             operatingHours: restaurants.operatingHours,
             location: {
                 id: locations.id,
                 name: locations.name,
                 slug: locations.slug
+            },
+            stats: {
+                id: restaurantStats.id,
+                googleStats: restaurantStats.googleStats,
+                tripAdvisorStats: restaurantStats.tripAdvisorStats,
             }
         })
             .from(restaurants)
-            .leftJoin(locations, eq(restaurants.locationId, locations.id));
+            .leftJoin(locations, eq(restaurants.locationId, locations.id))
+            .leftJoin(restaurantStats, eq(restaurants.id, restaurantStats.restaurantId));
 
         if (locationSlug) {
             // @ts-ignore - drizzle-orm and express types mismatch sometimes on req.query
@@ -65,10 +72,16 @@ export const getRestaurantBySlug = async (req: Request, res: Response) => {
                 id: locations.id,
                 name: locations.name,
                 slug: locations.slug
+            },
+            stats: {
+                id: restaurantStats.id,
+                googleStats: restaurantStats.googleStats,
+                tripAdvisorStats: restaurantStats.tripAdvisorStats,
             }
         })
             .from(restaurants)
             .leftJoin(locations, eq(restaurants.locationId, locations.id))
+            .leftJoin(restaurantStats, eq(restaurants.id, restaurantStats.restaurantId))
             .where(eq(restaurants.slug, slug as string));
 
         if (result.length === 0) {
@@ -86,7 +99,7 @@ export const getRestaurantBySlug = async (req: Request, res: Response) => {
 };
 
 export const createRestaurant = async (req: Request, res: Response) => {
-    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images } = req.body;
+    const { name, slug, tripAdvisorLocationId, locationId, description, address, priceRange, contactInfo, operatingHours, images } = req.body;
 
     try {
         // 1. Create Restaurant
@@ -96,6 +109,7 @@ export const createRestaurant = async (req: Request, res: Response) => {
                 name,
                 slug,
                 locationId,
+                tripAdvisorLocationId,
                 description,
                 address,
                 priceRange,

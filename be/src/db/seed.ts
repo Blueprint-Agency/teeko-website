@@ -9,6 +9,7 @@ async function main() {
         // Clear existing data
         console.log("🗑️  Clearing existing data...");
         await db.delete(restaurantImages);
+        await db.delete(restaurantStats);
         await db.delete(restaurants);
         await db.delete(locations);
         await db.delete(users);
@@ -89,6 +90,78 @@ async function main() {
                 seoDescription: "",
                 isIndexed: true,
             },
+            {
+                name: "Sky51",
+                slug: "sky51",
+                locationId: kualaLumpur.id,
+                tripAdvisorLocationId: "25066495",
+                description: "The eye-popping Sky51 is an entire floor dedicated to fine dining, fine wines, creative cocktails, and unrivalled views. Featured here are Sabayon, specializing in gourmet Continental cuisine, and Blue, an open-air rooftop lounge. All of which, promises a memorable experience. Sabayon Contemporary European dining reaches a whole new level – literally and lavishly. Sabayon is on most everyone’s places to eat. The cuisine is best described as the perfect combination of classic and contemporary. The award-winning restaurant serves degustation menus with an option for wine pairing. Be delighted in Sabayon’s fine-dining journey. For those requiring a private setting, our team will be happy to arrange a more personal dining experience for parties of any size. Give the special occasion that extra shine. Blue KL’s top bespoke outdoor rooftop bar at Sky51 offers tantalising snacks and handcrafted cocktails prepared by seasoned mixologists. The picture-perfect skybar provides the best panoramic views of the city, spanning from the KL Tower to the Petronas Twin Towers. There are three main areas: Lounge to unwind and watch live performances, Sky Deck where one gets a front-row seat to the city skyline and VIP Deck for private parties.",
+                address: "Jalan Sultan Ismail Equatorial Plaza, Kuala Lumpur 50250 Malaysia",
+                priceRange: "$$$$",
+                contactInfo: { phone: "+60 3-2789 7777", website: "https://www.eqkualalumpur.equatorial.com/dining/sky51/" },
+                reservationUrl: "https://www.sevenrooms.com/explore/sky51andblue/reservations/create/search",
+                operatingHours: [
+                    { day: "Mon-Sun", time: "05:00 PM - 01:00 AM" },
+                ],
+                seoTitle: "Sky51",
+                seoDescription: "",
+                isIndexed: true,
+            },
+            {
+                name: "Vasco's",
+                slug: "vasco's",
+                locationId: kualaLumpur.id,
+                tripAdvisorLocationId: "4831795",
+                description: "An innovative all-day-dining restaurant designed with an \"al fresco\" urban park feel. Impressive buffet showcase with choice selection of Asian and international favourites.",
+                address: "3 Jalan Stesen Sentral Lobby Level, Hilton Kuala Lumpur, Kuala Lumpur 50470 Malaysia",
+                priceRange: "$$ - $$$",
+                contactInfo: { phone: "+60 3-2264 2264", website: "https://www.sevenrooms.com/reservations/vascos/tripadvisor" },
+                reservationUrl: "https://www.sevenrooms.com/reservations/vascos/tripadvisor",
+                operatingHours: [
+                    { day: "Mon-Fri", time: "12:00 PM - 02:30 PM" },
+                    { day: "Mon-Fri", time: "06:00 PM - 10:00 PM" },
+                    { day: "Sat-Sun", time: "12:30 PM - 03:00 PM" },
+                    { day: "Sat-Sun", time: "06:00 PM - 10:00 PM" },
+                ],
+                seoTitle: "Vasco's",
+                seoDescription: "",
+                isIndexed: true,
+            },
+            {
+                name: "Kampachi EQ",
+                slug: "kampachi-eq",
+                locationId: kualaLumpur.id,
+                tripAdvisorLocationId: "1092910",
+                description: "The latest and finest version of Kampachi Restaurants after the great remake. Features a sophisticated Hinoki Wood Sushi counter that will surely bring your Sushi Omakase dining experience to the next level.",
+                address: "Equatorial Hotel 27 Jalan Sultan Ismail, Kuala Lumpur 50250 Malaysia",
+                priceRange: "$$$$",
+                contactInfo: { phone: "+60 3-2789 7722", website: "http://www.kampachi.com.my/" },
+                reservationUrl: "https://www.sevenrooms.com/explore/kampachieq/reservations/create/search",
+                operatingHours: [
+                    { day: "Mon-Sun", time: "12:00 PM - 03:00 PM" },
+                    { day: "Mon-Sun", time: "06:00 PM - 10:00 PM" },
+                ],
+                seoTitle: "Kampachi EQ",
+                seoDescription: "",
+                isIndexed: true,
+            },
+            {
+                name: "The Mesh",
+                slug: "the-mesh",
+                locationId: kualaLumpur.id,
+                tripAdvisorLocationId: "26825851",
+                description: "Embrace the communal spirit and savour authentic Malaysian cuisine at The Mesh. Our all-day dining venue blends traditional dishes with a modern twist in a unique, inviting atmosphere, celebrating community and culture, fit for a capacity of over 200 persons.",
+                address: "Jalan Ampang Ground Floor, Four Points By Sheraton Kuala Lumpur, City Centre Corner of Jalan Sultan Ismail, Kuala Lumpur 50450 Malaysia",
+                priceRange: "$$$$",
+                contactInfo: { phone: "+60 3-2706 9099", website: "http://www.themeshkl.com" },
+                reservationUrl: "https://www.sevenrooms.com/reservations/themesh/tripadvisor",
+                operatingHours: [
+                    { day: "Mon-Sun", time: "06:30 AM - 10:30 PM" },
+                ],
+                seoTitle: "The Mesh",
+                seoDescription: "",
+                isIndexed: true,
+            },
         ];
 
         const createdRestaurants = await db.insert(restaurants).values(restaurantData).returning();
@@ -99,6 +172,10 @@ async function main() {
         const imageData = createdRestaurants.flatMap((restaurant, index) => {
             const imageUrls = [
                 "https://media-cdn.tripadvisor.com/media/photo-o/17/f8/75/34/iketeru-restaurant.jpg",
+                "https://media-cdn.tripadvisor.com/media/photo-o/26/96/bc/92/sky51-facade.jpg",
+                "https://media-cdn.tripadvisor.com/media/photo-o/06/11/bf/f5/vasco-s-kl-hilton.jpg",
+                "https://media-cdn.tripadvisor.com/media/photo-m/1280/22/29/f8/19/magnificent-sushi-counter.jpg",
+                "https://media-cdn.tripadvisor.com/media/photo-m/1280/2a/c6/ec/a4/merasa-kembali-kenangan.jpg"
             ];
 
             return [
