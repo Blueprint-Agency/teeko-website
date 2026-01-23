@@ -120,16 +120,16 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
             <div className="max-w-7xl mx-auto px-6 mb-8">
                 <div className="grid grid-cols-4 gap-2 h-96 rounded-2xl overflow-hidden relative">
                     <div className="col-span-2 row-span-2">
-                        <img src={restaurant?.image} alt="Main" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                        <img src={restaurant?.restaurantImages?.[0]?.url} alt="Main" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                     </div>
                     <div className="col-span-1">
-                        <img src={restaurant?.popularDishes?.[0].image} alt="Dish 1" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                        <img src={restaurant?.restaurantImages?.[1]?.url} alt="Dish 1" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                     </div>
                     <div className="col-span-1">
-                        <img src={restaurant?.popularDishes?.[1].image} alt="Dish 2" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                        <img src={restaurant?.restaurantImages?.[2]?.url} alt="Dish 2" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                     </div>
                     <div className="col-span-1">
-                        <img src={restaurant?.popularDishes?.[2].image} alt="Dish 3" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                        <img src={restaurant?.restaurantImages?.[3]?.url} alt="Dish 3" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                     </div>
                     {/* <div className="col-span-1 relative">
                         <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1374&auto=format&fit=crop" alt="Ambience" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
@@ -217,7 +217,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                 <section>
                                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features & Amenities</h2>
                                     <div className="grid grid-cols-2 gap-y-3">
-                                        {restaurant?.features?.map((feature: any) => (
+                                        {restaurant?.feature?.map((feature: any) => (
                                             <div key={feature} className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
                                                 <Award className="w-5 h-5 text-red-500" />
                                                 {feature}
