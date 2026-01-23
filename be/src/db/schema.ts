@@ -29,6 +29,7 @@ export const restaurants = pgTable("restaurants", {
     tripAdvisorLocationId: varchar("trip_advisor_location_id").notNull(),
     description: text("description"),
     cuisine: text("cuisine"),
+    feature: jsonb("feature"),
     address: text("address"),
     priceRange: varchar("price_range"), // $, $$, $$$
     contactInfo: jsonb("contact_info"), // { phone, website, email }
