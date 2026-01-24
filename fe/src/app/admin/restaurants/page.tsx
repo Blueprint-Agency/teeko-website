@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/Button";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, Edit2, Loader2 } from "lucide-react";
+import { API_BASE_URL } from "@/utils/constants";
 
 interface Restaurant {
     id: string;
@@ -19,9 +20,14 @@ export default function AdminRestaurantsPage() {
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
-                const res = await fetch("http://localhost:5000/restaurants");
+                const token = localStorage.getItem("token");
+                const res = await fetch(`${API_BASE_URL}/restaurants`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
                 const data = await res.json();
-                setRestaurants(data);
+                setRestaurants(Array.isArray(data) ? data : []);
             } catch (e) {
                 console.error(e);
             } finally {
@@ -43,7 +49,9 @@ export default function AdminRestaurantsPage() {
             </div>
 
             {loading ? (
-                <p>Loading...</p>
+                <div className="flex items-center justify-center h-64">
+                    <Loader2 className="h-8 w-8 animate-spin text-red-600" />
+                </div>
             ) : (
                 <div className="rounded-lg border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-800">
@@ -62,7 +70,11 @@ export default function AdminRestaurantsPage() {
                                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{res.priceRange || "-"}</td>
                                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">{res.address || "-"}</td>
                                     <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                                        <button className="text-primary hover:text-red-900 dark:hover:text-red-400">Edit</button>
+                                        <Link href={`/admin/restaurants/${res.id}/edit`}>
+                                            <button className="text-primary hover:text-red-900 dark:hover:text-red-400 inline-flex items-center">
+                                                <Edit2 className="h-4 w-4 mr-1" /> Edit
+                                            </button>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}
