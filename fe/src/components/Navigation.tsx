@@ -25,7 +25,8 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
         { label: "Home", href: "/" },
         { label: "Locations", href: "/locations" },
         { label: "Restaurants", href: "/restaurants" },
-        { label: "About", href: "/about" },
+        { label: "eSIM", href: "/esim" },
+        { label: "Blog", href: "/blog" },
         { label: "Teeko App", href: process.env.NEXT_PUBLIC_AI_APP_URL || "#", external: true, special: true },
     ];
 
