@@ -46,3 +46,11 @@ export const restaurantImages = pgTable("restaurant_images", {
     caption: varchar("caption"),
     isPrimary: boolean("is_primary").default(false).notNull(),
 });
+
+export const settings = pgTable("settings", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    siteTitle: varchar("site_title", { length: 255 }).default("Teeko Advisor"),
+    siteDescription: text("site_description").default("Discover amazing restaurants near you."),
+    faviconUrl: text("favicon_url"),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});

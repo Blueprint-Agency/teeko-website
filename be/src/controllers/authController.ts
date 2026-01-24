@@ -51,7 +51,7 @@ export const login = async (req: Request, res: Response) => {
             return;
         }
 
-        if (!user.isVerified) {
+        if (!user.isVerified && user.role !== "ADMIN") {
             // Option: allow login but restrict access, or deny. 
             // For strict verification:
             res.status(403).json({ message: "Please verify your email first." });
