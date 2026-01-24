@@ -54,3 +54,55 @@ export const settings = pgTable("settings", {
     faviconUrl: text("favicon_url"),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+// eSIM Provider table
+export const esimProviders = pgTable("esim_providers", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    slug: varchar("slug", { length: 255 }).notNull().unique(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// eSIM Package table
+export const esimPackages = pgTable("esim_packages", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    packageName: varchar("package_name", { length: 255 }).notNull(),
+    slug: varchar("slug", { length: 255 }).notNull().unique(),
+    providerId: uuid("provider_id").references(() => esimProviders.id).notNull(),
+    featureImage: text("feature_image"),
+    price: varchar("price", { length: 100 }),
+    about: text("about"),
+    ctaLink: text("cta_link"),
+    seoTitle: varchar("seo_title"),
+    seoDescription: text("seo_description"),
+    isPublished: boolean("is_published").default(false).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Blog status enum
+export const blogStatusEnum = pgEnum("blog_status", ["DRAFT", "PUBLISHED", "BIN"]);
+
+// Blog posts table
+export const blogPosts = pgTable("blog_posts", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    title: varchar("title", { length: 500 }).notNull(),
+    slug: varchar("slug", { length: 500 }).notNull().unique(),
+    metaDescription: text("meta_description"),
+    featureImage: text("feature_image"),
+    status: blogStatusEnum("status").default("DRAFT").notNull(),
+    authorId: uuid("author_id").references(() => users.id),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    publishedAt: timestamp("published_at"),
+});
+
+// Blog content blocks (for dynamic headings and paragraphs)
+export const blogContentBlocks = pgTable("blog_content_blocks", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    blogPostId: uuid("blog_post_id").references(() => blogPosts.id).notNull(),
+    blockType: varchar("block_type", { length: 50 }).notNull(), // 'h2', 'h3', 'h4', 'paragraph'
+    content: text("content").notNull(),
+    orderIndex: varchar("order_index", { length: 10 }).notNull(), // For ordering blocks
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+});
