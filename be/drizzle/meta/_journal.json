@@ -36,6 +36,13 @@
       "when": 1769146363946,
       "tag": "0004_flippant_liz_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1769324712478,
+      "tag": "0005_chemical_smasher",
+      "breakpoints": true
     }
   ]
 }
