@@ -12,10 +12,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Teeko - Discover Malaysia",
-  description: "Find the best places and destinations in Malaysia.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3011";
+  try {
+    const res = await fetch(`${apiUrl}/admin/settings`, { next: { revalidate: 60 } });
+    if (!res.ok) throw new Error("Failed to fetch settings");
+    const settings = await res.json();
+
+    return {
+      title: settings.siteTitle || "Teeko Advisor",
+      description: settings.siteDescription || "Discover amazing restaurants near you.",
+      icons: {
+        icon: settings.faviconUrl || "/favicon.ico",
+      },
+    };
+  } catch (error) {
+    console.error("Metadata fetch error:", error);
+    return {
+      title: "Teeko Advisor - Discover Malaysia",
+      description: "Find the best places and destinations in Malaysia.",
+    };
+  }
+}
 
 // Script to prevent flash of wrong theme
 const themeScript = `

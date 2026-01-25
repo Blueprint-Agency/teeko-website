@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { API_BASE_URL } from "@/utils/constants";
 
 export default function CreateRestaurantPage() {
     const router = useRouter();
@@ -20,9 +21,9 @@ export default function CreateRestaurantPage() {
     });
 
     useEffect(() => {
-        fetch("http://localhost:5000/locations")
+        fetch(`${API_BASE_URL}/locations`)
             .then(res => res.json())
-            .then(data => setLocations(data))
+            .then(data => setLocations(Array.isArray(data) ? data : []))
             .catch(err => console.error(err));
     }, []);
 
@@ -32,7 +33,7 @@ export default function CreateRestaurantPage() {
 
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch("http://localhost:5000/restaurants", {
+            const res = await fetch(`${API_BASE_URL}/restaurants`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
