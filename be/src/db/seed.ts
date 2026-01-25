@@ -1,6 +1,8 @@
 import { db } from "./index";
-import { users, locations, restaurants, restaurantImages, restaurantStats } from "./schema";
+import { users, locations, restaurants, restaurantImages, restaurantStats, blogPosts, blogContentBlocks } from "./schema";
 import bcrypt from "bcrypt";
+import { seedAdmin } from "./seedAdmin";
+import { seedBlogPosts } from "./seedBlog";
 
 async function main() {
     console.log("🌱 Starting consolidated database seed...");
@@ -8,6 +10,8 @@ async function main() {
     try {
         // Clear existing data
         console.log("🗑️  Clearing existing data...");
+        await db.delete(blogContentBlocks);
+        await db.delete(blogPosts);
         await db.delete(restaurantImages);
         await db.delete(restaurantStats);
         await db.delete(restaurants);
@@ -354,13 +358,23 @@ async function main() {
         await db.insert(restaurantStats).values(statsData);
         console.log(`✅ Added ${statsData.length} stats`);
 
+        // 6. Seed Admin User
+        console.log("\n👤 Seeding admin user...");
+        await seedAdmin();
+
+        // 7. Seed Blog Posts
+        console.log("\n📝 Seeding blog posts...");
+        await seedBlogPosts();
+
         console.log("\n✨ Database seeded successfully!");
         console.log(`📊 Summary:`);
-        console.log(`   - 2 users`);
+        console.log(`   - Admin user (from .env)`);
+        console.log(`   - 2 demo users`);
         console.log(`   - ${[kualaLumpur, penang, johorBahru].length} locations`);
         console.log(`   - ${createdRestaurants.length} restaurants`);
         console.log(`   - ${imageData.length} images`);
         console.log(`   - ${statsData.length} stats`);
+        console.log(`   - Blog posts (check output above)`);
 
     } catch (error) {
         console.error("❌ Error seeding database:", error);
