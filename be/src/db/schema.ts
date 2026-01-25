@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text, boolean, timestamp, jsonb, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, text, boolean, timestamp, jsonb, pgEnum, numeric } from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum("role", ["USER", "ADMIN"]);
 
@@ -26,7 +26,10 @@ export const restaurants = pgTable("restaurants", {
     name: varchar("name").notNull(),
     slug: varchar("slug").notNull().unique(),
     locationId: uuid("location_id").references(() => locations.id).notNull(),
+    tripAdvisorLocationId: varchar("trip_advisor_location_id").notNull(),
     description: text("description"),
+    cuisine: text("cuisine"),
+    feature: jsonb("feature"),
     address: text("address"),
     priceRange: varchar("price_range"), // $, $$, $$$
     contactInfo: jsonb("contact_info"), // { phone, website, email }
@@ -45,4 +48,19 @@ export const restaurantImages = pgTable("restaurant_images", {
     url: varchar("url").notNull(),
     caption: varchar("caption"),
     isPrimary: boolean("is_primary").default(false).notNull(),
+});
+
+export const restaurantStats = pgTable("restaurant_stats", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    restaurantId: uuid("restaurant_id").references(() => restaurants.id).notNull(),
+    googleStats: jsonb("google_stats"), // { rating, totalReviews, link }
+    tripAdvisorStats: jsonb("trip_advisor_stats"), // { rating, totalReviews, link }
+});
+
+export const restaurantReviews = pgTable("restaurant_reviews", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    restaurantId: uuid("restaurant_id").references(() => restaurants.id).notNull(),
+    source: varchar("source").notNull(), // google, tripadvisor
+    rating: numeric("rating").notNull(),
+    images: jsonb("images"),
 });
