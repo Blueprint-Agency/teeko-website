@@ -24,7 +24,7 @@ export const seedAdmin = async () => {
                 role: "ADMIN",
                 isVerified: true,
             });
-            console.log("Admin account created successfully.");
+            console.log("✅ Admin account created successfully.");
         } else {
             console.log("Admin account already exists. Updating credentials...");
             const hashedPassword = await bcrypt.hash(adminPassword, 10);
@@ -35,9 +35,9 @@ export const seedAdmin = async () => {
                     isVerified: true,
                 })
                 .where(eq(users.email, adminUsername));
-            console.log("Admin account updated successfully.");
+            console.log("✅ Admin account updated successfully.");
         }
     } catch (error) {
-        console.error("Error seeding admin account:", error);
+        console.error("❌ Error seeding admin account:", error);
     }
 };
