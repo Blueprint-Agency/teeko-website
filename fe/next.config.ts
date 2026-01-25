@@ -18,10 +18,13 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
+    // Use BACKEND_URL for Docker, fallback to localhost for local dev
+    const backendUrl = process.env.BACKEND_URL || "http://localhost:3011";
+
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:3011/:path*",
+        destination: `${backendUrl}/:path*`,
       },
     ];
   },
