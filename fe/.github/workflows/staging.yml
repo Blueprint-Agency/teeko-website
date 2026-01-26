@@ -3,6 +3,7 @@ name: Staging FE CI/CD
 on:
   push:
     branches: [ staging ]
+  workflow_dispatch:
 
 jobs:
   build-and-push:
