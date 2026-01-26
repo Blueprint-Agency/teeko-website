@@ -1,4 +1,4 @@
-FROM node:22-slim
+FROM node:23-slim
 
 WORKDIR /app
 
@@ -8,6 +8,4 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-EXPOSE 3010
-
-CMD ["npm", "start", "--", "-p", "3010"]
+CMD ["npm", "start"]
