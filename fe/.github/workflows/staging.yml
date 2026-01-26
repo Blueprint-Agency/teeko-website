@@ -24,6 +24,10 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/teeko-staging-site-fe:staging
+          build-args: |
+            NEXT_PUBLIC_API_URL=https://stagingapi.teeko.ai
+            NEXT_PUBLIC_AI_APP_URL=https://app.teeko.ai
+            BACKEND_URL=http://backend-site:3000
 
       - name: Ping Infra Repo
         run: |
