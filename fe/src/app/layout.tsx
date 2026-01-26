@@ -13,26 +13,30 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3011";
+  const apiUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
   try {
-    const res = await fetch(`${apiUrl}/admin/settings`, { next: { revalidate: 60 } });
-    if (!res.ok) throw new Error("Failed to fetch settings");
-    const settings = await res.json();
+    const res = await fetch(`${apiUrl}/admin/settings`, {
+      next: { revalidate: 60 },
+      signal: AbortSignal.timeout(5000) // Don't wait forever during build
+    });
 
-    return {
-      title: settings.siteTitle || "Teeko Advisor",
-      description: settings.siteDescription || "Discover amazing restaurants near you.",
-      icons: {
-        icon: settings.faviconUrl || "/favicon.ico",
-      },
-    };
+    if (res.ok) {
+      const settings = await res.json();
+      return {
+        title: settings.siteTitle || "Teeko Advisor",
+        description: settings.siteDescription || "Discover amazing restaurants near you.",
+        icons: {
+          icon: settings.faviconUrl || "/favicon.ico",
+        },
+      };
+    }
   } catch (error) {
-    console.error("Metadata fetch error:", error);
-    return {
-      title: "Teeko Advisor - Discover Malaysia",
-      description: "Find the best places and destinations in Malaysia.",
-    };
+    console.warn("Skipping dynamic metadata during build (API unreachable). Using fallbacks.");
   }
+  return {
+    title: "Teeko Advisor - Discover Malaysia",
+    description: "Find the best places and destinations in Malaysia.",
+  };
 }
 
 // Script to prevent flash of wrong theme
