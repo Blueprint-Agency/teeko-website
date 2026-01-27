@@ -23,7 +23,7 @@ export default function AdminLayout({
 
         try {
             const user = JSON.parse(userStr);
-            if (user.role !== "ADMIN") {
+            if (user.role !== "ADMIN" && user.role !== "SUPERADMIN") {
                 router.push("/");
                 return;
             }
