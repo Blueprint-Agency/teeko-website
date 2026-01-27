@@ -140,8 +140,10 @@ export default function EsimPage() {
                                                 {pkg.about}
                                             </p>
                                         )}
-                                        <div className="flex items-center text-red-600 dark:text-red-400 font-medium">
-                                            View Details <ExternalLink className="ml-2 h-4 w-4" />
+                                        <div className="mt-4">
+                                            <div className="inline-flex items-center justify-center w-full py-2.5 bg-red-600 group-hover:bg-red-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg shadow-red-600/20 group-hover:shadow-red-600/30 text-sm">
+                                                Check price <ExternalLink className="ml-2 h-4 w-4" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
