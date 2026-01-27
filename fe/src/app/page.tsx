@@ -1,11 +1,11 @@
-import { Navigation } from "@/components/Navigation";
-import { HeroSection } from "@/components/HeroSection";
-import { FeaturedSection } from "@/components/FeaturedSection";
-import { EsimSection } from "@/components/EsimSection";
-import { BlogSection } from "@/components/BlogSection";
-import { CTASection } from "@/components/CTASection";
-import { Footer } from "@/components/Footer";
-import { API_BASE_URL } from "@/utils/constants";
+import { Navigation } from "@/components/layout/Navigation";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { FeaturedSection } from "@/components/sections/FeaturedSection";
+import { EsimSection } from "@/components/sections/EsimSection";
+import { BlogSection } from "@/components/sections/BlogSection";
+import { CTASection } from "@/components/sections/CTASection";
+import { Footer } from "@/components/layout/Footer";
+import { API_BASE_URL } from "@/lib/constants";
 
 async function getRestaurants() {
   try {
@@ -67,3 +67,4 @@ export default async function Home() {
     </div>
   );
 }
+

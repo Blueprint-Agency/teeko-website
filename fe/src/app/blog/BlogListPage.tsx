@@ -2,8 +2,9 @@
 
 import { Loader2, Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 interface BlogPost {
     id: string;
@@ -20,14 +21,16 @@ interface BlogListPageProps {
 
 export default function BlogListPage({ initialPosts }: BlogListPageProps) {
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-zinc-950 dark:to-zinc-900">
+        <div className="min-h-screen bg-[var(--background)]">
             <Navigation forceSolid />
-            <div className="container mx-auto px-4 py-16 pt-24">
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <main className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-20">
+                <Breadcrumbs items={[{ label: "Blog" }]} />
+
+                <div className="page-header">
+                    <h1 className="page-title">
                         Our Blog
                     </h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    <p className="text-xl text-muted">
                         Discover travel tips, destination guides, and insider insights
                     </p>
                 </div>
@@ -39,7 +42,7 @@ export default function BlogListPage({ initialPosts }: BlogListPageProps) {
                             href={`/blog/${post.slug}`}
                             className="group block"
                         >
-                            <article className="rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1">
+                            <article className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1">
                                 <div className="md:flex">
                                     {post.featureImage && (
                                         <div className="md:w-1/3 aspect-video md:aspect-square overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950">
@@ -84,8 +87,9 @@ export default function BlogListPage({ initialPosts }: BlogListPageProps) {
                         </p>
                     </div>
                 )}
-            </div>
+            </main>
             <Footer />
         </div>
     );
 }
+

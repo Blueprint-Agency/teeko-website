@@ -14,7 +14,7 @@ export function CTASection() {
     };
 
     return (
-        <section className="bg-gray-900 dark:bg-black py-16 sm:py-20 lg:py-24 overflow-hidden">
+        <section className="bg-[var(--background)] py-16 sm:py-20 lg:py-24 overflow-hidden">
             <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="relative bg-gradient-to-br from-primary-600 to-primary-800 rounded-3xl p-8 sm:p-12 lg:p-16 overflow-hidden">
                     {/* Background Pattern */}
@@ -90,3 +90,4 @@ export function CTASection() {
         </section>
     );
 }
+

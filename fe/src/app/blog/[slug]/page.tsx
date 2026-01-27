@@ -1,10 +1,11 @@
 import { Metadata } from "next";
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 import { notFound } from "next/navigation";
 import { Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 interface ContentBlock {
     id: string;
@@ -93,12 +94,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-zinc-950 dark:to-zinc-900">
+        <div className="min-h-screen bg-[var(--background)]">
             <Navigation forceSolid />
-            <div className="container mx-auto px-4 py-16 pt-24">
-                <Link href="/blog" className="inline-flex items-center text-red-600 dark:text-red-400 hover:underline mb-8">
-                    <ArrowLeft className="h-4 w-4 mr-2" /> Back to all posts
-                </Link>
+            <main className="max-w-container mx-auto px-4 py-12 pt-20">
+                <Breadcrumbs
+                    items={[
+                        { label: "Blog", href: "/blog" },
+                        { label: post.title }
+                    ]}
+                />
 
                 <article className="max-w-4xl mx-auto">
                     {post.featureImage && (
@@ -149,7 +153,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         </Link>
                     </div>
                 </article>
-            </div>
+            </main>
             <Footer />
         </div>
     );

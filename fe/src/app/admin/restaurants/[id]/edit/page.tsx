@@ -2,11 +2,11 @@
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft, Loader2, Save, Trash2, Plus, X } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
-import { Toast, ToastType } from "@/components/Toast";
+import { API_BASE_URL } from "@/lib/constants";
+import { Toast, ToastType } from "@/components/ui/Toast";
 
 export default function EditRestaurantPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 import RestaurantDetailsPage from "./RestaurantDetailsPage";
 import { Metadata } from 'next';
 

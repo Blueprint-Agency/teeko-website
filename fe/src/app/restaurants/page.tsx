@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 import RestaurantsPage from "./RestaurantsPage";
 import { Metadata } from 'next';
 
@@ -22,3 +22,4 @@ export default async function Page() {
     const restaurants = await getRestaurants();
     return <RestaurantsPage initialRestaurants={restaurants} />;
 }
+

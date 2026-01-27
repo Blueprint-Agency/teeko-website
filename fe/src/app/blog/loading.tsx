@@ -1,6 +1,6 @@
 import { Loader2 } from "lucide-react";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
 
 export default function Loading() {
     return (
@@ -18,3 +18,4 @@ export default function Loading() {
         </div>
     );
 }
+

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 
 export function HomeSearch() {
     const router = useRouter();
@@ -38,3 +38,4 @@ export function HomeSearch() {
         </form>
     );
 }
+

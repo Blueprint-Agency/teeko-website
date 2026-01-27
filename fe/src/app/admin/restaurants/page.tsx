@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { Plus, Edit2, Loader2 } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 
 interface Restaurant {
     id: string;
@@ -126,3 +126,4 @@ export default function AdminRestaurantsPage() {
         </div>
     );
 }
+

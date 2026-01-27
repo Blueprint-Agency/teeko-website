@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { Loader2, ExternalLink } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 import Link from "next/link";
-import { Button } from "@/components/Button";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/Button";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 interface Provider {
     id: string;
@@ -58,9 +59,10 @@ export default function EsimPage() {
         : packages.filter(pkg => pkg.provider?.id === selectedProvider);
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-zinc-950 dark:to-zinc-900">
+        <div className="min-h-screen bg-[var(--background)]">
             <Navigation forceSolid />
-            <div className="container mx-auto px-4 py-16 pt-24">
+            <main className="max-w-container mx-auto px-4 py-12 pt-20">
+                <Breadcrumbs items={[{ label: "eSIM" }]} />
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
                         eSIM Packages
@@ -75,8 +77,8 @@ export default function EsimPage() {
                     <button
                         onClick={() => setSelectedProvider("all")}
                         className={`px-6 py-2 rounded-full font-medium transition-all ${selectedProvider === "all"
-                                ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
-                                : "bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700"
+                            ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
+                            : "bg-[var(--card-bg)] text-gray-700 dark:text-gray-300 border border-[var(--border)] hover:bg-[var(--background-alt)]"
                             }`}
                     >
                         All Providers
@@ -86,8 +88,8 @@ export default function EsimPage() {
                             key={provider.id}
                             onClick={() => setSelectedProvider(provider.id)}
                             className={`px-6 py-2 rounded-full font-medium transition-all ${selectedProvider === provider.id
-                                    ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
-                                    : "bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-700"
+                                ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
+                                : "bg-[var(--card-bg)] text-gray-700 dark:text-gray-300 border border-[var(--border)] hover:bg-[var(--background-alt)]"
                                 }`}
                         >
                             {provider.name}
@@ -107,7 +109,7 @@ export default function EsimPage() {
                                 href={`/esim/${pkg.slug}`}
                                 className="group"
                             >
-                                <div className="h-full rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1">
+                                <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1">
                                     {pkg.featureImage && (
                                         <div className="aspect-video overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950">
                                             <img
@@ -155,8 +157,9 @@ export default function EsimPage() {
                         </p>
                     </div>
                 )}
-            </div>
+            </main>
             <Footer />
         </div>
     );
 }
+

@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 
 export default function CreateRestaurantPage() {
     const router = useRouter();
@@ -148,3 +148,4 @@ export default function CreateRestaurantPage() {
         </div>
     );
 }
+

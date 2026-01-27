@@ -83,9 +83,9 @@ export const GoogleReviewsList = ({ reviews }: { reviews: GoogleReview[] }) => {
                 Latest from Google
                 <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" className="w-5 h-5" />
             </h3>
-            <div className="grid gap-4">
+            <div className="flex sm:grid gap-4 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory">
                 {reviews.map((review) => (
-                    <div key={review.id} className="p-5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700">
+                    <div key={review.id} className="min-w-[75vw] sm:min-w-0 p-5 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 snap-center">
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-3">
                                 {review.authorImage ? (
@@ -106,13 +106,13 @@ export const GoogleReviewsList = ({ reviews }: { reviews: GoogleReview[] }) => {
                                 ))}
                             </div>
                         </div>
-                        <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-3">
+                        <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-3 line-clamp-4">
                             {review.text}
                         </p>
                         {review.images && review.images.length > 0 && (
-                            <div className="flex gap-2 overflow-x-auto pb-2">
+                            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                                 {review.images.map((img, idx) => (
-                                    <img key={idx} src={img} alt="Review" className="w-24 h-24 rounded-lg object-cover flex-shrink-0" />
+                                    <img key={idx} src={img} alt="Review" className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
                                 ))}
                             </div>
                         )}
@@ -145,7 +145,7 @@ const SocialCard = ({ post }: { post: SocialPost }) => {
             href={post.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer block"
+            className="group relative aspect-[10/14] rounded-xl overflow-hidden cursor-pointer block"
         >
             <img
                 src={post.thumbnail}
@@ -206,13 +206,16 @@ export const SocialMediaGrid = ({ posts, type }: { posts: SocialPost[], type: 'x
                 {!isXHS && <Play className="w-4 h-4 text-gray-400" />}
             </h3>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory">
                 {posts.map((post) => (
-                    <SocialCard key={post.id} post={post} />
+                    <div key={post.id} className="min-w-[60vw] sm:min-w-0 snap-center">
+                        <SocialCard post={post} />
+                    </div>
                 ))}
             </div>
         </div>
     );
 };
+
 
 

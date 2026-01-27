@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
 import { Mail, Lock, Eye, EyeOff, User, Loader2 } from "lucide-react";
 
 export default function RegisterPage() {
@@ -213,3 +213,4 @@ export default function RegisterPage() {
         </div>
     );
 }
+

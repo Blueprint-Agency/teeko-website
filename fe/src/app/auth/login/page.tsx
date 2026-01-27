@@ -3,10 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
 import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -197,3 +197,4 @@ export default function LoginPage() {
         </div>
     );
 }
+

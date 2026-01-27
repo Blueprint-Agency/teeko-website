@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 import BlogListPage from "./BlogListPage";
 import { Metadata } from 'next';
 
@@ -22,3 +22,4 @@ export default async function Page() {
     const posts = await getPosts();
     return <BlogListPage initialPosts={Array.isArray(posts) ? posts : []} />;
 }
+

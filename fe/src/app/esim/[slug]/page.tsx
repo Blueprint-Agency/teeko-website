@@ -1,11 +1,12 @@
 import { Metadata } from "next";
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 import { notFound } from "next/navigation";
 import { ExternalLink, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/Button";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/Button";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 interface Provider {
     id: string;
@@ -63,12 +64,15 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-zinc-950 dark:to-zinc-900">
+        <div className="min-h-screen bg-[var(--background)]">
             <Navigation forceSolid />
-            <div className="container mx-auto px-4 py-16 pt-24">
-                <Link href="/esim" className="inline-flex items-center text-red-600 dark:text-red-400 hover:underline mb-8">
-                    <ArrowLeft className="h-4 w-4 mr-2" /> Back to all packages
-                </Link>
+            <main className="max-w-container mx-auto px-4 py-12 pt-20">
+                <Breadcrumbs
+                    items={[
+                        { label: "eSIM", href: "/esim" },
+                        { label: pkg.packageName }
+                    ]}
+                />
 
                 <div className="max-w-4xl mx-auto">
                     <div className="rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xl">
@@ -131,7 +135,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
             <Footer />
         </div>
     );

@@ -98,3 +98,4 @@ export const sampleRestaurants = [
 ];
 
 export const featuredRestaurants = sampleRestaurants.slice(0, 4);
+

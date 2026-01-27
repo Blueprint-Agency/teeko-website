@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { Save, Loader2, Globe, Image as ImageIcon, Type } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
-import { Toast, ToastType } from "@/components/Toast";
+import { API_BASE_URL } from "@/lib/constants";
+import { Toast, ToastType } from "@/components/ui/Toast";
 
 export default function AdminSettingsPage() {
     const [loading, setLoading] = useState(true);
@@ -151,3 +151,4 @@ export default function AdminSettingsPage() {
         </div>
     );
 }
+
