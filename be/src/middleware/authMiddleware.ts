@@ -26,7 +26,7 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
 
 export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
     authenticateToken(req, res, () => {
-        if (req.user?.role !== "ADMIN") {
+        if (req.user?.role !== "ADMIN" && req.user?.role !== "SUPERADMIN") {
             res.status(403).json({ message: "Admin access required" });
             return;
         }

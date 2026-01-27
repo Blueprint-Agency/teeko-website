@@ -19,25 +19,8 @@ async function main() {
         await db.delete(users);
         console.log("✅ Cleared existing data");
 
-        // 1. Create Users
-        console.log("👤 Creating users...");
-        const passwordHash = await bcrypt.hash("password123", 10);
-
-        await db.insert(users).values([
-            {
-                email: "admin@teeko.com",
-                passwordHash,
-                role: "ADMIN",
-                isVerified: true,
-            },
-            {
-                email: "user@teeko.com",
-                passwordHash,
-                role: "USER",
-                isVerified: true,
-            },
-        ]);
-        console.log("✅ Created users");
+        // 1. Users are now exclusively handled by seedAdmin() below
+        console.log("👤 User initialization moved to seedAdmin step...");
 
         // 2. Create Locations
         console.log("📍 Creating locations...");
@@ -368,8 +351,7 @@ async function main() {
 
         console.log("\n✨ Database seeded successfully!");
         console.log(`📊 Summary:`);
-        console.log(`   - Admin user (from .env)`);
-        console.log(`   - 2 demo users`);
+        console.log(`   - Superadmin account (synchronized from .env)`);
         console.log(`   - ${[kualaLumpur, penang, johorBahru].length} locations`);
         console.log(`   - ${createdRestaurants.length} restaurants`);
         console.log(`   - ${imageData.length} images`);

@@ -43,6 +43,13 @@
       "when": 1769324712478,
       "tag": "0005_chemical_smasher",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1769517969338,
+      "tag": "0006_nosy_stark_industries",
+      "breakpoints": true
     }
   ]
 }
