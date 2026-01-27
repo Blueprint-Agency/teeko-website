@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { db } from "../db";
 import { restaurants, restaurantImages, locations, restaurantStats } from "../db/schema";
 import { eq } from "drizzle-orm";
+import { getJson } from "serpapi";
 
 export const getRestaurants = async (req: Request, res: Response) => {
     const { location: locationSlug } = req.query;
@@ -177,6 +178,71 @@ export const createRestaurant = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+export const createRestaurantByTripAdvisorID = async (req: Request, res: Response) => {
+    const { tripAdvisorID } = req.params;
+    const { locationId, priceRange } = req.body;
+
+    try {
+        getJson({
+            api_key: process.env.SERPAPI_API_KEY,
+            engine: "tripadvisor_place",
+            place_id: tripAdvisorID,
+            tripadvisor_domain: "www.tripadvisor.com.my"
+        }, async (json: any) => {
+            if (!json.place_result) {
+                res.status(404).json({ message: "TripAdvisor place not found" });
+                return;
+            }
+
+            try {
+                const newRestaurant = await db
+                    .insert(restaurants)
+                    .values({
+                        name: json.place_result.name as string,
+                        slug: (json.place_result.name as string).toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, ""),
+                        locationId: locationId as string,
+                        tripAdvisorLocationId: tripAdvisorID as string,
+                        description: json.place_result.description as string,
+                        address: json.place_result.address as string,
+                        priceRange: priceRange as string,
+                        cuisine: json.place_result.cuisines[0] as string,
+                        contactInfo: {
+                            phone: json.place_result.phone,
+                            website: json.place_result.website,
+                        },
+                        operatingHours: json.place_result.operation_hours?.hours,
+                    })
+                    .returning();
+
+                const restaurantId = newRestaurant[0].id;
+
+                // 2. Add Images if provided
+                if (json.place_result.images && Array.isArray(json.place_result.images)) {
+                    await db.insert(restaurantImages).values(
+                        json.place_result.images.map((img: any, index: number) => ({
+                            restaurantId,
+                            url: img,
+                            caption: `Image ${index + 1}`,
+                            isPrimary: index === 0,
+                        }))
+                    );
+                }
+
+                res.status(201).json({
+                    message: "Restaurant created successfully via TripAdvisor",
+                    restaurant: newRestaurant[0]
+                });
+            } catch (dbError) {
+                console.error("Database error:", dbError);
+                res.status(500).json({ message: "Failed to save restaurant to database" });
+            }
+        });
+    } catch (error) {
+        console.error("SerpApi error:", error);
+        res.status(500).json({ message: "Error fetching data from TripAdvisor" });
+    }
+}
 
 export const updateRestaurant = async (req: Request, res: Response) => {
     const { id } = req.params;
