@@ -98,7 +98,6 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                             Sign In
                         </Link>
 
-                        {/* Mobile menu button */}
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             className={`md:hidden p-2 rounded-lg transition-colors ${isScrolled
@@ -107,9 +106,9 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                                 }`}
                         >
                             {mobileMenuOpen ? (
-                                <X className={`w-6 h-6 ${isScrolled ? "text-[var(--foreground)]" : "text-white"}`} />
+                                <X className={`w-6 h-6 ${isScrolled ? "text-gray-900 dark:text-white" : "text-white"}`} />
                             ) : (
-                                <Menu className={`w-6 h-6 ${isScrolled ? "text-[var(--foreground)]" : "text-white"}`} />
+                                <Menu className={`w-6 h-6 ${isScrolled ? "text-gray-900 dark:text-white" : "text-white"}`} />
                             )}
                         </button>
                     </div>

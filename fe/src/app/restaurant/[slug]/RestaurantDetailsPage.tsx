@@ -166,7 +166,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-6 text-sm mb-6">
+                                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm mb-6">
                                     <div className="flex items-center gap-1.5">
                                         <div className="flex text-red-500">
                                             {[1, 2, 3, 4, 5].map(star => <Star key={star} className={`w-5 h-5 ${star <= Math.floor(restaurant?.rating || 0) ? 'fill-current' : 'text-gray-300'}`} />)}
