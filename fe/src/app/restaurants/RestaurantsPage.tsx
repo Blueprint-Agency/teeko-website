@@ -26,8 +26,8 @@ const RestaurantsPage = ({ initialRestaurants }: RestaurantsPageProps) => {
         }
         // Filter by Price
         if (selectedPrice) {
-            const priceParts = restaurant.priceRange.split("-").map((p: string) => p.trim());
-            if (!priceParts.includes(selectedPrice)) {
+            const priceParts = restaurant.priceRange?.split("-").map((p: string) => p.trim());
+            if (!priceParts?.includes(selectedPrice)) {
                 return false;
             }
         }
