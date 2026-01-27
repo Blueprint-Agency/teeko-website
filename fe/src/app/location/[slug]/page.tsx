@@ -53,7 +53,7 @@ export default async function LocationPage({ params }: { params: Promise<{ slug:
 
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900">
-            <Navigation />
+            <Navigation forceSolid />
             {/* Minimalist Header with a bit more punch */}
             <div className="relative py-16 md:py-24 w-full bg-white dark:bg-black border-b border-gray-100 dark:border-zinc-900">
                 <div className="container mx-auto px-4">

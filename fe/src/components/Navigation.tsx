@@ -39,9 +39,8 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
         >
             <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
-                    {/* Logo - Left */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="relative w-8 h-8 rounded-full overflow-hidden">
+                        <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0">
                             <img
                                 src="/teeko-icon.png"
                                 alt="Teeko"

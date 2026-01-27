@@ -18,7 +18,7 @@ export default async function LocationsIndexPage() {
 
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900">
-            <Navigation />
+            <Navigation forceSolid />
             <main className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
                 <div className="mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
