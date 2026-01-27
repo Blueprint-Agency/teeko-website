@@ -3,53 +3,107 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Primary Colors */
+  /* 
+     TEEKO COLOR SYSTEM 
+     Change the hex values below to update the entire site brand
+  */
+  --brand-primary: #ef4444;
+  /* Main Red */
+  --brand-secondary: #facc15;
+  /* Main Gold/Yellow */
+  --brand-accent: #dc2626;
+
+  /* Primary Scales (Derived from brand primary) */
   --color-primary-50: #fef2f2;
   --color-primary-100: #fee2e2;
   --color-primary-200: #fecaca;
   --color-primary-300: #fca5a5;
   --color-primary-400: #f87171;
-  --color-primary-500: #ef4444;
-  --color-primary-600: #dc2626;
+  --color-primary-500: var(--brand-primary);
+  --color-primary-600: var(--brand-accent);
   --color-primary-700: #b91c1c;
   --color-primary-800: #991b1b;
   --color-primary-900: #7f1d1d;
-  --color-primary: var(--color-primary-500);
+  --color-primary: var(--brand-primary);
 
-  /* Secondary Colors */
+  /* Secondary Scales */
   --color-secondary-50: #fefce8;
   --color-secondary-100: #fef3c7;
   --color-secondary-200: #fee68a;
   --color-secondary-300: #fde047;
-  --color-secondary-400: #facc15;
+  --color-secondary-400: var(--brand-secondary);
   --color-secondary-500: #eab308;
   --color-secondary-600: #ca8a04;
   --color-secondary-700: #a16207;
   --color-secondary-800: #854d0e;
   --color-secondary-900: #713f12;
-  --color-secondary: var(--color-secondary-400);
+  --color-secondary: var(--brand-secondary);
 
-  /* Container */
+  /* Layout */
   --container-max-width: 1440px;
 }
 
 @layer base {
   :root {
     --background: #ffffff;
-    --foreground: #0f172a;
+    --background-alt: #fff9f9;
+    /* Super subtle red for split sections */
+    --background-accent: #fef1f2;
+    /* Soft light red for focus sections (primary-50) */
+    --foreground: #020617;
+    /* High contrast dark */
+    --card-bg: #ffffff;
+    --border: #f1f5f9;
+    --muted: #475569;
+    /* Darker muted for readability */
+    font-size: 14px;
+    /* Scaled down from 16px to reduce overall UI size */
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      font-size: 15px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    :root {
+      font-size: 14px;
+    }
   }
 
   .dark {
     --background: #0b0f14;
-    --foreground: #f9fafb;
+    --background-alt: #11151c;
+    --background-accent: #1a1f26;
+    --foreground: #f8fafc;
+    --card-bg: #1a1f26;
+    --border: #262c36;
+    --muted: #94a3b8;
   }
 
   body {
     background: var(--background);
     color: var(--foreground);
     font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.95rem;
+    /* Further fine-tuning body text */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+  }
+}
+
+@layer base {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--foreground);
+    letter-spacing: -0.025em;
   }
 }
 
@@ -62,5 +116,81 @@
     max-width: 1280px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Standardized Section Headers */
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    /* mb-12 */
+  }
+
+  .section-title {
+    font-size: 1.875rem;
+    /* text-3xl */
+    line-height: 2.25rem;
+    font-weight: 800;
+    /* font-extrabold */
+    margin-bottom: 1rem;
+    /* mb-4 */
+  }
+
+  @media (min-width: 640px) {
+    .section-title {
+      font-size: 2.25rem;
+      /* text-4xl */
+      line-height: 2.5rem;
+    }
+  }
+
+  .section-description {
+    font-size: 1.125rem;
+    /* text-lg */
+    color: var(--muted);
+    max-width: 42rem;
+    /* max-w-2xl */
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.625;
+  }
+
+  /* Standardized Page Headers */
+  .page-header {
+    margin-bottom: 3rem;
+    /* mb-12 */
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 2.25rem;
+    /* text-4xl */
+    font-weight: 900;
+    /* font-black */
+    margin-bottom: 1rem;
+    letter-spacing: -0.05em;
+  }
+
+  @media (min-width: 768px) {
+    .page-title {
+      font-size: 3rem;
+      /* text-5xl */
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .page-title {
+      font-size: 3.75rem;
+      /* text-6xl */
+    }
   }
 }

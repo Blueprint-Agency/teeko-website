@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { Plus, Edit2, Loader2, Trash2 } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
-import { Toast, ToastType } from "@/components/Toast";
+import { API_BASE_URL } from "@/lib/constants";
+import { Toast, ToastType } from "@/components/ui/Toast";
 import Link from "next/link";
 
 interface Provider {
@@ -215,3 +215,4 @@ export default function AdminEsimPage() {
         </div>
     );
 }
+

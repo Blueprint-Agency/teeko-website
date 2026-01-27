@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
-import { ThemeSwitch } from "./ThemeSwitch";
+import { ThemeSwitch } from "../shared/ThemeSwitch";
 
 export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -32,23 +32,22 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                ? "bg-white dark:bg-gray-900 shadow-md"
-                : "bg-transparent"
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${isScrolled
+                ? "bg-white/90 dark:bg-[#0b0f14]/90 backdrop-blur-md shadow-sm border-b border-[var(--border)]"
+                : "bg-transparent border-b border-transparent"
                 }`}
         >
             <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
-                    {/* Logo - Left */}
+                <div className="flex items-center justify-between h-14">
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="relative w-8 h-8 rounded-full overflow-hidden">
+                        <div className="relative w-7 h-7 rounded-full overflow-hidden shrink-0">
                             <img
                                 src="/teeko-icon.png"
                                 alt="Teeko"
                                 className="w-full h-full object-cover"
                             />
                         </div>
-                        <span className={`text-xl font-bold transition-colors ${isScrolled
+                        <span className={`text-lg font-bold transition-colors ${isScrolled
                             ? "text-gray-900 dark:text-white"
                             : "text-white"
                             }`}>
@@ -68,7 +67,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                                     className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${item.special
                                         ? "bg-primary-500/10 dark:bg-primary-500/20 text-primary-600 dark:text-primary-400 border border-primary-500/20 hover:bg-primary-500/20 dark:hover:bg-primary-500/30 backdrop-blur-sm shadow-sm hover:shadow-primary-500/20 ring-1 ring-primary-500/10 hover:ring-primary-500/30"
                                         : isScrolled
-                                            ? "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                                            ? "text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 hover:bg-[var(--background-alt)]"
                                             : "text-white/90 hover:text-white hover:bg-white/10"
                                         }`}
                                 >
@@ -79,7 +78,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                                     key={item.href}
                                     href={item.href}
                                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${isScrolled
-                                        ? "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
+                                        ? "text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 hover:bg-[var(--background-alt)]"
                                         : "text-white/90 hover:text-white hover:bg-white/10"
                                         }`}
                                 >
@@ -94,7 +93,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                         <ThemeSwitch isScrolled={isScrolled} />
                         <Link
                             href="/auth/login"
-                            className="hidden sm:inline-flex items-center px-5 py-2.5 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-full transition-colors shadow-sm"
+                            className="hidden sm:inline-flex items-center px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white text-[13px] font-semibold rounded-full transition-colors shadow-sm"
                         >
                             Sign In
                         </Link>
@@ -108,9 +107,9 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                                 }`}
                         >
                             {mobileMenuOpen ? (
-                                <X className={`w-6 h-6 ${isScrolled ? "text-gray-700 dark:text-gray-300" : "text-white"}`} />
+                                <X className={`w-6 h-6 ${isScrolled ? "text-[var(--foreground)]" : "text-white"}`} />
                             ) : (
-                                <Menu className={`w-6 h-6 ${isScrolled ? "text-gray-700 dark:text-gray-300" : "text-white"}`} />
+                                <Menu className={`w-6 h-6 ${isScrolled ? "text-[var(--foreground)]" : "text-white"}`} />
                             )}
                         </button>
                     </div>
@@ -119,15 +118,15 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
 
             {/* Mobile Menu - Fixed overlay */}
             {mobileMenuOpen && (
-                <div className="md:hidden fixed inset-0 top-16 z-40">
+                <div className="md:hidden fixed inset-0 top-14 z-40">
                     {/* Backdrop */}
                     <div
-                        className="absolute inset-0 bg-black/50"
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                         onClick={() => setMobileMenuOpen(false)}
                     />
 
                     {/* Menu Panel */}
-                    <div className="relative bg-white dark:bg-gray-900 shadow-xl mx-4 mt-2 rounded-2xl overflow-hidden">
+                    <div className="relative bg-[var(--card-bg)] border-b border-[var(--border)] shadow-2xl mx-4 mt-2 rounded-2xl overflow-hidden border border-[var(--border)]">
                         <div className="p-4 space-y-1">
                             {menuItems.map((item: any) => (
                                 item.external ? (
@@ -138,7 +137,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                                         rel="noopener noreferrer"
                                         className={`block px-4 py-3 text-base font-medium rounded-xl transition-colors ${item.special
                                             ? "bg-primary-500/10 text-primary-600 border border-primary-500/20"
-                                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                            : "text-[var(--foreground)] hover:bg-[var(--background-alt)]"
                                             }`}
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
@@ -148,7 +147,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                                     <Link
                                         key={item.href}
                                         href={item.href}
-                                        className="block px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+                                        className="block px-4 py-3 text-base font-medium text-[var(--foreground)] hover:bg-[var(--background-alt)] rounded-xl transition-colors"
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
                                         {item.label}
@@ -171,3 +170,4 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
         </nav>
     );
 }
+

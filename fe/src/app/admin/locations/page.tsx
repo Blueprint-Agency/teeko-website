@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { Plus, Search, Edit2, Loader2, X } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
-import { Toast, ToastType } from "@/components/Toast";
+import { API_BASE_URL } from "@/lib/constants";
+import { Toast, ToastType } from "@/components/ui/Toast";
 
 interface Location {
     id: string;
@@ -248,3 +248,4 @@ export default function AdminLocationsPage() {
         </div>
     );
 }
+

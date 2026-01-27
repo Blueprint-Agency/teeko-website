@@ -45,8 +45,8 @@ export function ThemeSwitch({ isScrolled = true }: ThemeSwitchProps) {
         <button
             onClick={toggleTheme}
             className={`p-2 rounded-full transition-colors ${isScrolled
-                    ? "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
-                    : "bg-white/10 hover:bg-white/20"
+                ? "bg-[var(--background-alt)] hover:bg-[var(--card-bg)] border border-[var(--border)]"
+                : "bg-white/10 hover:bg-white/20"
                 }`}
             aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
         >
@@ -58,3 +58,4 @@ export function ThemeSwitch({ isScrolled = true }: ThemeSwitchProps) {
         </button>
     );
 }
+

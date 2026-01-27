@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Store, MapPin, Users, Loader2 } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
+import { API_BASE_URL } from "@/lib/constants";
 
 export default function AdminDashboardPage() {
     const [stats, setStats] = useState({
@@ -77,3 +77,4 @@ export default function AdminDashboardPage() {
         </div>
     );
 }
+

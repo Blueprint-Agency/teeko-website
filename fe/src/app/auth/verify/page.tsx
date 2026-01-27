@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
 import { CheckCircle } from "lucide-react";
 
 export default function VerifyPage() {
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
-            <Navigation />
+            <Navigation forceSolid />
             <main className="flex-1 flex items-center justify-center px-4 py-12">
                 <div className="w-full max-w-md text-center">
                     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 border border-gray-200 dark:border-gray-700">
@@ -48,3 +48,4 @@ export default function VerifyPage() {
         </div>
     );
 }
+

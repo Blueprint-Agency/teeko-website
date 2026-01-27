@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensils, Award, BookOpen } from 'lucide-react';
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
-import { ReviewsTab } from "@/components/restaurant/ReviewsTab";
-import { GoogleReview, SocialPost } from "@/components/restaurant/ReviewComponents";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
+import { ReviewsTab } from "@/components/features/restaurant/ReviewsTab";
+import { GoogleReview, SocialPost } from "@/components/features/restaurant/ReviewComponents";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { ImageModal } from "@/components/shared/ImageModal";
 
 const CONSTANT_XHS_POSTS: SocialPost[] = [
     {
@@ -103,217 +105,252 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('overview');
     const [restaurant] = useState(initialRestaurant);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+    const imageUrls = restaurant?.restaurantImages?.map((img: any) => img.url) || [];
+
+    const openImage = (index: number) => {
+        setSelectedImageIndex(index);
+        setModalOpen(true);
+    };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans text-gray-900 dark:text-gray-100 pb-12 pt-20">
+        <div className="min-h-screen bg-[var(--background)] pb-12">
             <Navigation forceSolid />
-            {/* Breadcrumbs */}
-            <div className="max-w-7xl mx-auto px-6 py-4">
-                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 gap-2">
-                    <span className="cursor-pointer hover:text-red-600 dark:hover:text-red-400" onClick={() => router.push('/restaurants')}>Restaurants</span>
-                    <ChevronRight className="w-4 h-4" />
-                    <span className="font-medium text-gray-900 dark:text-gray-200">{restaurant?.name}</span>
-                </div>
-            </div>
 
-            {/* Hero Images Grid (TripAdvisor style) */}
-            <div className="max-w-7xl mx-auto px-6 mb-8">
-                <div className="grid grid-cols-4 gap-2 h-96 rounded-2xl overflow-hidden relative">
-                    <div className="col-span-2 row-span-2">
-                        <img src={restaurant?.restaurantImages?.[0]?.url} alt="Main" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-                    </div>
-                    <div className="col-span-1">
-                        <img src={restaurant?.restaurantImages?.[1]?.url} alt="Dish 1" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-                    </div>
-                    <div className="col-span-1">
-                        <img src={restaurant?.restaurantImages?.[2]?.url} alt="Dish 2" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-                    </div>
-                    <div className="col-span-1">
-                        <img src={restaurant?.restaurantImages?.[3]?.url} alt="Dish 3" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-                    </div>
-                    {/* <div className="col-span-1 relative">
-                        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1374&auto=format&fit=crop" alt="Ambience" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer hover:bg-black/50 transition-colors">
-                            <span className="text-white font-bold text-lg">+ 42 photos</span>
-                        </div>
-                    </div> */}
-                </div>
-            </div>
+            <main className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+                <Breadcrumbs
+                    items={[
+                        { label: "Restaurants", href: "/restaurants" },
+                        { label: restaurant?.name || "Restaurant" }
+                    ]}
+                />
 
-            <div className="max-w-7xl mx-auto px-6 mb-20">
-                <div className="flex flex-col lg:flex-row gap-10">
-
-                    {/* Main Content */}
-                    <div className="flex-1">
-                        {/* Header Info */}
-                        <div className="mb-8 border-b border-gray-200 dark:border-gray-700 pb-8">
-                            <div className="flex justify-between items-start mb-4">
-                                <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">{restaurant?.name}</h1>
-                                <div className="flex gap-2">
-                                    <button className="p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-200 dark:hover:border-red-800 hover:text-red-600 dark:hover:text-red-400 transition-all">
-                                        <Share2 className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-red-600" />
-                                    </button>
-                                    <button className="p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-200 dark:hover:border-red-800 hover:text-red-600 dark:hover:text-red-400 transition-all">
-                                        <Heart className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-red-600" />
-                                    </button>
-                                </div>
+                {/* Hero Images Grid (TripAdvisor style) - Horizontal scroll on mobile */}
+                <div className="mb-8 -mx-4 sm:mx-0">
+                    <div className="flex sm:grid sm:grid-cols-4 gap-2 h-[300px] sm:h-96 overflow-x-auto sm:overflow-hidden snap-x snap-mandatory scrollbar-hide">
+                        {restaurant?.restaurantImages?.slice(0, 4).map((img: any, idx: number) => (
+                            <div
+                                key={img.id || idx}
+                                className={`relative min-w-[85vw] sm:min-w-0 h-full snap-center cursor-pointer overflow-hidden ${idx === 0 ? 'sm:col-span-2 sm:row-span-2' : 'sm:col-span-1'
+                                    }`}
+                                onClick={() => openImage(idx)}
+                            >
+                                <img
+                                    src={img.url}
+                                    alt={`${restaurant.name} ${idx + 1}`}
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                />
                             </div>
+                        ))}
+                    </div>
+                </div>
 
-                            <div className="flex items-center gap-6 text-sm mb-6">
-                                <div className="flex items-center gap-1.5">
-                                    <div className="flex text-red-500">
-                                        {[1, 2, 3, 4, 5].map(star => <Star key={star} className={`w-5 h-5 ${star <= Math.floor(restaurant?.rating || 0) ? 'fill-current' : 'text-gray-300'}`} />)}
+                <div className="max-w-7xl mx-auto px-6 mb-20">
+                    <div className="flex flex-col lg:flex-row gap-10">
+
+                        {/* Main Content */}
+                        <div className="flex-1">
+                            {/* Header Info */}
+                            <div className="mb-8 border-b border-gray-200 dark:border-gray-700 pb-8">
+                                <div className="flex justify-between items-start mb-4">
+                                    <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">{restaurant?.name}</h1>
+                                    <div className="flex gap-2">
+                                        <button className="p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-200 dark:hover:border-red-800 hover:text-red-600 dark:hover:text-red-400 transition-all">
+                                            <Share2 className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-red-600" />
+                                        </button>
+                                        <button className="p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-200 dark:hover:border-red-800 hover:text-red-600 dark:hover:text-red-400 transition-all">
+                                            <Heart className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-red-600" />
+                                        </button>
                                     </div>
-                                    <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">{restaurant?.rating}</span>
-                                    <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{restaurant?.reviewCount} reviews</span>
                                 </div>
 
-                                <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-                                    <Utensils className="w-4 h-4" />
-                                    <span>{restaurant?.cuisine}</span>
+                                <div className="flex items-center gap-6 text-sm mb-6">
+                                    <div className="flex items-center gap-1.5">
+                                        <div className="flex text-red-500">
+                                            {[1, 2, 3, 4, 5].map(star => <Star key={star} className={`w-5 h-5 ${star <= Math.floor(restaurant?.rating || 0) ? 'fill-current' : 'text-gray-300'}`} />)}
+                                        </div>
+                                        <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">{restaurant?.rating}</span>
+                                        <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{restaurant?.reviewCount} reviews</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
+                                        <Utensils className="w-4 h-4" />
+                                        <span>{restaurant?.cuisine}</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
+                                        <span className="font-medium text-gray-900 dark:text-gray-100">{restaurant?.priceRange}</span>
+                                    </div>
+
+                                    <div className={`px-3 py-1 rounded-full text-xs font-bold ${restaurant?.isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {restaurant?.isOpen ? 'Open Now' : 'Closed'}
+                                    </div>
                                 </div>
 
-                                <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-                                    <span className="font-medium text-gray-900 dark:text-gray-100">{restaurant?.priceRange}</span>
-                                </div>
-
-                                <div className={`px-3 py-1 rounded-full text-xs font-bold ${restaurant?.isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                    {restaurant?.isOpen ? 'Open Now' : 'Closed'}
+                                <div className="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                                    <MapPin className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                                    <span className="text-base">{restaurant?.address}</span>
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-2 text-gray-600 dark:text-gray-300">
-                                <MapPin className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-                                <span className="text-base">{restaurant?.address}</span>
+                            {/* Tabs */}
+                            <div className="flex gap-6 border-b border-[var(--border)] mb-8 overflow-x-auto sticky top-14 bg-[var(--background)]/95 backdrop-blur-md z-30 py-4 -mx-4 px-4 sm:mx-0 sm:px-0 shadow-sm scrollbar-hide">
+                                {['Overview', 'Reviews', 'Photos', 'Q&A'].map(tab => (
+                                    <button
+                                        key={tab}
+                                        onClick={() => {
+                                            setActiveTab(tab.toLowerCase());
+                                            const element = document.getElementById(tab.toLowerCase());
+                                            if (element) {
+                                                const offset = 120; // Adjusted offset for better visibility
+                                                const bodyRect = document.body.getBoundingClientRect().top;
+                                                const elementRect = element.getBoundingClientRect().top;
+                                                const elementPosition = elementRect - bodyRect;
+                                                const offsetPosition = elementPosition - offset;
+
+                                                window.scrollTo({
+                                                    top: offsetPosition,
+                                                    behavior: 'smooth'
+                                                });
+                                            }
+                                        }}
+                                        className={`pb-3 font-bold text-sm whitespace-nowrap transition-all border-b-2 ${activeTab === tab.toLowerCase() ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
+                                    >
+                                        {tab}
+                                    </button>
+                                ))}
                             </div>
-                        </div>
 
-                        {/* Tabs */}
-                        <div className="flex gap-8 border-b border-gray-200 dark:border-gray-700 mb-8 overflow-x-auto sticky top-20 bg-gray-50 dark:bg-gray-900 z-10 py-2">
-                            {['Overview', 'Reviews', 'Photos', 'Q&A'].map(tab => (
-                                <button
-                                    key={tab}
-                                    onClick={() => {
-                                        setActiveTab(tab.toLowerCase());
-                                        document.getElementById(tab.toLowerCase())?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                    }}
-                                    className={`pb-4 font-bold text-base whitespace-nowrap transition-all border-b-2 ${activeTab === tab.toLowerCase() ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
-                                >
-                                    {tab}
-                                </button>
-                            ))}
-                        </div>
+                            {/* Content Sections */}
+                            <div className="space-y-16">
 
-                        {/* Content Sections */}
-                        <div className="space-y-16">
+                                {/* Overview Section */}
+                                <div id="overview" className="scroll-mt-48 space-y-10">
+                                    <section>
+                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">About</h2>
+                                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">{restaurant?.description}</p>
+                                    </section>
 
-                            {/* Overview Section */}
-                            <div id="overview" className="scroll-mt-48 space-y-10">
-                                <section>
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">About</h2>
-                                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">{restaurant?.description}</p>
-                                </section>
+                                    <section>
+                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features & Amenities</h2>
+                                        <div className="grid grid-cols-2 gap-y-3">
+                                            {restaurant?.feature?.map((feature: any) => (
+                                                <div key={feature} className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                                                    <Award className="w-5 h-5 text-red-500" />
+                                                    {feature}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                </div>
 
-                                <section>
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features & Amenities</h2>
-                                    <div className="grid grid-cols-2 gap-y-3">
-                                        {restaurant?.feature?.map((feature: any) => (
-                                            <div key={feature} className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                                                <Award className="w-5 h-5 text-red-500" />
-                                                {feature}
+
+
+                                {/* Reviews Section */}
+                                <div id="reviews" className="scroll-mt-48">
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Reviews & Social</h2>
+                                    <ReviewsTab
+                                        googleStats={restaurant?.stats?.googleStats}
+                                        tripAdvisorStats={restaurant?.stats?.tripAdvisorStats}
+                                        googleReviews={CONSTANT_GOOGLE_REVIEWS}
+                                        xhsPosts={CONSTANT_XHS_POSTS}
+                                        igReels={CONSTANT_IG_REELS}
+                                    />
+                                </div>
+
+                                {/* Photos Section */}
+                                <div id="photos" className="scroll-mt-48">
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Photos</h2>
+                                    <div className="flex sm:grid grid-cols-2 sm:grid-cols-4 gap-3 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory">
+                                        {restaurant?.restaurantImages?.map((img: any, idx: number) => (
+                                            <div
+                                                key={img.id || idx}
+                                                className="min-w-[60vw] sm:min-w-0 aspect-square bg-[var(--background-alt)] rounded-xl overflow-hidden cursor-pointer group snap-center"
+                                                onClick={() => openImage(idx)}
+                                            >
+                                                <img
+                                                    src={img.url}
+                                                    alt={`Gallery ${idx + 1}`}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                />
                                             </div>
                                         ))}
                                     </div>
-                                </section>
-                            </div>
-
-
-
-                            {/* Reviews Section */}
-                            <div id="reviews" className="scroll-mt-48">
-                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Reviews & Social</h2>
-                                <ReviewsTab
-                                    googleStats={restaurant?.stats?.googleStats}
-                                    tripAdvisorStats={restaurant?.stats?.tripAdvisorStats}
-                                    googleReviews={CONSTANT_GOOGLE_REVIEWS}
-                                    xhsPosts={CONSTANT_XHS_POSTS}
-                                    igReels={CONSTANT_IG_REELS}
-                                />
-                            </div>
-
-                            {/* Photos Section (Placeholder) */}
-                            <div id="photos" className="scroll-mt-48">
-                                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Photos</h2>
-                                <div className="grid grid-cols-4 gap-2 h-40">
-                                    {[1, 2, 3, 4].map(i => (
-                                        <div key={i} className="bg-gray-200 rounded-lg"></div>
-                                    ))}
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Sticky Sidebar */}
-                    <div className="w-full lg:w-80 shrink-0 space-y-6">
-                        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 sticky top-8">
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Location & Contact</h3>
+                        {/* Sticky Sidebar */}
+                        <div className="w-full lg:w-80 shrink-0 space-y-6">
+                            <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 sticky top-8">
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Location & Contact</h3>
 
-                            {/* Map Placeholder */}
-                            <div className="h-48 bg-gray-100 rounded-xl mb-6 relative overflow-hidden group">
-                                <div className="absolute inset-0 bg-[url('https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/-74.006,40.7128,14,0/600x400?access_token=YOUR_TOKEN')] bg-cover bg-center grayscale opacity-60"></div>
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <button className="bg-white/90 backdrop-blur px-4 py-2 rounded-lg text-sm font-bold text-gray-800 shadow-sm group-hover:scale-105 transition-transform flex items-center gap-2">
-                                        <MapPin className="w-4 h-4 text-red-500" />
-                                        View Map
+                                {/* Map Placeholder */}
+                                <div className="h-48 bg-gray-100 rounded-xl mb-6 relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-[url('https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/-74.006,40.7128,14,0/600x400?access_token=YOUR_TOKEN')] bg-cover bg-center grayscale opacity-60"></div>
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <button className="bg-white/90 backdrop-blur px-4 py-2 rounded-lg text-sm font-bold text-gray-800 shadow-sm group-hover:scale-105 transition-transform flex items-center gap-2">
+                                            <MapPin className="w-4 h-4 text-red-500" />
+                                            View Map
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4 mb-6">
+                                    <div className="flex items-start gap-3">
+                                        <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm">{restaurant?.contactInfo?.address}</p>
+                                    </div>
+
+                                    <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-semibold text-gray-700 dark:text-gray-200">
+                                        <BookOpen className="w-4 h-4" />
+                                        View Menu
                                     </button>
+                                    <div className="flex items-center gap-3">
+                                        <Phone className="w-5 h-5 text-gray-400" />
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">{restaurant?.contactInfo?.phone}</p>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <Globe className="w-5 h-5 text-gray-400" />
+                                        <a href={restaurant?.contactInfo?.website} target="_blank" className="text-red-600 text-sm font-medium hover:underline">Visit Website</a>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="space-y-4 mb-6">
-                                <div className="flex items-start gap-3">
-                                    <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
-                                    <p className="text-gray-600 dark:text-gray-300 text-sm">{restaurant?.contactInfo?.address}</p>
+                                <hr className="border-gray-100 dark:border-gray-700 my-4" />
+
+                                <div className="mb-6">
+                                    <h4 className="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                        <Clock className="w-4 h-4 text-red-500" /> Opening Hours
+                                    </h4>
+                                    <div className="space-y-2 text-sm">
+                                        {restaurant?.operatingHours?.map((h: any, i: any) => (
+                                            <div key={i} className="flex justify-between">
+                                                <span className="text-gray-500 dark:text-gray-400 w-20">{h.day}</span>
+                                                <span className="text-gray-900 dark:text-gray-200 font-medium">{h.time}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
 
-                                <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-semibold text-gray-700 dark:text-gray-200">
-                                    <BookOpen className="w-4 h-4" />
-                                    View Menu
+                                <button onClick={() => window.open(restaurant.reservationUrl, "_blank")} className="w-full bg-red-600 text-white font-bold py-3.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                                    Reserve a Table
                                 </button>
-                                <div className="flex items-center gap-3">
-                                    <Phone className="w-5 h-5 text-gray-400" />
-                                    <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">{restaurant?.contactInfo?.phone}</p>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Globe className="w-5 h-5 text-gray-400" />
-                                    <a href={restaurant?.contactInfo?.website} target="_blank" className="text-red-600 text-sm font-medium hover:underline">Visit Website</a>
-                                </div>
                             </div>
-
-                            <hr className="border-gray-100 dark:border-gray-700 my-4" />
-
-                            <div className="mb-6">
-                                <h4 className="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                                    <Clock className="w-4 h-4 text-red-500" /> Opening Hours
-                                </h4>
-                                <div className="space-y-2 text-sm">
-                                    {restaurant?.operatingHours?.map((h: any, i: any) => (
-                                        <div key={i} className="flex justify-between">
-                                            <span className="text-gray-500 dark:text-gray-400 w-20">{h.day}</span>
-                                            <span className="text-gray-900 dark:text-gray-200 font-medium">{h.time}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <button onClick={() => window.open(restaurant.reservationUrl, "_blank")} className="w-full bg-red-600 text-white font-bold py-3.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-                                Reserve a Table
-                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
             <Footer />
+
+            <ImageModal
+                images={imageUrls}
+                initialIndex={selectedImageIndex}
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+            />
         </div>
     );
 };

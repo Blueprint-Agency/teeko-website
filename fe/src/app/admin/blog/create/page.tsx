@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { Loader2, ArrowLeft, Plus, Trash2, GripVertical } from "lucide-react";
-import { API_BASE_URL } from "@/utils/constants";
-import { Toast, ToastType } from "@/components/Toast";
+import { API_BASE_URL } from "@/lib/constants";
+import { Toast, ToastType } from "@/components/ui/Toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -280,3 +280,4 @@ export default function CreateBlogPostPage() {
         </div>
     );
 }
+

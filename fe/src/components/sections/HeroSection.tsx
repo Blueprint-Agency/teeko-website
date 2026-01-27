@@ -75,7 +75,7 @@ export function HeroSection() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Search places..."
-                                    className="w-full pl-12 pr-28 py-4 bg-white dark:bg-gray-900 rounded-full text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none shadow-2xl text-sm sm:text-base"
+                                    className="w-full pl-12 pr-28 py-4 bg-[var(--card-bg)] rounded-full text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none shadow-2xl text-sm sm:text-base border border-[var(--border)] group-focus-within:border-primary-500/50"
                                 />
                                 <button
                                     type="submit"
@@ -126,3 +126,4 @@ export function HeroSection() {
         </section>
     );
 }
+
