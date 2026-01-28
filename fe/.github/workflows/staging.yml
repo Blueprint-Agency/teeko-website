@@ -27,8 +27,8 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/teeko-site-fe:staging
             ${{ secrets.DOCKERHUB_USERNAME }}/teeko-site-fe:staging-${{ github.sha }}
           build-args: |
-            NEXT_PUBLIC_API_URL=https://stagingapi.teeko.ai
-            NEXT_PUBLIC_AI_APP_URL=https://app.teeko.ai
+            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_AI_APP_URL=${{ secrets.NEXT_PUBLIC_AI_APP_URL }}
             BACKEND_URL=http://backend-site:3000
 
       - name: Trigger Portainer Deployment
