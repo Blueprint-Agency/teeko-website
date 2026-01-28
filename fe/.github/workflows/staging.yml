@@ -23,7 +23,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/teeko-staging-site-fe:staging
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/teeko-site-fe:staging
+            ${{ secrets.DOCKERHUB_USERNAME }}/teeko-site-fe:staging-${{ github.sha }}
           build-args: |
             NEXT_PUBLIC_API_URL=https://stagingapi.teeko.ai
             NEXT_PUBLIC_AI_APP_URL=https://app.teeko.ai
@@ -31,4 +33,4 @@ jobs:
 
       - name: Trigger Portainer Deployment
         run: |
-          curl -X POST "https://stagingport.teeko.ai/api/stacks/webhooks/e856af60-b222-4efd-a0c0-3425a30e7ea9"
+          curl -X POST "${{ secrets.PORTAINER_STAGING_WEBHOOK_URL }}"
