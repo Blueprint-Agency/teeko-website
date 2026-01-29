@@ -43,7 +43,7 @@ app.use("/esim", esimRoutes);
 app.use("/blog", blogRoutes);
 
 app.get("/", (req, res) => {
-    res.json({ message: "Teeko API is running!!!" });
+    res.json({ message: "Teeko API is running!" });
 });
 
 app.listen(PORT, async () => {
