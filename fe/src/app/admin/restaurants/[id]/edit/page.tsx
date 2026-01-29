@@ -4,7 +4,7 @@ import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import { ArrowLeft, Loader2, Save, Trash2, Plus, X } from "lucide-react";
+import { ArrowLeft, Save, Plus, X, Search, Loader2, Trash2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 
@@ -21,9 +21,18 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
         locationId: "",
         description: "",
         address: "",
-        priceRange: "$",
+        minPrice: "$",
+        maxPrice: "$",
+        cuisine: "",
+        features: [] as string[],
+        tripAdvisorId: "",
         images: [] as any[]
     });
+
+    const [syncing, setSyncing] = useState(false);
+    const [taId, setTaId] = useState("");
+
+    const priceOptions = ["$", "$$", "$$$", "$$$$"];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,15 +51,29 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                 setLocations(Array.isArray(locData) ? locData : []);
 
                 if (restRes.ok) {
+                    let minPrice = "$";
+                    let maxPrice = "$";
+
+                    if (restData.priceRange) {
+                        const parts = restData.priceRange.split("-").map((p: string) => p.trim());
+                        minPrice = parts[0] || "$";
+                        maxPrice = parts[1] || minPrice;
+                    }
+
                     setFormData({
                         name: restData.name || "",
                         slug: restData.slug || "",
                         locationId: restData.locationId || "",
                         description: restData.description || "",
                         address: restData.address || "",
-                        priceRange: restData.priceRange || "$",
+                        minPrice,
+                        maxPrice,
+                        cuisine: restData.cuisine || "",
+                        features: Array.isArray(restData.feature) ? restData.feature : [],
+                        tripAdvisorId: restData.tripAdvisorId || "",
                         images: restData.restaurantImages || []
                     });
+                    setTaId(restData.tripAdvisorId || "");
                 } else {
                     setToast({ message: "Restaurant not found", type: "error" });
                     setTimeout(() => router.push("/admin/restaurants"), 2000);
@@ -65,19 +88,91 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
         fetchData();
     }, [id, router]);
 
+    const handleFetchTripAdvisor = async () => {
+        if (!taId) return;
+        setSyncing(true);
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_BASE_URL}/restaurants/tripadvisor/${taId}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+
+                // Parse price range
+                let minPrice = "$";
+                let maxPrice = "$";
+                if (data.priceRange) {
+                    const parts = data.priceRange.split("-").map((p: string) => p.trim());
+                    minPrice = parts[0] || "$";
+                    maxPrice = parts[1] || minPrice;
+                }
+
+                setFormData({
+                    ...formData,
+                    name: data.name || formData.name,
+                    description: data.description || formData.description,
+                    address: data.address || formData.address,
+                    cuisine: data.cuisine || formData.cuisine,
+                    features: Array.isArray(data.feature) ? data.feature : formData.features,
+                    minPrice,
+                    maxPrice,
+                    tripAdvisorId: taId
+                });
+                setToast({ message: "Data fetched from TripAdvisor!", type: "success" });
+            } else {
+                setToast({ message: "Failed to fetch TripAdvisor data", type: "error" });
+            }
+        } catch (error) {
+            console.error(error);
+            setToast({ message: "An error occurred", type: "error" });
+        } finally {
+            setSyncing(false);
+        }
+    };
+
+    const handleAddFeature = () => {
+        setFormData({ ...formData, features: [...formData.features, ""] });
+    };
+
+    const handleFeatureChange = (index: number, value: string) => {
+        const newFeatures = [...formData.features];
+        newFeatures[index] = value;
+        setFormData({ ...formData, features: newFeatures });
+    };
+
+    const handleRemoveFeature = (index: number) => {
+        const newFeatures = formData.features.filter((_, i) => i !== index);
+        setFormData({ ...formData, features: newFeatures });
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSaving(true);
 
         try {
             const token = localStorage.getItem("token");
+            const priceRange = formData.minPrice === formData.maxPrice
+                ? formData.minPrice
+                : `${formData.minPrice} - ${formData.maxPrice}`;
+
+            const submissionData = {
+                ...formData,
+                priceRange,
+                feature: formData.features.filter(f => f.trim() !== ""),
+            };
+            // Clean up internal state fields
+            delete (submissionData as any).minPrice;
+            delete (submissionData as any).maxPrice;
+            delete (submissionData as any).features;
+
             const res = await fetch(`${API_BASE_URL}/restaurants/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(submissionData),
             });
 
             if (res.ok) {
@@ -147,9 +242,35 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="mb-6 rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800">
+                <label className="block text-sm font-medium dark:text-gray-300 mb-2">Sync with TripAdvisor</label>
+                <div className="flex gap-2">
+                    <input
+                        type="text"
+                        placeholder="Enter TripAdvisor ID (e.g. 1234567)"
+                        className="flex-1 rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                        value={taId}
+                        onChange={e => setTaId(e.target.value)}
+                    />
+                    <Button
+                        type="button"
+                        onClick={handleFetchTripAdvisor}
+                        disabled={syncing || !taId}
+                    >
+                        {syncing ? (
+                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        ) : (
+                            <Search className="h-4 w-4 mr-2" />
+                        )}
+                        Fetch Data
+                    </Button>
+                </div>
+                <p className="mt-1 text-xs text-gray-500">Input standard TripAdvisor ID to sync data.</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 space-y-6">
-                    <h2 className="text-lg font-semibold border-b pb-2 dark:text-white">General Information</h2>
+                    <h2 className="text-lg font-semibold mb-6 dark:text-white">General Information</h2>
                     <div className="grid gap-6 md:grid-cols-2">
                         <div>
                             <label className="block text-sm font-medium dark:text-gray-300">Name</label>
@@ -189,17 +310,72 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium dark:text-gray-300">Price Range</label>
-                            <select
+                            <label className="block text-sm font-medium dark:text-gray-300">Cuisine</label>
+                            <input
+                                type="text"
+                                placeholder="e.g. Japanese, Italian"
                                 className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                value={formData.priceRange}
-                                onChange={e => setFormData({ ...formData, priceRange: e.target.value })}
-                            >
-                                <option value="$">$ (Cheap)</option>
-                                <option value="$$">$$ (Moderate)</option>
-                                <option value="$$$">$$$ (Expensive)</option>
-                                <option value="$$$$">$$$$ (Fine Dining)</option>
-                            </select>
+                                value={formData.cuisine}
+                                onChange={e => setFormData({ ...formData, cuisine: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="grid gap-6 md:grid-cols-2">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium dark:text-gray-300">Price Range (Min)</label>
+                                <select
+                                    className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                    value={formData.minPrice}
+                                    onChange={e => setFormData({ ...formData, minPrice: e.target.value })}
+                                >
+                                    {priceOptions.map(opt => (
+                                        <option key={opt} value={opt}>{opt}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium dark:text-gray-300">Price Range (Max)</label>
+                                <select
+                                    className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                    value={formData.maxPrice}
+                                    onChange={e => setFormData({ ...formData, maxPrice: e.target.value })}
+                                >
+                                    {priceOptions.map(opt => (
+                                        <option key={opt} value={opt}>{opt}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="block text-sm font-medium dark:text-gray-300">Features & Amenities</label>
+                            <Button type="button" variant="ghost" size="sm" onClick={handleAddFeature}>
+                                <Plus className="h-4 w-4 mr-1" /> Add Feature
+                            </Button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                            {formData.features.map((feature, index) => (
+                                <div key={index} className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        className="flex-1 rounded-md border p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                        value={feature}
+                                        onChange={e => handleFeatureChange(index, e.target.value)}
+                                        placeholder="e.g. Free Wi-Fi"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveFeature(index)}
+                                        className="p-2 text-red-500 hover:bg-red-50 rounded"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            ))}
                         </div>
                     </div>
 

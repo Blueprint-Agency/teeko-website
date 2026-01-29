@@ -81,7 +81,6 @@ export const GoogleReviewsList = ({ reviews }: { reviews: GoogleReview[] }) => {
         <div className="space-y-4">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
                 Latest from Google
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" className="w-5 h-5" />
             </h3>
             <div className="flex sm:grid gap-4 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory">
                 {reviews.map((review) => (
