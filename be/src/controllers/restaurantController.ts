@@ -113,6 +113,8 @@ export const getRestaurantById = async (req: Request, res: Response) => {
             slug: restaurants.slug,
             locationId: restaurants.locationId,
             description: restaurants.description,
+            feature: restaurants.feature,
+            cuisine: restaurants.cuisine,
             address: restaurants.address,
             priceRange: restaurants.priceRange,
             contactInfo: restaurants.contactInfo,
@@ -139,7 +141,7 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 };
 
 export const createRestaurant = async (req: Request, res: Response) => {
-    const { name, slug, tripAdvisorLocationId, locationId, description, address, priceRange, contactInfo, operatingHours, images } = req.body;
+    const { name, slug, tripAdvisorLocationId, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine } = req.body;
 
     try {
         // 1. Create Restaurant
@@ -155,6 +157,8 @@ export const createRestaurant = async (req: Request, res: Response) => {
                 priceRange,
                 contactInfo,
                 operatingHours,
+                feature,
+                cuisine,
             })
             .returning();
 
@@ -176,6 +180,44 @@ export const createRestaurant = async (req: Request, res: Response) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const getRestaurantByTripAdvisorID = async (req: Request, res: Response) => {
+    const { tripAdvisorID } = req.params;
+
+    try {
+        getJson({
+            api_key: process.env.SERPAPI_API_KEY,
+            engine: "tripadvisor_place",
+            place_id: tripAdvisorID,
+            tripadvisor_domain: "www.tripadvisor.com.my"
+        }, async (json: any) => {
+            if (!json.place_result) {
+                res.status(404).json({ message: "TripAdvisor place not found" });
+                return;
+            }
+
+            const result = {
+                name: json.place_result.name as string,
+                slug: (json.place_result.name as string).toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, ""),
+                tripAdvisorLocationId: tripAdvisorID as string,
+                description: json.place_result.description as string,
+                address: json.place_result.address as string,
+                website: json.place_result.website as string,
+                cuisine: json.place_result.cuisines[0] as string,
+                contactInfo: {
+                    phone: json.place_result.phone,
+                    website: json.place_result.website,
+                },
+                operatingHours: json.place_result.operation_hours?.hours,
+            }
+
+            res.json(result);
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error while fetching restaurant" });
     }
 };
 
@@ -246,7 +288,7 @@ export const createRestaurantByTripAdvisorID = async (req: Request, res: Respons
 
 export const updateRestaurant = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images } = req.body;
+    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine } = req.body;
 
     try {
         const [updatedRestaurant] = await db
@@ -260,6 +302,8 @@ export const updateRestaurant = async (req: Request, res: Response) => {
                 priceRange,
                 contactInfo,
                 operatingHours,
+                feature,
+                cuisine,
                 updatedAt: new Date(),
             })
             .where(eq(restaurants.id, id as string))
