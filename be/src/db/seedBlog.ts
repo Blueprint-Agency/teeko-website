@@ -1,13 +1,13 @@
 import { db } from "./index";
 import { blogPosts, blogContentBlocks, users } from "./schema";
-import { eq } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 
 export const seedBlogPosts = async () => {
     try {
         console.log("Starting blog posts seed...");
 
-        // Get admin user to use as author
-        const [adminUser] = await db.select().from(users).where(eq(users.role, "ADMIN")).limit(1);
+        // Get admin user to use as author (can be ADMIN or SUPERADMIN)
+        const [adminUser] = await db.select().from(users).where(inArray(users.role, ["ADMIN", "SUPERADMIN"])).limit(1);
 
         if (!adminUser) {
             console.warn("No admin user found. Skipping blog seed.");
