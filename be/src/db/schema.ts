@@ -82,6 +82,7 @@ export const esimPackages = pgTable("esim_packages", {
     seoTitle: varchar("seo_title"),
     seoDescription: text("seo_description"),
     status: esimStatusEnum("status").default("DRAFT").notNull(),
+    publishedAt: timestamp("published_at"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

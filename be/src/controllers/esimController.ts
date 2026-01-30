@@ -77,6 +77,7 @@ export const getPackages = async (req: Request, res: Response) => {
                 seoTitle: esimPackages.seoTitle,
                 seoDescription: esimPackages.seoDescription,
                 status: esimPackages.status,
+                publishedAt: esimPackages.publishedAt,
                 createdAt: esimPackages.createdAt,
                 updatedAt: esimPackages.updatedAt,
                 provider: {
@@ -108,6 +109,7 @@ export const getPublishedPackages = async (req: Request, res: Response) => {
                 ctaLink: esimPackages.ctaLink,
                 seoTitle: esimPackages.seoTitle,
                 seoDescription: esimPackages.seoDescription,
+                publishedAt: esimPackages.publishedAt,
                 provider: {
                     id: esimProviders.id,
                     name: esimProviders.name,
@@ -140,6 +142,7 @@ export const getPackageBySlug = async (req: Request, res: Response) => {
                 ctaLink: esimPackages.ctaLink,
                 seoTitle: esimPackages.seoTitle,
                 seoDescription: esimPackages.seoDescription,
+                publishedAt: esimPackages.publishedAt,
                 provider: {
                     id: esimProviders.id,
                     name: esimProviders.name,
@@ -210,6 +213,7 @@ export const createPackage = async (req: Request, res: Response) => {
                 seoTitle,
                 seoDescription,
                 status: status || "DRAFT",
+                publishedAt: (status === "PUBLISHED") ? new Date() : null,
             })
             .returning();
 
@@ -263,6 +267,7 @@ export const updatePackage = async (req: Request, res: Response) => {
                 seoTitle,
                 seoDescription,
                 status,
+                publishedAt: (status === "PUBLISHED") ? new Date() : null,
                 updatedAt: new Date(),
             })
             .where(eq(esimPackages.id, id as string))
