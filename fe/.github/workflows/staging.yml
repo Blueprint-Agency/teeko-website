@@ -42,7 +42,3 @@ jobs:
           git add last_fe_deploy.txt
           git commit -m "🚀 Auto-deploy FE: ${{ github.sha }}"
           git push origin staging
-
-      - name: Trigger Portainer Deployment
-        run: |
-          curl -X POST "${{ secrets.PORTAINER_STAGING_WEBHOOK_URL }}"
