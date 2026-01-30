@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Store, MapPin, Settings, LogOut, Smartphone, FileText, Menu, X } from "lucide-react";
+import { LayoutDashboard, Store, MapPin, Settings, LogOut, Smartphone, FileText, Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
 export const AdminSidebar = () => {
@@ -13,7 +13,15 @@ export const AdminSidebar = () => {
         { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
         { href: "/admin/restaurants", label: "Restaurants", icon: Store },
         { href: "/admin/locations", label: "Locations", icon: MapPin },
-        { href: "/admin/esim", label: "eSIM", icon: Smartphone },
+        {
+            href: "/admin/esim",
+            label: "eSIM",
+            icon: Smartphone,
+            children: [
+                { href: "/admin/esim/providers", label: "Providers" },
+                { href: "/admin/esim/packages", label: "Packages" },
+            ]
+        },
         { href: "/admin/blog", label: "Blog", icon: FileText },
         { href: "/admin/settings", label: "Settings", icon: Settings },
     ];
@@ -55,20 +63,49 @@ export const AdminSidebar = () => {
                 <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
                     {links.map((link) => {
                         const isActive = pathname.startsWith(link.href);
+                        const hasChildren = link.children && link.children.length > 0;
                         const Icon = link.icon;
+
                         return (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                onClick={handleLinkClick}
-                                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive
-                                    ? "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400"
-                                    : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800"
-                                    }`}
-                            >
-                                <Icon className="h-5 w-5" />
-                                {link.label}
-                            </Link>
+                            <div key={link.href} className="space-y-1">
+                                <Link
+                                    href={hasChildren ? link.children![0].href : link.href}
+                                    onClick={handleLinkClick}
+                                    className={`flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive
+                                        ? "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400"
+                                        : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800"
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <Icon className="h-5 w-5" />
+                                        {link.label}
+                                    </div>
+                                    {hasChildren && (
+                                        <ChevronDown className={`h-4 w-4 transition-transform ${isActive ? '' : '-rotate-90'}`} />
+                                    )}
+                                </Link>
+
+                                {hasChildren && isActive && (
+                                    <div className="ml-9 space-y-1 border-l-2 border-gray-100 dark:border-zinc-800 pl-2">
+                                        {link.children!.map((child) => {
+                                            const isChildActive = pathname === child.href;
+                                            return (
+                                                <Link
+                                                    key={child.href}
+                                                    href={child.href}
+                                                    onClick={handleLinkClick}
+                                                    className={`block rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${isChildActive
+                                                        ? "text-red-600 bg-red-50 dark:bg-red-900/10 dark:text-red-400"
+                                                        : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-zinc-800/50"
+                                                        }`}
+                                                >
+                                                    {child.label}
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
                         );
                     })}
                 </nav>

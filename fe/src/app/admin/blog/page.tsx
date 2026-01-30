@@ -134,7 +134,7 @@ export default function AdminBlogPage() {
             ) : (
                 <>
                     {/* Desktop Table View */}
-                    <div className="hidden md:block rounded-lg border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 overflow-x-auto">
+                    <div className="rounded-lg border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-800">
                             <thead className="bg-gray-50 dark:bg-zinc-800/50">
                                 <tr>
@@ -196,59 +196,7 @@ export default function AdminBlogPage() {
                         </table>
                     </div>
 
-                    {/* Mobile Card View */}
-                    <div className="md:hidden space-y-4">
-                        {filteredPosts.map((post) => (
-                            <div key={post.id} className="rounded-lg border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 p-4">
-                                <div className="flex items-start justify-between mb-3">
-                                    <div className="flex-1">
-                                        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">{post.title}</h3>
-                                        <div className="flex items-center gap-2 flex-wrap">
-                                            <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${post.status === "PUBLISHED"
-                                                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                                : post.status === "DRAFT"
-                                                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                                    : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
-                                                }`}>
-                                                {post.status}
-                                            </span>
-                                            {post.publishedAt && (
-                                                <span className="text-xs text-gray-500 dark:text-gray-400">
-                                                    {new Date(post.publishedAt).toLocaleDateString()}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex gap-2 pt-3 border-t border-gray-200 dark:border-zinc-800">
-                                    <Link href={`/admin/blog/${post.id}/edit`} className="flex-1">
-                                        <button className="w-full px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium inline-flex items-center justify-center">
-                                            <Edit2 className="h-4 w-4 mr-1" /> Edit
-                                        </button>
-                                    </Link>
-                                    {post.status !== "BIN" && (
-                                        <button
-                                            onClick={() => handleMoveToBin(post.id)}
-                                            className="px-3 py-2 bg-orange-100 hover:bg-orange-200 dark:bg-orange-900/30 dark:hover:bg-orange-900/50 text-orange-700 dark:text-orange-400 rounded-md text-sm font-medium inline-flex items-center"
-                                        >
-                                            <Archive className="h-4 w-4" />
-                                        </button>
-                                    )}
-                                    <button
-                                        onClick={() => handleDelete(post.id)}
-                                        className="px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-red-600 dark:text-red-400 rounded-md text-sm font-medium inline-flex items-center"
-                                    >
-                                        <Trash2 className="h-4 w-4" />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                        {filteredPosts.length === 0 && (
-                            <div className="rounded-lg border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 p-8 text-center">
-                                <p className="text-sm text-gray-500">No posts found.</p>
-                            </div>
-                        )}
-                    </div>
+
                 </>
             )}
         </div>

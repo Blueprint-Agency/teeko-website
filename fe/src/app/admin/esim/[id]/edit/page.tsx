@@ -130,16 +130,9 @@ export default function EditEsimPackagePage() {
                 />
             )}
 
-            <div className="flex items-center gap-4">
-                <Link href="/admin/esim">
-                    <Button variant="ghost" size="sm">
-                        <ArrowLeft className="h-4 w-4 mr-2" /> Back
-                    </Button>
-                </Link>
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit eSIM Package</h1>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Update package information</p>
-                </div>
+            <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit eSIM Package</h1>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Update package information</p>
             </div>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -291,8 +284,8 @@ export default function EditEsimPackagePage() {
                             {/* Draft Option */}
                             <label
                                 className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${formData.status === "DRAFT"
-                                        ? "border-amber-500 bg-amber-50 dark:bg-amber-500/10"
-                                        : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
+                                    ? "border-amber-500 bg-amber-50 dark:bg-amber-500/10"
+                                    : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
                                     }`}
                             >
                                 <input
@@ -313,8 +306,8 @@ export default function EditEsimPackagePage() {
                             {/* Published Option */}
                             <label
                                 className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${formData.status === "PUBLISHED"
-                                        ? "border-green-500 bg-green-50 dark:bg-green-500/10"
-                                        : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
+                                    ? "border-green-500 bg-green-50 dark:bg-green-500/10"
+                                    : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
                                     }`}
                             >
                                 <input
@@ -335,8 +328,8 @@ export default function EditEsimPackagePage() {
                             {/* Bin Option */}
                             <label
                                 className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${formData.status === "BIN"
-                                        ? "border-red-500 bg-red-50 dark:bg-red-500/10"
-                                        : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
+                                    ? "border-red-500 bg-red-50 dark:bg-red-500/10"
+                                    : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
                                     }`}
                             >
                                 <input

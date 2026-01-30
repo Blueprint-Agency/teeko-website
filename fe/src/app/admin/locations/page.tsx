@@ -114,7 +114,7 @@ export default function AdminLocationsPage() {
             ) : (
                 <>
                     {/* Desktop Table View */}
-                    <div className="hidden md:block rounded-lg border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 overflow-x-auto">
+                    <div className="rounded-lg border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200 dark:divide-zinc-800">
                             <thead className="bg-gray-50 dark:bg-zinc-800/50">
                                 <tr>
@@ -149,39 +149,7 @@ export default function AdminLocationsPage() {
                         </table>
                     </div>
 
-                    {/* Mobile Card View */}
-                    <div className="md:hidden space-y-4">
-                        {locations.map((loc) => (
-                            <div key={loc.id} className="rounded-lg border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 p-4">
-                                <div className="flex items-start justify-between mb-3">
-                                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">{loc.name}</h3>
-                                    <button
-                                        onClick={() => handleOpenEdit(loc)}
-                                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                                    >
-                                        <Edit2 className="h-5 w-5" />
-                                    </button>
-                                </div>
-                                <div className="space-y-2 text-sm">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-500 dark:text-gray-400">Slug:</span>
-                                        <span className="text-gray-900 dark:text-white font-medium">{loc.slug}</span>
-                                    </div>
-                                    {loc.seoTitle && (
-                                        <div>
-                                            <span className="text-gray-500 dark:text-gray-400 block mb-1">SEO Title:</span>
-                                            <span className="text-gray-900 dark:text-white text-xs">{loc.seoTitle}</span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                        {locations.length === 0 && (
-                            <div className="rounded-lg border border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 p-8 text-center">
-                                <p className="text-sm text-gray-500">No locations found.</p>
-                            </div>
-                        )}
-                    </div>
+
                 </>
             )}
 

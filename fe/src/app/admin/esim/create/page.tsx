@@ -264,8 +264,8 @@ export default function CreateEsimPackagePage() {
                             {/* Draft Option */}
                             <label
                                 className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${formData.status === "DRAFT"
-                                        ? "border-amber-500 bg-amber-50 dark:bg-amber-500/10"
-                                        : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
+                                    ? "border-amber-500 bg-amber-50 dark:bg-amber-500/10"
+                                    : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
                                     }`}
                             >
                                 <input
@@ -286,8 +286,8 @@ export default function CreateEsimPackagePage() {
                             {/* Published Option */}
                             <label
                                 className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${formData.status === "PUBLISHED"
-                                        ? "border-green-500 bg-green-50 dark:bg-green-500/10"
-                                        : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
+                                    ? "border-green-500 bg-green-50 dark:bg-green-500/10"
+                                    : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
                                     }`}
                             >
                                 <input
@@ -308,8 +308,8 @@ export default function CreateEsimPackagePage() {
                             {/* Bin Option */}
                             <label
                                 className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 ${formData.status === "BIN"
-                                        ? "border-red-500 bg-red-50 dark:bg-red-500/10"
-                                        : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
+                                    ? "border-red-500 bg-red-50 dark:bg-red-500/10"
+                                    : "border-gray-200 dark:border-zinc-700 hover:border-gray-300 dark:hover:border-zinc-600"
                                     }`}
                             >
                                 <input
