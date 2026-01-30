@@ -38,7 +38,3 @@ jobs:
           git add last_be_deploy.txt
           git commit -m "🚀 Auto-deploy BE: ${{ github.sha }}"
           git push origin staging
-
-      - name: Trigger Portainer Deployment
-        run: |
-          curl -X POST "${{ secrets.PORTAINER_STAGING_WEBHOOK_URL }}"
