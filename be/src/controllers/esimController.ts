@@ -76,7 +76,7 @@ export const getPackages = async (req: Request, res: Response) => {
                 ctaLink: esimPackages.ctaLink,
                 seoTitle: esimPackages.seoTitle,
                 seoDescription: esimPackages.seoDescription,
-                isPublished: esimPackages.isPublished,
+                status: esimPackages.status,
                 createdAt: esimPackages.createdAt,
                 updatedAt: esimPackages.updatedAt,
                 provider: {
@@ -116,7 +116,7 @@ export const getPublishedPackages = async (req: Request, res: Response) => {
             })
             .from(esimPackages)
             .leftJoin(esimProviders, eq(esimPackages.providerId, esimProviders.id))
-            .where(eq(esimPackages.isPublished, true));
+            .where(eq(esimPackages.status, "PUBLISHED"));
 
         res.json(packages);
     } catch (error) {
@@ -184,7 +184,17 @@ export const getPackageById = async (req: Request, res: Response) => {
 };
 
 export const createPackage = async (req: Request, res: Response) => {
-    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, isPublished } = req.body;
+    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, status } = req.body;
+
+    // Validate price
+    if (price) {
+        // Check if price contains only digits (integers only, no decimals, no other chars)
+        const priceRegex = /^\d+$/;
+        if (!priceRegex.test(price.toString())) {
+            res.status(400).json({ message: "Price must be a whole number (integer) only. No decimals or other characters allowed." });
+            return;
+        }
+    }
 
     try {
         const [newPackage] = await db
@@ -194,12 +204,12 @@ export const createPackage = async (req: Request, res: Response) => {
                 slug,
                 providerId,
                 featureImage,
-                price,
+                price: price ? `RM${price}` : null,
                 about,
                 ctaLink,
                 seoTitle,
                 seoDescription,
-                isPublished: isPublished || false,
+                status: status || "DRAFT",
             })
             .returning();
 
@@ -212,7 +222,32 @@ export const createPackage = async (req: Request, res: Response) => {
 
 export const updatePackage = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, isPublished } = req.body;
+    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, status } = req.body;
+
+    let formattedPrice = price;
+
+    // Validate price if it's being updated
+    if (price !== undefined && price !== null) {
+        // If the user sends the full string "RM10", we might want to strip it to check validity or just reject it based on "only numberical number" rule.
+        // The user rule: "only allow admin to insert numberical number... prefix hardcoded as RM". 
+        // This implies the input should be RAW number. "RM" is added by system.
+        // So simply checking regex /^\d+$/ is correct.
+
+        const priceStr = price.toString();
+
+        // Handle case where frontend might send "RM10" - though instructions say "only allow... numerical". 
+        // I will assume strict compliance: Input MUST be integer.
+        // However, solely for robustness, if it starts with leading RM, I could strip it? 
+        // No, user said "reject... non-integer". "RM10" is non-integer string.
+
+        const priceRegex = /^\d+$/;
+        if (!priceRegex.test(priceStr)) {
+            res.status(400).json({ message: "Price must be a whole number (integer) only. No decimals or other characters allowed." });
+            return;
+        }
+
+        formattedPrice = `RM${priceStr}`;
+    }
 
     try {
         const [updated] = await db
@@ -222,12 +257,12 @@ export const updatePackage = async (req: Request, res: Response) => {
                 slug,
                 providerId,
                 featureImage,
-                price,
+                price: formattedPrice,
                 about,
                 ctaLink,
                 seoTitle,
                 seoDescription,
-                isPublished,
+                status,
                 updatedAt: new Date(),
             })
             .where(eq(esimPackages.id, id as string))

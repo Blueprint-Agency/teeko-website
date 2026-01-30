@@ -58,6 +58,9 @@ export const settings = pgTable("settings", {
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// eSIM status enum
+export const esimStatusEnum = pgEnum("esim_status", ["DRAFT", "PUBLISHED", "BIN"]);
+
 // eSIM Provider table
 export const esimProviders = pgTable("esim_providers", {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -78,7 +81,7 @@ export const esimPackages = pgTable("esim_packages", {
     ctaLink: text("cta_link"),
     seoTitle: varchar("seo_title"),
     seoDescription: text("seo_description"),
-    isPublished: boolean("is_published").default(false).notNull(),
+    status: esimStatusEnum("status").default("DRAFT").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
