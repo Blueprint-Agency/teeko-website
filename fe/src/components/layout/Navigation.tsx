@@ -23,7 +23,6 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
 
     const menuItems = [
         { label: "Home", href: "/" },
-        { label: "Locations", href: "/locations" },
         { label: "Restaurants", href: "/restaurants" },
         { label: "eSIM", href: "/esim" },
         { label: "Blog", href: "/blog" },

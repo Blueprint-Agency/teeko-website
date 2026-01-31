@@ -30,7 +30,9 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
             try {
                 const token = localStorage.getItem("token");
                 const [locRes, restRes] = await Promise.all([
-                    fetch(`${API_BASE_URL}/locations`),
+                    fetch(`${API_BASE_URL}/admin/locations`, {
+                        headers: { "Authorization": `Bearer ${token}` }
+                    }),
                     fetch(`${API_BASE_URL}/restaurants/id/${id}`, {
                         headers: { "Authorization": `Bearer ${token}` }
                     })
