@@ -20,7 +20,7 @@ export const getSettings = async (req: Request, res: Response) => {
 };
 
 export const updateSettings = async (req: Request, res: Response) => {
-    const { siteTitle, siteDescription, faviconUrl } = req.body;
+    const { siteTitle, siteDescription, faviconUrl, maintenanceMode } = req.body;
 
     try {
         const existing = await db.select().from(settings).limit(1);
@@ -28,7 +28,8 @@ export const updateSettings = async (req: Request, res: Response) => {
             const [newSettings] = await db.insert(settings).values({
                 siteTitle,
                 siteDescription,
-                faviconUrl
+                faviconUrl,
+                maintenanceMode: maintenanceMode ?? false
             }).returning();
             res.json(newSettings);
         } else {
@@ -38,6 +39,7 @@ export const updateSettings = async (req: Request, res: Response) => {
                     siteTitle,
                     siteDescription,
                     faviconUrl,
+                    maintenanceMode: maintenanceMode ?? existing[0].maintenanceMode,
                     updatedAt: new Date()
                 })
                 .where(eq(settings.id, existing[0].id))

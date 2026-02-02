@@ -55,6 +55,7 @@ export const settings = pgTable("settings", {
     siteTitle: varchar("site_title", { length: 255 }).default("Teeko Advisor"),
     siteDescription: text("site_description").default("Discover amazing restaurants near you."),
     faviconUrl: text("favicon_url"),
+    maintenanceMode: boolean("maintenance_mode").default(false).notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
