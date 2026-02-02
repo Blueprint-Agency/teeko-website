@@ -30,9 +30,11 @@ export interface SocialPost {
     thumbnail: string;
     title?: string;
     author?: string;
+    channel?: string;
     likes?: number;
     link: string;
-    type: 'xhs' | 'ig_reel';
+    source?: string;
+    type?: 'xhs' | 'ig_reel';
 }
 
 // --- Components ---
@@ -165,13 +167,17 @@ const SocialCard = ({ post }: { post: SocialPost }) => {
             {/* Overlay Content */}
             <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                 <div className="flex items-center gap-2 mb-2">
-                    {isXHS ? (
+                    {post.source === 'xhs' || post.type === 'xhs' ? (
                         <span className="text-[10px] font-bold bg-red-600 text-white px-2 py-0.5 rounded shadow-sm">
                             XHS
                         </span>
-                    ) : (
+                    ) : (post.source === 'ig_reel' || post.type === 'ig_reel' || (post.source || '').toLowerCase() === 'instagram') ? (
                         <span className="text-[10px] font-bold bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white px-2 py-0.5 rounded shadow-sm">
                             REELS
+                        </span>
+                    ) : (
+                        <span className="text-[10px] font-bold bg-red-700 text-white px-2 py-0.5 rounded shadow-sm uppercase">
+                            {post.source || 'YouTube'}
                         </span>
                     )}
                 </div>
@@ -181,7 +187,7 @@ const SocialCard = ({ post }: { post: SocialPost }) => {
                     </p>
                 )}
                 <div className="flex items-center justify-between text-xs text-white/80">
-                    <span className="font-medium">@{post.author}</span>
+                    <span className="font-medium">@{post.channel || post.author}</span>
                     {post.likes !== undefined && (
                         <div className="flex items-center gap-1 bg-black/20 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
                             <HeartIcon className="w-3 h-3 text-red-500" />
@@ -203,19 +209,16 @@ const SocialCard = ({ post }: { post: SocialPost }) => {
     );
 };
 
-export const SocialMediaGrid = ({ posts, type }: { posts: SocialPost[], type: 'xhs' | 'ig' }) => {
-    const isXHS = type === 'xhs';
-    const title = isXHS ? "Trending on XiaoHongShu" : "Instagram Reels";
-
+export const SocialMediaGrid = ({ posts, title }: { posts: SocialPost[], title: string }) => {
     return (
         <div className="space-y-4">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
                 {title}
-                {!isXHS && <Play className="w-4 h-4 text-gray-400" />}
+                <Play className="w-4 h-4 text-gray-400" />
             </h3>
 
             <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory">
-                {posts.map((post) => (
+                {posts?.map((post) => (
                     <div key={post.id} className="min-w-[60vw] sm:min-w-0 snap-center">
                         <SocialCard post={post} />
                     </div>

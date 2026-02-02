@@ -12,16 +12,14 @@ interface ReviewsTabProps {
     googleStats: ReviewStats;
     tripAdvisorStats: ReviewStats;
     googleReviews: GoogleReview[];
-    xhsPosts: SocialPost[];
-    igReels: SocialPost[];
+    shortVideos: SocialPost[];
 }
 
 export const ReviewsTab = ({
     googleStats,
     tripAdvisorStats,
     googleReviews,
-    xhsPosts,
-    igReels
+    shortVideos
 }: ReviewsTabProps) => {
     return (
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -39,16 +37,30 @@ export const ReviewsTab = ({
 
             <hr className="border-gray-100 dark:border-gray-700" />
 
-            {/* Section 2: XiaoHongShu */}
-            <section>
-                <SocialMediaGrid posts={xhsPosts} type="xhs" />
-            </section>
+            {/* Section 2: Trending Short Videos Grouped by Source */}
+            <section className="space-y-12">
+                {Object.entries(
+                    (shortVideos || []).reduce((acc: Record<string, SocialPost[]>, post) => {
+                        let sourceKey = post.source || post.type || 'YouTube';
+                        // Normalize source names for grouping
+                        if (sourceKey === 'ig_reel') sourceKey = 'Instagram';
+                        if (sourceKey === 'xhs') sourceKey = 'XiaoHongShu';
+                        if (sourceKey.toLowerCase() === 'xhs') sourceKey = 'XiaoHongShu';
 
-            <hr className="border-gray-100 dark:border-gray-700" />
+                        // Capitalize for display
+                        const displaySource = sourceKey.charAt(0).toUpperCase() + sourceKey.slice(1);
 
-            {/* Section 3: IG Reels */}
-            <section>
-                <SocialMediaGrid posts={igReels} type="ig" />
+                        if (!acc[displaySource]) acc[displaySource] = [];
+                        acc[displaySource].push(post);
+                        return acc;
+                    }, {})
+                ).map(([source, posts]) => (
+                    <SocialMediaGrid
+                        key={source}
+                        posts={posts}
+                        title={`Trending on ${source}`}
+                    />
+                ))}
             </section>
         </div>
     );

@@ -33,13 +33,14 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
         googleStats: { rating: 0, totalReviews: 0, link: "" },
         tripAdvisorStats: { rating: 0, totalReviews: 0, link: "" },
         googleReviews: [] as any[],
-        xhsPosts: [] as any[],
-        igReels: [] as any[],
+        shortVideos: [] as any[],
     });
 
     const [syncing, setSyncing] = useState(false);
     const [syncingGoogle, setSyncingGoogle] = useState(false);
+    const [syncingSocial, setSyncingSocial] = useState(false);
     const [googleSearchQuery, setGoogleSearchQuery] = useState("");
+    const [socialSearchQuery, setSocialSearchQuery] = useState("");
     const [taId, setTaId] = useState("");
 
     const priceOptions = ["$", "$$", "$$$", "$$$$"];
@@ -88,12 +89,18 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                         websiteUrl: restData.websiteUrl || restData.contactInfo?.website || "",
                         googleStats: restData.restaurantStats[0]?.googleStats || { rating: 0, totalReviews: 0, link: "" },
                         tripAdvisorStats: restData.restaurantStats[0]?.tripAdvisorStats || { rating: 0, totalReviews: 0, link: "" },
-                        googleReviews: restData.restaurantReviews || [],
-                        xhsPosts: restData.xhsPosts || [],
-                        igReels: restData.igReels || [],
+                        googleReviews: restData.restaurantReviews.map((rev: any) => ({
+                            ...rev,
+                            user_name: rev.user_name || rev.userName,
+                        })) || [],
+                        shortVideos: [
+                            ...(restData.xhsPosts || []).map((p: any) => ({ ...p, type: 'xhs' })),
+                            ...(restData.igReels || []).map((p: any) => ({ ...p, type: 'ig_reel' }))
+                        ],
                     });
                     setTaId(restData.tripAdvisorId || "");
                     setGoogleSearchQuery(restData.name || "");
+                    setSocialSearchQuery(restData.name || "");
                 } else {
                     setToast({ message: "Restaurant not found", type: "error" });
                     setTimeout(() => router.push("/admin/restaurants"), 2000);
@@ -174,7 +181,11 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                         totalReviews: data.reviews || formData.googleStats.totalReviews,
                         link: data.link || formData.googleStats.link
                     },
-                    googleReviews: data.googleReviews || formData.googleReviews,
+                    googleReviews: (data.googleReviews || []).map((rev: any) => ({
+                        ...rev,
+                        user_name: rev.user_name || rev.userName,
+                        userName: undefined
+                    })) || formData.googleReviews
                 });
                 setToast({ message: "Google stats synced!", type: "success" });
             } else {
@@ -185,6 +196,38 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
             setToast({ message: "An error occurred while syncing Google stats", type: "error" });
         } finally {
             setSyncingGoogle(false);
+        }
+    };
+
+    const handleFetchSocialPosts = async () => {
+        if (!socialSearchQuery) {
+            setToast({ message: "Please provide a social search query first", type: "error" });
+            return;
+        }
+        setSyncingSocial(true);
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_BASE_URL}/restaurants/shortVideos/${encodeURIComponent(socialSearchQuery)}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setFormData({
+                    ...formData,
+                    shortVideos: [
+                        ...formData.shortVideos,
+                        ...(data.shortVideos || [])
+                    ]
+                });
+                setToast({ message: "Short videos synced!", type: "success" });
+            } else {
+                setToast({ message: "Failed to fetch short videos. Please check the query or try again later.", type: "error" });
+            }
+        } catch (error) {
+            console.error(error);
+            setToast({ message: "An error occurred while syncing short videos", type: "error" });
+        } finally {
+            setSyncingSocial(false);
         }
     };
 
@@ -222,14 +265,8 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                     id: undefined,
                     user_image: (r.user_image || []).filter((img: any) => img.thumbnail && img.thumbnail.trim() !== "")
                 })),
-                xhsPosts: formData.xhsPosts.map(p => ({
-                    ...p,
-                    id: undefined
-                })),
-                igReels: formData.igReels.map(p => ({
-                    ...p,
-                    id: undefined
-                }))
+                xhsPosts: formData.shortVideos.filter(v => v.source === 'xhs').map(p => ({ ...p, id: undefined })),
+                igReels: formData.shortVideos.filter(v => v.source === 'ig_reel').map(p => ({ ...p, id: undefined }))
             };
             // Clean up internal state fields
             delete (submissionData as any).minPrice;
@@ -660,7 +697,7 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                                                 type="text"
                                                 placeholder="Author Name"
                                                 className="w-full rounded border p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                                value={rev.user_name || rev.userName}
+                                                value={rev.user_name}
                                                 onChange={e => {
                                                     const newReviews = [...formData.googleReviews];
                                                     newReviews[idx] = { ...newReviews[idx], user_name: e.target.value };
@@ -750,158 +787,125 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
 
                 {activeTab === "reels" && (
                     <div className="space-y-6">
-                        <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 space-y-6">
-                            <div className="flex items-center justify-between border-b pb-2">
-                                <h2 className="text-lg font-semibold dark:text-white">XiaoHongShu Posts</h2>
+                        <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 space-y-4">
+                            <h2 className="text-lg font-semibold dark:text-white">Social Search & Sync</h2>
+                            <div className="flex gap-2">
+                                <div className="relative flex-1">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search for short videos (e.g. Restaurant Name)"
+                                        className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white text-sm focus:ring-2 focus:ring-red-500 transition-all"
+                                        value={socialSearchQuery}
+                                        onChange={(e) => setSocialSearchQuery(e.target.value)}
+                                    />
+                                </div>
                                 <Button
                                     type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => setFormData({
-                                        ...formData,
-                                        xhsPosts: [...formData.xhsPosts, { id: Date.now().toString(), type: 'xhs', link: "", thumbnail: "", author: "", title: "", likes: 0 }]
-                                    })}
+                                    onClick={handleFetchSocialPosts}
+                                    disabled={syncingSocial}
+                                    className="bg-red-600 hover:bg-red-700 text-white"
                                 >
-                                    <Plus className="h-4 w-4 mr-1" /> Add Post
+                                    {syncingSocial ? (
+                                        <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Syncing...</>
+                                    ) : (
+                                        <><Search className="mr-2 h-4 w-4" /> Search & Sync Video</>
+                                    )}
                                 </Button>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {formData.xhsPosts.map((post, idx) => (
-                                    <div key={post.id || idx} className="p-4 border rounded-lg dark:border-zinc-800 space-y-2 relative">
-                                        <button
-                                            type="button"
-                                            className="absolute top-2 right-2 text-red-500 hover:bg-red-50 p-1 rounded"
-                                            onClick={() => {
-                                                const newPosts = [...formData.xhsPosts];
-                                                newPosts.splice(idx, 1);
-                                                setFormData({ ...formData, xhsPosts: newPosts });
-                                            }}
-                                        >
-                                            <X className="h-4 w-4" />
-                                        </button>
-                                        <input
-                                            type="text"
-                                            placeholder="Link"
-                                            className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                            value={post.link}
-                                            onChange={e => {
-                                                const newPosts = [...formData.xhsPosts];
-                                                newPosts[idx] = { ...newPosts[idx], link: e.target.value };
-                                                setFormData({ ...formData, xhsPosts: newPosts });
-                                            }}
-                                        />
-                                        <input
-                                            type="text"
-                                            placeholder="Thumbnail URL"
-                                            className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                            value={post.thumbnail}
-                                            onChange={e => {
-                                                const newPosts = [...formData.xhsPosts];
-                                                newPosts[idx] = { ...newPosts[idx], thumbnail: e.target.value };
-                                                setFormData({ ...formData, xhsPosts: newPosts });
-                                            }}
-                                        />
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <input
-                                                type="text"
-                                                placeholder="Author"
-                                                className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                                value={post.author}
-                                                onChange={e => {
-                                                    const newPosts = [...formData.xhsPosts];
-                                                    newPosts[idx] = { ...newPosts[idx], author: e.target.value };
-                                                    setFormData({ ...formData, xhsPosts: newPosts });
-                                                }}
-                                            />
-                                            <input
-                                                type="number"
-                                                placeholder="Likes"
-                                                className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                                value={post.likes}
-                                                onChange={e => {
-                                                    const newPosts = [...formData.xhsPosts];
-                                                    newPosts[idx] = { ...newPosts[idx], likes: parseInt(e.target.value) };
-                                                    setFormData({ ...formData, xhsPosts: newPosts });
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                            <p className="text-xs text-gray-500">
+                                This will search for trending Instagram Reels and XiaoHongShu posts for this restaurant.
+                            </p>
                         </div>
 
                         <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 space-y-6">
                             <div className="flex items-center justify-between border-b pb-2">
-                                <h2 className="text-lg font-semibold dark:text-white">Instagram Reels</h2>
+                                <h2 className="text-lg font-semibold dark:text-white">Short Videos</h2>
                                 <Button
                                     type="button"
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => setFormData({
                                         ...formData,
-                                        igReels: [...formData.igReels, { id: Date.now().toString(), type: 'ig_reel', link: "", thumbnail: "", author: "", title: "", likes: 0 }]
+                                        shortVideos: [...formData.shortVideos, { id: Date.now().toString(), source: 'ig_reel', link: "", thumbnail: "", channel: "", title: "" }]
                                     })}
                                 >
-                                    <Plus className="h-4 w-4 mr-1" /> Add Reel
+                                    <Plus className="h-4 w-4 mr-1" /> Add Video
                                 </Button>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {formData.igReels.map((post, idx) => (
+                                {formData.shortVideos.map((post, idx) => (
                                     <div key={post.id || idx} className="p-4 border rounded-lg dark:border-zinc-800 space-y-2 relative">
                                         <button
                                             type="button"
                                             className="absolute top-2 right-2 text-red-500 hover:bg-red-50 p-1 rounded"
                                             onClick={() => {
-                                                const newPosts = [...formData.igReels];
+                                                const newPosts = [...formData.shortVideos];
                                                 newPosts.splice(idx, 1);
-                                                setFormData({ ...formData, igReels: newPosts });
+                                                setFormData({ ...formData, shortVideos: newPosts });
                                             }}
                                         >
                                             <X className="h-4 w-4" />
                                         </button>
-                                        <input
-                                            type="text"
-                                            placeholder="Link"
-                                            className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                            value={post.link}
-                                            onChange={e => {
-                                                const newPosts = [...formData.igReels];
-                                                newPosts[idx] = { ...newPosts[idx], link: e.target.value };
-                                                setFormData({ ...formData, igReels: newPosts });
-                                            }}
-                                        />
-                                        <input
-                                            type="text"
-                                            placeholder="Thumbnail URL"
-                                            className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                            value={post.thumbnail}
-                                            onChange={e => {
-                                                const newPosts = [...formData.igReels];
-                                                newPosts[idx] = { ...newPosts[idx], thumbnail: e.target.value };
-                                                setFormData({ ...formData, igReels: newPosts });
-                                            }}
-                                        />
-                                        <div className="grid grid-cols-2 gap-2">
+
+                                        <div className="grid grid-cols-1 gap-2">
+                                            <div>
+                                                <label className="text-[10px] text-gray-500">Source Type</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Source (e.g. ig_reel, xhs)"
+                                                    className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                                    value={post.source}
+                                                    onChange={e => {
+                                                        const newPosts = [...formData.shortVideos];
+                                                        newPosts[idx] = { ...newPosts[idx], source: e.target.value };
+                                                        setFormData({ ...formData, shortVideos: newPosts });
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] text-gray-500">Video Link</label>
                                             <input
                                                 type="text"
-                                                placeholder="Author"
+                                                placeholder="Link"
                                                 className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                                value={post.author}
+                                                value={post.link}
                                                 onChange={e => {
-                                                    const newPosts = [...formData.igReels];
-                                                    newPosts[idx] = { ...newPosts[idx], author: e.target.value };
-                                                    setFormData({ ...formData, igReels: newPosts });
+                                                    const newPosts = [...formData.shortVideos];
+                                                    newPosts[idx] = { ...newPosts[idx], link: e.target.value };
+                                                    setFormData({ ...formData, shortVideos: newPosts });
                                                 }}
                                             />
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] text-gray-500">Thumbnail URL</label>
                                             <input
-                                                type="number"
-                                                placeholder="Likes"
+                                                type="text"
+                                                placeholder="Thumbnail URL"
                                                 className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                                value={post.likes}
+                                                value={post.thumbnail}
                                                 onChange={e => {
-                                                    const newPosts = [...formData.igReels];
-                                                    newPosts[idx] = { ...newPosts[idx], likes: parseInt(e.target.value) };
-                                                    setFormData({ ...formData, igReels: newPosts });
+                                                    const newPosts = [...formData.shortVideos];
+                                                    newPosts[idx] = { ...newPosts[idx], thumbnail: e.target.value };
+                                                    setFormData({ ...formData, shortVideos: newPosts });
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] text-gray-500">Channel</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Channel"
+                                                className="w-full rounded border p-1 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                                value={post.channel}
+                                                onChange={e => {
+                                                    const newPosts = [...formData.shortVideos];
+                                                    newPosts[idx] = { ...newPosts[idx], channel: e.target.value };
+                                                    setFormData({ ...formData, shortVideos: newPosts });
                                                 }}
                                             />
                                         </div>
