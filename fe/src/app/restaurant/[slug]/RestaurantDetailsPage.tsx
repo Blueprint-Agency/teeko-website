@@ -105,6 +105,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('overview');
     const [restaurant] = useState(initialRestaurant);
+    console.log('restaurant', restaurant)
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -254,7 +255,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                     <ReviewsTab
                                         googleStats={restaurant?.stats?.googleStats}
                                         tripAdvisorStats={restaurant?.stats?.tripAdvisorStats}
-                                        googleReviews={CONSTANT_GOOGLE_REVIEWS}
+                                        googleReviews={restaurant?.googleReviews || CONSTANT_GOOGLE_REVIEWS}
                                         xhsPosts={CONSTANT_XHS_POSTS}
                                         igReels={CONSTANT_IG_REELS}
                                     />

@@ -11,12 +11,18 @@ export interface ReviewStats {
 
 export interface GoogleReview {
     id: string;
-    authorName: string;
+    authorName?: string;
+    user_name?: string;
+    userName?: string;
     authorImage?: string;
     rating: number;
-    timeAgo: string;
-    text: string;
+    timeAgo?: string;
+    time_ago?: string;
+    text?: string;
+    description?: string;
     images?: string[];
+    user_image?: { thumbnail: string }[];
+    image?: { thumbnail: string }[];
 }
 
 export interface SocialPost {
@@ -88,15 +94,15 @@ export const GoogleReviewsList = ({ reviews }: { reviews: GoogleReview[] }) => {
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-3">
                                 {review.authorImage ? (
-                                    <img src={review.authorImage} alt={review.authorName} className="w-10 h-10 rounded-full object-cover" />
+                                    <img src={review.authorImage} alt={review.userName} className="w-10 h-10 rounded-full object-cover" />
                                 ) : (
                                     <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center font-bold text-gray-500">
-                                        {review.authorName.charAt(0)}
+                                        {(review.user_name || review.userName || "?").charAt(0)}
                                     </div>
                                 )}
                                 <div>
-                                    <div className="font-bold text-gray-900 dark:text-white text-sm">{review.authorName}</div>
-                                    <div className="text-xs text-gray-500 dark:text-gray-400">{review.timeAgo}</div>
+                                    <div className="font-bold text-gray-900 dark:text-white text-sm">{review.user_name || review.userName}</div>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">{review.time_ago || review.timeAgo}</div>
                                 </div>
                             </div>
                             <div className="flex text-yellow-400">
@@ -106,12 +112,15 @@ export const GoogleReviewsList = ({ reviews }: { reviews: GoogleReview[] }) => {
                             </div>
                         </div>
                         <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-3 line-clamp-4">
-                            {review.text}
+                            {review.description || review.text}
                         </p>
-                        {review.images && review.images.length > 0 && (
+                        {((review.user_image && review.user_image.length > 0) || (review.images && review.images.length > 0)) && (
                             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                                {review.images.map((img, idx) => (
-                                    <img key={idx} src={img} alt="Review" className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+                                {review.user_image?.map((img, idx) => (
+                                    <img key={`ui-${idx}`} src={img.thumbnail} alt="Review" className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+                                ))}
+                                {review.images?.map((img: any, idx: number) => (
+                                    <img key={`i-${idx}`} src={img?.thumbnail} alt="Review" className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
                                 ))}
                             </div>
                         )}
