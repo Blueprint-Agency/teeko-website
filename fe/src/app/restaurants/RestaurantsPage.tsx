@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { RestaurantCard } from "@/components/shared/RestaurantCard";
-import { Search, SlidersHorizontal, Map, MapPin, X } from "lucide-react";
+import { Search, SlidersHorizontal, Map, MapPin, X, ChevronDown } from "lucide-react";
 
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
@@ -10,13 +10,15 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 interface RestaurantsPageProps {
     initialRestaurants: any[];
+    locations: any[];
 }
 
-const RestaurantsPage = ({ initialRestaurants }: RestaurantsPageProps) => {
+const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps) => {
     const [restaurants] = useState(initialRestaurants);
     const [activeTab, setActiveTab] = useState("all");
     const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
     const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
+    const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
     const [showMobileFilters, setShowMobileFilters] = useState(false);
 
     const filteredRestaurants = (restaurants || []).filter(restaurant => {
@@ -30,6 +32,10 @@ const RestaurantsPage = ({ initialRestaurants }: RestaurantsPageProps) => {
             if (!priceParts?.includes(selectedPrice)) {
                 return false;
             }
+        }
+        // Filter by Location
+        if (selectedLocation && restaurant.locationId !== selectedLocation) {
+            return false;
         }
         return true;
     }).sort((a, b) => {
@@ -81,31 +87,24 @@ const RestaurantsPage = ({ initialRestaurants }: RestaurantsPageProps) => {
                     {/* Sidebar Filters (Desktop Focused) */}
                     <div className="w-64 shrink-0 hidden lg:block sticky top-8 self-start">
                         <div className="space-y-8">
-                            {/* Filter Group: Categories */}
+                            {/* Filter Group: Locations */}
                             <div>
-                                <h3 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                                    <SlidersHorizontal className="w-4 h-4" /> Filters
-                                </h3>
-                                {/* <div className="space-y-3">
-                                    {Array.from(new Set((restaurants || []).map(r => r.cuisine))).map(cuisine => (
-                                        <label key={cuisine} className="flex items-center gap-3 cursor-pointer group">
-                                            <div
-                                                className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${selectedCuisines.includes(cuisine)
-                                                    ? "bg-red-600 border-red-600"
-                                                    : "border-gray-300 dark:border-gray-600 group-hover:border-red-500"
-                                                    }`}
-                                                onClick={() => toggleCuisine(cuisine)}
-                                            >
-                                                {selectedCuisines.includes(cuisine) && (
-                                                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                )}
-                                            </div>
-                                            <span className="text-gray-600 dark:text-gray-300 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">{cuisine}</span>
-                                        </label>
-                                    ))}
-                                </div> */}
+                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Location</h3>
+                                <div className="relative">
+                                    <select
+                                        value={selectedLocation || ""}
+                                        onChange={(e) => setSelectedLocation(e.target.value || null)}
+                                        className="w-full appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm font-semibold focus:ring-2 focus:ring-red-500 outline-none cursor-pointer pr-10"
+                                    >
+                                        <option value="">All Locations</option>
+                                        {locations.map(loc => (
+                                            <option key={loc.id} value={loc.id}>
+                                                {loc.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                                </div>
                             </div>
 
                             {/* Filter Group: Price */}
@@ -195,22 +194,23 @@ const RestaurantsPage = ({ initialRestaurants }: RestaurantsPageProps) => {
                         </div>
 
                         <div className="flex-1 space-y-8 overflow-y-auto pr-2 scrollbar-hide">
-                            {/* Price Filter */}
+                            {/* Location Filter */}
                             <div>
-                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Price</h3>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {['$', '$$', '$$$', '$$$$'].map(price => (
-                                        <button
-                                            key={price}
-                                            onClick={() => setSelectedPrice(selectedPrice === price ? null : price)}
-                                            className={`px-4 py-3 border rounded-lg text-sm font-semibold transition-all ${selectedPrice === price
-                                                ? "bg-red-600 border-red-600 text-white"
-                                                : "bg-[var(--card-bg)] border-[var(--border)]"
-                                                }`}
-                                        >
-                                            {price}
-                                        </button>
-                                    ))}
+                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Location</h3>
+                                <div className="relative">
+                                    <select
+                                        value={selectedLocation || ""}
+                                        onChange={(e) => setSelectedLocation(e.target.value || null)}
+                                        className="w-full appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm font-semibold focus:ring-2 focus:ring-red-500 outline-none cursor-pointer pr-10"
+                                    >
+                                        <option value="">All Locations</option>
+                                        {locations.map(loc => (
+                                            <option key={loc.id} value={loc.id}>
+                                                {loc.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                                 </div>
                             </div>
 
