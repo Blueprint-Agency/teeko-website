@@ -205,7 +205,7 @@ export const getRestaurantByTripAdvisorID = async (req: Request, res: Response) 
                 description: json.place_result.description as string,
                 address: json.place_result.address as string,
                 website: json.place_result.website as string,
-                cuisine: json.place_result.cuisines[0] as string,
+                cuisine: json.place_result.cuisines?.[0] as string,
                 contactInfo: {
                     phone: json.place_result.phone,
                     website: json.place_result.website,
@@ -288,7 +288,7 @@ export const createRestaurantByTripAdvisorID = async (req: Request, res: Respons
 
 export const updateRestaurant = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine } = req.body;
+    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine, reservationUrl } = req.body;
 
     try {
         const [updatedRestaurant] = await db
@@ -304,6 +304,7 @@ export const updateRestaurant = async (req: Request, res: Response) => {
                 operatingHours,
                 feature,
                 cuisine,
+                reservationUrl,
                 updatedAt: new Date(),
             })
             .where(eq(restaurants.id, id as string))
