@@ -190,9 +190,17 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-2 text-gray-600 dark:text-gray-300">
-                                    <MapPin className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-                                    <span className="text-base">{restaurant?.address}</span>
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div className="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                                        <MapPin className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                                        <span className="text-base">{restaurant?.address}</span>
+                                    </div>
+                                    <button
+                                        onClick={() => window.open(restaurant?.reservationUrl, "_blank")}
+                                        className="bg-red-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
+                                    >
+                                        Reserve a Table
+                                    </button>
                                 </div>
                             </div>
 
@@ -335,10 +343,6 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                         ))}
                                     </div>
                                 </div>
-
-                                <button onClick={() => window.open(restaurant.reservationUrl, "_blank")} className="w-full bg-red-600 text-white font-bold py-3.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-                                    Reserve a Table
-                                </button>
                             </div>
                         </div>
                     </div>
