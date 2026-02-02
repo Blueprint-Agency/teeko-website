@@ -57,6 +57,20 @@
       "when": 1769763179537,
       "tag": "0007_icy_mesmero",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1770024200577,
+      "tag": "0008_loose_argent",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1770024583010,
+      "tag": "0009_easy_beyonder",
+      "breakpoints": true
     }
   ]
 }

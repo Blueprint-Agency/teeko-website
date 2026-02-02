@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { db } from "../db";
-import { restaurants, restaurantImages, locations, restaurantStats } from "../db/schema";
+import { restaurants, restaurantImages, locations, restaurantStats, restaurantReviews } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { getJson } from "serpapi";
 
@@ -42,13 +42,15 @@ export const getRestaurants = async (req: Request, res: Response) => {
 
         const allRestaurants = await query;
 
-        // Get images for each restaurant
-        const restaurantsWithImages = await Promise.all(allRestaurants.map(async (res) => {
+        // Get images and reviews for each restaurant
+        const restaurantsWithDetails = await Promise.all(allRestaurants.map(async (res) => {
             const images = await db.select().from(restaurantImages).where(eq(restaurantImages.restaurantId, res.id));
-            return { ...res, restaurantImages: images };
+            const reviews = await db.select().from(restaurantReviews).where(eq(restaurantReviews.restaurantId, res.id));
+            const googleReviews = reviews.filter(r => r.source === 'google');
+            return { ...res, restaurantImages: images, googleReviews };
         }));
 
-        res.json(restaurantsWithImages);
+        res.json(restaurantsWithDetails);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error while fetching restaurants" });
@@ -95,8 +97,10 @@ export const getRestaurantBySlug = async (req: Request, res: Response) => {
         }
 
         const images = await db.select().from(restaurantImages).where(eq(restaurantImages.restaurantId, result[0].id));
+        const reviews = await db.select().from(restaurantReviews).where(eq(restaurantReviews.restaurantId, result[0].id));
+        const googleReviews = reviews.filter(r => r.source === 'google');
 
-        res.json({ ...result[0], restaurantImages: images });
+        res.json({ ...result[0], restaurantImages: images, googleReviews });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error while fetching restaurant" });
@@ -133,7 +137,11 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 
         const images = await db.select().from(restaurantImages).where(eq(restaurantImages.restaurantId, id as string));
 
-        res.json({ ...result[0], restaurantImages: images });
+        const stats = await db.select().from(restaurantStats).where(eq(restaurantStats.restaurantId, id as string));
+
+        const review = await db.select().from(restaurantReviews).where(eq(restaurantReviews.restaurantId, id as string));
+
+        res.json({ ...result[0], restaurantImages: images, restaurantStats: stats, restaurantReviews: review });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error while fetching restaurant" });
@@ -221,6 +229,44 @@ export const getRestaurantByTripAdvisorID = async (req: Request, res: Response) 
     }
 };
 
+export const getRestaurantStatsByGoogleSearchQuery = async (req: Request, res: Response) => {
+    const { searchQuery } = req.params;
+    try {
+        getJson({
+            api_key: process.env.SERPAPI_API_KEY,
+            engine: "google_maps",
+            type: "search",
+            google_domain: "google.com",
+            q: searchQuery,
+            hl: "en"
+        }, (json) => {
+            if (!json.place_results) {
+                res.status(404).json({ message: "Google place not found" });
+                return;
+            }
+
+            const result = {
+                title: json.place_results.title as string,
+                rating: json.place_results.rating as string,
+                reviews: (json.place_results.reviews as number),
+                googleReviews: json.place_results.user_reviews.most_relevant.map((review: any) => ({
+                    rating: review.rating,
+                    description: review.description,
+                    user_name: review.username,
+                    user_image: review.images,
+                    date: review.date,
+                    date_iso8601: review.date_iso8601,
+                }))
+            }
+
+            res.json(result);
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error while fetching restaurant" });
+    }
+};
+
 export const createRestaurantByTripAdvisorID = async (req: Request, res: Response) => {
     const { tripAdvisorID } = req.params;
     const { locationId, priceRange } = req.body;
@@ -288,7 +334,7 @@ export const createRestaurantByTripAdvisorID = async (req: Request, res: Respons
 
 export const updateRestaurant = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine, reservationUrl } = req.body;
+    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews } = req.body;
 
     try {
         const [updatedRestaurant] = await db
@@ -329,6 +375,30 @@ export const updateRestaurant = async (req: Request, res: Response) => {
             );
         }
 
+        const hasGoogleStats = googleStats && Object.keys(googleStats).length > 0;
+        const hasTripAdvisorStats = tripAdvisorStats && Object.keys(tripAdvisorStats).length > 0;
+        await db
+            .delete(restaurantStats)
+            .where(eq(restaurantStats.restaurantId, id as string));
+        await db.insert(restaurantStats).values({
+            restaurantId: id as string,
+            ...(hasGoogleStats && { googleStats }),
+            ...(hasTripAdvisorStats && { tripAdvisorStats }),
+        });
+
+        if (googleReviews && Array.isArray(googleReviews)) {
+            await db.delete(restaurantReviews).where(eq(restaurantReviews.restaurantId, id as string));
+            await db.insert(restaurantReviews).values(
+                googleReviews.map((review: any) => ({
+                    restaurantId: id as string,
+                    source: "google",
+                    rating: review.rating,
+                    description: review.description,
+                    images: review.user_image,
+                    userName: review.user_name,
+                }))
+            );
+        }
         res.json({ message: "Restaurant updated successfully", restaurant: updatedRestaurant });
     } catch (error) {
         console.error(error);

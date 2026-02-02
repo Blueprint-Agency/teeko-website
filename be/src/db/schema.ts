@@ -125,5 +125,7 @@ export const restaurantReviews = pgTable("restaurant_reviews", {
     restaurantId: uuid("restaurant_id").references(() => restaurants.id).notNull(),
     source: varchar("source").notNull(), // google, tripadvisor
     rating: numeric("rating").notNull(),
+    userName: varchar("user_name").notNull(),
+    description: text("description").notNull(),
     images: jsonb("images"),
 });
