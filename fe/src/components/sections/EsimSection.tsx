@@ -45,7 +45,7 @@ export function EsimSection({ packages }: EsimSectionProps) {
                             >
                                 <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1">
                                     {pkg.featureImage && (
-                                        <div className="aspect-video overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950">
+                                        <div className="aspect-square overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950">
                                             <img
                                                 src={pkg.featureImage}
                                                 alt={pkg.packageName}

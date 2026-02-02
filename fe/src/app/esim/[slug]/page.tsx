@@ -77,7 +77,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                 <div className="max-w-4xl mx-auto">
                     <div className="rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xl">
                         {pkg.featureImage && (
-                            <div className="aspect-[21/9] overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950">
+                            <div className="aspect-square overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950">
                                 <img
                                     src={pkg.featureImage}
                                     alt={pkg.packageName}
