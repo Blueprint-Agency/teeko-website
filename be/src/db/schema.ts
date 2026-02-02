@@ -129,3 +129,14 @@ export const restaurantReviews = pgTable("restaurant_reviews", {
     description: text("description").notNull(),
     images: jsonb("images"),
 });
+
+export const restaurantShortVideos = pgTable("restaurant_short_videos", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    restaurantId: uuid("restaurant_id").references(() => restaurants.id).notNull(),
+    title: varchar("title").notNull(),
+    link: varchar("link").notNull(),
+    thumbnail: varchar("thumbnail").notNull(),
+    source: varchar("source").notNull(),
+    channel: varchar("channel").notNull(),
+});
+

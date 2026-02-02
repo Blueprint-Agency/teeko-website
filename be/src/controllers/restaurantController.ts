@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { db } from "../db";
-import { restaurants, restaurantImages, locations, restaurantStats, restaurantReviews } from "../db/schema";
+import { restaurants, restaurantImages, locations, restaurantStats, restaurantReviews, restaurantShortVideos } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { getJson } from "serpapi";
 
@@ -47,7 +47,8 @@ export const getRestaurants = async (req: Request, res: Response) => {
             const images = await db.select().from(restaurantImages).where(eq(restaurantImages.restaurantId, res.id));
             const reviews = await db.select().from(restaurantReviews).where(eq(restaurantReviews.restaurantId, res.id));
             const googleReviews = reviews.filter(r => r.source === 'google');
-            return { ...res, restaurantImages: images, googleReviews };
+            const shortVideos = await db.select().from(restaurantShortVideos).where(eq(restaurantShortVideos.restaurantId, res.id));
+            return { ...res, restaurantImages: images, googleReviews, shortVideos };
         }));
 
         res.json(restaurantsWithDetails);
@@ -141,7 +142,9 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 
         const review = await db.select().from(restaurantReviews).where(eq(restaurantReviews.restaurantId, id as string));
 
-        res.json({ ...result[0], restaurantImages: images, restaurantStats: stats, restaurantReviews: review });
+        const shortVideos = await db.select().from(restaurantShortVideos).where(eq(restaurantShortVideos.restaurantId, id as string));
+
+        res.json({ ...result[0], restaurantImages: images, restaurantStats: stats, restaurantReviews: review, shortVideos });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error while fetching restaurant" });
@@ -267,6 +270,39 @@ export const getRestaurantStatsByGoogleSearchQuery = async (req: Request, res: R
     }
 };
 
+export const getRestaurantShortVideosBySearchQuery = async (req: Request, res: Response) => {
+    const { searchQuery } = req.params;
+    try {
+        getJson({
+            api_key: process.env.SERPAPI_API_KEY,
+            engine: "google_short_videos",
+            google_domain: "google.com",
+            q: searchQuery,
+            hl: "en"
+        }, (json) => {
+            if (!json.short_video_results) {
+                res.status(404).json({ message: "Google short videos not found" });
+                return;
+            }
+
+            const result = json.short_video_results.map((video: any) => {
+                return {
+                    title: video.title as string,
+                    link: video.link as string,
+                    thumbnail: video.thumbnail as string,
+                    source: video.source as string,
+                    channel: video.channel as string,
+                }
+            });
+
+            res.json({ shortVideos: result });
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error while fetching restaurant" });
+    }
+};
+
 export const createRestaurantByTripAdvisorID = async (req: Request, res: Response) => {
     const { tripAdvisorID } = req.params;
     const { locationId, priceRange } = req.body;
@@ -334,7 +370,7 @@ export const createRestaurantByTripAdvisorID = async (req: Request, res: Respons
 
 export const updateRestaurant = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews } = req.body;
+    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews, shortVideos } = req.body;
 
     try {
         const [updatedRestaurant] = await db
@@ -396,6 +432,20 @@ export const updateRestaurant = async (req: Request, res: Response) => {
                     description: review.description,
                     images: review.user_image,
                     userName: review.user_name,
+                }))
+            );
+        }
+
+        if (shortVideos && Array.isArray(shortVideos)) {
+            await db.delete(restaurantShortVideos).where(eq(restaurantShortVideos.restaurantId, id as string));
+            await db.insert(restaurantShortVideos).values(
+                shortVideos.map((video: any) => ({
+                    restaurantId: id as string,
+                    title: video.title,
+                    link: video.link,
+                    thumbnail: video.thumbnail,
+                    source: video.source,
+                    channel: video.channel,
                 }))
             );
         }

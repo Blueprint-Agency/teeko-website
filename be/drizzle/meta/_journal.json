@@ -71,6 +71,13 @@
       "when": 1770024583010,
       "tag": "0009_easy_beyonder",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1770037599640,
+      "tag": "0010_aberrant_unicorn",
+      "breakpoints": true
     }
   ]
 }
