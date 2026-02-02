@@ -105,7 +105,6 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('overview');
     const [restaurant] = useState(initialRestaurant);
-    console.log('restaurant', restaurant)
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
