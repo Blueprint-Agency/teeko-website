@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { db } from "../db";
-import { blogPosts, blogContentBlocks } from "../db/schema";
+import { blogPosts, blogContentBlocks, restaurants, locations, restaurantImages, restaurantStats } from "../db/schema";
 import { eq, desc, and } from "drizzle-orm";
 
 // Get all blog posts (admin)
@@ -52,7 +52,45 @@ export const getPostBySlug = async (req: Request, res: Response) => {
             .where(eq(blogContentBlocks.blogPostId, post.id))
             .orderBy(blogContentBlocks.orderIndex);
 
-        res.json({ ...post, contentBlocks: blocks });
+        // Enrich blocks with linked entities
+        const enrichedBlocks = await Promise.all(
+            blocks.map(async (block) => {
+                let suggestions = null;
+                let linkedEntity = null;
+
+                if (block.restaurantId) {
+                    // Fetch specific restaurant
+                    const [restaurant] = await db.select().from(restaurants).where(eq(restaurants.id, block.restaurantId));
+                    if (restaurant) {
+                        const images = await db.select().from(restaurantImages).where(eq(restaurantImages.restaurantId, restaurant.id));
+                        const [stats] = await db.select().from(restaurantStats).where(eq(restaurantStats.restaurantId, restaurant.id));
+                        linkedEntity = { ...restaurant, images, stats };
+                    }
+                } else if (block.locationId) {
+                    // Fetch location info and top restaurants
+                    const [location] = await db.select().from(locations).where(eq(locations.id, block.locationId));
+                    if (location) {
+                        const topRestaurants = await db.select().from(restaurants).where(eq(restaurants.locationId, location.id)).limit(10);
+                        // Enrich these top restaurants with images
+                        const enrichedTop = await Promise.all(topRestaurants.map(async (r) => {
+                            const images = await db.select().from(restaurantImages).where(eq(restaurantImages.restaurantId, r.id));
+                            const [stats] = await db.select().from(restaurantStats).where(eq(restaurantStats.restaurantId, r.id));
+                            return { ...r, images, stats };
+                        }));
+                        linkedEntity = location;
+                        suggestions = enrichedTop;
+                    }
+                }
+
+                return {
+                    ...block,
+                    linkedEntity,
+                    suggestions
+                };
+            })
+        );
+
+        res.json({ ...post, contentBlocks: enrichedBlocks });
     } catch (error) {
         console.error("Error fetching post:", error);
         res.status(500).json({ message: "Server error" });
@@ -111,6 +149,8 @@ export const createPost = async (req: Request, res: Response) => {
                     blockType: block.blockType,
                     content: block.content,
                     orderIndex: String(index),
+                    locationId: block.locationId,
+                    restaurantId: block.restaurantId,
                 }))
             );
         }
@@ -167,6 +207,8 @@ export const updatePost = async (req: Request, res: Response) => {
                     blockType: block.blockType,
                     content: block.content,
                     orderIndex: String(index),
+                    locationId: block.locationId,
+                    restaurantId: block.restaurantId,
                 }))
             );
         }
