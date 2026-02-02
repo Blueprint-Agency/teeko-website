@@ -31,7 +31,10 @@ export default function CreateRestaurantPage() {
     const priceOptions = ["$", "$$", "$$$", "$$$$"];
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/locations`)
+        const token = localStorage.getItem("token");
+        fetch(`${API_BASE_URL}/admin/locations`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        })
             .then(res => res.json())
             .then(data => setLocations(Array.isArray(data) ? data : []))
             .catch(err => console.error(err));

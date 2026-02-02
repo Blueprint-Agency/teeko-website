@@ -25,7 +25,12 @@ export default function AdminLocationsPage() {
 
     const fetchLocations = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/locations`);
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_BASE_URL}/admin/locations`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             const data = await res.json();
             setLocations(Array.isArray(data) ? data : []);
         } catch (error) {
@@ -62,8 +67,8 @@ export default function AdminLocationsPage() {
         try {
             const token = localStorage.getItem("token");
             const url = editingLocation
-                ? `${API_BASE_URL}/locations/${editingLocation.id}`
-                : `${API_BASE_URL}/locations`;
+                ? `${API_BASE_URL}/admin/locations/${editingLocation.id}`
+                : `${API_BASE_URL}/admin/locations`;
 
             const method = editingLocation ? "PATCH" : "POST";
 
