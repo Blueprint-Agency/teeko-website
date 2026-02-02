@@ -4,8 +4,8 @@ import { requireAdmin } from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.get("/", getLocations);
-router.get("/:slug", getLocationBySlug);
+router.get("/", requireAdmin, getLocations);
+router.get("/:slug", requireAdmin, getLocationBySlug);
 router.post("/", requireAdmin, createLocation);
 router.patch("/:id", requireAdmin, updateLocation);
 

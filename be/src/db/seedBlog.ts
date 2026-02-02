@@ -1,13 +1,13 @@
 import { db } from "./index";
 import { blogPosts, blogContentBlocks, users } from "./schema";
-import { eq } from "drizzle-orm";
+import { inArray } from "drizzle-orm";
 
 export const seedBlogPosts = async () => {
     try {
         console.log("Starting blog posts seed...");
 
-        // Get admin user to use as author
-        const [adminUser] = await db.select().from(users).where(eq(users.role, "ADMIN")).limit(1);
+        // Get admin user to use as author (can be ADMIN or SUPERADMIN)
+        const [adminUser] = await db.select().from(users).where(inArray(users.role, ["ADMIN", "SUPERADMIN"])).limit(1);
 
         if (!adminUser) {
             console.warn("No admin user found. Skipping blog seed.");
@@ -59,26 +59,6 @@ export const seedBlogPosts = async () => {
                     { blockType: "paragraph", content: "Malaysian food is incredibly diverse and delicious. Don't be afraid to try street food - it's generally safe and offers the most authentic experience. Remember that Malaysia is a Muslim-majority country, so pork is not as common, but you'll find it in Chinese restaurants." },
                     { blockType: "h2", content: "Weather and What to Pack" },
                     { blockType: "paragraph", content: "Malaysia is hot and humid year-round. Pack light, breathable clothing, but bring a light jacket for air-conditioned spaces. Don't forget sunscreen, an umbrella (for both sun and rain), and comfortable walking shoes." },
-                ]
-            },
-            {
-                title: "The Ultimate Guide to Malaysian Street Food",
-                slug: "ultimate-guide-malaysian-street-food",
-                metaDescription: "From nasi lemak to char kway teow, explore the incredible world of Malaysian street food with our comprehensive guide to must-try dishes.",
-                featureImage: "https://images.unsplash.com/photo-1596040033229-a0b3b83e7c8d?w=1200&h=600&fit=crop",
-                status: "PUBLISHED" as const,
-                contentBlocks: [
-                    { blockType: "paragraph", content: "Malaysian street food is world-renowned for its incredible flavors, diversity, and affordability. This guide will help you navigate the delicious world of hawker stalls and street vendors." },
-                    { blockType: "h2", content: "Breakfast Champions" },
-                    { blockType: "h3", content: "Nasi Lemak - The National Dish" },
-                    { blockType: "paragraph", content: "Nasi lemak is Malaysia's beloved national dish. Fragrant coconut rice served with sambal, fried anchovies, peanuts, cucumber, and a hard-boiled egg. For the full experience, add rendang or fried chicken." },
-                    { blockType: "h3", content: "Roti Canai - Flaky Perfection" },
-                    { blockType: "paragraph", content: "This flaky, crispy flatbread is a breakfast staple. Watch as skilled vendors flip and toss the dough before cooking it on a hot griddle. Dip it in dhal curry or chicken curry for the authentic experience." },
-                    { blockType: "h2", content: "Lunch and Dinner Favorites" },
-                    { blockType: "h3", content: "Char Kway Teow" },
-                    { blockType: "paragraph", content: "Flat rice noodles stir-fried with prawns, Chinese sausage, eggs, and bean sprouts in a dark soy sauce. The best versions have a smoky 'wok hei' flavor that comes from high-heat cooking." },
-                    { blockType: "h3", content: "Satay - Grilled Perfection" },
-                    { blockType: "paragraph", content: "Skewered and grilled meat (chicken, beef, or lamb) served with peanut sauce, cucumber, and onions. The meat is marinated in a blend of spices before grilling over charcoal." },
                 ]
             },
             {

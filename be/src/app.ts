@@ -8,7 +8,6 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 import authRoutes from "./routes/authRoutes";
-import locationRoutes from "./routes/locationRoutes";
 import restaurantRoutes from "./routes/restaurantRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import esimRoutes from "./routes/esimRoutes";
@@ -36,7 +35,6 @@ app.use(cors({
 app.use(express.json());
 
 app.use("/auth", authRoutes);
-app.use("/locations", locationRoutes);
 app.use("/restaurants", restaurantRoutes);
 app.use("/admin", adminRoutes);
 app.use("/esim", esimRoutes);
