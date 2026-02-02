@@ -129,8 +129,8 @@ export default function EsimPage() {
                                 <button
                                     onClick={() => setSelectedProvider("all")}
                                     className={`w-full text-left px-4 py-2 rounded-lg transition-colors flex items-center justify-between ${selectedProvider === "all"
-                                            ? "bg-red-50 dark:bg-red-900/20 text-red-600 font-medium"
-                                            : "text-gray-600 dark:text-gray-400 hover:bg-[var(--background-alt)]"
+                                        ? "bg-red-50 dark:bg-red-900/20 text-red-600 font-medium"
+                                        : "text-gray-600 dark:text-gray-400 hover:bg-[var(--background-alt)]"
                                         }`}
                                 >
                                     <span>All Providers</span>
@@ -141,8 +141,8 @@ export default function EsimPage() {
                                         key={provider.id}
                                         onClick={() => setSelectedProvider(provider.id)}
                                         className={`w-full text-left px-4 py-2 rounded-lg transition-colors flex items-center justify-between ${selectedProvider === provider.id
-                                                ? "bg-red-50 dark:bg-red-900/20 text-red-600 font-medium"
-                                                : "text-gray-600 dark:text-gray-400 hover:bg-[var(--background-alt)]"
+                                            ? "bg-red-50 dark:bg-red-900/20 text-red-600 font-medium"
+                                            : "text-gray-600 dark:text-gray-400 hover:bg-[var(--background-alt)]"
                                             }`}
                                     >
                                         <span>{provider.name}</span>
@@ -170,7 +170,7 @@ export default function EsimPage() {
                                         >
                                             <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1 flex flex-col">
                                                 {pkg.featureImage && (
-                                                    <div className="aspect-video overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950 relative">
+                                                    <div className="aspect-square overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950 relative">
                                                         <img
                                                             src={pkg.featureImage}
                                                             alt={pkg.packageName}
