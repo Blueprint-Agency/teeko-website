@@ -147,7 +147,8 @@ export default function CreateBlogPostPage() {
                 setToast({ message: "Post created successfully!", type: "success" });
                 setTimeout(() => router.push("/admin/blog"), 1500);
             } else {
-                setToast({ message: "Failed to create post", type: "error" });
+                const data = await res.json();
+                setToast({ message: data.message || "Failed to create post", type: "error" });
             }
         } catch (error) {
             console.error(error);

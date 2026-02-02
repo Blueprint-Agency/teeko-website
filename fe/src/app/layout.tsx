@@ -53,6 +53,8 @@ const themeScript = `
   })();
 `;
 
+import { MaintenanceProvider } from "@/components/providers/MaintenanceProvider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -66,7 +68,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-white dark:bg-gray-900`}
       >
-        {children}
+        <MaintenanceProvider>
+          {children}
+        </MaintenanceProvider>
       </body>
     </html>
   );

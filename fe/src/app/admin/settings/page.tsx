@@ -14,6 +14,7 @@ export default function AdminSettingsPage() {
         siteTitle: "",
         siteDescription: "",
         faviconUrl: "",
+        maintenanceMode: false,
     });
 
     useEffect(() => {
@@ -31,6 +32,7 @@ export default function AdminSettingsPage() {
                         siteTitle: data.siteTitle || "",
                         siteDescription: data.siteDescription || "",
                         faviconUrl: data.faviconUrl || "",
+                        maintenanceMode: data.maintenanceMode || false,
                     });
                 }
             } catch (error) {
@@ -134,6 +136,25 @@ export default function AdminSettingsPage() {
                                     <img src={formData.faviconUrl} alt="Favicon preview" className="h-full w-full object-contain" />
                                 </div>
                             )}
+                        </div>
+                    </div>
+                    <div className="pt-4 border-t border-gray-100 dark:border-zinc-800">
+                        <div className="flex items-center justify-between p-4 rounded-xl bg-orange-50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-900/20">
+                            <div className="flex-1">
+                                <h3 className="text-sm font-bold text-orange-900 dark:text-orange-400">Maintenance Mode</h3>
+                                <p className="text-xs text-orange-700 dark:text-orange-500 mt-1">When enabled, the public website will show a maintenance message.</p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setFormData({ ...formData, maintenanceMode: !formData.maintenanceMode })}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${formData.maintenanceMode ? 'bg-orange-600' : 'bg-gray-200 dark:bg-zinc-700'
+                                    }`}
+                            >
+                                <span
+                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.maintenanceMode ? 'translate-x-6' : 'translate-x-1'
+                                        }`}
+                                />
+                            </button>
                         </div>
                     </div>
                 </div>
