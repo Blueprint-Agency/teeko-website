@@ -24,6 +24,8 @@ export default function CreateRestaurantPage() {
         cuisine: "",
         features: [] as string[],
         tripAdvisorId: "",
+        reservationUrl: "",
+        websiteUrl: "",
     });
 
     const priceOptions = ["$", "$$", "$$$", "$$$$"];
@@ -66,7 +68,9 @@ export default function CreateRestaurantPage() {
                     features: Array.isArray(data.feature) ? data.feature : [],
                     minPrice,
                     maxPrice,
-                    tripAdvisorId: taId
+                    tripAdvisorId: taId,
+                    reservationUrl: data.reservationUrl || "",
+                    websiteUrl: data.websiteUrl || data.website || ""
                 });
             } else {
                 alert("Failed to fetch TripAdvisor data");
@@ -277,6 +281,29 @@ export default function CreateRestaurantPage() {
                     </div>
                 </div>
 
+                <div className="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <label className="block text-sm font-medium dark:text-gray-300">Reservation URL</label>
+                        <input
+                            type="url"
+                            placeholder="https://..."
+                            className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 border-gray-200"
+                            value={formData.reservationUrl}
+                            onChange={e => setFormData({ ...formData, reservationUrl: e.target.value })}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium dark:text-gray-300">Website URL</label>
+                        <input
+                            type="url"
+                            placeholder="https://..."
+                            className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 border-gray-200"
+                            value={formData.websiteUrl}
+                            onChange={e => setFormData({ ...formData, websiteUrl: e.target.value })}
+                        />
+                    </div>
+                </div>
+
                 <div>
                     <label className="block text-sm font-medium dark:text-gray-300">Address</label>
                     <textarea
@@ -305,8 +332,8 @@ export default function CreateRestaurantPage() {
                         {loading ? "Creating..." : "Create Restaurant"}
                     </Button>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 }
 

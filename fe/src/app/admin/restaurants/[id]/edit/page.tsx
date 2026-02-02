@@ -26,7 +26,9 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
         cuisine: "",
         features: [] as string[],
         tripAdvisorId: "",
-        images: [] as any[]
+        images: [] as any[],
+        reservationUrl: "",
+        websiteUrl: "",
     });
 
     const [syncing, setSyncing] = useState(false);
@@ -71,7 +73,9 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                         cuisine: restData.cuisine || "",
                         features: Array.isArray(restData.feature) ? restData.feature : [],
                         tripAdvisorId: restData.tripAdvisorId || "",
-                        images: restData.restaurantImages || []
+                        images: restData.restaurantImages || [],
+                        reservationUrl: restData.reservationUrl || "",
+                        websiteUrl: restData.websiteUrl || restData.contactInfo?.website || ""
                     });
                     setTaId(restData.tripAdvisorId || "");
                 } else {
@@ -117,7 +121,9 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                     features: Array.isArray(data.feature) ? data.feature : formData.features,
                     minPrice,
                     maxPrice,
-                    tripAdvisorId: taId
+                    tripAdvisorId: taId,
+                    reservationUrl: data.reservationUrl || formData.reservationUrl,
+                    websiteUrl: data.websiteUrl || data.website || formData.websiteUrl
                 });
                 setToast({ message: "Data fetched from TripAdvisor!", type: "success" });
             } else {
@@ -379,6 +385,29 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                         </div>
                     </div>
 
+                    <div className="grid gap-6 md:grid-cols-2">
+                        <div>
+                            <label className="block text-sm font-medium dark:text-gray-300">Reservation URL</label>
+                            <input
+                                type="url"
+                                placeholder="https://..."
+                                className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                value={formData.reservationUrl}
+                                onChange={e => setFormData({ ...formData, reservationUrl: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium dark:text-gray-300">Website URL</label>
+                            <input
+                                type="url"
+                                placeholder="https://..."
+                                className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                value={formData.websiteUrl}
+                                onChange={e => setFormData({ ...formData, websiteUrl: e.target.value })}
+                            />
+                        </div>
+                    </div>
+
                     <div>
                         <label className="block text-sm font-medium dark:text-gray-300">Address</label>
                         <textarea
@@ -460,7 +489,7 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                         )}
                     </Button>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 }
