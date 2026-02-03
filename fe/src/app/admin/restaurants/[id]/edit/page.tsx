@@ -94,8 +94,7 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                             user_name: rev.user_name || rev.userName,
                         })) || [],
                         shortVideos: [
-                            ...(restData.xhsPosts || []).map((p: any) => ({ ...p, type: 'xhs' })),
-                            ...(restData.igReels || []).map((p: any) => ({ ...p, type: 'ig_reel' }))
+                            ...(restData.shortVideos || []),
                         ],
                     });
                     setTaId(restData.tripAdvisorId || "");
