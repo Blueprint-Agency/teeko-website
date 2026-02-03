@@ -250,6 +250,7 @@ export const getRestaurantByTripAdvisorID = async (req: Request, res: Response) 
                     website: json.place_result.website,
                 },
                 operatingHours: json.place_result.operation_hours?.hours,
+                images: json.place_result.images,
             }
 
             res.json(result);
