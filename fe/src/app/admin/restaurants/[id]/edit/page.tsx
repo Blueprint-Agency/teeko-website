@@ -144,6 +144,11 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                     minPrice,
                     maxPrice,
                     tripAdvisorId: taId,
+                    images: data.images.map((img: any) => ({
+                        url: img,
+                        caption: "",
+                        isPrimary: false
+                    })) || [],
                     reservationUrl: data.reservationUrl || formData.reservationUrl,
                     websiteUrl: data.websiteUrl || data.website || formData.websiteUrl
                 });
