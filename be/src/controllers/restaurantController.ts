@@ -177,7 +177,7 @@ export const createRestaurant = async (req: Request, res: Response) => {
         const restaurantId = newRestaurant[0].id;
 
         // 2. Add Images if provided
-        if (images && Array.isArray(images)) {
+        if (images && Array.isArray(images) && images.length > 0) {
             await db.insert(restaurantImages).values(
                 images.map((img: any) => ({
                     restaurantId,
@@ -426,7 +426,7 @@ export const updateRestaurant = async (req: Request, res: Response) => {
         }
 
         // Handle images if provided
-        if (images && Array.isArray(images)) {
+        if (images && Array.isArray(images) && images.length > 0) {
             // Simplistic approach: delete old images and add new ones (better approach would be syncing)
             await db.delete(restaurantImages).where(eq(restaurantImages.restaurantId, id as string));
             await db.insert(restaurantImages).values(
