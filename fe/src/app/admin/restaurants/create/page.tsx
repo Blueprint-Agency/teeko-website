@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import { ArrowLeft, Plus, X, Search, Loader2, Save } from "lucide-react";
+import { ArrowLeft, Plus, X, Search, Loader2, Save, Trash2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 
 export default function CreateRestaurantPage() {
@@ -29,6 +29,7 @@ export default function CreateRestaurantPage() {
         cuisine: "",
         features: [] as string[],
         tripAdvisorId: "",
+        images: [] as any[],
         reservationUrl: "",
         websiteUrl: "",
         googleStats: { rating: 0, totalReviews: 0, link: "" },
@@ -86,6 +87,11 @@ export default function CreateRestaurantPage() {
                     minPrice,
                     maxPrice,
                     tripAdvisorId: taId,
+                    images: data.images.map((img: any) => ({
+                        url: img,
+                        caption: "",
+                        isPrimary: false
+                    })) || [],
                     reservationUrl: data.reservationUrl || "",
                     websiteUrl: data.websiteUrl || data.website || "",
                     tripAdvisorStats: {
@@ -187,6 +193,33 @@ export default function CreateRestaurantPage() {
     const handleRemoveFeature = (index: number) => {
         const newFeatures = formData.features.filter((_, i) => i !== index);
         setFormData({ ...formData, features: newFeatures });
+    };
+
+    const handleAddImage = () => {
+        setFormData({
+            ...formData,
+            images: [...formData.images, { url: "", caption: "", isPrimary: false }]
+        });
+    };
+
+    const handleRemoveImage = (index: number) => {
+        const newImages = [...formData.images];
+        newImages.splice(index, 1);
+        setFormData({ ...formData, images: newImages });
+    };
+
+    const handleImageChange = (index: number, field: string, value: any) => {
+        const newImages = [...formData.images];
+        newImages[index] = { ...newImages[index], [field]: value };
+
+        // If setting as primary, unset others
+        if (field === 'isPrimary' && value === true) {
+            newImages.forEach((img, i) => {
+                if (i !== index) img.isPrimary = false;
+            });
+        }
+
+        setFormData({ ...formData, images: newImages });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -812,19 +845,51 @@ export default function CreateRestaurantPage() {
                 )}
 
                 {activeTab === "images" && (
-                    <div className="space-y-6">
-                        <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 space-y-6">
-                            <div className="flex items-center justify-between mb-4 pb-2 border-b dark:border-zinc-800">
-                                <h2 className="text-lg font-semibold dark:text-white">Restaurant Images</h2>
-                                <Button type="button" variant="ghost" size="sm" onClick={() => setFormData({ ...formData, features: [...formData.features, ""] })}>
-                                    <Plus className="h-4 w-4 mr-1" /> Add Image
-                                </Button>
-                            </div>
-                            <p className="text-sm text-gray-500 mb-4">Add high-quality images of the restaurant and Dishes.</p>
-                            {/* Note: I'll need to add image handling functions or use a simplified version for now since create page didn't have images before */}
-                            <div className="text-center py-12 border-2 border-dashed rounded-lg dark:border-zinc-800">
-                                <p className="text-gray-500">Image upload simplified for this view. Please use edit page for full image management.</p>
-                            </div>
+                    <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 space-y-6">
+                        <div className="flex items-center justify-between border-b pb-2">
+                            <h2 className="text-lg font-semibold dark:text-white">Images</h2>
+                            <Button type="button" variant="ghost" size="sm" onClick={handleAddImage}>
+                                <Plus className="h-4 w-4 mr-1" /> Add Image
+                            </Button>
+                        </div>
+
+                        <div className="space-y-4">
+                            {formData.images.map((img, index) => (
+                                <div key={index} className="flex gap-4 items-start p-4 border rounded-lg dark:border-zinc-800">
+                                    <div className="flex-1 space-y-3">
+                                        <input
+                                            type="text"
+                                            placeholder="Image URL"
+                                            className="w-full rounded-md border p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                            value={img.url}
+                                            onChange={e => handleImageChange(index, 'url', e.target.value)}
+                                        />
+                                        <input
+                                            type="text"
+                                            placeholder="Caption"
+                                            className="w-full rounded-md border p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                            value={img.caption}
+                                            onChange={e => handleImageChange(index, 'caption', e.target.value)}
+                                        />
+                                        <label className="flex items-center gap-2 text-sm dark:text-gray-300">
+                                            <input
+                                                type="checkbox"
+                                                checked={img.isPrimary}
+                                                onChange={e => handleImageChange(index, 'isPrimary', e.target.checked)}
+                                            />
+                                            Primary Image
+                                        </label>
+                                    </div>
+                                    {img.url && (
+                                        <div className="w-24 h-24 border rounded overflow-hidden">
+                                            <img src={img.url} alt="Preview" className="w-full h-full object-cover" />
+                                        </div>
+                                    )}
+                                    <button type="button" onClick={() => handleRemoveImage(index)} className="text-red-500 p-1 hover:bg-red-50 rounded">
+                                        <Trash2 className="h-5 w-5" />
+                                    </button>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}
