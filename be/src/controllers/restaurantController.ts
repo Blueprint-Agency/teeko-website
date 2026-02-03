@@ -201,7 +201,10 @@ export const createRestaurant = async (req: Request, res: Response) => {
                 googleReviews.map((review: any) => ({
                     restaurantId,
                     source: 'google',
-                    ...review,
+                    rating: review.rating,
+                    description: review.description,
+                    images: review.user_image,
+                    userName: review.user_name,
                 }))
             );
         }
@@ -210,7 +213,11 @@ export const createRestaurant = async (req: Request, res: Response) => {
             await db.insert(restaurantShortVideos).values(
                 shortVideos.map((video: any) => ({
                     restaurantId,
-                    ...video,
+                    title: video.title,
+                    link: video.link,
+                    thumbnail: video.thumbnail,
+                    source: video.source,
+                    channel: video.channel,
                 }))
             );
         }
