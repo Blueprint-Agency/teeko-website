@@ -127,6 +127,7 @@ export const getRestaurantById = async (req: Request, res: Response) => {
             operatingHours: restaurants.operatingHours,
             seoTitle: restaurants.seoTitle,
             seoDescription: restaurants.seoDescription,
+            tripAdvisorId: restaurants.tripAdvisorLocationId,
         })
             .from(restaurants)
             .where(eq(restaurants.id, id as string));
@@ -152,7 +153,7 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 };
 
 export const createRestaurant = async (req: Request, res: Response) => {
-    const { name, slug, tripAdvisorLocationId, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine } = req.body;
+    const { name, slug, tripAdvisorId, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews, shortVideos } = req.body;
 
     try {
         // 1. Create Restaurant
@@ -162,7 +163,7 @@ export const createRestaurant = async (req: Request, res: Response) => {
                 name,
                 slug,
                 locationId,
-                tripAdvisorLocationId,
+                tripAdvisorLocationId: tripAdvisorId,
                 description,
                 address,
                 priceRange,
@@ -183,6 +184,33 @@ export const createRestaurant = async (req: Request, res: Response) => {
                     url: img.url,
                     caption: img.caption,
                     isPrimary: img.isPrimary || false,
+                }))
+            );
+        }
+
+        const hasGoogleStats = googleStats && Object.keys(googleStats).length > 0;
+        const hasTripAdvisorStats = tripAdvisorStats && Object.keys(tripAdvisorStats).length > 0;
+        await db.insert(restaurantStats).values({
+            restaurantId,
+            googleStats: hasGoogleStats ? googleStats : null,
+            tripAdvisorStats: hasTripAdvisorStats ? tripAdvisorStats : null,
+        });
+
+        if (googleReviews && Array.isArray(googleReviews) && googleReviews.length > 0) {
+            await db.insert(restaurantReviews).values(
+                googleReviews.map((review: any) => ({
+                    restaurantId,
+                    source: 'google',
+                    ...review,
+                }))
+            );
+        }
+
+        if (shortVideos && Array.isArray(shortVideos) && shortVideos.length > 0) {
+            await db.insert(restaurantShortVideos).values(
+                shortVideos.map((video: any) => ({
+                    restaurantId,
+                    ...video,
                 }))
             );
         }
@@ -422,7 +450,7 @@ export const updateRestaurant = async (req: Request, res: Response) => {
             ...(hasTripAdvisorStats && { tripAdvisorStats }),
         });
 
-        if (googleReviews && Array.isArray(googleReviews)) {
+        if (googleReviews && Array.isArray(googleReviews) && googleReviews.length > 0) {
             await db.delete(restaurantReviews).where(eq(restaurantReviews.restaurantId, id as string));
             await db.insert(restaurantReviews).values(
                 googleReviews.map((review: any) => ({
@@ -436,7 +464,7 @@ export const updateRestaurant = async (req: Request, res: Response) => {
             );
         }
 
-        if (shortVideos && Array.isArray(shortVideos)) {
+        if (shortVideos && Array.isArray(shortVideos) && shortVideos.length > 0) {
             await db.delete(restaurantShortVideos).where(eq(restaurantShortVideos.restaurantId, id as string));
             await db.insert(restaurantShortVideos).values(
                 shortVideos.map((video: any) => ({
