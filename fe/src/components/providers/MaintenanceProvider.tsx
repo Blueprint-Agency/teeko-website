@@ -10,14 +10,13 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
     const [loading, setLoading] = useState(true);
     const pathname = usePathname();
 
+    // IMMEDIATE EXEMPTION: Admin routes are never blocked or delayed
+    const isAdminRoute = pathname?.startsWith("/admin");
+
     useEffect(() => {
+        if (isAdminRoute) return;
+
         const checkMaintenance = async () => {
-            // Never block admin or auth routes
-            if (pathname?.startsWith("/admin") || pathname?.startsWith("/auth")) {
-                setIsMaintenance(false);
-                setLoading(false);
-                return;
-            }
 
             try {
                 const res = await fetch(`${API_BASE_URL}/admin/settings`, { cache: 'no-store' });
@@ -33,14 +32,16 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
         };
 
         checkMaintenance();
-    }, [pathname]);
+    }, [pathname, isAdminRoute]);
+
+    if (isAdminRoute) return <>{children}</>;
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black uppercase italic">
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black">
                 <div className="flex flex-col items-center gap-4">
                     <RefreshCcw className="w-8 h-8 text-red-600 animate-spin" />
-                    <span className="text-xs font-black tracking-widest text-gray-400">Loading Experience...</span>
+                    <span className="text-xs font-black tracking-widest text-gray-400 uppercase">Loading Experience...</span>
                 </div>
             </div>
         );
@@ -48,7 +49,7 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
 
     if (isMaintenance) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-black p-6 text-center uppercase">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-black p-6 text-center">
                 <div className="relative mb-12">
                     <div className="absolute inset-0 bg-red-600/20 blur-[100px] rounded-full" />
                     <div className="relative bg-zinc-900 rounded-[40px] p-8 shadow-2xl border border-zinc-800">
@@ -56,9 +57,9 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
                     </div>
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tighter leading-none italic">
-                    SYSTEM UNDERWIDE <br />
-                    <span className="text-red-600">MAINTENANCE</span>
+                <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tighter leading-none">
+                    System underwide <br />
+                    <span className="text-red-600">maintenance</span>
                 </h1>
 
                 <div className="max-w-md space-y-6">

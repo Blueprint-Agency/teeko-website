@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { AdminSidebar } from "@/components/layout/AdminSidebar";
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs";
 
@@ -12,13 +12,19 @@ export default function AdminLayout({
 }) {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
+        if (pathname === "/admin/auth/login") {
+            setIsAuthorized(true);
+            return;
+        }
+
         const userStr = localStorage.getItem("user");
         const token = localStorage.getItem("token");
 
         if (!userStr || !token) {
-            router.push("/auth/login");
+            router.push("/admin/auth/login");
             return;
         }
 
@@ -30,9 +36,9 @@ export default function AdminLayout({
             }
             setIsAuthorized(true);
         } catch (e) {
-            router.push("/auth/login");
+            router.push("/admin/auth/login");
         }
-    }, [router]);
+    }, [router, pathname]);
 
     if (!isAuthorized) {
         return (
@@ -40,6 +46,10 @@ export default function AdminLayout({
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-red-600 border-t-transparent"></div>
             </div>
         );
+    }
+
+    if (pathname === "/admin/auth/login") {
+        return <div className="min-h-screen bg-gray-50 dark:bg-black uppercase">{children}</div>;
     }
 
     return (
