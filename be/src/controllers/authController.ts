@@ -105,3 +105,40 @@ export const verifyEmail = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Server error" });
     }
 };
+
+export const adminLogin = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    try {
+        const userResult = await db.select().from(users).where(eq(users.email, email));
+        const user = userResult[0];
+
+        if (!user) {
+            res.status(403).json({ message: "Access denied. Admin credentials only." });
+            return;
+        }
+
+        // Check for admin roles
+        if (user.role !== "ADMIN" && user.role !== "SUPERADMIN") {
+            res.status(403).json({ message: "Access denied. Admin credentials only." });
+            return;
+        }
+
+        const isMatch = await bcrypt.compare(password, user.passwordHash);
+        if (!isMatch) {
+            res.status(400).json({ message: "Invalid credentials" });
+            return;
+        }
+
+        const token = jwt.sign(
+            { id: user.id, email: user.email, role: user.role },
+            process.env.JWT_SECRET as string,
+            { expiresIn: "10h" } // Longer session for admin
+        );
+
+        res.json({ token, user: { id: user.id, email: user.email, role: user.role } });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
