@@ -10,4 +10,4 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-CMD ["sh", "-c", "npm run db:push && npm start"]
+CMD ["sh", "-c", "npm run db:migrate && npm start"]
