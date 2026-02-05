@@ -7,6 +7,7 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -41,6 +42,34 @@ export default function LoginPage() {
             localStorage.setItem("user", JSON.stringify(data.user));
 
             // Redirect based on role
+            if (data.user.role === "ADMIN" || data.user.role === "SUPERADMIN") {
+                router.push("/admin");
+            } else {
+                router.push("/");
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse: any) => {
+        setIsLoading(true);
+        setError("");
+        try {
+            const res = await fetch(`${API_BASE_URL}/auth/google-login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ credential: credentialResponse.credential }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || "Google Login failed");
+
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
             if (data.user.role === "ADMIN" || data.user.role === "SUPERADMIN") {
                 router.push("/admin");
             } else {
@@ -174,6 +203,18 @@ export default function LoginPage() {
                                 )}
                             </button>
                         </form>
+
+                        <div className="mt-6 flex flex-col items-center gap-4">
+                            <GoogleLogin
+                                onSuccess={handleGoogleSuccess}
+                                onError={() => setError("Google Login Failed")}
+                                theme="filled_blue"
+                                shape="pill"
+                                width="100%"
+                                size="large"
+                                text="continue_with"
+                            />
+                        </div>
 
                         <div className="mt-8 relative">
                             <div className="absolute inset-0 flex items-center">

@@ -54,6 +54,7 @@ const themeScript = `
 `;
 
 import { MaintenanceProvider } from "@/components/providers/MaintenanceProvider";
+import { GoogleAuthProvider } from "@/components/providers/GoogleAuthProvider";
 
 export default function RootLayout({
   children,
@@ -68,9 +69,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-white dark:bg-gray-900`}
       >
-        <MaintenanceProvider>
-          {children}
-        </MaintenanceProvider>
+        <GoogleAuthProvider>
+          <MaintenanceProvider>
+            {children}
+          </MaintenanceProvider>
+        </GoogleAuthProvider>
       </body>
     </html>
   );

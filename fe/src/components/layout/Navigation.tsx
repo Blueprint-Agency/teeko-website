@@ -2,17 +2,21 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles, User as UserIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeSwitch } from "../shared/ThemeSwitch";
 
 export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isScrolledState, setIsScrolledState] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const isScrolled = isScrolledState || forceSolid;
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        setIsLoggedIn(!!token);
+
         const handleScroll = () => {
             setIsScrolledState(window.scrollY > 50);
         };
@@ -90,12 +94,25 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                     {/* Right Actions */}
                     <div className="flex items-center gap-3">
                         <ThemeSwitch isScrolled={isScrolled} />
-                        <Link
-                            href="/auth/login"
-                            className="hidden sm:inline-flex items-center px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white text-[13px] font-semibold rounded-full transition-colors shadow-sm"
-                        >
-                            Sign In
-                        </Link>
+
+                        {isLoggedIn ? (
+                            <Link
+                                href="/profile"
+                                className={`hidden sm:flex items-center justify-center w-10 h-10 rounded-full transition-all ${isScrolled
+                                        ? "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:text-primary-600"
+                                        : "bg-white/10 text-white hover:bg-white/20"
+                                    } shadow-sm overflow-hidden border border-white/10`}
+                            >
+                                <UserIcon className="w-5 h-5" />
+                            </Link>
+                        ) : (
+                            <Link
+                                href="/auth/login"
+                                className="hidden sm:inline-flex items-center px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white text-[13px] font-semibold rounded-full transition-colors shadow-sm"
+                            >
+                                Sign In
+                            </Link>
+                        )}
 
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -154,13 +171,24 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                             ))}
                         </div>
                         <div className="p-4 pt-0">
-                            <Link
-                                href="/auth/login"
-                                className="block w-full px-5 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors text-center"
-                                onClick={() => setMobileMenuOpen(false)}
-                            >
-                                Sign In
-                            </Link>
+                            {isLoggedIn ? (
+                                <Link
+                                    href="/profile"
+                                    className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-[var(--background-alt)] text-[var(--foreground)] font-semibold rounded-xl transition-colors border border-[var(--border)]"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    <UserIcon className="w-5 h-5" />
+                                    <span>My Profile</span>
+                                </Link>
+                            ) : (
+                                <Link
+                                    href="/auth/login"
+                                    className="block w-full px-5 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors text-center"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    Sign In
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>
