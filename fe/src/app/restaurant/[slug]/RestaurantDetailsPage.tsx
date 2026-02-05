@@ -6,6 +6,7 @@ import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensil
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { ReviewsTab } from "@/components/features/restaurant/ReviewsTab";
+import { SocialsSection } from "@/components/features/restaurant/SocialsSection";
 import { GoogleReview, SocialPost } from "@/components/features/restaurant/ReviewComponents";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { ImageModal } from "@/components/shared/ImageModal";
@@ -205,7 +206,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
 
                             {/* Tabs */}
                             <div className="flex gap-6 border-b border-[var(--border)] mb-8 overflow-x-auto sticky top-14 bg-[var(--background)]/95 backdrop-blur-md z-30 py-4 -mx-4 px-4 sm:mx-0 sm:px-0 shadow-sm scrollbar-hide">
-                                {['Overview', 'Reviews', 'Photos', 'Q&A'].map(tab => (
+                                {['Overview', 'Reviews', 'Socials', 'Photos', 'Q&A'].map(tab => (
                                     <button
                                         key={tab}
                                         onClick={() => {
@@ -258,11 +259,18 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
 
                                 {/* Reviews Section */}
                                 <div id="reviews" className="scroll-mt-48">
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Reviews & Social</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Reviews</h2>
                                     <ReviewsTab
                                         googleStats={restaurant?.stats?.googleStats}
                                         tripAdvisorStats={restaurant?.stats?.tripAdvisorStats}
                                         googleReviews={restaurant?.googleReviews}
+                                    />
+                                </div>
+
+                                {/* Socials Section */}
+                                <div id="socials" className="scroll-mt-48">
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Socials Feed</h2>
+                                    <SocialsSection
                                         shortVideos={restaurant?.shortVideos}
                                     />
                                 </div>
