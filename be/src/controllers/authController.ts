@@ -25,16 +25,17 @@ export const register = async (req: Request, res: Response) => {
                 res.status(400).json({ message: "Email already in use" });
                 return;
             } else {
-                // Update existing unverified user with new code
-                await db.update(users)
-                    .set({
-                        verificationCode,
-                        verificationExpires,
-                        passwordHash: await bcrypt.hash(password, 10)
-                    })
-                    .where(eq(users.id, existingUser.id));
+                await db.transaction(async (tx) => {
+                    await tx.update(users)
+                        .set({
+                            verificationCode,
+                            verificationExpires,
+                            passwordHash: await bcrypt.hash(password, 10)
+                        })
+                        .where(eq(users.id, existingUser.id));
 
-                await sendVerificationEmail(email, verificationCode);
+                    await sendVerificationEmail(email, verificationCode);
+                });
                 res.status(200).json({ message: "Verification code sent. Please check your email." });
                 return;
             }
@@ -42,23 +43,25 @@ export const register = async (req: Request, res: Response) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await db
-            .insert(users)
-            .values({
-                email,
-                passwordHash: hashedPassword,
-                role: "USER",
-                verificationCode,
-                verificationExpires,
-                isVerified: false,
-            });
+        await db.transaction(async (tx) => {
+            await tx
+                .insert(users)
+                .values({
+                    email,
+                    passwordHash: hashedPassword,
+                    role: "USER",
+                    verificationCode,
+                    verificationExpires,
+                    isVerified: false,
+                });
 
-        await sendVerificationEmail(email, verificationCode);
+            await sendVerificationEmail(email, verificationCode);
+        });
 
         res.status(201).json({ message: "User registered. Please check your email for verification code." });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
+    } catch (error: any) {
+        console.error("Registration error:", error);
+        res.status(500).json({ message: error.message || "Server error" });
     }
 };
 
@@ -131,17 +134,19 @@ export const resendCode = async (req: Request, res: Response) => {
         const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
         const verificationExpires = new Date(Date.now() + 3 * 60 * 1000); // 3 minutes
 
-        await db
-            .update(users)
-            .set({ verificationCode, verificationExpires })
-            .where(eq(users.id, user.id));
+        await db.transaction(async (tx) => {
+            await tx
+                .update(users)
+                .set({ verificationCode, verificationExpires })
+                .where(eq(users.id, user.id));
 
-        await sendVerificationEmail(email, verificationCode);
+            await sendVerificationEmail(email, verificationCode);
+        });
 
         res.json({ message: "New verification code sent" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
+    } catch (error: any) {
+        console.error("Resend code error:", error);
+        res.status(500).json({ message: error.message || "Server error" });
     }
 };
 

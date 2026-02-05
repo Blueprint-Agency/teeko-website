@@ -36,20 +36,24 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
             return;
         }
 
-        const [newBooking] = await db.insert(esimBookings).values({
-            userId,
-            esimId,
-            quantity: quantity.toString(),
-            status: "booked"
-        }).returning();
+        let newBooking;
+        await db.transaction(async (tx) => {
+            const [insertedBooking] = await tx.insert(esimBookings).values({
+                userId,
+                esimId,
+                quantity: quantity.toString(),
+                status: "booked"
+            }).returning();
+            newBooking = insertedBooking;
 
-        // Send confirmation email
-        await sendBookingConfirmation(req.user.email, esim[0].packageName, quantity.toString(), esim[0].price || "Contact for Price");
+            // Send confirmation email within transaction
+            await sendBookingConfirmation(req.user.email, esim[0].packageName, quantity.toString(), esim[0].price || "Contact for Price");
+        });
 
         res.status(201).json(newBooking);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error creating booking:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: error.message || "Internal server error" });
     }
 };
 
@@ -79,17 +83,19 @@ export const cancelBooking = async (req: AuthRequest, res: Response) => {
             return;
         }
 
-        await db.update(esimBookings)
-            .set({ status: "cancelled", updatedAt: new Date() })
-            .where(eq(esimBookings.id, bookingId as string));
+        await db.transaction(async (tx) => {
+            await tx.update(esimBookings)
+                .set({ status: "cancelled", updatedAt: new Date() })
+                .where(eq(esimBookings.id, bookingId as string));
 
-        // Send cancellation email
-        await sendCancellationEmail(req.user.email, bookingResult[0].esim.packageName);
+            // Send cancellation email within transaction
+            await sendCancellationEmail(req.user.email, bookingResult[0].esim.packageName);
+        });
 
         res.json({ message: "Booking cancelled successfully." });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error cancelling booking:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: error.message || "Internal server error" });
     }
 };
 
@@ -187,18 +193,20 @@ export const updateBookingStatus = async (req: Request, res: Response) => {
             return;
         }
 
-        await db.update(esimBookings)
-            .set({ status: status as any, updatedAt: new Date() })
-            .where(eq(esimBookings.id, bookingId as string));
+        await db.transaction(async (tx) => {
+            await tx.update(esimBookings)
+                .set({ status: status as any, updatedAt: new Date() })
+                .where(eq(esimBookings.id, bookingId as string));
 
-        // If rejected, send email
-        if (status === "rejected") {
-            await sendCancellationEmail(bookingResult[0].userEmail, bookingResult[0].packageName);
-        }
+            // If rejected, send email within transaction
+            if (status === "rejected") {
+                await sendCancellationEmail(bookingResult[0].userEmail, bookingResult[0].packageName);
+            }
+        });
 
         res.json({ message: `Booking status updated to ${status}.` });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error updating booking status:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: error.message || "Internal server error" });
     }
 };

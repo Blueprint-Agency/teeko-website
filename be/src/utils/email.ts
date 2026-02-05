@@ -4,22 +4,22 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-    service: process.env.SMTP_SERVICE, // e.g., 'gmail'
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || "465"),
-    secure: true, // true for 465, false for other ports
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-    },
+  service: process.env.SMTP_SERVICE, // e.g., 'gmail'
+  host: process.env.SMTP_HOST,
+  port: parseInt(process.env.SMTP_PORT || "465"),
+  secure: true, // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
 });
 
 export const sendVerificationEmail = async (email: string, code: string) => {
-    const mailOptions = {
-        from: '"Teeko" <no-reply@teeko.ai>',
-        to: email,
-        subject: "Your Verification Code - Teeko",
-        html: `
+  const mailOptions = {
+    from: '"Teeko" <no-reply@teeko.ai>',
+    to: email,
+    subject: "Your Verification Code - Teeko",
+    html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
         <h1 style="color: #ef4444; text-align: center;">Welcome to Teeko!</h1>
         <p style="font-size: 16px; color: #333;">Please verify your email address by entering the code below:</p>
@@ -30,28 +30,28 @@ export const sendVerificationEmail = async (email: string, code: string) => {
         <p style="font-size: 14px; color: #666;">If you did not create an account, please ignore this email.</p>
       </div>
     `,
-    };
+  };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log(`Verification email sent to ${email}`);
-    } catch (error) {
-        console.error("Error sending email:", error);
-        throw new Error("Could not send verification email");
-    }
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Verification email sent to ${email}`);
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw new Error("Could not send verification email");
+  }
 };
 
 export const sendBookingConfirmation = async (email: string, packageName: string, quantity: string, price: string) => {
-    // Extract numeric value from price string (e.g., "RM 50" -> 50)
-    const priceValue = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
-    const currency = price.replace(/[0-9.]/g, '').trim() || "RM";
-    const total = (priceValue * parseInt(quantity)).toFixed(2);
+  // Extract numeric value from price string (e.g., "RM 50" -> 50)
+  const priceValue = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
+  const currency = price.replace(/[0-9.]/g, '').trim() || "RM";
+  const total = (priceValue * parseInt(quantity)).toFixed(2);
 
-    const mailOptions = {
-        from: '"Teeko" <no-reply@teeko.ai>',
-        to: email,
-        subject: "Booking Confirmation - Teeko eSIM",
-        html: `
+  const mailOptions = {
+    from: '"Teeko" <no-reply@teeko.ai>',
+    to: email,
+    subject: "Booking Confirmation - Teeko eSIM",
+    html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
         <h1 style="color: #ef4444; text-align: center;">Booking Confirmed!</h1>
         <p style="font-size: 16px; color: #333;">Your eSIM booking has been successfully placed.</p>
@@ -68,36 +68,38 @@ export const sendBookingConfirmation = async (email: string, packageName: string
         <p style="font-size: 14px; color: #666;">You can view your booking status in your profile page.</p>
       </div>
     `,
-    };
+  };
 
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log(`Booking confirmation sent to ${email}`);
-    } catch (error) {
-        console.error("Error sending booking email:", error);
-    }
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Booking confirmation sent to ${email}`);
+  } catch (error) {
+    console.error("Error sending booking email:", error);
+    throw new Error("Could not send booking confirmation email");
+  }
 };
 
 export const sendCancellationEmail = async (email: string, packageName: string) => {
-    const mailOptions = {
-        from: '"Teeko" <no-reply@teeko.ai>',
-        to: email,
-        subject: "Booking Cancelled - Teeko eSIM",
-        html: `
+  const mailOptions = {
+    from: '"Teeko" <no-reply@teeko.ai>',
+    to: email,
+    subject: "Booking Cancelled - Teeko eSIM",
+    html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
         <h1 style="color: #666; text-align: center;">Booking Cancelled</h1>
         <p style="font-size: 16px; color: #333;">Your eSIM booking for <strong>${packageName}</strong> has been cancelled.</p>
         <p style="font-size: 14px; color: #666;">If this wasn't you, please contact support.</p>
       </div>
     `,
-    };
+  };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log(`Cancellation email sent to ${email}`);
-    } catch (error) {
-        console.error("Error sending cancellation email:", error);
-    }
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Cancellation email sent to ${email}`);
+  } catch (error) {
+    console.error("Error sending cancellation email:", error);
+    throw new Error("Could not send cancellation email");
+  }
 };
 
