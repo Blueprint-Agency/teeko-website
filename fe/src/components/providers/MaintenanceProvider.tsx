@@ -38,10 +38,10 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black">
+            <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
                 <div className="flex flex-col items-center gap-4">
-                    <RefreshCcw className="w-8 h-8 text-red-600 animate-spin" />
-                    <span className="text-xs font-black tracking-widest text-gray-400 uppercase">Loading Experience...</span>
+                    <RefreshCcw className="w-8 h-8 text-primary-500 animate-spin" />
+                    <span className="text-xs font-semibold tracking-widest text-[var(--muted)]">Loading Experience...</span>
                 </div>
             </div>
         );
@@ -49,33 +49,33 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
 
     if (isMaintenance) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-black p-6 text-center">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background)] p-6 text-center">
                 <div className="relative mb-12">
-                    <div className="absolute inset-0 bg-red-600/20 blur-[100px] rounded-full" />
-                    <div className="relative bg-zinc-900 rounded-[40px] p-8 shadow-2xl border border-zinc-800">
-                        <Wrench className="w-16 h-16 text-red-600" />
+                    <div className="absolute inset-0 bg-primary-600/20 blur-[100px] rounded-full" />
+                    <div className="relative bg-[var(--card-bg)] rounded-[40px] p-8 shadow-2xl border border-[var(--border)]">
+                        <Wrench className="w-16 h-16 text-primary-600" />
                     </div>
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tighter leading-none">
-                    System underwide <br />
-                    <span className="text-red-600">maintenance</span>
+                <h1 className="text-4xl md:text-6xl font-bold text-[var(--foreground)] mb-6 tracking-tight leading-tight">
+                    Undergoing <br />
+                    <span className="text-primary-600">Maintenance</span>
                 </h1>
 
                 <div className="max-w-md space-y-6">
-                    <p className="text-lg font-bold text-gray-500 dark:text-zinc-400 tracking-tight">
+                    <p className="text-lg font-medium text-[var(--muted)] tracking-tight">
                         We are currently fine-tuning our platform to serve you better. We'll be back momentarily.
                     </p>
 
-                    <div className="flex items-center justify-center gap-3 bg-gray-100 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 px-6 py-3 rounded-full">
-                        <Clock className="w-4 h-4 text-red-600" />
-                        <span className="text-xs font-black tracking-widest text-gray-600 dark:text-zinc-300">
-                            EXPECTED UPTIME: SOON
+                    <div className="flex items-center justify-center gap-3 bg-[var(--background-alt)] border border-[var(--border)] px-6 py-3 rounded-full">
+                        <Clock className="w-4 h-4 text-primary-600" />
+                        <span className="text-xs font-bold tracking-widest text-[var(--muted)]">
+                            Expected Uptime: Soon
                         </span>
                     </div>
                 </div>
 
-                <div className="mt-16 text-[10px] font-black text-gray-400 dark:text-zinc-600 tracking-[0.3em]">
+                <div className="mt-16 text-[10px] font-bold text-[var(--muted)] tracking-widest">
                     TEEKO &bull; TRIP ADVISOR &bull; 2026
                 </div>
             </div>

@@ -35,13 +35,13 @@ export const AdminSidebar = () => {
             {/* Mobile Menu Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="fixed top-4 left-4 z-50 p-2 rounded-lg bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 lg:hidden shadow-lg"
+                className="fixed top-4 left-4 z-50 p-2 rounded-lg bg-[var(--card-bg)] border border-[var(--border)] lg:hidden shadow-lg"
                 aria-label="Toggle menu"
             >
                 {isOpen ? (
-                    <X className="h-6 w-6 text-gray-900 dark:text-white" />
+                    <X className="h-6 w-6 text-[var(--foreground)]" />
                 ) : (
-                    <Menu className="h-6 w-6 text-gray-900 dark:text-white" />
+                    <Menu className="h-6 w-6 text-[var(--foreground)]" />
                 )}
             </button>
 
@@ -54,10 +54,10 @@ export const AdminSidebar = () => {
             )}
 
             {/* Sidebar */}
-            <div className={`fixed lg:static inset-y-0 left-0 z-40 flex h-screen w-64 flex-col border-r border-gray-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+            <div className={`fixed lg:static inset-y-0 left-0 z-40 flex h-screen w-64 flex-col border-r border-[var(--border)] bg-[var(--card-bg)] transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
                 }`}>
-                <div className="flex h-16 items-center justify-center border-b border-gray-200 dark:border-zinc-800">
-                    <span className="text-xl font-bold text-red-600">Teeko Admin</span>
+                <div className="flex h-16 items-center justify-center border-b border-[var(--border)]">
+                    <span className="text-xl font-bold text-primary-600">Teeko Admin</span>
                 </div>
 
                 <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
@@ -72,8 +72,8 @@ export const AdminSidebar = () => {
                                     href={hasChildren ? link.children![0].href : link.href}
                                     onClick={handleLinkClick}
                                     className={`flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive
-                                        ? "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400"
-                                        : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-zinc-800"
+                                        ? "bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400"
+                                        : "text-[var(--foreground)] opacity-70 hover:opacity-100 hover:bg-primary-50/50 dark:hover:bg-primary-900/10"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -95,8 +95,8 @@ export const AdminSidebar = () => {
                                                     href={child.href}
                                                     onClick={handleLinkClick}
                                                     className={`block rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${isChildActive
-                                                        ? "text-red-600 bg-red-50 dark:bg-red-900/10 dark:text-red-400"
-                                                        : "text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-zinc-800/50"
+                                                        ? "text-primary-600 bg-primary-50 dark:bg-primary-900/10 dark:text-primary-400"
+                                                        : "text-[var(--muted)] hover:bg-primary-50/30 dark:hover:bg-primary-900/5"
                                                         }`}
                                                 >
                                                     {child.label}
@@ -110,14 +110,14 @@ export const AdminSidebar = () => {
                     })}
                 </nav>
 
-                <div className="border-t border-gray-200 p-4 dark:border-zinc-800">
+                <div className="border-t border-[var(--border)] p-4">
                     <button
                         onClick={() => {
                             localStorage.removeItem("token");
                             localStorage.removeItem("user");
-                            window.location.href = "/auth/login";
+                            window.location.href = "/admin/auth/login";
                         }}
-                        className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-red-600 dark:text-gray-300 dark:hover:bg-zinc-800 dark:hover:text-red-400"
+                        className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-[var(--muted)] hover:bg-primary-50 hover:text-primary-600 dark:hover:bg-primary-900/10 dark:hover:text-primary-400"
                     >
                         <LogOut className="h-5 w-5" />
                         Sign Out

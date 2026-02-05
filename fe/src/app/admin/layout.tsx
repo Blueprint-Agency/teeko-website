@@ -42,18 +42,18 @@ export default function AdminLayout({
 
     if (!isAuthorized) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-black">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-red-600 border-t-transparent"></div>
+            <div className="flex min-h-screen items-center justify-center bg-[var(--background)]">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent"></div>
             </div>
         );
     }
 
     if (pathname === "/admin/auth/login") {
-        return <div className="min-h-screen bg-gray-50 dark:bg-black uppercase">{children}</div>;
+        return <div className="min-h-screen bg-[var(--background)]">{children}</div>;
     }
 
     return (
-        <div className="flex h-screen bg-gray-50 dark:bg-black overflow-hidden uppercase">
+        <div className="flex h-screen bg-[var(--background)] overflow-hidden">
             <AdminSidebar />
             <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-12 pt-16 lg:pt-12 scroll-smooth">
                 <Breadcrumbs />

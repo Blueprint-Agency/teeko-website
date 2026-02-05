@@ -85,7 +85,7 @@
   body {
     background: var(--background);
     color: var(--foreground);
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
     font-size: 0.95rem;
     /* Further fine-tuning body text */
     -webkit-font-smoothing: antialiased;
