@@ -6,11 +6,13 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { User, Mail, Shield, LogOut, Loader2 } from "lucide-react";
 import { UserBookings } from "@/components/booking/UserBookings";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 export default function ProfilePage() {
     const router = useRouter();
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
@@ -34,84 +36,128 @@ export default function ProfilePage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-                <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-red-600" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen relative bg-[var(--background)] flex flex-col overflow-hidden text-[var(--foreground)]">
+        <div className="min-h-screen bg-[var(--background)]">
             <Navigation forceSolid />
 
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary-500/5 rounded-full blur-[120px]" />
-            </div>
+            <main className="max-w-container mx-auto px-4 py-12 pt-24">
+                <Breadcrumbs items={[{ label: "Profile" }]} />
 
-            <main className="flex-1 max-w-4xl mx-auto w-full px-4 pt-24 pb-12 relative z-10">
+                {/* Header */}
                 <div className="mb-12">
-                    <h1 className="text-4xl font-bold tracking-tight mb-2">My Profile</h1>
-                    <p className="text-[var(--muted)]">Manage your account and preferences</p>
+                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                        My Profile
+                    </h1>
+                    <p className="text-lg text-gray-600 dark:text-gray-400">
+                        Manage your account and view your eSIM bookings
+                    </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {/* User Card */}
-                    <div className="md:col-span-1">
-                        <div className="bg-[var(--card-bg)] rounded-[32px] p-6 border border-[var(--border)] shadow-xl shadow-black/5 text-center">
-                            <div className="w-24 h-24 bg-primary-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border-4 border-[var(--background)] shadow-inner">
-                                <User className="w-10 h-10 text-primary-600" />
+                <div className="flex flex-col lg:flex-row gap-8">
+                    {/* Sidebar - User Card */}
+                    <aside className="w-full lg:w-72 shrink-0">
+                        <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--border)] text-center sticky top-24">
+                            <div className="w-20 h-20 bg-[var(--background-alt)] rounded-full flex items-center justify-center mx-auto mb-5 border-4 border-[var(--background-alt)]">
+                                <User className="w-9 h-9 text-gray-500 dark:text-gray-400" />
                             </div>
-                            <h2 className="text-xl font-bold mb-1 truncate px-4">{user?.email.split('@')[0]}</h2>
-                            <p className="text-xs font-semibold text-primary-600 bg-primary-500/10 inline-block px-3 py-1 rounded-full uppercase tracking-wider mb-8">
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1 truncate px-2">
+                                {user?.email.split('@')[0]}
+                            </h2>
+                            <p className="text-xs font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/50 inline-block px-3 py-1.5 rounded-full uppercase tracking-widest mb-6">
                                 {user?.role || 'User'}
                             </p>
 
                             <button
-                                onClick={handleLogout}
-                                className="w-full flex items-center justify-center gap-2 py-3 text-sm font-bold text-primary-600 hover:bg-primary-500/5 rounded-2xl transition-all border border-primary-500/20"
+                                onClick={() => setShowLogoutModal(true)}
+                                className="w-full flex items-center justify-center gap-2 py-3 text-sm font-bold text-red-600 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-xl transition-all"
                             >
                                 <LogOut className="w-4 h-4" />
                                 Sign Out
                             </button>
                         </div>
-                    </div>
+                    </aside>
 
-                    {/* Personal Details */}
-                    <div className="md:col-span-2 space-y-6">
-                        <div className="bg-[var(--card-bg)] rounded-[32px] p-8 border border-[var(--border)] shadow-xl shadow-black/5">
-                            <h3 className="text-lg font-bold mb-6">Account Information</h3>
+                    {/* Main Content */}
+                    <div className="flex-1 space-y-8">
+                        {/* Account Info Card */}
+                        <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--border)]">
+                            <h3 className="font-bold text-gray-900 dark:text-white mb-6 text-lg">Account Information</h3>
 
-                            <div className="space-y-6">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-xl bg-[var(--background-alt)] flex items-center justify-center border border-[var(--border)]">
-                                        <Mail className="w-5 h-5 text-[var(--muted)]" />
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4 p-4 bg-[var(--background-alt)] rounded-xl">
+                                    <div className="w-10 h-10 rounded-lg bg-[var(--card-bg)] border border-[var(--border)] flex items-center justify-center">
+                                        <Mail className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                     </div>
-                                    <div className="flex-1">
-                                        <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider leading-none mb-1.5">Email Address</p>
-                                        <p className="text-sm font-semibold">{user?.email}</p>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-0.5">Email Address</p>
+                                        <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{user?.email}</p>
                                     </div>
-                                    <span className="px-2 py-1 bg-green-500/10 text-green-600 text-[10px] font-bold rounded-md">VERIFIED</span>
+                                    <span className="px-2.5 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 text-[10px] font-bold rounded-lg uppercase tracking-wider flex-shrink-0">Verified</span>
                                 </div>
 
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-xl bg-[var(--background-alt)] flex items-center justify-center border border-[var(--border)]">
-                                        <Shield className="w-5 h-5 text-[var(--muted)]" />
+                                <div className="flex items-center gap-4 p-4 bg-[var(--background-alt)] rounded-xl">
+                                    <div className="w-10 h-10 rounded-lg bg-[var(--card-bg)] border border-[var(--border)] flex items-center justify-center">
+                                        <Shield className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="text-[10px] font-bold text-[var(--muted)] uppercase tracking-wider leading-none mb-1.5">Account Role</p>
-                                        <p className="text-sm font-semibold">{user?.role}</p>
+                                        <p className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-0.5">Account Role</p>
+                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{user?.role}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="space-y-6">
-                            <h3 className="text-lg font-bold">My eSIM Bookings</h3>
+                        {/* Bookings Section - Match Account Info container */}
+                        <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--border)]">
+                            <h3 className="font-bold text-gray-900 dark:text-white mb-6 text-lg">My eSIM Bookings</h3>
                             <UserBookings />
                         </div>
                     </div>
                 </div>
             </main>
             <Footer />
+
+            {/* Logout Confirmation Modal */}
+            {showLogoutModal && (
+                <div
+                    className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setShowLogoutModal(false);
+                    }}
+                >
+                    <div className="w-full max-w-xs sm:max-w-sm bg-[var(--background-alt)] rounded-3xl shadow-2xl overflow-hidden border border-[var(--border)] p-6 sm:p-8 text-center">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[var(--card-bg)] rounded-2xl flex items-center justify-center mx-auto mb-5 border border-[var(--border)]">
+                            <LogOut className="w-7 h-7 sm:w-8 sm:h-8 text-red-600" />
+                        </div>
+
+                        <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">Sign Out?</h2>
+                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-6 sm:mb-8">
+                            Are you sure you want to sign out of your account?
+                        </p>
+
+                        <div className="space-y-2.5">
+                            <button
+                                onClick={handleLogout}
+                                className="w-full py-3 sm:py-4 bg-red-600 text-white text-sm font-bold rounded-xl sm:rounded-2xl hover:bg-red-700 transition-all duration-300 shadow-lg shadow-red-600/20 flex items-center justify-center gap-2"
+                            >
+                                Yes, Sign Out
+                            </button>
+
+                            <button
+                                onClick={() => setShowLogoutModal(false)}
+                                className="w-full py-3 sm:py-4 bg-[var(--card-bg)] text-gray-600 dark:text-gray-300 text-sm font-bold rounded-xl sm:rounded-2xl hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all border border-[var(--border)]"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

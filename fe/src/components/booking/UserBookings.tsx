@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ShoppingBag, ChevronRight, XCircle, Clock, CheckCircle, RefreshCcw, Loader2 } from "lucide-react";
+import { ShoppingBag, XCircle, Clock, CheckCircle, RefreshCcw, Loader2, QrCode, X } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { CancelBookingModal } from "./CancelBookingModal";
+import { QRCodeCanvas } from "qrcode.react";
 
 export function UserBookings() {
     const [bookings, setBookings] = useState<any[]>([]);
@@ -12,6 +13,8 @@ export function UserBookings() {
     const [cancellingId, setCancellingId] = useState<string | null>(null);
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState<any>(null);
+    const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+    const [qrBooking, setQrBooking] = useState<any>(null);
 
     const fetchBookings = async () => {
         try {
@@ -40,6 +43,11 @@ export function UserBookings() {
     const handleCancelClick = (booking: any) => {
         setSelectedBooking(booking);
         setIsCancelModalOpen(true);
+    };
+
+    const handleViewCode = (booking: any) => {
+        setQrBooking(booking);
+        setIsQRModalOpen(true);
     };
 
     const confirmCancel = async () => {
@@ -71,24 +79,25 @@ export function UserBookings() {
         }
     };
 
+    // Color system: Blue=pending, Green=success, Gray=neutral, Red=destructive only
     const getStatusColor = (status: string) => {
         switch (status) {
-            case "booked": return "bg-blue-500/10 text-blue-600 border-blue-500/10";
-            case "cancelled": return "bg-gray-500/10 text-gray-500 border-gray-500/10";
-            case "completed": return "bg-green-500/10 text-green-600 border-green-500/10";
-            case "expired": return "bg-orange-500/10 text-orange-600 border-orange-500/10";
-            case "rejected": return "bg-red-500/10 text-red-600 border-red-500/10";
-            default: return "bg-gray-500/10 text-gray-500";
+            case "booked": return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+            case "cancelled": return "bg-gray-500/10 text-gray-400 border-gray-500/20";
+            case "completed": return "bg-emerald-500/10 text-emerald-500 border-emerald-500/20";
+            case "expired": return "bg-amber-500/10 text-amber-500 border-amber-500/20";
+            case "rejected": return "bg-red-500/10 text-red-400 border-red-500/20";
+            default: return "bg-gray-500/10 text-gray-400";
         }
     };
 
     const getStatusIcon = (status: string) => {
         switch (status) {
-            case "booked": return <Clock className="w-3.5 h-3.5" />;
-            case "cancelled": return <XCircle className="w-3.5 h-3.5" />;
-            case "completed": return <CheckCircle className="w-3.5 h-3.5" />;
-            case "expired": return <Clock className="w-3.5 h-3.5" />;
-            case "rejected": return <XCircle className="w-3.5 h-3.5" />;
+            case "booked": return <Clock className="w-3 h-3" />;
+            case "cancelled": return <XCircle className="w-3 h-3" />;
+            case "completed": return <CheckCircle className="w-3 h-3" />;
+            case "expired": return <Clock className="w-3 h-3" />;
+            case "rejected": return <XCircle className="w-3 h-3" />;
             default: return null;
         }
     };
@@ -96,63 +105,80 @@ export function UserBookings() {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-6 h-6 animate-spin text-primary-600" />
+                <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
             </div>
         );
     }
 
     if (bookings.length === 0) {
         return (
-            <div className="text-center py-12 bg-gray-50/50 dark:bg-zinc-950/50 rounded-3xl border border-dashed border-[var(--border)]">
-                <ShoppingBag className="w-12 h-12 text-[var(--muted)] mx-auto mb-4 opacity-50" />
-                <p className="text-sm font-bold text-[var(--muted)] uppercase tracking-wider">No active bookings</p>
-                <p className="text-xs text-[var(--muted)] mt-1">Book an eSIM to see it here.</p>
+            <div className="text-center py-12 bg-[var(--card-bg)] rounded-2xl border border-dashed border-[var(--border)]">
+                <ShoppingBag className="w-12 h-12 text-gray-500 mx-auto mb-4 opacity-40" />
+                <p className="text-sm font-bold text-gray-400 uppercase tracking-wider">No active bookings</p>
+                <p className="text-xs text-gray-500 mt-1">Book an eSIM to see it here.</p>
             </div>
         );
     }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-3">
             {bookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map(booking => (
-                <div key={booking.id} className="bg-[var(--card-bg)] rounded-3xl p-5 border border-[var(--border)] shadow-sm hover:shadow-md transition-all duration-300">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div className="flex items-center gap-4">
-                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950 flex-shrink-0 overflow-hidden border border-white/10">
-                                {booking.featureImage ? (
-                                    <img src={booking.featureImage} alt={booking.packageName} className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center">
-                                        <ShoppingBag className="w-6 h-6 text-primary-600" />
-                                    </div>
-                                )}
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-gray-900 dark:text-white leading-tight mb-1">{booking.packageName}</h4>
-                                <div className="flex items-center gap-3">
-                                    <span className="text-xs font-bold text-[var(--muted)] uppercase tracking-widest leading-none">QTY: {booking.quantity}</span>
-                                    <span className="text-[10px] text-[var(--muted)]">•</span>
-                                    <span className="text-xs font-bold text-red-600 uppercase tracking-widest outline-none leading-none">{booking.price}</span>
-                                </div>
-                            </div>
+                <div key={booking.id} className="bg-[var(--background-alt)] rounded-xl p-4 transition-all duration-300">
+                    {/* Card Layout */}
+                    <div className="flex items-start gap-4">
+                        {/* Image - Match Account Info icon container */}
+                        <div className="w-10 h-10 rounded-lg bg-[var(--card-bg)] border border-[var(--border)] flex-shrink-0 overflow-hidden flex items-center justify-center">
+                            {booking.featureImage ? (
+                                <img src={booking.featureImage} alt={booking.packageName} className="w-full h-full object-cover" />
+                            ) : (
+                                <ShoppingBag className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                            )}
                         </div>
 
-                        <div className="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto">
-                            <div className={`px-4 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 ${getStatusColor(booking.status)}`}>
+                        {/* Info */}
+                        <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-gray-900 dark:text-white text-sm leading-tight truncate">{booking.packageName}</h4>
+                            <div className="flex items-center gap-2 mt-0.5">
+                                <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">QTY: {booking.quantity}</span>
+                                <span className="text-[10px] text-gray-400 dark:text-gray-500">•</span>
+                                <span className="text-sm font-semibold text-gray-900 dark:text-white">{booking.price}</span>
+                            </div>
+                            {/* Status Badge - Semantic colors only */}
+                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 mt-2 rounded-full border text-[9px] font-bold uppercase tracking-wider ${getStatusColor(booking.status)}`}>
                                 {getStatusIcon(booking.status)}
                                 {booking.status}
                             </div>
-
-                            {booking.status === "booked" && (
-                                <button
-                                    onClick={() => handleCancelClick(booking)}
-                                    disabled={cancellingId === booking.id}
-                                    className="flex items-center gap-2 px-4 py-2 text-[10px] font-bold bg-white dark:bg-zinc-800 text-red-600 border border-red-500/20 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/20 transition-all uppercase tracking-widest disabled:opacity-50"
-                                >
-                                    {cancellingId === booking.id ? <RefreshCcw className="w-3 h-3 animate-spin" /> : "Cancel"}
-                                </button>
-                            )}
                         </div>
+
+                        {/* Cancel Button - Red only for destructive action */}
+                        {booking.status === "booked" && (
+                            <button
+                                onClick={() => handleCancelClick(booking)}
+                                disabled={cancellingId === booking.id}
+                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all disabled:opacity-50 flex-shrink-0"
+                                title="Cancel Booking"
+                            >
+                                {cancellingId === booking.id ? (
+                                    <RefreshCcw className="w-5 h-5 animate-spin" />
+                                ) : (
+                                    <XCircle className="w-5 h-5" />
+                                )}
+                            </button>
+                        )}
                     </div>
+
+                    {/* Verify Button */}
+                    {booking.status === "booked" && booking.verificationCode && (
+                        <div className="mt-3 pt-3 border-t border-[var(--border)]">
+                            <button
+                                onClick={() => handleViewCode(booking)}
+                                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold bg-[var(--card-bg)] text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700 transition-all uppercase tracking-wider border border-[var(--border)]"
+                            >
+                                <QrCode className="w-4 h-4" />
+                                Verify
+                            </button>
+                        </div>
+                    )}
                 </div>
             ))}
 
@@ -163,6 +189,60 @@ export function UserBookings() {
                 isLoading={cancellingId !== null}
                 packageName={selectedBooking?.packageName || ""}
             />
+
+            {/* QR Modal */}
+            {isQRModalOpen && qrBooking && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm modal-overlay"
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setIsQRModalOpen(false);
+                    }}
+                >
+                    <div className="bg-[var(--background-alt)] rounded-3xl w-full max-w-xs sm:max-w-sm border border-[var(--border)] overflow-hidden shadow-2xl modal-content">
+                        {/* Header */}
+                        <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
+                            <div>
+                                <h3 className="text-base font-bold text-gray-900 dark:text-white">Verification Code</h3>
+                                <p className="text-xs text-gray-500">Show this to the administrator</p>
+                            </div>
+                            <button
+                                onClick={() => setIsQRModalOpen(false)}
+                                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+                            >
+                                <X className="w-5 h-5 text-gray-400" />
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-6 text-center">
+                            <div className="bg-white p-3 rounded-2xl inline-block shadow-lg border border-gray-100 mb-5">
+                                <QRCodeCanvas
+                                    value={qrBooking.verificationCode}
+                                    size={180}
+                                    level="H"
+                                    includeMargin={false}
+                                />
+                            </div>
+
+                            {/* Manual code - White text on dark background for readability */}
+                            <div className="bg-[var(--card-bg)] rounded-xl p-4 transition-all duration-300">
+                                <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block mb-1.5">Manual Code</span>
+                                <span className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-[0.15em] font-mono">{qrBooking.verificationCode}</span>
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-4 border-t border-[var(--border)]">
+                            <button
+                                onClick={() => setIsQRModalOpen(false)}
+                                className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 transition-all uppercase tracking-wider text-xs"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

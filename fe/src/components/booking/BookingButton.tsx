@@ -58,12 +58,12 @@ export function BookingButton({ pkg }: BookingButtonProps) {
     };
 
     return (
-        <div className="mt-8 pt-8 border-t border-gray-200 dark:border-zinc-800 flex flex-col items-center">
+        <div className="mt-8 pt-8 border-t border-[var(--border)] flex flex-col items-center">
             <button
                 onClick={handleBooking}
-                className={`inline-flex items-center justify-center px-10 py-5 text-white text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl w-full sm:w-auto ${isBooked
-                    ? "bg-zinc-100 dark:bg-zinc-800 !text-zinc-500 border border-zinc-200 dark:border-zinc-700 shadow-none hover:bg-zinc-200 dark:hover:bg-zinc-700"
-                    : "bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 shadow-red-600/30 hover:shadow-2xl hover:shadow-red-600/40 hover:-translate-y-1"
+                className={`inline-flex items-center justify-center px-10 py-5 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl w-full sm:w-auto ${isBooked
+                    ? "bg-[var(--background-alt)] text-gray-500 dark:text-gray-400 border border-[var(--border)] shadow-none hover:bg-gray-100 dark:hover:bg-zinc-700"
+                    : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 shadow-gray-900/20 dark:shadow-white/10 hover:shadow-2xl hover:-translate-y-1"
                     }`}
             >
                 {!user ? (

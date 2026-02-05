@@ -63,10 +63,10 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden border border-white/20">
+            <div className="w-full max-w-md bg-[var(--background-alt)] rounded-3xl shadow-2xl overflow-hidden border border-[var(--border)]">
                 {!isSuccess ? (
                     <>
-                        <div className="relative p-6 border-b border-gray-100 dark:border-zinc-800">
+                        <div className="relative p-6 border-b border-[var(--border)]">
                             <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                 <Smartphone className="w-5 h-5 text-red-600" />
                                 Review Booking
@@ -77,7 +77,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                         </div>
 
                         <div className="p-8 space-y-6">
-                            <div className="bg-gray-50/50 dark:bg-zinc-950/50 rounded-2xl p-4 border border-gray-100 dark:border-zinc-800">
+                            <div className="bg-[var(--card-bg)] rounded-2xl p-4 border border-[var(--border)]">
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center">
                                         <span className="text-sm text-gray-500 dark:text-zinc-400 font-medium">Email Address</span>
@@ -91,7 +91,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                         <span className="text-sm text-gray-500 dark:text-zinc-400 font-medium">Unit Price</span>
                                         <span className="text-sm text-gray-900 dark:text-white font-bold">{pkg.price || "N/A"}</span>
                                     </div>
-                                    <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-zinc-800">
+                                    <div className="flex justify-between items-center pt-2 border-t border-[var(--border)]">
                                         <span className="text-sm text-gray-500 dark:text-zinc-400 font-bold uppercase">Total Price</span>
                                         <span className="text-lg text-red-600 dark:text-red-400 font-black">{currency} {totalPrice}</span>
                                     </div>
@@ -104,7 +104,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                     Quantity
                                 </label>
                                 <div className="flex items-center gap-6">
-                                    <div className="flex items-center border border-gray-200 dark:border-zinc-800 rounded-xl bg-gray-50 dark:bg-zinc-950 px-2 py-1">
+                                    <div className="flex items-center border border-[var(--border)] rounded-xl bg-[var(--card-bg)] px-2 py-1">
                                         <button
                                             onClick={() => setQuantity(Math.max(1, quantity - 1))}
                                             className="w-10 h-10 flex items-center justify-center text-xl font-bold text-gray-500 hover:text-red-600"
@@ -134,7 +134,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                             <button
                                 onClick={handleConfirm}
                                 disabled={isLoading}
-                                className="w-full py-4 bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold rounded-2xl hover:from-red-700 hover:to-orange-700 transition-all duration-300 shadow-xl shadow-red-600/20 flex items-center justify-center gap-2 group"
+                                className="w-full py-4 bg-red-600 text-white font-bold rounded-2xl hover:bg-red-700 transition-all duration-300 shadow-xl shadow-red-600/20 flex items-center justify-center gap-2 disabled:opacity-50"
                             >
                                 {isLoading ? (
                                     <>
@@ -148,7 +148,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                         </div>
                     </>
                 ) : (
-                    <div className="p-12 text-center space-y-4 animate-in zoom-in-95 duration-500">
+                    <div className="p-12 text-center space-y-4">
                         <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                             <CheckCircle className="w-10 h-10 text-green-500" />
                         </div>

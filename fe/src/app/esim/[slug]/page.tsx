@@ -76,9 +76,9 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                 />
 
                 <div className="max-w-4xl mx-auto">
-                    <div className="rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xl">
+                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden shadow-xl">
                         {pkg.featureImage && (
-                            <div className="aspect-square overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950">
+                            <div className="aspect-square overflow-hidden bg-gray-100 dark:bg-zinc-800">
                                 <img
                                     src={pkg.featureImage}
                                     alt={pkg.packageName}
@@ -88,21 +88,22 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                         )}
 
                         <div className="p-8 md:p-12">
-                            <div className="flex items-start justify-between mb-6">
+                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 mb-8">
                                 <div>
-                                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
+                                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
                                         {pkg.packageName}
                                     </h1>
                                     {pkg.provider && (
-                                        <p className="text-lg text-gray-600 dark:text-gray-400">
-                                            Provided by <span className="font-semibold text-red-600 dark:text-red-400">{pkg.provider.name}</span>
+                                        <p className="text-base text-gray-600 dark:text-gray-400 flex items-center gap-2">
+                                            <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                                            Provided by <span className="font-semibold text-gray-900 dark:text-white">{pkg.provider.name}</span>
                                         </p>
                                     )}
                                 </div>
                                 {pkg.price && (
-                                    <div className="text-right">
-                                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Starting from</p>
-                                        <p className="text-3xl md:text-4xl font-bold text-red-600 dark:text-red-400">
+                                    <div className="text-left sm:text-right shrink-0">
+                                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Starting from</p>
+                                        <p className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
                                             {pkg.price}
                                         </p>
                                     </div>
@@ -110,11 +111,13 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                             </div>
 
                             {pkg.about && (
-                                <div className="prose prose-lg dark:prose-invert max-w-none mb-8">
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">About This Package</h2>
-                                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed">
-                                        {pkg.about}
-                                    </p>
+                                <div className="mb-8">
+                                    <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">About This Package</h2>
+                                    <div className="bg-[var(--background-alt)] rounded-xl p-6">
+                                        <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed">
+                                            {pkg.about}
+                                        </p>
+                                    </div>
                                 </div>
                             )}
 

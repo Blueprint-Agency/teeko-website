@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, ExternalLink } from "lucide-react";
+import { Loader2, ExternalLink, ChevronDown, Sparkles } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
@@ -30,8 +30,7 @@ export default function EsimPage() {
     const [loading, setLoading] = useState(true);
     const [selectedProvider, setSelectedProvider] = useState<string>("all");
     const [providers, setProviders] = useState<Provider[]>([]);
-    const [minPrice, setMinPrice] = useState<string>("");
-    const [maxPrice, setMaxPrice] = useState<string>("");
+    const [selectedPriceRange, setSelectedPriceRange] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,15 +65,33 @@ export default function EsimPage() {
             priceVal = numericString ? parseInt(numericString, 10) : 0;
         }
 
-        const min = minPrice ? parseInt(minPrice) : 0;
-        const max = maxPrice ? parseInt(maxPrice) : Infinity;
+        let matchesPrice = true;
+        if (selectedPriceRange) {
+            switch (selectedPriceRange) {
+                case "under50":
+                    matchesPrice = priceVal < 50;
+                    break;
+                case "50-100":
+                    matchesPrice = priceVal >= 50 && priceVal <= 100;
+                    break;
+                case "100-200":
+                    matchesPrice = priceVal > 100 && priceVal <= 200;
+                    break;
+                case "over200":
+                    matchesPrice = priceVal > 200;
+                    break;
+            }
+        }
 
-        // If simple input logic, treat empty as no limit
-        const matchesMin = !minPrice || priceVal >= min;
-        const matchesMax = !maxPrice || priceVal <= max;
-
-        return matchesProvider && matchesMin && matchesMax;
+        return matchesProvider && matchesPrice;
     });
+
+    const priceRanges = [
+        { id: "under50", label: "Under RM50" },
+        { id: "50-100", label: "RM50 - RM100" },
+        { id: "100-200", label: "RM100 - RM200" },
+        { id: "over200", label: "Over RM200" },
+    ];
 
     return (
         <div className="min-h-screen bg-[var(--background)]">
@@ -92,66 +109,81 @@ export default function EsimPage() {
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Sidebar Filters */}
-                    <aside className="w-full lg:w-72 shrink-0 space-y-8">
-                        {/* Price Filter */}
-                        <div className="bg-[var(--card-bg)] p-6 rounded-2xl border border-[var(--border)]">
-                            <h3 className="font-bold text-gray-900 dark:text-white mb-4 text-lg">Price Range</h3>
-                            <div className="flex items-center gap-2">
-                                <div className="relative flex-1">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">RM</span>
-                                    <input
-                                        type="number"
-                                        placeholder="Min"
-                                        value={minPrice}
-                                        onChange={(e) => setMinPrice(e.target.value)}
-                                        className="w-full pl-9 pr-3 py-2 bg-transparent border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-600 transition-all dark:text-white"
-                                    />
-                                </div>
-                                <span className="text-gray-400">-</span>
-                                <div className="relative flex-1">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">RM</span>
-                                    <input
-                                        type="number"
-                                        placeholder="Max"
-                                        value={maxPrice}
-                                        onChange={(e) => setMaxPrice(e.target.value)}
-                                        className="w-full pl-9 pr-3 py-2 bg-transparent border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-600 transition-all dark:text-white"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Provider Filter */}
-                        <div className="bg-[var(--card-bg)] p-6 rounded-2xl border border-[var(--border)]">
-                            <h3 className="font-bold text-gray-900 dark:text-white mb-4 text-lg">Providers</h3>
-                            <div className="space-y-2">
-                                <button
-                                    onClick={() => setSelectedProvider("all")}
-                                    className={`w-full text-left px-4 py-2 rounded-lg transition-colors flex items-center justify-between ${selectedProvider === "all"
-                                        ? "bg-red-50 dark:bg-red-900/20 text-red-600 font-medium"
-                                        : "text-gray-600 dark:text-gray-400 hover:bg-[var(--background-alt)]"
-                                        }`}
-                                >
-                                    <span>All Providers</span>
-                                    {selectedProvider === "all" && <div className="w-2 h-2 rounded-full bg-red-600" />}
-                                </button>
-                                {providers.map(provider => (
-                                    <button
-                                        key={provider.id}
-                                        onClick={() => setSelectedProvider(provider.id)}
-                                        className={`w-full text-left px-4 py-2 rounded-lg transition-colors flex items-center justify-between ${selectedProvider === provider.id
-                                            ? "bg-red-50 dark:bg-red-900/20 text-red-600 font-medium"
-                                            : "text-gray-600 dark:text-gray-400 hover:bg-[var(--background-alt)]"
-                                            }`}
+                    {/* Sidebar Filters (Desktop) - Match Restaurant Page Style */}
+                    <div className="w-64 shrink-0 hidden lg:block sticky top-8 self-start">
+                        <div className="space-y-8">
+                            {/* Filter Group: Provider */}
+                            <div>
+                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Provider</h3>
+                                <div className="relative">
+                                    <select
+                                        value={selectedProvider}
+                                        onChange={(e) => setSelectedProvider(e.target.value)}
+                                        className="w-full appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none cursor-pointer pr-10"
                                     >
-                                        <span>{provider.name}</span>
-                                        {selectedProvider === provider.id && <div className="w-2 h-2 rounded-full bg-red-600" />}
-                                    </button>
-                                ))}
+                                        <option value="all">All Providers</option>
+                                        {providers.map(provider => (
+                                            <option key={provider.id} value={provider.id}>
+                                                {provider.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                                </div>
+                            </div>
+
+                            {/* Filter Group: Price (Button Style like Restaurant) */}
+                            <div>
+                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Price Range</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {priceRanges.map(range => (
+                                        <button
+                                            key={range.id}
+                                            onClick={() => setSelectedPriceRange(selectedPriceRange === range.id ? null : range.id)}
+                                            className={`px-3 py-2 border rounded-lg text-xs font-semibold transition-all ${selectedPriceRange === range.id
+                                                ? "bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20"
+                                                : "bg-[var(--card-bg)] border-[var(--border)] text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 dark:hover:text-red-400"
+                                                }`}
+                                        >
+                                            {range.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Feature Card */}
+                            <div className="bg-gray-900 rounded-xl p-4 text-white relative overflow-hidden group cursor-pointer shadow-lg">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-red-600/20 to-transparent"></div>
+                                <Sparkles className="w-8 h-8 mb-2 text-red-500" />
+                                <h4 className="font-bold text-lg">New Releases</h4>
+                                <p className="text-gray-400 text-sm">Check out our latest eSIM packages</p>
                             </div>
                         </div>
-                    </aside>
+                    </div>
+
+                    {/* Mobile Filters */}
+                    <div className="lg:hidden flex gap-3 overflow-x-auto pb-2">
+                        <select
+                            value={selectedProvider}
+                            onChange={(e) => setSelectedProvider(e.target.value)}
+                            className="appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white"
+                        >
+                            <option value="all">All Providers</option>
+                            {providers.map(provider => (
+                                <option key={provider.id} value={provider.id}>{provider.name}</option>
+                            ))}
+                        </select>
+                        <select
+                            value={selectedPriceRange || ""}
+                            onChange={(e) => setSelectedPriceRange(e.target.value || null)}
+                            className="appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white"
+                        >
+                            <option value="">All Prices</option>
+                            {priceRanges.map(range => (
+                                <option key={range.id} value={range.id}>{range.label}</option>
+                            ))}
+                        </select>
+                    </div>
 
                     {/* Results Grid */}
                     <div className="flex-1">
@@ -168,9 +200,9 @@ export default function EsimPage() {
                                             href={`/esim/${pkg.slug}`}
                                             className="group"
                                         >
-                                            <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1 flex flex-col">
+                                            <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-black/10 dark:hover:shadow-black/30 transition-all duration-300 hover:-translate-y-1 flex flex-col">
                                                 {pkg.featureImage && (
-                                                    <div className="aspect-square overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950 relative">
+                                                    <div className="aspect-square overflow-hidden bg-gray-100 dark:bg-zinc-800 relative">
                                                         <img
                                                             src={pkg.featureImage}
                                                             alt={pkg.packageName}
@@ -187,7 +219,7 @@ export default function EsimPage() {
 
                                                     {pkg.price && (
                                                         <div className="mb-3">
-                                                            <span className="text-2xl font-bold text-red-600 dark:text-red-400">
+                                                            <span className="text-2xl font-bold text-gray-900 dark:text-white">
                                                                 {pkg.price}
                                                             </span>
                                                         </div>
@@ -195,7 +227,7 @@ export default function EsimPage() {
 
                                                     {pkg.provider && (
                                                         <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
-                                                            <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+                                                            <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
                                                             {pkg.provider.name}
                                                         </p>
                                                     )}
@@ -207,7 +239,7 @@ export default function EsimPage() {
                                                     )}
 
                                                     <div className="mt-auto pt-4 border-t border-[var(--border)]">
-                                                        <div className="flex items-center justify-between text-red-600 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                                                        <div className="flex items-center justify-between text-red-600 dark:text-red-400 font-semibold text-sm group-hover:translate-x-1 transition-transform">
                                                             View Details <ExternalLink className="h-4 w-4" />
                                                         </div>
                                                     </div>
@@ -225,8 +257,7 @@ export default function EsimPage() {
                                         <button
                                             onClick={() => {
                                                 setSelectedProvider("all");
-                                                setMinPrice("");
-                                                setMaxPrice("");
+                                                setSelectedPriceRange(null);
                                             }}
                                             className="mt-4 text-red-600 font-medium hover:underline"
                                         >
@@ -243,4 +274,3 @@ export default function EsimPage() {
         </div>
     );
 }
-
