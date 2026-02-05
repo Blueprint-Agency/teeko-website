@@ -91,6 +91,21 @@ export const esimPackages = pgTable("esim_packages", {
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// eSIM Booking status enum
+export const bookingStatusEnum = pgEnum("booking_status", ["booked", "cancelled", "completed", "expired", "rejected"]);
+
+// eSIM Bookings table
+export const esimBookings = pgTable("esim_bookings", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id").references(() => users.id).notNull(),
+    esimId: uuid("esim_id").references(() => esimPackages.id).notNull(),
+    quantity: numeric("quantity").default("1").notNull(),
+    status: bookingStatusEnum("status").default("booked").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+
 // Blog status enum
 export const blogStatusEnum = pgEnum("blog_status", ["DRAFT", "PUBLISHED", "BIN"]);
 

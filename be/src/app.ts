@@ -13,6 +13,7 @@ import adminRoutes from "./routes/adminRoutes";
 import esimRoutes from "./routes/esimRoutes";
 import blogRoutes from "./routes/blogRoutes";
 import locationRoutes from "./routes/locationRoutes";
+import bookingRoutes from "./routes/bookingRoutes";
 import { seedAdmin } from "./db/seedAdmin";
 
 // CORS Configuration
@@ -41,6 +42,7 @@ app.use("/admin", adminRoutes);
 app.use("/esim", esimRoutes);
 app.use("/blog", blogRoutes);
 app.use("/locations", locationRoutes);
+app.use("/bookings", bookingRoutes);
 
 app.get("/", (req, res) => {
     res.json({ message: "Teeko API is running!" });
