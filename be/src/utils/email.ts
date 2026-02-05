@@ -48,10 +48,10 @@ export const sendBookingConfirmation = async (email: string, packageName: string
   const currency = price.replace(/[0-9.]/g, '').trim() || "RM";
   const total = (priceValue * parseInt(quantity)).toFixed(2);
 
-  // Generate QR code as base64 data URI
-  let qrCodeDataUri = "";
+  // Generate QR code as buffer for CID attachment (works with Gmail)
+  let qrCodeBuffer: Buffer | null = null;
   try {
-    qrCodeDataUri = await QRCode.toDataURL(verificationCode, {
+    qrCodeBuffer = await QRCode.toBuffer(verificationCode, {
       width: 200,
       margin: 2,
       color: {
@@ -64,9 +64,19 @@ export const sendBookingConfirmation = async (email: string, packageName: string
     // Continue without QR code if generation fails
   }
 
-  const qrCodeHtml = qrCodeDataUri
-    ? `<img src="${qrCodeDataUri}" alt="QR Code" style="width: 150px; height: 150px; display: block; margin: 0 auto;" />`
+  // QR code HTML using CID reference (cid:qrcode)
+  const qrCodeHtml = qrCodeBuffer
+    ? `<img src="cid:qrcode" alt="QR Code" width="150" height="150" style="display: block; margin: 0 auto;" />`
     : `<p style="font-size: 12px; color: #999;">(QR code could not be generated)</p>`;
+
+  // Prepare attachments for CID embedding
+  const attachments = qrCodeBuffer ? [
+    {
+      filename: 'qrcode.png',
+      content: qrCodeBuffer,
+      cid: 'qrcode' // This is the CID referenced in the HTML as src="cid:qrcode"
+    }
+  ] : [];
 
   const mailOptions = {
     from: '"Teeko" <no-reply@teeko.ai>',
@@ -96,6 +106,7 @@ export const sendBookingConfirmation = async (email: string, packageName: string
         <p style="font-size: 14px; color: #666; margin-top: 20px;">You can also view this code in your profile page on our website.</p>
       </div>
     `,
+    attachments: attachments
   };
 
 
