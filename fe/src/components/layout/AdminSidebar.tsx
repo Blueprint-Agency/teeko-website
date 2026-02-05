@@ -20,6 +20,7 @@ export const AdminSidebar = () => {
             children: [
                 { href: "/admin/esim/providers", label: "Providers" },
                 { href: "/admin/esim/packages", label: "Packages" },
+                { href: "/admin/esim/bookings", label: "Bookings" },
             ]
         },
         { href: "/admin/blog", label: "Blog", icon: FileText },

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { User, Mail, Shield, LogOut, Loader2 } from "lucide-react";
+import { UserBookings } from "@/components/booking/UserBookings";
 
 export default function ProfilePage() {
     const router = useRouter();
@@ -103,9 +104,9 @@ export default function ProfilePage() {
                             </div>
                         </div>
 
-                        <div className="bg-[var(--background-alt)] rounded-[32px] p-8 border border-dashed border-[var(--border)] flex flex-col items-center justify-center text-center opacity-70">
-                            <p className="text-sm font-bold text-[var(--muted)] mb-2">More features coming soon</p>
-                            <p className="text-xs text-[var(--muted)] max-w-xs">You'll soon be able to save your favorite restaurants, write reviews, and track your eSIM purchases here.</p>
+                        <div className="space-y-6">
+                            <h3 className="text-lg font-bold">My eSIM Bookings</h3>
+                            <UserBookings />
                         </div>
                     </div>
                 </div>

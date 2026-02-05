@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { BookingButton } from "@/components/booking/BookingButton";
 
 interface Provider {
     id: string;
@@ -117,21 +118,13 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                 </div>
                             )}
 
-                            {pkg.ctaLink && (
-                                <div className="mt-8 pt-8 border-t border-gray-200 dark:border-zinc-800 flex flex-col items-center">
-                                    <a
-                                        href={pkg.ctaLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center justify-center px-10 py-5 bg-gradient-to-r from-red-600 to-orange-600 text-white text-lg font-bold rounded-2xl hover:from-red-700 hover:to-orange-700 transition-all duration-300 shadow-xl shadow-red-600/30 hover:shadow-2xl hover:shadow-red-600/40 hover:-translate-y-1"
-                                    >
-                                        Get This Package <ExternalLink className="ml-3 h-6 w-6" />
-                                    </a>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-5 text-center max-w-md">
-                                        You'll be redirected to the provider's website to complete your purchase.
-                                    </p>
-                                </div>
-                            )}
+                            <BookingButton
+                                pkg={{
+                                    id: pkg.id,
+                                    packageName: pkg.packageName,
+                                    price: pkg.price
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
