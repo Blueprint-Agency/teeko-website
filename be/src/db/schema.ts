@@ -5,10 +5,13 @@ export const roleEnum = pgEnum("role", ["USER", "ADMIN", "SUPERADMIN"]);
 export const users = pgTable("users", {
     id: uuid("id").defaultRandom().primaryKey(),
     email: varchar("email", { length: 255 }).notNull().unique(),
-    passwordHash: varchar("password_hash").notNull(),
+    passwordHash: varchar("password_hash"), // Optional for Google users
+    googleId: varchar("google_id").unique(),
     role: roleEnum("role").default("USER").notNull(),
     isVerified: boolean("is_verified").default(false).notNull(),
     verificationToken: varchar("verification_token"),
+    verificationCode: varchar("verification_code", { length: 6 }),
+    verificationExpires: timestamp("verification_expires"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

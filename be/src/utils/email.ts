@@ -14,18 +14,21 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-export const sendVerificationEmail = async (email: string, token: string) => {
-    const verificationUrl = `http://localhost:3010/auth/verify?token=${token}`;
-
+export const sendVerificationEmail = async (email: string, code: string) => {
     const mailOptions = {
         from: '"Teeko" <no-reply@teeko.ai>',
         to: email,
-        subject: "Verify your email address",
+        subject: "Your Verification Code - Teeko",
         html: `
-      <h1>Welcome to Teeko!</h1>
-      <p>Please verify your email address by clicking the link below:</p>
-      <a href="${verificationUrl}">Verify Email</a>
-      <p>If you did not create an account, please ignore this email.</p>
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h1 style="color: #ef4444; text-align: center;">Welcome to Teeko!</h1>
+        <p style="font-size: 16px; color: #333;">Please verify your email address by entering the code below:</p>
+        <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0;">
+          <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #111;">${code}</span>
+        </div>
+        <p style="font-size: 14px; color: #666;">This code will expire in 3 minutes.</p>
+        <p style="font-size: 14px; color: #666;">If you did not create an account, please ignore this email.</p>
+      </div>
     `,
     };
 
