@@ -34,7 +34,7 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
             }
         }
         // Filter by Location
-        if (selectedLocation && restaurant.locationId !== selectedLocation) {
+        if (selectedLocation && restaurant.location.id !== selectedLocation) {
             return false;
         }
         return true;
