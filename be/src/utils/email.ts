@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import QRCode from "qrcode";
 
 dotenv.config();
 
@@ -41,11 +42,31 @@ export const sendVerificationEmail = async (email: string, code: string) => {
   }
 };
 
-export const sendBookingConfirmation = async (email: string, packageName: string, quantity: string, price: string) => {
+export const sendBookingConfirmation = async (email: string, packageName: string, quantity: string, price: string, verificationCode: string) => {
   // Extract numeric value from price string (e.g., "RM 50" -> 50)
   const priceValue = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
   const currency = price.replace(/[0-9.]/g, '').trim() || "RM";
   const total = (priceValue * parseInt(quantity)).toFixed(2);
+
+  // Generate QR code as base64 data URI
+  let qrCodeDataUri = "";
+  try {
+    qrCodeDataUri = await QRCode.toDataURL(verificationCode, {
+      width: 200,
+      margin: 2,
+      color: {
+        dark: '#000000',
+        light: '#ffffff'
+      }
+    });
+  } catch (qrError) {
+    console.error("Error generating QR code:", qrError);
+    // Continue without QR code if generation fails
+  }
+
+  const qrCodeHtml = qrCodeDataUri
+    ? `<img src="${qrCodeDataUri}" alt="QR Code" style="width: 150px; height: 150px; display: block; margin: 0 auto;" />`
+    : `<p style="font-size: 12px; color: #999;">(QR code could not be generated)</p>`;
 
   const mailOptions = {
     from: '"Teeko" <no-reply@teeko.ai>',
@@ -64,8 +85,15 @@ export const sendBookingConfirmation = async (email: string, packageName: string
           <hr style="border: none; border-top: 1px solid #ddd; margin: 15px 0;">
           <p style="margin: 5px 0; font-size: 18px;"><strong>Total Price:</strong> ${currency} ${total}</p>
         </div>
+
+        <div style="text-align: center; padding: 20px; border: 2px dashed #ef4444; border-radius: 8px; margin-top: 20px;">
+          <h3 style="margin-top: 0; color: #ef4444;">Verification Code</h3>
+          <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Show this to the administrator to complete your booking:</p>
+          <div style="font-size: 28px; font-weight: bold; letter-spacing: 3px; color: #111; margin-bottom: 20px; font-family: monospace;">${verificationCode}</div>
+          ${qrCodeHtml}
+        </div>
         
-        <p style="font-size: 14px; color: #666;">You can view your booking status in your profile page.</p>
+        <p style="font-size: 14px; color: #666; margin-top: 20px;">You can also view this code in your profile page on our website.</p>
       </div>
     `,
   };
@@ -102,4 +130,3 @@ export const sendCancellationEmail = async (email: string, packageName: string) 
     throw new Error("Could not send cancellation email");
   }
 };
-

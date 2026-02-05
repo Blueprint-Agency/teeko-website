@@ -5,7 +5,8 @@ import {
     getUserBookings,
     getAdminBookings,
     updateBookingStatus,
-    checkBookingStatus
+    checkBookingStatus,
+    completeBookingByCode
 } from "../controllers/bookingController";
 import { authenticateToken, requireAdmin } from "../middleware/authMiddleware";
 
@@ -18,7 +19,8 @@ router.get("/check-status/:esimId", authenticateToken, checkBookingStatus);
 router.post("/:bookingId/cancel", authenticateToken, cancelBooking);
 
 // Admin routes
-router.get("/admin/all", requireAdmin, getAdminBookings);
-router.patch("/admin/:bookingId/status", requireAdmin, updateBookingStatus);
+router.get("/admin/all", authenticateToken, requireAdmin, getAdminBookings);
+router.patch("/:bookingId/status", authenticateToken, requireAdmin, updateBookingStatus);
+router.post("/complete-by-code", authenticateToken, requireAdmin, completeBookingByCode);
 
 export default router;

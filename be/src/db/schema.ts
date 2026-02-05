@@ -103,6 +103,7 @@ export const esimBookings = pgTable("esim_bookings", {
     status: bookingStatusEnum("status").default("booked").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    verificationCode: varchar("verification_code", { length: 12 }).unique(),
 });
 
 

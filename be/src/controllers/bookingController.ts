@@ -3,6 +3,7 @@ import { db } from "../db";
 import { esimBookings, esimPackages, users } from "../db/schema";
 import { eq, and, ne } from "drizzle-orm";
 import { sendBookingConfirmation, sendCancellationEmail } from "../utils/email";
+import crypto from "crypto";
 
 interface AuthRequest extends Request {
     user?: any;
@@ -38,16 +39,19 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
 
         let newBooking;
         await db.transaction(async (tx) => {
+            const verificationCode = crypto.randomBytes(6).toString('hex').toUpperCase();
+
             const [insertedBooking] = await tx.insert(esimBookings).values({
                 userId,
                 esimId,
                 quantity: quantity.toString(),
-                status: "booked"
+                status: "booked",
+                verificationCode
             }).returning();
             newBooking = insertedBooking;
 
             // Send confirmation email within transaction
-            await sendBookingConfirmation(req.user.email, esim[0].packageName, quantity.toString(), esim[0].price || "Contact for Price");
+            await sendBookingConfirmation(req.user.email, esim[0].packageName, quantity.toString(), esim[0].price || "Contact for Price", verificationCode);
         });
 
         res.status(201).json(newBooking);
@@ -110,7 +114,8 @@ export const getUserBookings = async (req: AuthRequest, res: Response) => {
             createdAt: esimBookings.createdAt,
             packageName: esimPackages.packageName,
             price: esimPackages.price,
-            featureImage: esimPackages.featureImage
+            featureImage: esimPackages.featureImage,
+            verificationCode: esimBookings.verificationCode
         })
             .from(esimBookings)
             .innerJoin(esimPackages, eq(esimBookings.esimId, esimPackages.id))
@@ -131,7 +136,8 @@ export const getAdminBookings = async (req: Request, res: Response) => {
             status: esimBookings.status,
             createdAt: esimBookings.createdAt,
             packageName: esimPackages.packageName,
-            userEmail: users.email
+            userEmail: users.email,
+            verificationCode: esimBookings.verificationCode
         })
             .from(esimBookings)
             .innerJoin(esimPackages, eq(esimBookings.esimId, esimPackages.id))
@@ -208,5 +214,66 @@ export const updateBookingStatus = async (req: Request, res: Response) => {
     } catch (error: any) {
         console.error("Error updating booking status:", error);
         res.status(500).json({ message: error.message || "Internal server error" });
+    }
+};
+
+export const completeBookingByCode = async (req: AuthRequest, res: Response) => {
+    const { code } = req.body;
+
+    if (!code) {
+        res.status(400).json({ message: "Verification code is required." });
+        return;
+    }
+
+    try {
+        // Join with esimPackages and users to get full details
+        const bookingResult = await db.select({
+            id: esimBookings.id,
+            quantity: esimBookings.quantity,
+            status: esimBookings.status,
+            verificationCode: esimBookings.verificationCode,
+            createdAt: esimBookings.createdAt,
+            packageName: esimPackages.packageName,
+            price: esimPackages.price,
+            userEmail: users.email
+        })
+            .from(esimBookings)
+            .leftJoin(esimPackages, eq(esimBookings.esimId, esimPackages.id))
+            .leftJoin(users, eq(esimBookings.userId, users.id))
+            .where(eq(esimBookings.verificationCode, code.toUpperCase()))
+            .limit(1);
+
+        if (bookingResult.length === 0) {
+            res.status(404).json({ message: "Invalid verification code." });
+            return;
+        }
+
+        const targetBooking = bookingResult[0];
+
+        if (targetBooking.status !== "booked") {
+            res.status(400).json({ message: `This booking is already ${targetBooking.status}.` });
+            return;
+        }
+
+        await db.update(esimBookings)
+            .set({ status: "completed", updatedAt: new Date() })
+            .where(eq(esimBookings.id, targetBooking.id));
+
+        res.json({
+            message: "Booking completed successfully.",
+            bookingId: targetBooking.id,
+            booking: {
+                id: targetBooking.id,
+                packageName: targetBooking.packageName,
+                quantity: targetBooking.quantity,
+                price: targetBooking.price,
+                userEmail: targetBooking.userEmail,
+                verificationCode: targetBooking.verificationCode,
+                createdAt: targetBooking.createdAt
+            }
+        });
+    } catch (error: any) {
+        console.error("Error completing booking by code:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 };
