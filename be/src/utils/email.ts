@@ -81,11 +81,11 @@ export const sendBookingConfirmation = async (email: string, packageName: string
   const mailOptions = {
     from: '"Teeko" <no-reply@teeko.ai>',
     to: email,
-    subject: "Booking Confirmation - Teeko eSIM",
+    subject: "Booking Confirmation - Teeko Travel SIM",
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
         <h1 style="color: #ef4444; text-align: center;">Booking Confirmed!</h1>
-        <p style="font-size: 16px; color: #333;">Your eSIM booking has been successfully placed.</p>
+        <p style="font-size: 16px; color: #333;">Your Travel SIM booking has been successfully placed.</p>
         
         <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <h3 style="margin-top: 0; color: #111;">Order Summary</h3>
@@ -123,11 +123,11 @@ export const sendCancellationEmail = async (email: string, packageName: string) 
   const mailOptions = {
     from: '"Teeko" <no-reply@teeko.ai>',
     to: email,
-    subject: "Booking Cancelled - Teeko eSIM",
+    subject: "Booking Cancelled - Teeko Travel SIM",
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
         <h1 style="color: #666; text-align: center;">Booking Cancelled</h1>
-        <p style="font-size: 16px; color: #333;">Your eSIM booking for <strong>${packageName}</strong> has been cancelled.</p>
+        <p style="font-size: 16px; color: #333;">Your Travel SIM booking for <strong>${packageName}</strong> has been cancelled.</p>
         <p style="font-size: 14px; color: #666;">If this wasn't you, please contact support.</p>
       </div>
     `,

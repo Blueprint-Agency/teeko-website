@@ -11,7 +11,7 @@ import {
     createPackage,
     updatePackage,
     deletePackage,
-} from "../controllers/esimController";
+} from "../controllers/simController";
 import { requireAdmin } from "../middleware/authMiddleware";
 
 const router = Router();

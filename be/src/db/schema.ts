@@ -62,45 +62,45 @@ export const settings = pgTable("settings", {
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// eSIM status enum
-export const esimStatusEnum = pgEnum("esim_status", ["DRAFT", "PUBLISHED", "BIN"]);
+// SIM status enum
+export const simStatusEnum = pgEnum("sim_status", ["DRAFT", "PUBLISHED", "BIN"]);
 
-// eSIM Provider table
-export const esimProviders = pgTable("esim_providers", {
+// SIM Provider table
+export const simProviders = pgTable("sim_providers", {
     id: uuid("id").defaultRandom().primaryKey(),
     name: varchar("name", { length: 255 }).notNull(),
     slug: varchar("slug", { length: 255 }).notNull().unique(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// eSIM Package table
-export const esimPackages = pgTable("esim_packages", {
+// SIM Package table
+export const simPackages = pgTable("sim_packages", {
     id: uuid("id").defaultRandom().primaryKey(),
     packageName: varchar("package_name", { length: 255 }).notNull(),
     slug: varchar("slug", { length: 255 }).notNull().unique(),
-    providerId: uuid("provider_id").references(() => esimProviders.id).notNull(),
+    providerId: uuid("provider_id").references(() => simProviders.id).notNull(),
     featureImage: text("feature_image"),
     price: varchar("price", { length: 100 }),
     about: text("about"),
     ctaLink: text("cta_link"),
     seoTitle: varchar("seo_title"),
     seoDescription: text("seo_description"),
-    status: esimStatusEnum("status").default("DRAFT").notNull(),
+    status: simStatusEnum("status").default("DRAFT").notNull(),
     publishedAt: timestamp("published_at"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// eSIM Booking status enum
-export const bookingStatusEnum = pgEnum("booking_status", ["booked", "cancelled", "completed", "expired", "rejected"]);
+// SIM Booking status enum
+export const simBookingStatusEnum = pgEnum("sim_booking_status", ["booked", "cancelled", "completed", "expired", "rejected"]);
 
-// eSIM Bookings table
-export const esimBookings = pgTable("esim_bookings", {
+// SIM Bookings table
+export const simBookings = pgTable("sim_bookings", {
     id: uuid("id").defaultRandom().primaryKey(),
     userId: uuid("user_id").references(() => users.id).notNull(),
-    esimId: uuid("esim_id").references(() => esimPackages.id).notNull(),
+    simId: uuid("sim_id").references(() => simPackages.id).notNull(),
     quantity: numeric("quantity").default("1").notNull(),
-    status: bookingStatusEnum("status").default("booked").notNull(),
+    status: simBookingStatusEnum("status").default("booked").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
     verificationCode: varchar("verification_code", { length: 12 }).unique(),

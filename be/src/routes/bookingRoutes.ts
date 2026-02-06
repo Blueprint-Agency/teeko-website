@@ -15,7 +15,7 @@ const router = Router();
 // User routes
 router.post("/", authenticateToken, createBooking);
 router.get("/my-bookings", authenticateToken, getUserBookings);
-router.get("/check-status/:esimId", authenticateToken, checkBookingStatus);
+router.get("/check-status/:simId", authenticateToken, checkBookingStatus);
 router.post("/:bookingId/cancel", authenticateToken, cancelBooking);
 
 // Admin routes

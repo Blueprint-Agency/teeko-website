@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { db } from "../db";
-import { esimProviders, esimPackages } from "../db/schema";
+import { simProviders, simPackages } from "../db/schema";
 import { eq } from "drizzle-orm";
 
-// eSIM Providers
+// SIM Providers
 export const getProviders = async (req: Request, res: Response) => {
     try {
-        const providers = await db.select().from(esimProviders);
+        const providers = await db.select().from(simProviders);
         res.json(providers);
     } catch (error) {
         console.error("Error fetching providers:", error);
@@ -18,7 +18,7 @@ export const createProvider = async (req: Request, res: Response) => {
     const { name, slug } = req.body;
 
     try {
-        const [newProvider] = await db.insert(esimProviders).values({ name, slug }).returning();
+        const [newProvider] = await db.insert(simProviders).values({ name, slug }).returning();
         res.status(201).json(newProvider);
     } catch (error) {
         console.error("Error creating provider:", error);
@@ -32,9 +32,9 @@ export const updateProvider = async (req: Request, res: Response) => {
 
     try {
         const [updated] = await db
-            .update(esimProviders)
+            .update(simProviders)
             .set({ name, slug })
-            .where(eq(esimProviders.id, id as string))
+            .where(eq(simProviders.id, id as string))
             .returning();
 
         if (!updated) {
@@ -53,7 +53,7 @@ export const deleteProvider = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
-        await db.delete(esimProviders).where(eq(esimProviders.id, id as string));
+        await db.delete(simProviders).where(eq(simProviders.id, id as string));
         res.json({ message: "Provider deleted successfully" });
     } catch (error) {
         console.error("Error deleting provider:", error);
@@ -61,33 +61,33 @@ export const deleteProvider = async (req: Request, res: Response) => {
     }
 };
 
-// eSIM Packages
+// SIM Packages
 export const getPackages = async (req: Request, res: Response) => {
     try {
         const packages = await db
             .select({
-                id: esimPackages.id,
-                packageName: esimPackages.packageName,
-                slug: esimPackages.slug,
-                providerId: esimPackages.providerId,
-                featureImage: esimPackages.featureImage,
-                price: esimPackages.price,
-                about: esimPackages.about,
-                ctaLink: esimPackages.ctaLink,
-                seoTitle: esimPackages.seoTitle,
-                seoDescription: esimPackages.seoDescription,
-                status: esimPackages.status,
-                publishedAt: esimPackages.publishedAt,
-                createdAt: esimPackages.createdAt,
-                updatedAt: esimPackages.updatedAt,
+                id: simPackages.id,
+                packageName: simPackages.packageName,
+                slug: simPackages.slug,
+                providerId: simPackages.providerId,
+                featureImage: simPackages.featureImage,
+                price: simPackages.price,
+                about: simPackages.about,
+                ctaLink: simPackages.ctaLink,
+                seoTitle: simPackages.seoTitle,
+                seoDescription: simPackages.seoDescription,
+                status: simPackages.status,
+                publishedAt: simPackages.publishedAt,
+                createdAt: simPackages.createdAt,
+                updatedAt: simPackages.updatedAt,
                 provider: {
-                    id: esimProviders.id,
-                    name: esimProviders.name,
-                    slug: esimProviders.slug,
+                    id: simProviders.id,
+                    name: simProviders.name,
+                    slug: simProviders.slug,
                 },
             })
-            .from(esimPackages)
-            .leftJoin(esimProviders, eq(esimPackages.providerId, esimProviders.id));
+            .from(simPackages)
+            .leftJoin(simProviders, eq(simPackages.providerId, simProviders.id));
 
         res.json(packages);
     } catch (error) {
@@ -100,25 +100,25 @@ export const getPublishedPackages = async (req: Request, res: Response) => {
     try {
         const packages = await db
             .select({
-                id: esimPackages.id,
-                packageName: esimPackages.packageName,
-                slug: esimPackages.slug,
-                featureImage: esimPackages.featureImage,
-                price: esimPackages.price,
-                about: esimPackages.about,
-                ctaLink: esimPackages.ctaLink,
-                seoTitle: esimPackages.seoTitle,
-                seoDescription: esimPackages.seoDescription,
-                publishedAt: esimPackages.publishedAt,
+                id: simPackages.id,
+                packageName: simPackages.packageName,
+                slug: simPackages.slug,
+                featureImage: simPackages.featureImage,
+                price: simPackages.price,
+                about: simPackages.about,
+                ctaLink: simPackages.ctaLink,
+                seoTitle: simPackages.seoTitle,
+                seoDescription: simPackages.seoDescription,
+                publishedAt: simPackages.publishedAt,
                 provider: {
-                    id: esimProviders.id,
-                    name: esimProviders.name,
-                    slug: esimProviders.slug,
+                    id: simProviders.id,
+                    name: simProviders.name,
+                    slug: simProviders.slug,
                 },
             })
-            .from(esimPackages)
-            .leftJoin(esimProviders, eq(esimPackages.providerId, esimProviders.id))
-            .where(eq(esimPackages.status, "PUBLISHED"));
+            .from(simPackages)
+            .leftJoin(simProviders, eq(simPackages.providerId, simProviders.id))
+            .where(eq(simPackages.status, "PUBLISHED"));
 
         res.json(packages);
     } catch (error) {
@@ -133,25 +133,25 @@ export const getPackageBySlug = async (req: Request, res: Response) => {
     try {
         const result = await db
             .select({
-                id: esimPackages.id,
-                packageName: esimPackages.packageName,
-                slug: esimPackages.slug,
-                featureImage: esimPackages.featureImage,
-                price: esimPackages.price,
-                about: esimPackages.about,
-                ctaLink: esimPackages.ctaLink,
-                seoTitle: esimPackages.seoTitle,
-                seoDescription: esimPackages.seoDescription,
-                publishedAt: esimPackages.publishedAt,
+                id: simPackages.id,
+                packageName: simPackages.packageName,
+                slug: simPackages.slug,
+                featureImage: simPackages.featureImage,
+                price: simPackages.price,
+                about: simPackages.about,
+                ctaLink: simPackages.ctaLink,
+                seoTitle: simPackages.seoTitle,
+                seoDescription: simPackages.seoDescription,
+                publishedAt: simPackages.publishedAt,
                 provider: {
-                    id: esimProviders.id,
-                    name: esimProviders.name,
-                    slug: esimProviders.slug,
+                    id: simProviders.id,
+                    name: simProviders.name,
+                    slug: simProviders.slug,
                 },
             })
-            .from(esimPackages)
-            .leftJoin(esimProviders, eq(esimPackages.providerId, esimProviders.id))
-            .where(eq(esimPackages.slug, slug as string));
+            .from(simPackages)
+            .leftJoin(simProviders, eq(simPackages.providerId, simProviders.id))
+            .where(eq(simPackages.slug, slug as string));
 
         if (result.length === 0) {
             res.status(404).json({ message: "Package not found" });
@@ -171,8 +171,8 @@ export const getPackageById = async (req: Request, res: Response) => {
     try {
         const result = await db
             .select()
-            .from(esimPackages)
-            .where(eq(esimPackages.id, id as string));
+            .from(simPackages)
+            .where(eq(simPackages.id, id as string));
 
         if (result.length === 0) {
             res.status(404).json({ message: "Package not found" });
@@ -201,7 +201,7 @@ export const createPackage = async (req: Request, res: Response) => {
 
     try {
         const [newPackage] = await db
-            .insert(esimPackages)
+            .insert(simPackages)
             .values({
                 packageName,
                 slug,
@@ -232,17 +232,7 @@ export const updatePackage = async (req: Request, res: Response) => {
 
     // Validate price if it's being updated
     if (price !== undefined && price !== null) {
-        // If the user sends the full string "RM10", we might want to strip it to check validity or just reject it based on "only numberical number" rule.
-        // The user rule: "only allow admin to insert numberical number... prefix hardcoded as RM". 
-        // This implies the input should be RAW number. "RM" is added by system.
-        // So simply checking regex /^\d+$/ is correct.
-
         const priceStr = price.toString();
-
-        // Handle case where frontend might send "RM10" - though instructions say "only allow... numerical". 
-        // I will assume strict compliance: Input MUST be integer.
-        // However, solely for robustness, if it starts with leading RM, I could strip it? 
-        // No, user said "reject... non-integer". "RM10" is non-integer string.
 
         const priceRegex = /^\d+$/;
         if (!priceRegex.test(priceStr)) {
@@ -255,7 +245,7 @@ export const updatePackage = async (req: Request, res: Response) => {
 
     try {
         const [updated] = await db
-            .update(esimPackages)
+            .update(simPackages)
             .set({
                 packageName,
                 slug,
@@ -270,7 +260,7 @@ export const updatePackage = async (req: Request, res: Response) => {
                 publishedAt: (status === "PUBLISHED") ? new Date() : null,
                 updatedAt: new Date(),
             })
-            .where(eq(esimPackages.id, id as string))
+            .where(eq(simPackages.id, id as string))
             .returning();
 
         if (!updated) {
@@ -289,7 +279,7 @@ export const deletePackage = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
-        await db.delete(esimPackages).where(eq(esimPackages.id, id as string));
+        await db.delete(simPackages).where(eq(simPackages.id, id as string));
         res.json({ message: "Package deleted successfully" });
     } catch (error) {
         console.error("Error deleting package:", error);

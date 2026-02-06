@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { db } from "../db";
-import { esimBookings, esimPackages, users } from "../db/schema";
+import { simBookings, simPackages, users } from "../db/schema";
 import { eq, and, ne } from "drizzle-orm";
 import { sendBookingConfirmation, sendCancellationEmail } from "../utils/email";
 import crypto from "crypto";
@@ -10,30 +10,30 @@ interface AuthRequest extends Request {
 }
 
 export const createBooking = async (req: AuthRequest, res: Response) => {
-    const { esimId, quantity } = req.body;
+    const { simId, quantity } = req.body;
     const userId = req.user.id;
 
     try {
-        // Check if user already has an active booking for this eSIM
+        // Check if user already has an active booking for this SIM
         const existingBooking = await db.select()
-            .from(esimBookings)
+            .from(simBookings)
             .where(
                 and(
-                    eq(esimBookings.userId, userId),
-                    eq(esimBookings.esimId, esimId),
-                    eq(esimBookings.status, "booked")
+                    eq(simBookings.userId, userId),
+                    eq(simBookings.simId, simId),
+                    eq(simBookings.status, "booked")
                 )
             )
             .limit(1);
 
         if (existingBooking.length > 0) {
-            res.status(400).json({ message: "You already have an active booking for this eSIM." });
+            res.status(400).json({ message: "You already have an active booking for this SIM." });
             return;
         }
 
-        const esim = await db.select().from(esimPackages).where(eq(esimPackages.id, esimId)).limit(1);
-        if (esim.length === 0) {
-            res.status(404).json({ message: "eSIM package not found." });
+        const sim = await db.select().from(simPackages).where(eq(simPackages.id, simId)).limit(1);
+        if (sim.length === 0) {
+            res.status(404).json({ message: "SIM package not found." });
             return;
         }
 
@@ -41,9 +41,9 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
         await db.transaction(async (tx) => {
             const verificationCode = crypto.randomBytes(6).toString('hex').toUpperCase();
 
-            const [insertedBooking] = await tx.insert(esimBookings).values({
+            const [insertedBooking] = await tx.insert(simBookings).values({
                 userId,
-                esimId,
+                simId,
                 quantity: quantity.toString(),
                 status: "booked",
                 verificationCode
@@ -51,7 +51,7 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
             newBooking = insertedBooking;
 
             // Send confirmation email within transaction
-            await sendBookingConfirmation(req.user.email, esim[0].packageName, quantity.toString(), esim[0].price || "Contact for Price", verificationCode);
+            await sendBookingConfirmation(req.user.email, sim[0].packageName, quantity.toString(), sim[0].price || "Contact for Price", verificationCode);
         });
 
         res.status(201).json(newBooking);
@@ -67,12 +67,12 @@ export const cancelBooking = async (req: AuthRequest, res: Response) => {
 
     try {
         const bookingResult = await db.select({
-            booking: esimBookings,
-            esim: esimPackages
+            booking: simBookings,
+            sim: simPackages
         })
-            .from(esimBookings)
-            .innerJoin(esimPackages, eq(esimBookings.esimId, esimPackages.id))
-            .where(and(eq(esimBookings.id, bookingId as string), eq(esimBookings.userId, userId)))
+            .from(simBookings)
+            .innerJoin(simPackages, eq(simBookings.simId, simPackages.id))
+            .where(and(eq(simBookings.id, bookingId as string), eq(simBookings.userId, userId)))
             .limit(1);
 
         if (bookingResult.length === 0) {
@@ -88,12 +88,12 @@ export const cancelBooking = async (req: AuthRequest, res: Response) => {
         }
 
         await db.transaction(async (tx) => {
-            await tx.update(esimBookings)
+            await tx.update(simBookings)
                 .set({ status: "cancelled", updatedAt: new Date() })
-                .where(eq(esimBookings.id, bookingId as string));
+                .where(eq(simBookings.id, bookingId as string));
 
             // Send cancellation email within transaction
-            await sendCancellationEmail(req.user.email, bookingResult[0].esim.packageName);
+            await sendCancellationEmail(req.user.email, bookingResult[0].sim.packageName);
         });
 
         res.json({ message: "Booking cancelled successfully." });
@@ -108,18 +108,18 @@ export const getUserBookings = async (req: AuthRequest, res: Response) => {
 
     try {
         const bookings = await db.select({
-            id: esimBookings.id,
-            quantity: esimBookings.quantity,
-            status: esimBookings.status,
-            createdAt: esimBookings.createdAt,
-            packageName: esimPackages.packageName,
-            price: esimPackages.price,
-            featureImage: esimPackages.featureImage,
-            verificationCode: esimBookings.verificationCode
+            id: simBookings.id,
+            quantity: simBookings.quantity,
+            status: simBookings.status,
+            createdAt: simBookings.createdAt,
+            packageName: simPackages.packageName,
+            price: simPackages.price,
+            featureImage: simPackages.featureImage,
+            verificationCode: simBookings.verificationCode
         })
-            .from(esimBookings)
-            .innerJoin(esimPackages, eq(esimBookings.esimId, esimPackages.id))
-            .where(eq(esimBookings.userId, userId));
+            .from(simBookings)
+            .innerJoin(simPackages, eq(simBookings.simId, simPackages.id))
+            .where(eq(simBookings.userId, userId));
 
         res.json(bookings);
     } catch (error) {
@@ -131,17 +131,17 @@ export const getUserBookings = async (req: AuthRequest, res: Response) => {
 export const getAdminBookings = async (req: Request, res: Response) => {
     try {
         const bookings = await db.select({
-            id: esimBookings.id,
-            quantity: esimBookings.quantity,
-            status: esimBookings.status,
-            createdAt: esimBookings.createdAt,
-            packageName: esimPackages.packageName,
+            id: simBookings.id,
+            quantity: simBookings.quantity,
+            status: simBookings.status,
+            createdAt: simBookings.createdAt,
+            packageName: simPackages.packageName,
             userEmail: users.email,
-            verificationCode: esimBookings.verificationCode
+            verificationCode: simBookings.verificationCode
         })
-            .from(esimBookings)
-            .innerJoin(esimPackages, eq(esimBookings.esimId, esimPackages.id))
-            .innerJoin(users, eq(esimBookings.userId, users.id));
+            .from(simBookings)
+            .innerJoin(simPackages, eq(simBookings.simId, simPackages.id))
+            .innerJoin(users, eq(simBookings.userId, users.id));
 
         res.json(bookings);
     } catch (error) {
@@ -151,17 +151,17 @@ export const getAdminBookings = async (req: Request, res: Response) => {
 };
 
 export const checkBookingStatus = async (req: AuthRequest, res: Response) => {
-    const { esimId } = req.params;
+    const { simId } = req.params;
     const userId = req.user.id;
 
     try {
         const booking = await db.select()
-            .from(esimBookings)
+            .from(simBookings)
             .where(
                 and(
-                    eq(esimBookings.userId, userId),
-                    eq(esimBookings.esimId, esimId as string),
-                    eq(esimBookings.status, "booked")
+                    eq(simBookings.userId, userId),
+                    eq(simBookings.simId, simId as string),
+                    eq(simBookings.status, "booked")
                 )
             )
             .limit(1);
@@ -184,14 +184,14 @@ export const updateBookingStatus = async (req: Request, res: Response) => {
 
     try {
         const bookingResult = await db.select({
-            status: esimBookings.status,
+            status: simBookings.status,
             userEmail: users.email,
-            packageName: esimPackages.packageName
+            packageName: simPackages.packageName
         })
-            .from(esimBookings)
-            .innerJoin(users, eq(esimBookings.userId, users.id))
-            .innerJoin(esimPackages, eq(esimBookings.esimId, esimPackages.id))
-            .where(eq(esimBookings.id, bookingId as string))
+            .from(simBookings)
+            .innerJoin(users, eq(simBookings.userId, users.id))
+            .innerJoin(simPackages, eq(simBookings.simId, simPackages.id))
+            .where(eq(simBookings.id, bookingId as string))
             .limit(1);
 
         if (bookingResult.length === 0) {
@@ -200,9 +200,9 @@ export const updateBookingStatus = async (req: Request, res: Response) => {
         }
 
         await db.transaction(async (tx) => {
-            await tx.update(esimBookings)
+            await tx.update(simBookings)
                 .set({ status: status as any, updatedAt: new Date() })
-                .where(eq(esimBookings.id, bookingId as string));
+                .where(eq(simBookings.id, bookingId as string));
 
             // If rejected, send email within transaction
             if (status === "rejected") {
@@ -226,21 +226,21 @@ export const completeBookingByCode = async (req: AuthRequest, res: Response) => 
     }
 
     try {
-        // Join with esimPackages and users to get full details
+        // Join with simPackages and users to get full details
         const bookingResult = await db.select({
-            id: esimBookings.id,
-            quantity: esimBookings.quantity,
-            status: esimBookings.status,
-            verificationCode: esimBookings.verificationCode,
-            createdAt: esimBookings.createdAt,
-            packageName: esimPackages.packageName,
-            price: esimPackages.price,
+            id: simBookings.id,
+            quantity: simBookings.quantity,
+            status: simBookings.status,
+            verificationCode: simBookings.verificationCode,
+            createdAt: simBookings.createdAt,
+            packageName: simPackages.packageName,
+            price: simPackages.price,
             userEmail: users.email
         })
-            .from(esimBookings)
-            .leftJoin(esimPackages, eq(esimBookings.esimId, esimPackages.id))
-            .leftJoin(users, eq(esimBookings.userId, users.id))
-            .where(eq(esimBookings.verificationCode, code.toUpperCase()))
+            .from(simBookings)
+            .leftJoin(simPackages, eq(simBookings.simId, simPackages.id))
+            .leftJoin(users, eq(simBookings.userId, users.id))
+            .where(eq(simBookings.verificationCode, code.toUpperCase()))
             .limit(1);
 
         if (bookingResult.length === 0) {
@@ -255,9 +255,9 @@ export const completeBookingByCode = async (req: AuthRequest, res: Response) => 
             return;
         }
 
-        await db.update(esimBookings)
+        await db.update(simBookings)
             .set({ status: "completed", updatedAt: new Date() })
-            .where(eq(esimBookings.id, targetBooking.id));
+            .where(eq(simBookings.id, targetBooking.id));
 
         res.json({
             message: "Booking completed successfully.",
