@@ -19,7 +19,7 @@ async function getRestaurants() {
 
 async function getEsimPackages() {
   try {
-    const res = await fetch(`${API_BASE_URL}/esim/packages`, { cache: "no-store" });
+    const res = await fetch(`${API_BASE_URL}/sim/packages`, { cache: "no-store" });
     if (!res.ok) return [];
     return res.json();
   } catch (error) {

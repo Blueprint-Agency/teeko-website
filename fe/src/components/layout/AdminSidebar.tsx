@@ -14,13 +14,13 @@ export const AdminSidebar = () => {
         { href: "/admin/restaurants", label: "Restaurants", icon: Store },
         { href: "/admin/locations", label: "Locations", icon: MapPin },
         {
-            href: "/admin/esim",
-            label: "eSIM",
+            href: "/admin/sim",
+            label: "Travel SIM",
             icon: Smartphone,
             children: [
-                { href: "/admin/esim/providers", label: "Providers" },
-                { href: "/admin/esim/packages", label: "Packages" },
-                { href: "/admin/esim/bookings", label: "Bookings" },
+                { href: "/admin/sim/providers", label: "Providers" },
+                { href: "/admin/sim/packages", label: "Packages" },
+                { href: "/admin/sim/bookings", label: "Bookings" },
             ]
         },
         { href: "/admin/blog", label: "Blog", icon: FileText },

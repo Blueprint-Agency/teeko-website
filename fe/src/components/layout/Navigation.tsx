@@ -28,7 +28,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
     const menuItems = [
         { label: "Home", href: "/" },
         { label: "Restaurants", href: "/restaurants" },
-        { label: "eSIM", href: "/esim" },
+        { label: "Travel SIM", href: "/sim" },
         { label: "Blog", href: "/blog" },
         { label: "Teeko App", href: process.env.NEXT_PUBLIC_AI_APP_URL || "#", external: true, special: true },
     ];
@@ -99,8 +99,8 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                             <Link
                                 href="/profile"
                                 className={`hidden sm:flex items-center justify-center w-10 h-10 rounded-full transition-all ${isScrolled
-                                        ? "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:text-primary-600"
-                                        : "bg-white/10 text-white hover:bg-white/20"
+                                    ? "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:text-primary-600"
+                                    : "bg-white/10 text-white hover:bg-white/20"
                                     } shadow-sm overflow-hidden border border-white/10`}
                             >
                                 <UserIcon className="w-5 h-5" />

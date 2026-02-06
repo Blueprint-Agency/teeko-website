@@ -36,13 +36,13 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                     "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    esimId: pkg.id,
+                    simId: pkg.id,
                     quantity
                 })
             });
 
             const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Failed to book eSIM");
+            if (!res.ok) throw new Error(data.message || "Failed to book Travel SIM");
 
             setIsSuccess(true);
             if (onBookingSuccess) onBookingSuccess();
@@ -154,7 +154,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                         </div>
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Booking Complete!</h2>
                         <p className="text-gray-500 dark:text-zinc-400 max-w-xs mx-auto">
-                            We've sent a confirmation email to <span className="text-gray-900 dark:text-white font-bold">{user?.email}</span>
+                            We've sent booking confirmation to <span className="text-gray-900 dark:text-white font-bold">{user?.email}</span>
                         </p>
                     </div>
                 )}

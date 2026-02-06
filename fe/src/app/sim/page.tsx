@@ -36,8 +36,8 @@ export default function EsimPage() {
         const fetchData = async () => {
             try {
                 const [packagesRes, providersRes] = await Promise.all([
-                    fetch(`${API_BASE_URL}/esim/packages`),
-                    fetch(`${API_BASE_URL}/esim/providers`)
+                    fetch(`${API_BASE_URL}/sim/packages`),
+                    fetch(`${API_BASE_URL}/sim/providers`)
                 ]);
 
                 const packagesData = await packagesRes.json();
@@ -97,14 +97,14 @@ export default function EsimPage() {
         <div className="min-h-screen bg-[var(--background)]">
             <Navigation forceSolid />
             <main className="max-w-container mx-auto px-4 py-12 pt-24">
-                <Breadcrumbs items={[{ label: "eSIM" }]} />
+                <Breadcrumbs items={[{ label: "Travel SIM" }]} />
 
                 <div className="mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-                        eSIM Packages
+                        Travel SIM Packages
                     </h1>
                     <p className="text-lg text-gray-600 dark:text-gray-400">
-                        Stay connected wherever you go with our curated eSIM offerings
+                        Stay connected wherever you go with our curated Travel SIM offerings
                     </p>
                 </div>
 
@@ -156,7 +156,7 @@ export default function EsimPage() {
                                 <div className="absolute inset-0 bg-gradient-to-tr from-red-600/20 to-transparent"></div>
                                 <Sparkles className="w-8 h-8 mb-2 text-red-500" />
                                 <h4 className="font-bold text-lg">New Releases</h4>
-                                <p className="text-gray-400 text-sm">Check out our latest eSIM packages</p>
+                                <p className="text-gray-400 text-sm">Check out our latest Travel SIM packages</p>
                             </div>
                         </div>
                     </div>
@@ -197,7 +197,7 @@ export default function EsimPage() {
                                     {filteredPackages.map(pkg => (
                                         <Link
                                             key={pkg.id}
-                                            href={`/esim/${pkg.slug}`}
+                                            href={`/sim/${pkg.slug}`}
                                             className="group"
                                         >
                                             <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-black/10 dark:hover:shadow-black/30 transition-all duration-300 hover:-translate-y-1 flex flex-col">
@@ -252,7 +252,7 @@ export default function EsimPage() {
                                 {!loading && filteredPackages.length === 0 && (
                                     <div className="text-center py-16 bg-[var(--card-bg)] rounded-3xl border border-[var(--border)] border-dashed">
                                         <p className="text-gray-500 dark:text-gray-400 text-lg">
-                                            No eSIM packages match your filters.
+                                            No Travel SIM packages match your filters.
                                         </p>
                                         <button
                                             onClick={() => {

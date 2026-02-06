@@ -44,8 +44,8 @@ export default function AdminEsimPackagesPage() {
         try {
             const token = localStorage.getItem("token");
             const [pkgRes, provRes] = await Promise.all([
-                fetch(`${API_BASE_URL}/esim/packages/all`, { headers: { "Authorization": `Bearer ${token}` } }),
-                fetch(`${API_BASE_URL}/esim/providers`, { headers: { "Authorization": `Bearer ${token}` } })
+                fetch(`${API_BASE_URL}/sim/packages/all`, { headers: { "Authorization": `Bearer ${token}` } }),
+                fetch(`${API_BASE_URL}/sim/providers`, { headers: { "Authorization": `Bearer ${token}` } })
             ]);
 
             if (pkgRes.status === 401 || pkgRes.status === 403) {
@@ -78,7 +78,7 @@ export default function AdminEsimPackagesPage() {
         if (!confirm("Are you sure you want to permanently delete this package?")) return;
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/esim/packages/${id}`, {
+            const res = await fetch(`${API_BASE_URL}/sim/packages/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -95,7 +95,7 @@ export default function AdminEsimPackagesPage() {
         if (!confirm("Move this package to bin?")) return;
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/esim/packages/${pkg.id}`, {
+            const res = await fetch(`${API_BASE_URL}/sim/packages/${pkg.id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                 body: JSON.stringify({ status: "BIN" })
@@ -141,10 +141,10 @@ export default function AdminEsimPackagesPage() {
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">eSIM Packages</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Travel SIM Packages</h1>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage connectivity packages and offerings</p>
                 </div>
-                <Link href="/admin/esim/create">
+                <Link href="/admin/sim/create">
                     <Button><Plus className="mr-2 h-4 w-4" /> Add Package</Button>
                 </Link>
             </div>
@@ -204,7 +204,7 @@ export default function AdminEsimPackagesPage() {
                                 {filteredPackages.map((pkg) => (
                                     <tr key={pkg.id} className="hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <Link href={`/admin/esim/${pkg.id}/edit`} className="group">
+                                            <Link href={`/admin/sim/${pkg.id}/edit`} className="group">
                                                 <div className="font-medium text-gray-900 dark:text-white group-hover:text-red-600 transition-colors cursor-pointer">{pkg.packageName}</div>
                                                 <div className="text-xs text-gray-500 dark:text-gray-400">{pkg.slug}</div>
                                             </Link>
@@ -218,7 +218,7 @@ export default function AdminEsimPackagesPage() {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div className="flex items-center justify-end gap-3">
-                                                <Link href={`/admin/esim/${pkg.id}/edit`} className="text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 inline-flex items-center gap-1">
+                                                <Link href={`/admin/sim/${pkg.id}/edit`} className="text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 inline-flex items-center gap-1">
                                                     <Edit2 className="h-4 w-4" /> Edit
                                                 </Link>
                                                 {pkg.status === "BIN" ? (

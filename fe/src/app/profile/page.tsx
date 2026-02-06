@@ -54,7 +54,7 @@ export default function ProfilePage() {
                         My Profile
                     </h1>
                     <p className="text-lg text-gray-600 dark:text-gray-400">
-                        Manage your account and view your eSIM bookings
+                        Manage your account and view your Travel SIM bookings
                     </p>
                 </div>
 
@@ -114,7 +114,7 @@ export default function ProfilePage() {
 
                         {/* Bookings Section - Match Account Info container */}
                         <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--border)]">
-                            <h3 className="font-bold text-gray-900 dark:text-white mb-6 text-lg">My eSIM Bookings</h3>
+                            <h3 className="font-bold text-gray-900 dark:text-white mb-6 text-lg">My Travel SIM Bookings</h3>
                             <UserBookings />
                         </div>
                     </div>

@@ -115,7 +115,7 @@ export function UserBookings() {
             <div className="text-center py-12 bg-[var(--card-bg)] rounded-2xl border border-dashed border-[var(--border)]">
                 <ShoppingBag className="w-12 h-12 text-gray-500 mx-auto mb-4 opacity-40" />
                 <p className="text-sm font-bold text-gray-400 uppercase tracking-wider">No active bookings</p>
-                <p className="text-xs text-gray-500 mt-1">Book an eSIM to see it here.</p>
+                <p className="text-xs text-gray-500 mt-1">Book a Travel SIM to see it here.</p>
             </div>
         );
     }

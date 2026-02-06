@@ -11,7 +11,7 @@ export const Breadcrumbs = () => {
     // Map common path segments to readable labels
     const labels: Record<string, string> = {
         admin: "Admin",
-        esim: "eSIM",
+        sim: "Travel SIM",
         packages: "Packages",
         providers: "Providers",
         create: "Create",

@@ -76,10 +76,10 @@ export function BookingButton({ pkg }: BookingButtonProps) {
             </button>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-5 text-center max-w-md">
                 {!user
-                    ? "Only registered members can book eSIM packages. Create an account to get started."
+                    ? "Only registered members can book Travel SIM packages. Create an account to get started."
                     : isBooked
                         ? "You already have an active booking for this package. Click above to view it in your profile."
-                        : "Book this eSIM now. You'll receive a confirmation email shortly."
+                        : "Book this Travel SIM now. You'll receive a confirmation email shortly."
                 }
             </p>
 

@@ -25,7 +25,7 @@ export default function AdminEsimProvidersPage() {
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/esim/providers`, {
+            const res = await fetch(`${API_BASE_URL}/sim/providers`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const data = await res.json();
@@ -59,8 +59,8 @@ export default function AdminEsimProvidersPage() {
         try {
             const token = localStorage.getItem("token");
             const url = editingProvider
-                ? `${API_BASE_URL}/esim/providers/${editingProvider.id}`
-                : `${API_BASE_URL}/esim/providers`;
+                ? `${API_BASE_URL}/sim/providers/${editingProvider.id}`
+                : `${API_BASE_URL}/sim/providers`;
 
             const method = editingProvider ? "PATCH" : "POST";
 
@@ -89,7 +89,7 @@ export default function AdminEsimProvidersPage() {
         if (!confirm("Are you sure? This might affect packages using this provider.")) return;
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/esim/providers/${id}`, {
+            const res = await fetch(`${API_BASE_URL}/sim/providers/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -108,8 +108,8 @@ export default function AdminEsimProvidersPage() {
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">eSIM Providers</h1>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage connectivity providers for eSIM packages</p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Travel SIM Providers</h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage connectivity providers for Travel SIM packages</p>
                 </div>
                 <Button onClick={handleOpenCreate}><Plus className="mr-2 h-4 w-4" /> Add Provider</Button>
             </div>

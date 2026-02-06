@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface Provider {
@@ -14,11 +14,8 @@ interface Provider {
     slug: string;
 }
 
-export default function EditEsimPackagePage() {
+export default function CreateEsimPackagePage() {
     const router = useRouter();
-    const params = useParams();
-    const id = params.id as string;
-
     const [providers, setProviders] = useState<Provider[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -38,45 +35,23 @@ export default function EditEsimPackagePage() {
     });
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchProviders = async () => {
             try {
                 const token = localStorage.getItem("token");
-
-                // Fetch providers
-                const providersRes = await fetch(`${API_BASE_URL}/esim/providers`, {
+                const res = await fetch(`${API_BASE_URL}/sim/providers`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
-                const providersData = await providersRes.json();
-                setProviders(Array.isArray(providersData) ? providersData : []);
-
-                // Fetch package
-                const packageRes = await fetch(`${API_BASE_URL}/esim/packages/id/${id}`, {
-                    headers: { "Authorization": `Bearer ${token}` }
-                });
-                const packageData = await packageRes.json();
-
-                setFormData({
-                    packageName: packageData.packageName || "",
-                    slug: packageData.slug || "",
-                    providerId: packageData.providerId || "",
-                    featureImage: packageData.featureImage || "",
-                    price: packageData.price ? packageData.price.replace(/^RM/, "") : "",
-                    about: packageData.about || "",
-                    ctaLink: packageData.ctaLink || "",
-                    seoTitle: packageData.seoTitle || "",
-                    seoDescription: packageData.seoDescription || "",
-                    status: packageData.status || "DRAFT",
-                });
+                const data = await res.json();
+                setProviders(Array.isArray(data) ? data : []);
             } catch (error) {
-                console.error("Failed to fetch data", error);
-                setToast({ message: "Failed to load package", type: "error" });
+                console.error("Failed to fetch providers", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchData();
-    }, [id]);
+        fetchProviders();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -84,8 +59,8 @@ export default function EditEsimPackagePage() {
 
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/esim/packages/${id}`, {
-                method: "PATCH",
+            const res = await fetch(`${API_BASE_URL}/sim/packages`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
@@ -94,11 +69,10 @@ export default function EditEsimPackagePage() {
             });
 
             if (res.ok) {
-                setToast({ message: "Package updated successfully!", type: "success" });
-                setTimeout(() => router.push("/admin/esim"), 1500);
+                setToast({ message: "Package created successfully!", type: "success" });
+                setTimeout(() => router.push("/admin/sim"), 1500);
             } else {
-                const errorData = await res.json();
-                setToast({ message: errorData.message || "Failed to update package", type: "error" });
+                setToast({ message: "Failed to create package", type: "error" });
             }
         } catch (error) {
             console.error(error);
@@ -130,9 +104,16 @@ export default function EditEsimPackagePage() {
                 />
             )}
 
-            <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit eSIM Package</h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Update package information</p>
+            <div className="flex items-center gap-4">
+                <Link href="/admin/sim">
+                    <Button variant="ghost" size="sm">
+                        <ArrowLeft className="h-4 w-4 mr-2" /> Back
+                    </Button>
+                </Link>
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create eSIM Package</h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Add a new eSIM package offering</p>
+                </div>
             </div>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -152,7 +133,8 @@ export default function EditEsimPackagePage() {
                                     onChange={e => setFormData({
                                         ...formData,
                                         packageName: e.target.value,
-                                        slug: generateSlug(e.target.value)
+                                        slug: generateSlug(e.target.value),
+                                        seoTitle: e.target.value
                                     })}
                                     placeholder="e.g., Global eSIM 10GB"
                                 />
@@ -183,6 +165,11 @@ export default function EditEsimPackagePage() {
                                         <option key={provider.id} value={provider.id}>{provider.name}</option>
                                     ))}
                                 </select>
+                                {providers.length === 0 && (
+                                    <p className="mt-1 text-sm text-red-600">
+                                        No providers found. <Link href="/admin/sim/providers" className="underline">Create one first</Link>.
+                                    </p>
+                                )}
                             </div>
 
                             <div>
@@ -211,13 +198,6 @@ export default function EditEsimPackagePage() {
                                     onChange={e => setFormData({ ...formData, featureImage: e.target.value })}
                                     placeholder="https://example.com/image.jpg"
                                 />
-                                {formData.featureImage && (
-                                    <img
-                                        src={formData.featureImage}
-                                        alt="Preview"
-                                        className="mt-2 h-32 w-auto rounded-md object-cover"
-                                    />
-                                )}
                             </div>
 
                             <div>
@@ -351,9 +331,9 @@ export default function EditEsimPackagePage() {
                         <div className="flex flex-col gap-3">
                             <Button type="submit" disabled={submitting} className="w-full justify-center">
                                 {submitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                                Update Package
+                                Create Package
                             </Button>
-                            <Link href="/admin/esim" className="w-full">
+                            <Link href="/admin/sim" className="w-full">
                                 <Button type="button" variant="ghost" className="w-full justify-center">Cancel</Button>
                             </Link>
                         </div>
@@ -363,3 +343,4 @@ export default function EditEsimPackagePage() {
         </div>
     );
 }
+

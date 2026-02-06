@@ -29,10 +29,10 @@ export function EsimSection({ packages }: EsimSectionProps) {
             <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="section-header">
                     <h2 className="section-title">
-                        Our eSIM Providers
+                        Our Travel SIM Providers
                     </h2>
                     <p className="section-description">
-                        Stay connected globally with our premium eSIM partners
+                        Stay connected globally with our premium Travel SIM partners
                     </p>
                 </div>
 
@@ -40,7 +40,7 @@ export function EsimSection({ packages }: EsimSectionProps) {
                     {packages.slice(0, 3).map((pkg) => (
                         <div key={pkg.id} className="min-w-[280px] md:min-w-0 snap-center">
                             <Link
-                                href={`/esim/${pkg.slug}`}
+                                href={`/sim/${pkg.slug}`}
                                 className="group block h-full"
                             >
                                 <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1">
@@ -83,10 +83,10 @@ export function EsimSection({ packages }: EsimSectionProps) {
 
                 <div className="text-center mt-12">
                     <Link
-                        href="/esim"
+                        href="/sim"
                         className="inline-flex items-center px-8 py-3 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-white font-semibold rounded-full hover:bg-gray-50 dark:hover:bg-zinc-800 transition-all shadow-sm"
                     >
-                        View All eSIM Packages
+                        View All Travel SIM Packages
                     </Link>
                 </div>
             </div>

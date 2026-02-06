@@ -7,7 +7,7 @@ export default function AdminEsimPage() {
     const router = useRouter();
 
     useEffect(() => {
-        router.replace("/admin/esim/packages");
+        router.replace("/admin/sim/packages");
     }, [router]);
 
     return null;

@@ -205,8 +205,8 @@ export default function AdminBookingsPage() {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">eSIM Bookings</h1>
-                    <p className="text-sm text-gray-500">Manage and review all user eSIM bookings</p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Travel SIM Bookings</h1>
+                    <p className="text-sm text-gray-500">Manage and review all user Travel SIM bookings</p>
                 </div>
 
                 {/* Verification Form */}

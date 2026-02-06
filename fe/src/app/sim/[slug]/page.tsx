@@ -30,7 +30,7 @@ interface Package {
 
 async function getPackage(slug: string): Promise<Package | null> {
     try {
-        const res = await fetch(`${API_BASE_URL}/esim/packages/slug/${slug}`, {
+        const res = await fetch(`${API_BASE_URL}/sim/packages/slug/${slug}`, {
             cache: "no-store"
         });
         if (!res.ok) return null;
@@ -70,7 +70,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
             <main className="max-w-container mx-auto px-4 py-12 pt-20">
                 <Breadcrumbs
                     items={[
-                        { label: "eSIM", href: "/esim" },
+                        { label: "Travel SIM", href: "/sim" },
                         { label: pkg.packageName }
                     ]}
                 />
