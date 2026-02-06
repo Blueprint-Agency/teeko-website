@@ -23,8 +23,8 @@ export const ReviewsTab = ({
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Section 1: Review Stats & Google Reviews */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <ReviewStatsCard stats={googleStats} />
-                <ReviewStatsCard stats={tripAdvisorStats} />
+                <ReviewStatsCard stats={googleStats} source={'google'} />
+                <ReviewStatsCard stats={tripAdvisorStats} source={'tripadvisor'} />
             </div>
 
             <div className="pt-4">

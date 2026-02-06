@@ -173,7 +173,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                             {[1, 2, 3, 4, 5].map(star => <Star key={star} className={`w-5 h-5 ${star <= Math.floor(restaurant?.rating || 0) ? 'fill-current' : 'text-gray-300'}`} />)}
                                         </div>
                                         <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">{restaurant?.rating}</span>
-                                        <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{restaurant?.reviewCount} reviews</span>
+                                        <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{restaurant?.stats?.googleStats?.totalReviews + restaurant?.stats?.tripAdvisorStats?.totalReviews} reviews</span>
                                     </div>
 
                                     <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
