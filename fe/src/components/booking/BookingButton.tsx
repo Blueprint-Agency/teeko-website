@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ExternalLink, ShoppingBag, LogIn, CheckCircle2, ArrowRight } from "lucide-react";
 import { BookingModal } from "./BookingModal";
 import { API_BASE_URL } from "@/lib/constants";
+import { useAuthFetch } from "@/lib/authFetch";
 
 interface BookingButtonProps {
     pkg: {
@@ -19,6 +20,7 @@ export function BookingButton({ pkg }: BookingButtonProps) {
     const [user, setUser] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isBooked, setIsBooked] = useState(false);
+    const { fetchWithAuth } = useAuthFetch();
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
@@ -33,12 +35,11 @@ export function BookingButton({ pkg }: BookingButtonProps) {
         try {
             const token = localStorage.getItem("token");
             if (!token) return;
-            const res = await fetch(`${API_BASE_URL}/bookings/check-status/${pkg.id}`, {
-                headers: { "Authorization": `Bearer ${token}` }
-            });
-            const data = await res.json();
-            if (res.ok) {
-                setIsBooked(data.isBooked);
+
+            const result = await fetchWithAuth(`${API_BASE_URL}/bookings/check-status/${pkg.id}`);
+            if (result.isSessionExpired) return;
+            if (!result.error && result.data) {
+                setIsBooked(result.data.isBooked);
             }
         } catch (err) {
             console.error("Status check error:", err);

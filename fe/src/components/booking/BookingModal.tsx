@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, Loader2, Mail, CheckCircle, Smartphone } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
+import { useAuthFetch } from "@/lib/authFetch";
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -21,6 +22,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
+    const { fetchWithAuth } = useAuthFetch();
 
     if (!isOpen) return null;
 
@@ -28,21 +30,17 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
         setIsLoading(true);
         setError("");
         try {
-            const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/bookings`, {
+            const result = await fetchWithAuth(`${API_BASE_URL}/bookings`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
                 body: JSON.stringify({
                     simId: pkg.id,
                     quantity
                 })
             });
 
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Failed to book Travel SIM");
+            if (result.isSessionExpired) return;
+
+            if (result.error) throw new Error(result.error);
 
             setIsSuccess(true);
             if (onBookingSuccess) onBookingSuccess();

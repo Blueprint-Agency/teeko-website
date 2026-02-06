@@ -5,6 +5,7 @@ import { ShoppingBag, XCircle, Clock, CheckCircle, RefreshCcw, Loader2, QrCode, 
 import { API_BASE_URL } from "@/lib/constants";
 import { CancelBookingModal } from "./CancelBookingModal";
 import { QRCodeCanvas } from "qrcode.react";
+import { useAuthFetch } from "@/lib/authFetch";
 
 export function UserBookings() {
     const [bookings, setBookings] = useState<any[]>([]);
@@ -15,18 +16,14 @@ export function UserBookings() {
     const [selectedBooking, setSelectedBooking] = useState<any>(null);
     const [isQRModalOpen, setIsQRModalOpen] = useState(false);
     const [qrBooking, setQrBooking] = useState<any>(null);
+    const { fetchWithAuth } = useAuthFetch();
 
     const fetchBookings = async () => {
         try {
-            const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/bookings/my-bookings`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-            const data = await res.json();
-            if (res.ok) {
-                setBookings(data);
+            const result = await fetchWithAuth(`${API_BASE_URL}/bookings/my-bookings`);
+            if (result.isSessionExpired) return;
+            if (!result.error && result.data) {
+                setBookings(result.data);
             }
         } catch (err) {
             console.error("Failed to fetch bookings:", err);
@@ -55,20 +52,17 @@ export function UserBookings() {
 
         setCancellingId(selectedBooking.id);
         try {
-            const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/bookings/${selectedBooking.id}/cancel`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
+            const result = await fetchWithAuth(`${API_BASE_URL}/bookings/${selectedBooking.id}/cancel`, {
+                method: "POST"
             });
 
-            if (res.ok) {
+            if (result.isSessionExpired) return;
+
+            if (!result.error) {
                 setIsCancelModalOpen(false);
                 fetchBookings();
             } else {
-                const data = await res.json();
-                alert(data.message || "Failed to cancel booking");
+                alert(result.error || "Failed to cancel booking");
             }
         } catch (err) {
             console.error("Cancel error:", err);

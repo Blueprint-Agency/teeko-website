@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
@@ -16,6 +16,17 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [sessionExpiredMessage, setSessionExpiredMessage] = useState("");
+    const searchParams = useSearchParams();
+
+    // Check for session expiration redirect
+    useEffect(() => {
+        const expired = searchParams.get("expired");
+        const message = searchParams.get("message");
+        if (expired === "true") {
+            setSessionExpiredMessage(message || "Your session has expired. Please log in again.");
+        }
+    }, [searchParams]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -111,6 +122,12 @@ export default function LoginPage() {
                     </div>
 
                     <div className="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-8 border border-white dark:border-zinc-800 shadow-black/5">
+                        {sessionExpiredMessage && (
+                            <div className="mb-6 p-3.5 bg-amber-500/10 border border-amber-500/20 rounded-2xl text-amber-600 dark:text-amber-400 text-xs flex items-start gap-2.5">
+                                <span className="w-1 h-1 rounded-full bg-amber-600 mt-1.5 shrink-0" />
+                                {sessionExpiredMessage}
+                            </div>
+                        )}
                         {error && (
                             <div className="mb-6 p-3.5 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-600 dark:text-red-400 text-xs flex items-start gap-2.5 animate-shake">
                                 <span className="w-1 h-1 rounded-full bg-red-600 mt-1.5 shrink-0" />
