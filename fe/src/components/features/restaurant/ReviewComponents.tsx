@@ -39,9 +39,9 @@ export interface SocialPost {
 
 // --- Components ---
 
-export const ReviewStatsCard = ({ stats }: { stats: ReviewStats }) => {
+export const ReviewStatsCard = ({ stats, source }: { stats: ReviewStats, source: string }) => {
     if (!stats) return null;
-    const isGoogle = stats.source?.toLowerCase() === 'google';
+    const isGoogle = source?.toLowerCase() === 'google';
 
     return (
         <a

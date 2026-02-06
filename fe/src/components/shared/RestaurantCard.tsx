@@ -18,6 +18,11 @@ export interface RestaurantCardProps {
     restaurantImages?: RestaurantImage[];
     rating?: number;
     reviewCount?: number;
+    stats?: {
+        id: string | number;
+        googleStats: { link: string; rating: number; totalReviews: number };
+        tripAdvisorStats: { link: string; rating: number; totalReviews: number };
+    };
     cuisine?: string;
     priceRange?: string;
     address?: string;
@@ -35,6 +40,11 @@ export function RestaurantCard({
     restaurantImages = [],
     rating = 4.5,
     reviewCount = 0,
+    stats = {
+        id,
+        googleStats: { link: "", rating: 0, totalReviews: 0 },
+        tripAdvisorStats: { link: "", rating: 0, totalReviews: 0 }
+    },
     cuisine,
     priceRange = "$$",
     address,
@@ -124,7 +134,7 @@ export function RestaurantCard({
 
                     <div className="flex flex-col items-end">
                         <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">Reviews</span>
-                        <span className="text-xs font-bold text-gray-900 dark:text-white">{reviewCount} reviews</span>
+                        <span className="text-xs font-bold text-gray-900 dark:text-white">{stats.googleStats.totalReviews + stats.tripAdvisorStats.totalReviews} reviews</span>
                     </div>
                 </div>
 
