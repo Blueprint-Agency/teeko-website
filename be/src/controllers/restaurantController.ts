@@ -153,7 +153,7 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 };
 
 export const createRestaurant = async (req: Request, res: Response) => {
-    const { name, slug, tripAdvisorId, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews, shortVideos } = req.body;
+    const { name, slug, tripAdvisorId, locationId, description, address, priceRange, websiteUrl, phone, email, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews, shortVideos } = req.body;
 
     try {
         // 1. Create Restaurant
@@ -167,7 +167,7 @@ export const createRestaurant = async (req: Request, res: Response) => {
                 description,
                 address,
                 priceRange,
-                contactInfo,
+                contactInfo: { website: websiteUrl, phone: phone, email: email },
                 operatingHours,
                 feature,
                 cuisine,
@@ -258,6 +258,8 @@ export const getRestaurantByTripAdvisorID = async (req: Request, res: Response) 
                 },
                 operatingHours: json.place_result.operation_hours?.hours,
                 images: json.place_result.images,
+                phone: json.place_result.phone,
+                email: json.place_result.email,
             }
 
             res.json(result);
@@ -406,7 +408,7 @@ export const createRestaurantByTripAdvisorID = async (req: Request, res: Respons
 
 export const updateRestaurant = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, slug, locationId, description, address, priceRange, contactInfo, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews, shortVideos } = req.body;
+    const { name, slug, locationId, description, address, priceRange, websiteUrl, phone, email, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews, shortVideos } = req.body;
 
     try {
         const [updatedRestaurant] = await db
@@ -418,7 +420,7 @@ export const updateRestaurant = async (req: Request, res: Response) => {
                 description,
                 address,
                 priceRange,
-                contactInfo,
+                contactInfo: { website: websiteUrl, phone: phone, email: email },
                 operatingHours,
                 feature,
                 cuisine,
