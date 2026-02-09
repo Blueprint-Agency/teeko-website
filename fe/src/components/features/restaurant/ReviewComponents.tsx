@@ -84,7 +84,7 @@ export const ReviewStatsCard = ({ stats, source }: { stats: ReviewStats, source:
     );
 };
 
-export const GoogleReviewsList = ({ reviews }: { reviews: GoogleReview[] }) => {
+export const GoogleReviewsList = ({ reviews, stats }: { reviews: GoogleReview[], stats: ReviewStats }) => {
     return (
         <div className="space-y-4">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
@@ -129,7 +129,7 @@ export const GoogleReviewsList = ({ reviews }: { reviews: GoogleReview[] }) => {
                     </div>
                 ))}
             </div>
-            <button className="w-full py-3 text-sm font-bold text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+            <button onClick={() => window.open(stats.link, '_blank')} className="w-full py-3 text-sm font-bold text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                 View more on Google
             </button>
         </div>

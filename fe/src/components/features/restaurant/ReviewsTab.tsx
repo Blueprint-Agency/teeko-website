@@ -27,9 +27,9 @@ export const ReviewsTab = ({
                 <ReviewStatsCard stats={tripAdvisorStats} source={'tripadvisor'} />
             </div>
 
-            <div className="pt-4">
-                <GoogleReviewsList reviews={googleReviews} />
-            </div>
+            {googleReviews.length > 0 && <div className="pt-4">
+                <GoogleReviewsList reviews={googleReviews} stats={googleStats} />
+            </div>}
         </div>
     );
 };

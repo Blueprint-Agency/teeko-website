@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensils, Award, BookOpen } from 'lucide-react';
 import { Navigation } from "@/components/layout/Navigation";
@@ -111,6 +111,50 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
 
     const imageUrls = restaurant?.restaurantImages?.map((img: any) => img.url) || [];
 
+    const tabs = useMemo(() => {
+        const availableTabs = [
+            { id: 'overview', label: 'Overview', visible: true },
+            { id: 'reviews', label: 'Reviews', visible: !!(restaurant?.googleReviews?.length || restaurant?.stats?.googleStats?.totalReviews || restaurant?.stats?.tripAdvisorStats?.totalReviews) },
+            { id: 'socials', label: 'Socials', visible: !!(restaurant?.shortVideos?.length > 0) },
+            { id: 'photos', label: 'Photos', visible: !!(restaurant?.restaurantImages?.length > 0) },
+        ];
+        return availableTabs.filter(tab => tab.visible);
+    }, [restaurant]);
+
+    useEffect(() => {
+        const observerOptions = {
+            root: null,
+            rootMargin: '-15% 0px -75% 0px',
+            threshold: 0
+        };
+
+        const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setActiveTab(entry.target.id);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+        tabs.forEach((tab) => {
+            const element = document.getElementById(tab.id);
+            if (element) {
+                observer.observe(element);
+            }
+        });
+
+        return () => {
+            tabs.forEach((tab) => {
+                const element = document.getElementById(tab.id);
+                if (element) {
+                    observer.unobserve(element);
+                }
+            });
+        };
+    }, [tabs]);
+
     const openImage = (index: number) => {
         setSelectedImageIndex(index);
         setModalOpen(true);
@@ -170,9 +214,9 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm mb-6">
                                     <div className="flex items-center gap-1.5">
                                         <div className="flex text-red-500">
-                                            {[1, 2, 3, 4, 5].map(star => <Star key={star} className={`w-5 h-5 ${star <= Math.floor(restaurant?.rating || 0) ? 'fill-current' : 'text-gray-300'}`} />)}
+                                            {[1, 2, 3, 4, 5].map(star => <Star key={star} className={`w-5 h-5 ${star <= Math.floor((restaurant?.stats?.googleStats?.rating + restaurant?.stats?.tripAdvisorStats?.rating) / 2 || 0) ? 'fill-current' : 'text-gray-300'}`} />)}
                                         </div>
-                                        <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">{restaurant?.rating}</span>
+                                        <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">{(restaurant?.stats?.googleStats?.rating + restaurant?.stats?.tripAdvisorStats?.rating) / 2}</span>
                                         <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{restaurant?.stats?.googleStats?.totalReviews + restaurant?.stats?.tripAdvisorStats?.totalReviews} reviews</span>
                                     </div>
 
@@ -206,12 +250,12 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
 
                             {/* Tabs */}
                             <div className="flex gap-6 border-b border-[var(--border)] mb-8 overflow-x-auto sticky top-14 bg-[var(--background)]/95 backdrop-blur-md z-30 py-4 -mx-4 px-4 sm:mx-0 sm:px-0 shadow-sm scrollbar-hide">
-                                {['Overview', 'Reviews', 'Socials', 'Photos', 'Q&A'].map(tab => (
+                                {tabs.map(tab => (
                                     <button
-                                        key={tab}
+                                        key={tab.id}
                                         onClick={() => {
-                                            setActiveTab(tab.toLowerCase());
-                                            const element = document.getElementById(tab.toLowerCase());
+                                            setActiveTab(tab.id);
+                                            const element = document.getElementById(tab.id);
                                             if (element) {
                                                 const offset = 120; // Adjusted offset for better visibility
                                                 const bodyRect = document.body.getBoundingClientRect().top;
@@ -225,9 +269,9 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                                 });
                                             }
                                         }}
-                                        className={`pb-3 font-bold text-sm whitespace-nowrap transition-all border-b-2 ${activeTab === tab.toLowerCase() ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
+                                        className={`pb-3 font-bold text-sm whitespace-nowrap transition-all border-b-2 ${activeTab === tab.id ? 'border-red-600 text-red-600' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
                                     >
-                                        {tab}
+                                        {tab.label}
                                     </button>
                                 ))}
                             </div>
@@ -258,42 +302,46 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
 
 
                                 {/* Reviews Section */}
-                                <div id="reviews" className="scroll-mt-48">
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Reviews</h2>
-                                    <ReviewsTab
-                                        googleStats={restaurant?.stats?.googleStats}
-                                        tripAdvisorStats={restaurant?.stats?.tripAdvisorStats}
-                                        googleReviews={restaurant?.googleReviews}
-                                    />
-                                </div>
+                                {(restaurant?.googleReviews?.length > 0 || restaurant?.stats?.googleStats?.totalReviews > 0 || restaurant?.stats?.tripAdvisorStats?.totalReviews > 0) && (
+                                    <div id="reviews" className="scroll-mt-48">
+                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Reviews</h2>
+                                        <ReviewsTab
+                                            googleStats={restaurant?.stats?.googleStats}
+                                            tripAdvisorStats={restaurant?.stats?.tripAdvisorStats}
+                                            googleReviews={restaurant?.googleReviews}
+                                        />
+                                    </div>
+                                )}
 
                                 {/* Socials Section */}
-                                <div id="socials" className="scroll-mt-48">
+                                {restaurant?.shortVideos?.length > 0 && <div id="socials" className="scroll-mt-48">
                                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Socials Feed</h2>
                                     <SocialsSection
                                         shortVideos={restaurant?.shortVideos}
                                     />
-                                </div>
+                                </div>}
 
                                 {/* Photos Section */}
-                                <div id="photos" className="scroll-mt-48">
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Photos</h2>
-                                    <div className="flex sm:grid grid-cols-2 sm:grid-cols-4 gap-3 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory">
-                                        {restaurant?.restaurantImages?.map((img: any, idx: number) => (
-                                            <div
-                                                key={img.id || idx}
-                                                className="min-w-[60vw] sm:min-w-0 aspect-square bg-[var(--background-alt)] rounded-xl overflow-hidden cursor-pointer group snap-center"
-                                                onClick={() => openImage(idx)}
-                                            >
-                                                <img
-                                                    src={img.url}
-                                                    alt={`Gallery ${idx + 1}`}
-                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                                />
-                                            </div>
-                                        ))}
+                                {restaurant?.restaurantImages?.length > 0 && (
+                                    <div id="photos" className="scroll-mt-48">
+                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Photos</h2>
+                                        <div className="flex sm:grid grid-cols-2 sm:grid-cols-4 gap-3 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory">
+                                            {restaurant?.restaurantImages?.map((img: any, idx: number) => (
+                                                <div
+                                                    key={img.id || idx}
+                                                    className="min-w-[60vw] sm:min-w-0 aspect-square bg-[var(--background-alt)] rounded-xl overflow-hidden cursor-pointer group snap-center"
+                                                    onClick={() => openImage(idx)}
+                                                >
+                                                    <img
+                                                        src={img.url}
+                                                        alt={`Gallery ${idx + 1}`}
+                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
                             </div>
                         </div>
