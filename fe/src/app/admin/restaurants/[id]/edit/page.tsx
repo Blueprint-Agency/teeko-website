@@ -30,6 +30,8 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
         images: [] as any[],
         reservationUrl: "",
         websiteUrl: "",
+        phone: "",
+        email: "",
         googleStats: { rating: 0, totalReviews: 0, link: "" },
         tripAdvisorStats: { rating: 0, totalReviews: 0, link: "" },
         googleReviews: [] as any[],
@@ -87,6 +89,8 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                         images: restData.restaurantImages || [],
                         reservationUrl: restData.reservationUrl || "",
                         websiteUrl: restData.websiteUrl || restData.contactInfo?.website || "",
+                        phone: restData.phone || restData.contactInfo?.phone || "",
+                        email: restData.email || restData.contactInfo?.email || "",
                         googleStats: restData.restaurantStats[0]?.googleStats || { rating: 0, totalReviews: 0, link: "" },
                         tripAdvisorStats: restData.restaurantStats[0]?.tripAdvisorStats || { rating: 0, totalReviews: 0, link: "" },
                         googleReviews: restData.restaurantReviews.map((rev: any) => ({
@@ -150,7 +154,9 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                         isPrimary: false
                     })) || [],
                     reservationUrl: data.reservationUrl || formData.reservationUrl,
-                    websiteUrl: data.websiteUrl || data.website || formData.websiteUrl
+                    websiteUrl: data.websiteUrl || data.website || formData.websiteUrl,
+                    phone: data.phone || formData.phone,
+                    email: data.email || formData.email,
                 });
                 setToast({ message: "Data fetched from TripAdvisor!", type: "success" });
             } else {
@@ -356,6 +362,7 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
             <div className="flex gap-4 border-b border-gray-200 dark:border-zinc-800 mb-8 overflow-x-auto scrollbar-hide">
                 {[
                     { id: "general", label: "General" },
+                    { id: "contact", label: "Contact" },
                     { id: "images", label: "Images" },
                     { id: "reviews", label: "Reviews" },
                     { id: "reels", label: "Reels" },
@@ -524,16 +531,6 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                                     onChange={e => setFormData({ ...formData, reservationUrl: e.target.value })}
                                 />
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium dark:text-gray-300">Website URL</label>
-                                <input
-                                    type="url"
-                                    placeholder="https://..."
-                                    className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
-                                    value={formData.websiteUrl}
-                                    onChange={e => setFormData({ ...formData, websiteUrl: e.target.value })}
-                                />
-                            </div>
                         </div>
 
                         <div>
@@ -554,6 +551,46 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                                 value={formData.description}
                                 onChange={e => setFormData({ ...formData, description: e.target.value })}
                             />
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === "contact" && (
+                    <div className="space-y-6">
+                        <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 space-y-6">
+                            <h2 className="text-lg font-semibold dark:text-white">Contact Information</h2>
+                            <div className="grid gap-6 md:grid-cols-2">
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300">Website URL</label>
+                                    <input
+                                        type="url"
+                                        placeholder="https://..."
+                                        className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                        value={formData.websiteUrl}
+                                        onChange={e => setFormData({ ...formData, websiteUrl: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300">Phone Number</label>
+                                    <input
+                                        type="tel"
+                                        placeholder="+60 12-345 6789"
+                                        className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                        value={formData.phone}
+                                        onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300">Email Address</label>
+                                    <input
+                                        type="email"
+                                        placeholder="contact@restaurant.com"
+                                        className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white border-gray-200"
+                                        value={formData.email}
+                                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

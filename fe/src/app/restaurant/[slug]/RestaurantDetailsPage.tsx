@@ -286,7 +286,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                         <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">{restaurant?.description}</p>
                                     </section>
 
-                                    <section>
+                                    {restaurant?.feature?.length > 0 && <section>
                                         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features & Amenities</h2>
                                         <div className="grid grid-cols-2 gap-y-3">
                                             {restaurant?.feature?.map((feature: any) => (
@@ -296,7 +296,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                                 </div>
                                             ))}
                                         </div>
-                                    </section>
+                                    </section>}
                                 </div>
 
 
@@ -384,7 +384,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
 
                                 <hr className="border-gray-100 dark:border-gray-700 my-4" />
 
-                                <div className="mb-6">
+                                {restaurant?.operatingHours?.length > 0 && <div className="mb-6">
                                     <h4 className="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                                         <Clock className="w-4 h-4 text-red-500" /> Opening Hours
                                     </h4>
@@ -396,7 +396,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                </div>}
                             </div>
                         </div>
                     </div>

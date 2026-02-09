@@ -32,6 +32,8 @@ export default function CreateRestaurantPage() {
         images: [] as any[],
         reservationUrl: "",
         websiteUrl: "",
+        phone: "",
+        email: "",
         googleStats: { rating: 0, totalReviews: 0, link: "" },
         tripAdvisorStats: { rating: 0, totalReviews: 0, link: "" },
         googleReviews: [] as any[],
@@ -94,6 +96,8 @@ export default function CreateRestaurantPage() {
                     })) || [],
                     reservationUrl: data.reservationUrl || "",
                     websiteUrl: data.websiteUrl || data.website || "",
+                    phone: data.phone || "",
+                    email: data.email || "",
                     tripAdvisorStats: {
                         rating: data.rating || 0,
                         totalReviews: data.numReviews || 0,
@@ -286,7 +290,7 @@ export default function CreateRestaurantPage() {
             </div>
 
             <div className="flex gap-1 mb-8 p-1 bg-gray-100 dark:bg-zinc-800 rounded-lg w-fit">
-                {['general', 'images', 'reviews', 'reels'].map((tab) => (
+                {['general', 'contact', 'images', 'reviews', 'reels'].map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -447,16 +451,6 @@ export default function CreateRestaurantPage() {
                                         onChange={e => setFormData({ ...formData, reservationUrl: e.target.value })}
                                     />
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-medium dark:text-gray-300">Website URL</label>
-                                    <input
-                                        type="url"
-                                        placeholder="https://..."
-                                        className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 border-gray-200"
-                                        value={formData.websiteUrl}
-                                        onChange={e => setFormData({ ...formData, websiteUrl: e.target.value })}
-                                    />
-                                </div>
                             </div>
 
                             <div>
@@ -477,6 +471,46 @@ export default function CreateRestaurantPage() {
                                     value={formData.description}
                                     onChange={e => setFormData({ ...formData, description: e.target.value })}
                                 />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === "contact" && (
+                    <div className="space-y-6">
+                        <div className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 space-y-6">
+                            <h2 className="text-lg font-semibold dark:text-white">Contact Information</h2>
+                            <div className="grid gap-6 md:grid-cols-2">
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300">Website URL</label>
+                                    <input
+                                        type="url"
+                                        placeholder="https://..."
+                                        className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 border-gray-200"
+                                        value={formData.websiteUrl}
+                                        onChange={e => setFormData({ ...formData, websiteUrl: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300">Phone Number</label>
+                                    <input
+                                        type="tel"
+                                        placeholder="+60 12-345 6789"
+                                        className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 border-gray-200"
+                                        value={formData.phone}
+                                        onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300">Email Address</label>
+                                    <input
+                                        type="email"
+                                        placeholder="contact@restaurant.com"
+                                        className="mt-1 block w-full rounded-md border p-2 dark:bg-zinc-800 dark:border-zinc-700 border-gray-200"
+                                        value={formData.email}
+                                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
