@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getRestaurants, createRestaurant, getRestaurantBySlug, updateRestaurant, getRestaurantById, createRestaurantByTripAdvisorID, getRestaurantByTripAdvisorID, getRestaurantStatsByGoogleSearchQuery, getRestaurantShortVideosBySearchQuery } from "../controllers/restaurantController";
+import { getRestaurants, createRestaurant, getRestaurantBySlug, updateRestaurant, getRestaurantById, createRestaurantByTripAdvisorID, getRestaurantByTripAdvisorID, getRestaurantStatsByGoogleSearchQuery, getRestaurantShortVideosBySearchQuery, updateRestaurantStatus } from "../controllers/restaurantController";
 import { requireAdmin } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -13,5 +13,6 @@ router.get('/shortVideos/:searchQuery', requireAdmin, getRestaurantShortVideosBy
 router.post("/", requireAdmin, createRestaurant);
 router.post("/:tripAdvisorID", requireAdmin, createRestaurantByTripAdvisorID)
 router.patch("/:id", requireAdmin, updateRestaurant);
+router.patch("/:id/updateStatus", requireAdmin, updateRestaurantStatus);
 
 export default router;

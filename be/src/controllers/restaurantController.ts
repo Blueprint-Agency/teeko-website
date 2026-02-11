@@ -10,6 +10,7 @@ export const getRestaurants = async (req: Request, res: Response) => {
     try {
         let query = db.select({
             id: restaurants.id,
+            status: restaurants.status,
             name: restaurants.name,
             slug: restaurants.slug,
             description: restaurants.description,
@@ -33,7 +34,8 @@ export const getRestaurants = async (req: Request, res: Response) => {
         })
             .from(restaurants)
             .leftJoin(locations, eq(restaurants.locationId, locations.id))
-            .leftJoin(restaurantStats, eq(restaurants.id, restaurantStats.restaurantId));
+            .leftJoin(restaurantStats, eq(restaurants.id, restaurantStats.restaurantId))
+            .where(eq(restaurants.status, "ACTIVE"));
 
         if (locationSlug) {
             // @ts-ignore - drizzle-orm and express types mismatch sometimes on req.query
@@ -488,6 +490,31 @@ export const updateRestaurant = async (req: Request, res: Response) => {
             );
         }
         res.json({ message: "Restaurant updated successfully", restaurant: updatedRestaurant });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const updateRestaurantStatus = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    try {
+        const [updatedRestaurant] = await db
+            .update(restaurants)
+            .set({
+                status,
+                updatedAt: new Date(),
+            })
+            .where(eq(restaurants.id, id as string))
+            .returning();
+
+        if (!updatedRestaurant) {
+            res.status(404).json({ message: "Restaurant not found" });
+            return;
+        }
+        res.json({ message: "Restaurant status updated successfully", restaurant: updatedRestaurant });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });

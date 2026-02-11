@@ -24,6 +24,9 @@ export const locations = pgTable("locations", {
     isIndexed: boolean("is_indexed").default(true).notNull(),
 });
 
+// Restaurant status enum
+export const restaurantStatusEnum = pgEnum("restaurant_status", ["ACTIVE", "INACTIVE"]);
+
 export const restaurants = pgTable("restaurants", {
     id: uuid("id").defaultRandom().primaryKey(),
     name: varchar("name").notNull(),
@@ -40,6 +43,7 @@ export const restaurants = pgTable("restaurants", {
     operatingHours: jsonb("operating_hours"),
     seoTitle: varchar("seo_title"),
     seoDescription: text("seo_description"),
+    status: restaurantStatusEnum("status").default("ACTIVE").notNull(),
     isIndexed: boolean("is_indexed").default(true).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
