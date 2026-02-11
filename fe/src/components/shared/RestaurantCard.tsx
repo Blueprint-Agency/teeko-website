@@ -134,7 +134,7 @@ export function RestaurantCard({
 
                     <div className="flex flex-col items-end">
                         <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">Reviews</span>
-                        <span className="text-xs font-bold text-gray-900 dark:text-white">{stats.googleStats.totalReviews + stats.tripAdvisorStats.totalReviews} reviews</span>
+                        <span className="text-xs font-bold text-gray-900 dark:text-white">{stats?.googleStats?.totalReviews || 0 + stats?.tripAdvisorStats?.totalReviews || 0} reviews</span>
                     </div>
                 </div>
 
