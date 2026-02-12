@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, Upload, Trash2, Layout } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { useRouter, useParams } from "next/navigation";
@@ -22,6 +22,8 @@ export default function EditEsimPackagePage() {
     const [providers, setProviders] = useState<Provider[]>([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
     const [formData, setFormData] = useState({
@@ -105,6 +107,40 @@ export default function EditEsimPackagePage() {
             setToast({ message: "An error occurred", type: "error" });
         } finally {
             setSubmitting(false);
+        }
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        const token = localStorage.getItem("token");
+        const formDataUpload = new FormData();
+        formDataUpload.append("image", file);
+        formDataUpload.append("simPackageId", id);
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/sim/packages/upload`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: formDataUpload,
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                setFormData({ ...formData, featureImage: data.url });
+                setToast({ message: "Image uploaded successfully!", type: "success" });
+            } else {
+                setToast({ message: "Failed to upload image", type: "error" });
+            }
+        } catch (error) {
+            console.error(error);
+            setToast({ message: "Error uploading image", type: "error" });
+        } finally {
+            setUploading(false);
         }
     };
 
@@ -203,21 +239,50 @@ export default function EditEsimPackagePage() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium dark:text-gray-300">Feature Image URL</label>
+                                <label className="block text-sm font-medium dark:text-gray-300">Feature Image</label>
                                 <input
-                                    type="url"
-                                    className="mt-1 block w-full rounded-md border border-gray-200 p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white"
-                                    value={formData.featureImage}
-                                    onChange={e => setFormData({ ...formData, featureImage: e.target.value })}
-                                    placeholder="https://example.com/image.jpg"
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    ref={fileInputRef}
+                                    onChange={handleImageUpload}
                                 />
-                                {formData.featureImage && (
-                                    <img
-                                        src={formData.featureImage}
-                                        alt="Preview"
-                                        className="mt-2 h-32 w-auto rounded-md object-cover"
-                                    />
-                                )}
+                                <div className="flex flex-col gap-4 mt-1">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        disabled={uploading}
+                                        className="w-full rounded-2xl border-2 border-dashed border-gray-200 dark:border-zinc-700 py-6"
+                                        onClick={() => fileInputRef.current?.click()}
+                                    >
+                                        {uploading ? (
+                                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                        ) : (
+                                            <Upload className="h-4 w-4 mr-2" />
+                                        )}
+                                        {formData.featureImage ? "Change Image" : "Upload Feature Image"}
+                                    </Button>
+
+                                    {formData.featureImage ? (
+                                        <div className="group relative aspect-[16/10] rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                                            <img src={formData.featureImage} alt="Preview" className="w-full h-full object-cover" />
+                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <Button
+                                                    type="button"
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    onClick={() => setFormData({ ...formData, featureImage: "" })}
+                                                >
+                                                    <Trash2 className="h-4 w-4 mr-2" /> Remove
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="aspect-[16/10] rounded-2xl bg-gray-50 dark:bg-zinc-800 border border-dashed border-gray-200 dark:border-zinc-700 flex items-center justify-center text-gray-300">
+                                            <Layout className="h-8 w-8" />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <div>

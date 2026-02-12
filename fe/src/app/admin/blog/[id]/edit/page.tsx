@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
-import { Loader2, ArrowLeft, Plus, Trash2, GripVertical, MapPin, Utensils, Type, Layout, MousePointer2, X } from "lucide-react";
+import { Loader2, ArrowLeft, Plus, Trash2, GripVertical, MapPin, Utensils, Type, Layout, MousePointer2, X, Upload } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { useRouter, useParams } from "next/navigation";
@@ -33,6 +33,8 @@ export default function EditBlogPostPage() {
 
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
     const [locations, setLocations] = useState<Location[]>([]);
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -197,6 +199,40 @@ export default function EditBlogPostPage() {
         }
     };
 
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        const token = localStorage.getItem("token");
+        const formDataUpload = new FormData();
+        formDataUpload.append("image", file);
+        formDataUpload.append("blogPostId", id);
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/blog/posts/upload`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: formDataUpload,
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                setFormData({ ...formData, featureImage: data.url });
+                setToast({ message: "Image uploaded successfully!", type: "success" });
+            } else {
+                setToast({ message: "Failed to upload image", type: "error" });
+            }
+        } catch (error) {
+            console.error(error);
+            setToast({ message: "Error uploading image", type: "error" });
+        } finally {
+            setUploading(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
@@ -348,23 +384,50 @@ export default function EditBlogPostPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-widest">Cover Art URL</label>
+                                    <label className="block text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase mb-2 tracking-widest">Cover Image</label>
                                     <input
-                                        type="url"
-                                        className="w-full rounded-2xl border border-gray-100 bg-gray-50 px-4 py-2 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white focus:ring-2 focus:ring-red-500 outline-none transition-all mb-4"
-                                        value={formData.featureImage}
-                                        onChange={e => setFormData({ ...formData, featureImage: e.target.value })}
-                                        placeholder="https://images.unsplash.com/..."
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        ref={fileInputRef}
+                                        onChange={handleImageUpload}
                                     />
-                                    {formData.featureImage ? (
-                                        <div className="aspect-[21/9] rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-                                            <img src={formData.featureImage} alt="Preview" className="w-full h-full object-cover" />
-                                        </div>
-                                    ) : (
-                                        <div className="aspect-[21/9] rounded-2xl bg-gray-50 dark:bg-zinc-800 border border-dashed border-gray-200 dark:border-zinc-700 flex items-center justify-center text-gray-300">
-                                            <Layout className="h-8 w-8" />
-                                        </div>
-                                    )}
+                                    <div className="flex flex-col gap-4">
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            disabled={uploading}
+                                            className="w-full rounded-2xl border-2 border-dashed border-gray-200 dark:border-zinc-700 py-6"
+                                            onClick={() => fileInputRef.current?.click()}
+                                        >
+                                            {uploading ? (
+                                                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                            ) : (
+                                                <Upload className="h-4 w-4 mr-2" />
+                                            )}
+                                            {formData.featureImage ? "Change Image" : "Upload Cover Image"}
+                                        </Button>
+
+                                        {formData.featureImage ? (
+                                            <div className="group relative aspect-[21/9] rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                                                <img src={formData.featureImage} alt="Preview" className="w-full h-full object-cover" />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <Button
+                                                        type="button"
+                                                        variant="destructive"
+                                                        size="sm"
+                                                        onClick={() => setFormData({ ...formData, featureImage: "" })}
+                                                    >
+                                                        <Trash2 className="h-4 w-4 mr-2" /> Remove
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="aspect-[21/9] rounded-2xl bg-gray-50 dark:bg-zinc-800 border border-dashed border-gray-200 dark:border-zinc-700 flex items-center justify-center text-gray-300">
+                                                <Layout className="h-8 w-8" />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
