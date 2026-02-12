@@ -11,8 +11,10 @@ import {
     createPackage,
     updatePackage,
     deletePackage,
+    uploadSimImage,
 } from "../controllers/simController";
 import { requireAdmin } from "../middleware/authMiddleware";
+import { upload } from "../middleware/uploadMiddleware";
 
 const router = Router();
 
@@ -28,6 +30,7 @@ router.get("/packages/all", requireAdmin, getPackages); // Admin - all packages
 router.get("/packages/slug/:slug", getPackageBySlug); // Public - by slug
 router.get("/packages/id/:id", requireAdmin, getPackageById); // Admin - by ID
 router.post("/packages", requireAdmin, createPackage);
+router.post("/packages/upload", requireAdmin, upload.single("image"), uploadSimImage);
 router.patch("/packages/:id", requireAdmin, updatePackage);
 router.delete("/packages/:id", requireAdmin, deletePackage);
 

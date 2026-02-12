@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { db } from "../db";
 import { blogPosts, blogContentBlocks, restaurants, locations, restaurantImages, restaurantStats } from "../db/schema";
 import { eq, desc, and } from "drizzle-orm";
+import { uploadImageToR2 } from "../utils/upload";
 
 // Get all blog posts (admin)
 export const getAllPosts = async (req: Request, res: Response) => {
@@ -128,6 +129,7 @@ export const createPost = async (req: Request, res: Response) => {
     const { title, slug, metaDescription, featureImage, status, contentBlocks } = req.body;
 
     try {
+        console.log("Creating post with featureImage:", featureImage);
         const [newPost] = await db
             .insert(blogPosts)
             .values({
@@ -176,6 +178,7 @@ export const updatePost = async (req: Request, res: Response) => {
                 ? new Date()
                 : existingPost?.publishedAt;
 
+        console.log("Updating post", id, "with featureImage:", featureImage);
         const [updated] = await db
             .update(blogPosts)
             .set({
@@ -258,5 +261,35 @@ export const deletePost = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error deleting post:", error);
         res.status(500).json({ message: "Server error" });
+    }
+};
+
+// Upload blog image
+export const uploadBlogImage = async (req: Request, res: Response) => {
+    try {
+        const file = req.file;
+        const { blogPostId } = req.body;
+
+        if (!file) {
+            res.status(400).json({ message: "No file uploaded" });
+            return;
+        }
+
+        const imageUrl = await uploadImageToR2(file, "blogs");
+        console.log("Uploaded image to R2, returning URL:", imageUrl);
+
+        // If blogPostId is provided (e.g. from Edit page), update DB immediately
+        if (blogPostId) {
+            console.log("Immediate DB update for blog post", blogPostId, "with URL:", imageUrl);
+            await db
+                .update(blogPosts)
+                .set({ featureImage: imageUrl, updatedAt: new Date() })
+                .where(eq(blogPosts.id, blogPostId));
+        }
+
+        res.json({ url: imageUrl });
+    } catch (error) {
+        console.error("Error uploading image:", error);
+        res.status(500).json({ message: "Upload failed" });
     }
 };

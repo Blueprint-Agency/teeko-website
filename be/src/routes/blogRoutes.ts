@@ -8,8 +8,10 @@ import {
     updatePost,
     moveToBin,
     deletePost,
+    uploadBlogImage,
 } from "../controllers/blogController";
 import { requireAdmin } from "../middleware/authMiddleware";
+import { upload } from "../middleware/uploadMiddleware";
 
 const router = Router();
 
@@ -24,5 +26,6 @@ router.post("/posts", requireAdmin, createPost);
 router.patch("/posts/:id", requireAdmin, updatePost);
 router.patch("/posts/:id/bin", requireAdmin, moveToBin); // Soft delete
 router.delete("/posts/:id", requireAdmin, deletePost); // Hard delete
+router.post("/posts/upload", requireAdmin, upload.single("image"), uploadBlogImage);
 
 export default router;

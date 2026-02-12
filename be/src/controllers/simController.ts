@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { db } from "../db";
 import { simProviders, simPackages } from "../db/schema";
 import { eq } from "drizzle-orm";
+import { uploadImageToR2 } from "../utils/upload";
 
 // SIM Providers
 export const getProviders = async (req: Request, res: Response) => {
@@ -284,5 +285,34 @@ export const deletePackage = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error deleting package:", error);
         res.status(500).json({ message: "Server error" });
+    }
+};
+// Upload SIM image
+export const uploadSimImage = async (req: Request, res: Response) => {
+    try {
+        const file = req.file;
+        const { simPackageId } = req.body;
+
+        if (!file) {
+            res.status(400).json({ message: "No file uploaded" });
+            return;
+        }
+
+        const imageUrl = await uploadImageToR2(file, "sims");
+        console.log("Uploaded SIM image to R2, returning URL:", imageUrl);
+
+        // If simPackageId is provided (e.g. from Edit page), update DB immediately
+        if (simPackageId) {
+            console.log("Immediate DB update for SIM package", simPackageId, "with URL:", imageUrl);
+            await db
+                .update(simPackages)
+                .set({ featureImage: imageUrl, updatedAt: new Date() })
+                .where(eq(simPackages.id, simPackageId));
+        }
+
+        res.json({ url: imageUrl });
+    } catch (error) {
+        console.error("Error uploading SIM image:", error);
+        res.status(500).json({ message: "Upload failed" });
     }
 };
