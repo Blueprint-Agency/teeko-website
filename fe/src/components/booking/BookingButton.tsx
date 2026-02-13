@@ -59,12 +59,12 @@ export function BookingButton({ pkg }: BookingButtonProps) {
     };
 
     return (
-        <div className="mt-8 pt-8 border-t border-[var(--border)] flex flex-col items-center">
+        <div className="flex flex-col">
             <button
                 onClick={handleBooking}
-                className={`inline-flex items-center justify-center px-10 py-5 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl w-full sm:w-auto ${isBooked
+                className={`inline-flex items-center justify-center px-10 py-5 text-lg font-bold rounded-2xl transition-all duration-300 shadow-xl w-full sm:w-fit ${isBooked
                     ? "bg-[var(--background-alt)] text-gray-500 dark:text-gray-400 border border-[var(--border)] shadow-none hover:bg-gray-100 dark:hover:bg-zinc-700"
-                    : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 shadow-gray-900/20 dark:shadow-white/10 hover:shadow-2xl hover:-translate-y-1"
+                    : "bg-red-600 text-white hover:bg-red-700 shadow-red-600/20 hover:shadow-2xl hover:-translate-y-1"
                     }`}
             >
                 {!user ? (
@@ -75,14 +75,6 @@ export function BookingButton({ pkg }: BookingButtonProps) {
                     <>Book Now <ShoppingBag className="ml-3 h-6 w-6" /></>
                 )}
             </button>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-5 text-center max-w-md">
-                {!user
-                    ? "Only registered members can book Travel SIM packages. Create an account to get started."
-                    : isBooked
-                        ? "You already have an active booking for this package. Click above to view it in your profile."
-                        : "Book this Travel SIM now. You'll receive a confirmation email shortly."
-                }
-            </p>
 
 
             <BookingModal

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
-import { Loader2, ArrowLeft, Upload, Trash2, Layout } from "lucide-react";
+import { Loader2, ArrowLeft, Upload, Trash2, Layout, Plus } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { useRouter, useParams } from "next/navigation";
@@ -37,6 +37,7 @@ export default function EditEsimPackagePage() {
         seoTitle: "",
         seoDescription: "",
         status: "DRAFT" as "DRAFT" | "PUBLISHED" | "BIN",
+        features: [] as { title: string; description: string }[],
     });
 
     useEffect(() => {
@@ -68,6 +69,7 @@ export default function EditEsimPackagePage() {
                     seoTitle: packageData.seoTitle || "",
                     seoDescription: packageData.seoDescription || "",
                     status: packageData.status || "DRAFT",
+                    features: packageData.features || [],
                 });
             } catch (error) {
                 console.error("Failed to fetch data", error);
@@ -306,6 +308,70 @@ export default function EditEsimPackagePage() {
                                     placeholder="https://provider.com/buy"
                                 />
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Core Features */}
+                    <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-lg font-semibold dark:text-white">Core Product Features</h2>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setFormData({
+                                    ...formData,
+                                    features: [...formData.features, { title: "", description: "" }]
+                                })}
+                            >
+                                <Plus className="h-4 w-4 mr-1" /> Add Feature
+                            </Button>
+                        </div>
+
+                        <div className="space-y-4">
+                            {formData.features.map((feature, index) => (
+                                <div key={index} className="flex gap-4 items-start p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-xl relative group">
+                                    <div className="flex-1 space-y-3">
+                                        <input
+                                            type="text"
+                                            className="block w-full rounded-md border border-gray-200 p-2 text-sm font-semibold dark:bg-zinc-800 dark:border-zinc-700 dark:text-white"
+                                            placeholder="Feature Title"
+                                            value={feature.title}
+                                            onChange={e => {
+                                                const newFeatures = [...formData.features];
+                                                newFeatures[index].title = e.target.value;
+                                                setFormData({ ...formData, features: newFeatures });
+                                            }}
+                                        />
+                                        <textarea
+                                            rows={2}
+                                            className="block w-full rounded-md border border-gray-200 p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white"
+                                            placeholder="Feature Description..."
+                                            value={feature.description}
+                                            onChange={e => {
+                                                const newFeatures = [...formData.features];
+                                                newFeatures[index].description = e.target.value;
+                                                setFormData({ ...formData, features: newFeatures });
+                                            }}
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="text-red-500 hover:text-red-700 p-1 lg:opacity-0 group-hover:opacity-100 transition-opacity"
+                                        onClick={() => {
+                                            const newFeatures = formData.features.filter((_, i) => i !== index);
+                                            setFormData({ ...formData, features: newFeatures });
+                                        }}
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            ))}
+                            {formData.features.length === 0 && (
+                                <div className="text-center py-8 border-2 border-dashed border-gray-100 dark:border-zinc-800 rounded-xl text-gray-400 text-sm">
+                                    No core features added yet.
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
