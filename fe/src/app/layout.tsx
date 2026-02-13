@@ -57,6 +57,8 @@ import { MaintenanceProvider } from "@/components/providers/MaintenanceProvider"
 import { GoogleAuthProvider } from "@/components/providers/GoogleAuthProvider";
 import { SnippetInjector } from "@/components/layout/SnippetInjector";
 import { AdminRedirect } from "@/components/layout/AdminRedirect";
+import GTMTracker from "@/components/layout/GTMTracker";
+import { Suspense } from "react";
 
 async function getSnippets() {
   const apiUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
@@ -118,6 +120,9 @@ export default async function RootLayout({
         <AdminRedirect />
         <GoogleAuthProvider>
           <MaintenanceProvider>
+            <Suspense fallback={null}>
+              <GTMTracker />
+            </Suspense>
             {children}
           </MaintenanceProvider>
         </GoogleAuthProvider>
