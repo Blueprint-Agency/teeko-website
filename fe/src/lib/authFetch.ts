@@ -36,7 +36,7 @@ export const isSessionExpiredResponse = (status: number): boolean => {
 // Redirect to login with session expired message
 export const redirectToLogin = (router: ReturnType<typeof useRouter>, message?: string) => {
     clearSession();
-    const loginUrl = `/login?expired=true${message ? `&message=${encodeURIComponent(message)}` : ''}`;
+    const loginUrl = `/auth/login?expired=true${message ? `&message=${encodeURIComponent(message)}` : ''}`;
     router.push(loginUrl);
 };
 
