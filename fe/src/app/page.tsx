@@ -3,7 +3,6 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { FeaturedSection } from "@/components/sections/FeaturedSection";
 import { EsimSection } from "@/components/sections/EsimSection";
 import { BlogSection } from "@/components/sections/BlogSection";
-import { CTASection } from "@/components/sections/CTASection";
 import { Footer } from "@/components/layout/Footer";
 import { API_BASE_URL } from "@/lib/constants";
 
@@ -60,8 +59,6 @@ export default async function Home() {
 
         {/* 3. Explore Blogs */}
         <BlogSection posts={blogPosts} />
-
-        <CTASection />
       </main>
       <Footer />
     </div>
