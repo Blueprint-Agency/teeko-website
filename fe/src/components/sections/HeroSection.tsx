@@ -1,6 +1,5 @@
 "use client";
 
-import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -13,7 +12,6 @@ const heroImages = [
 ];
 
 export function HeroSection() {
-    const [searchQuery, setSearchQuery] = useState("");
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const router = useRouter();
 
@@ -24,13 +22,6 @@ export function HeroSection() {
 
         return () => clearInterval(interval);
     }, []);
-
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            router.push(`/restaurants?search=${encodeURIComponent(searchQuery)}`);
-        }
-    };
 
     return (
         <section className="relative min-h-[520px] lg:min-h-[580px] flex items-center justify-center overflow-hidden">
@@ -52,41 +43,29 @@ export function HeroSection() {
             {/* Content */}
             <div className="relative z-10 max-w-container mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16">
                 {/* Main Headline */}
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-                    Find Your Next <span className="text-primary-400">Best Destination</span>
+                <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+                    Travel Malaysia <span className="text-primary-400 italic">Easy</span> with Teeko
                 </h1>
 
                 {/* Description */}
-                <p className="text-base sm:text-lg text-white/80 mb-8 max-w-xl mx-auto leading-relaxed">
+                <p className="text-base sm:text-lg text-white/80 mb-10 max-w-xl mx-auto leading-relaxed">
                     Discover amazing places across Malaysia, curated just for you
                 </p>
 
-                {/* Search Bar with Glow */}
-                <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-8">
-                    <div className="relative flex items-center">
-                        <div className="relative flex-1 group">
-                            {/* Glowing outline effect */}
-                            <div className="absolute -inset-1 bg-gradient-to-r from-primary-500 via-primary-400 to-primary-500 rounded-full opacity-70 blur-md group-hover:opacity-100 transition-opacity animate-pulse" />
+                {/* CTA Button */}
+                <div className="flex justify-center mb-12">
+                    <button
+                        onClick={() => router.push('/sim')}
+                        className="group relative px-8 py-5 bg-primary-500 hover:bg-primary-600 text-white text-lg font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-primary-500/40"
+                    >
+                        {/* Glowing effect base */}
+                        <div className="absolute -inset-1 bg-primary-400 rounded-full opacity-20 blur-lg group-hover:opacity-50 transition-opacity animate-pulse" />
 
-                            <div className="relative">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search places..."
-                                    className="w-full pl-12 pr-28 py-4 bg-[var(--card-bg)] rounded-full text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none shadow-2xl text-sm sm:text-base border border-[var(--border)] group-focus-within:border-primary-500/50"
-                                />
-                                <button
-                                    type="submit"
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-full transition-colors"
-                                >
-                                    Search
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                        <span className="relative flex items-center gap-3">
+                            Get limited free travel SIM now
+                        </span>
+                    </button>
+                </div>
 
                 {/* Quick Stats */}
                 <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-12">
