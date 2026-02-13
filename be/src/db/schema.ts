@@ -89,6 +89,7 @@ export const simPackages = pgTable("sim_packages", {
     ctaLink: text("cta_link"),
     seoTitle: varchar("seo_title"),
     seoDescription: text("seo_description"),
+    features: jsonb("features"), // [{ title, description }]
     status: simStatusEnum("status").default("DRAFT").notNull(),
     publishedAt: timestamp("published_at"),
     createdAt: timestamp("created_at").defaultNow().notNull(),

@@ -1,0 +1,1 @@
+ALTER TABLE "sim_packages" ADD COLUMN "features" jsonb;

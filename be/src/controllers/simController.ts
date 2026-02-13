@@ -77,6 +77,7 @@ export const getPackages = async (req: Request, res: Response) => {
                 ctaLink: simPackages.ctaLink,
                 seoTitle: simPackages.seoTitle,
                 seoDescription: simPackages.seoDescription,
+                features: simPackages.features,
                 status: simPackages.status,
                 publishedAt: simPackages.publishedAt,
                 createdAt: simPackages.createdAt,
@@ -110,6 +111,7 @@ export const getPublishedPackages = async (req: Request, res: Response) => {
                 ctaLink: simPackages.ctaLink,
                 seoTitle: simPackages.seoTitle,
                 seoDescription: simPackages.seoDescription,
+                features: simPackages.features,
                 publishedAt: simPackages.publishedAt,
                 provider: {
                     id: simProviders.id,
@@ -143,6 +145,7 @@ export const getPackageBySlug = async (req: Request, res: Response) => {
                 ctaLink: simPackages.ctaLink,
                 seoTitle: simPackages.seoTitle,
                 seoDescription: simPackages.seoDescription,
+                features: simPackages.features,
                 publishedAt: simPackages.publishedAt,
                 provider: {
                     id: simProviders.id,
@@ -188,7 +191,7 @@ export const getPackageById = async (req: Request, res: Response) => {
 };
 
 export const createPackage = async (req: Request, res: Response) => {
-    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, status } = req.body;
+    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, status, features } = req.body;
 
     // Validate price
     if (price) {
@@ -213,6 +216,7 @@ export const createPackage = async (req: Request, res: Response) => {
                 ctaLink,
                 seoTitle,
                 seoDescription,
+                features,
                 status: status || "DRAFT",
                 publishedAt: (status === "PUBLISHED") ? new Date() : null,
             })
@@ -227,7 +231,7 @@ export const createPackage = async (req: Request, res: Response) => {
 
 export const updatePackage = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, status } = req.body;
+    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, status, features } = req.body;
 
     let formattedPrice = price;
 
@@ -257,6 +261,7 @@ export const updatePackage = async (req: Request, res: Response) => {
                 ctaLink,
                 seoTitle,
                 seoDescription,
+                features,
                 status,
                 publishedAt: (status === "PUBLISHED") ? new Date() : null,
                 updatedAt: new Date(),
