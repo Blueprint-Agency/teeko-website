@@ -33,7 +33,7 @@ jobs:
             NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_AI_APP_URL=${{ vars.NEXT_PUBLIC_AI_APP_URL }}
             NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ vars.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
-            NEXT_PUBLIC_GTM_ID=${{ vars.NEXT_PUBLIC_GTM_ID || 'GTM-58VWTG5C' }}
+            NEXT_PUBLIC_GTM_ID=${{ vars.NEXT_PUBLIC_GTM_ID || 'GTM-5C57VVZC' }}
             NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
             BACKEND_URL=${{ vars.BACKEND_URL || 'http://backend-site:3000' }}
 
