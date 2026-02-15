@@ -26,19 +26,11 @@ interface EsimSectionProps {
 export function EsimSection({ packages }: EsimSectionProps) {
     if (packages.length === 0) return null;
 
-    // Sort by Duration (Low to High)
+    // Sort by Price (Lowest to Highest)
     const sortedPackages = [...packages].sort((a, b) => {
-        const durationA = a.duration || Infinity;
-        const durationB = b.duration || Infinity;
-
-        // Normalize to hours if needed (assuming days if unit missing or 'days')
-        const unitA = a.durationUnit || 'days';
-        const unitB = b.durationUnit || 'days';
-
-        const hoursA = unitA === 'days' ? durationA * 24 : durationA;
-        const hoursB = unitB === 'days' ? durationB * 24 : durationB;
-
-        return hoursA - hoursB;
+        const priceA = a.price ? parseInt(a.price.replace(/[^\d]/g, ""), 10) : Infinity;
+        const priceB = b.price ? parseInt(b.price.replace(/[^\d]/g, ""), 10) : Infinity;
+        return priceA - priceB;
     });
 
     return (
@@ -82,9 +74,16 @@ export function EsimSection({ packages }: EsimSectionProps) {
                                             )}
                                         </div>
                                         {pkg.provider && (
-                                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-                                                by {pkg.provider.name}
-                                            </p>
+                                            <div className="flex flex-wrap gap-2 mb-3">
+                                                <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+                                                    {pkg.provider.name}
+                                                </span>
+                                                {pkg.duration && (
+                                                    <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                                                        {pkg.duration} {pkg.durationUnit || 'days'}
+                                                    </span>
+                                                )}
+                                            </div>
                                         )}
                                         <div className="mt-4">
                                             <div className="inline-flex items-center justify-center w-full py-2.5 bg-red-600 group-hover:bg-red-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg shadow-red-600/20 group-hover:shadow-red-600/30">
