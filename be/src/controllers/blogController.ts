@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../db";
 import { blogPosts, blogContentBlocks, restaurants, locations, restaurantImages, restaurantStats } from "../db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, sql } from "drizzle-orm";
 import { uploadImageToR2 } from "../utils/upload";
 
 // Get all blog posts (admin)
@@ -51,7 +51,7 @@ export const getPostBySlug = async (req: Request, res: Response) => {
             .select()
             .from(blogContentBlocks)
             .where(eq(blogContentBlocks.blogPostId, post.id))
-            .orderBy(blogContentBlocks.orderIndex);
+            .orderBy(sql`CAST(${blogContentBlocks.orderIndex} AS INTEGER)`);
 
         // Enrich blocks with linked entities
         const enrichedBlocks = await Promise.all(
@@ -115,7 +115,7 @@ export const getPostById = async (req: Request, res: Response) => {
             .select()
             .from(blogContentBlocks)
             .where(eq(blogContentBlocks.blogPostId, id as string))
-            .orderBy(blogContentBlocks.orderIndex);
+            .orderBy(sql`CAST(${blogContentBlocks.orderIndex} AS INTEGER)`);
 
         res.json({ ...post, contentBlocks: blocks });
     } catch (error) {
