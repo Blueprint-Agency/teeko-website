@@ -82,17 +82,10 @@ export default function EsimPage() {
         const matchesDuration = !selectedDuration || `${pkg.duration} ${pkg.durationUnit || 'days'}` === selectedDuration;
         return matchesProvider && matchesDuration;
     }).sort((a, b) => {
-        // Sort by Duration (Low to High)
-        const durationA = a.duration || Infinity;
-        const durationB = b.duration || Infinity;
-
-        const unitA = a.durationUnit || 'days';
-        const unitB = b.durationUnit || 'days';
-
-        const hoursA = unitA === 'days' ? durationA * 24 : durationA;
-        const hoursB = unitB === 'days' ? durationB * 24 : durationB;
-
-        return hoursA - hoursB;
+        // Sort by Price (Lowest to Highest)
+        const priceA = a.price ? parseInt(a.price.replace(/[^\d]/g, ""), 10) : Infinity;
+        const priceB = b.price ? parseInt(b.price.replace(/[^\d]/g, ""), 10) : Infinity;
+        return priceA - priceB;
     });
 
     return (
