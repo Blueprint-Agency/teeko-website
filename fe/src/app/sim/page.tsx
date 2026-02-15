@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Loader2, ExternalLink, ChevronDown, Sparkles, Check } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Loader2, ExternalLink, Sparkles } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import Link from "next/link";
 import { Footer } from "@/components/layout/Footer";
 import { Navigation } from "@/components/layout/Navigation";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { Dropdown } from "@/components/shared/Dropdown";
 
 interface Provider {
     id: string;
@@ -31,11 +32,7 @@ export default function EsimPage() {
     const [loading, setLoading] = useState(true);
     const [selectedProvider, setSelectedProvider] = useState<string>("all");
     const [providers, setProviders] = useState<Provider[]>([]);
-    const [selectedDuration, setSelectedDuration] = useState<string | null>(null);
-
-    // Custom dropdown support
-    const [providerMenuOpen, setProviderMenuOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [selectedDuration, setSelectedDuration] = useState<string>("all");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,16 +57,6 @@ export default function EsimPage() {
         fetchData();
     }, []);
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setProviderMenuOpen(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
     // Extract unique durations for filter
     const uniqueDurations = Array.from(new Set(packages.map(p => {
@@ -79,7 +66,7 @@ export default function EsimPage() {
 
     const filteredPackages = packages.filter(pkg => {
         const matchesProvider = selectedProvider === "all" || pkg.provider?.id === selectedProvider;
-        const matchesDuration = !selectedDuration || `${pkg.duration} ${pkg.durationUnit || 'days'}` === selectedDuration;
+        const matchesDuration = selectedDuration === "all" || `${pkg.duration} ${pkg.durationUnit || 'days'}` === selectedDuration;
         return matchesProvider && matchesDuration;
     }).sort((a, b) => {
         // Sort by Price (Lowest to Highest)
@@ -107,78 +94,28 @@ export default function EsimPage() {
                     {/* Sidebar Filters (Desktop) */}
                     <div className="w-64 shrink-0 hidden lg:block sticky top-24 self-start">
                         <div className="space-y-8">
-                            {/* Filter Group: Provider (Custom Dropdown) */}
-                            <div>
-                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Provider</h3>
-                                <div className="relative" ref={dropdownRef}>
-                                    <button
-                                        type="button"
-                                        onClick={() => setProviderMenuOpen(!providerMenuOpen)}
-                                        className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none flex items-center justify-between transition-all"
-                                    >
-                                        <span className="truncate">
-                                            {selectedProvider === "all" ? "All Providers" : providers.find(p => p.id === selectedProvider)?.name || "Select Provider"}
-                                        </span>
-                                        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${providerMenuOpen ? "rotate-180" : ""}`} />
-                                    </button>
+                            <Dropdown
+                                label="Provider"
+                                options={[
+                                    { id: "all", label: "All Providers" },
+                                    ...providers.map(p => ({ id: p.id, label: p.name }))
+                                ]}
+                                selectedId={selectedProvider}
+                                onSelect={setSelectedProvider}
+                            />
 
-                                    {providerMenuOpen && (
-                                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl shadow-xl z-20 overflow-hidden max-h-60 overflow-y-auto">
-                                            <button
-                                                className={`w-full text-left px-4 py-3 text-sm transition-colors flex items-center justify-between ${selectedProvider === "all" ? "bg-red-50 dark:bg-red-900/10 text-red-600" : "hover:bg-[var(--background-alt)] text-[var(--foreground)]"}`}
-                                                onClick={() => { setSelectedProvider("all"); setProviderMenuOpen(false); }}
-                                            >
-                                                All Providers
-                                                {selectedProvider === "all" && <Check className="w-4 h-4 text-red-600" />}
-                                            </button>
-                                            {providers.map(provider => (
-                                                <button
-                                                    key={provider.id}
-                                                    className={`w-full text-left px-4 py-3 text-sm transition-colors flex items-center justify-between ${selectedProvider === provider.id ? "bg-red-50 dark:bg-red-900/10 text-red-600" : "hover:bg-[var(--background-alt)] text-[var(--foreground)]"}`}
-                                                    onClick={() => { setSelectedProvider(provider.id); setProviderMenuOpen(false); }}
-                                                >
-                                                    {provider.name}
-                                                    {selectedProvider === provider.id && <Check className="w-4 h-4 text-red-600" />}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Filter Group: Duration (Replaces Price Range) */}
-                            <div>
-                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Duration</h3>
-                                <div className="flex flex-wrap gap-2">
-                                    <button
-                                        onClick={() => setSelectedDuration(null)}
-                                        className={`px-3 py-2 border rounded-lg text-xs font-semibold transition-all ${!selectedDuration
-                                            ? "bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20"
-                                            : "bg-[var(--card-bg)] border-[var(--border)] text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 dark:hover:text-red-400"
-                                            }`}
-                                    >
-                                        All
-                                    </button>
-                                    {uniqueDurations.sort().map(duration => (
-                                        <button
-                                            key={duration}
-                                            onClick={() => setSelectedDuration(selectedDuration === duration ? null : duration)}
-                                            className={`px-3 py-2 border rounded-lg text-xs font-semibold transition-all ${selectedDuration === duration
-                                                ? "bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20"
-                                                : "bg-[var(--card-bg)] border-[var(--border)] text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 dark:hover:text-red-400"
-                                                }`}
-                                        >
-                                            {duration}
-                                        </button>
-                                    ))}
-                                    {uniqueDurations.length === 0 && (
-                                        <p className="text-sm text-gray-500 italic">No duration filters available</p>
-                                    )}
-                                </div>
-                            </div>
+                            <Dropdown
+                                label="Duration"
+                                options={[
+                                    { id: "all", label: "All Durations" },
+                                    ...uniqueDurations.map(d => ({ id: d, label: d }))
+                                ]}
+                                selectedId={selectedDuration}
+                                onSelect={setSelectedDuration}
+                            />
 
                             {/* Feature Card */}
-                            <div className="bg-gray-900 rounded-xl p-4 text-white relative overflow-hidden group cursor-pointer shadow-lg">
+                            <div className="bg-gray-900 rounded-xl p-4 text-white relative overflow-hidden group cursor-pointer shadow-lg transition-transform hover:scale-[1.02]">
                                 <div className="absolute inset-0 bg-gradient-to-tr from-red-600/20 to-transparent"></div>
                                 <Sparkles className="w-8 h-8 mb-2 text-red-500" />
                                 <h4 className="font-bold text-lg">New Releases</h4>
@@ -188,30 +125,29 @@ export default function EsimPage() {
                     </div>
 
                     {/* Mobile Filters */}
-                    <div className="lg:hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                        {/* Mobile Provider Dropdown (Simple Select for Mobile UX usually better, but requirements said "own UI dropdown". Assuming Desktop requirement primarily, but keeping native select for mobile is often better for accessibility/usability unless explicitly asked to change mobile too. I'll stick to native for mobile to avoid complexity unless user complaints, as 'dropdown' usually refers to desktop) */}
-                        <select
-                            value={selectedProvider}
-                            onChange={(e) => setSelectedProvider(e.target.value)}
-                            className="appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none"
-                        >
-                            <option value="all">All Providers</option>
-                            {providers.map(provider => (
-                                <option key={provider.id} value={provider.id}>{provider.name}</option>
-                            ))}
-                        </select>
-
-                        {/* Mobile Duration Filter */}
-                        <select
-                            value={selectedDuration || ""}
-                            onChange={(e) => setSelectedDuration(e.target.value || null)}
-                            className="appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none"
-                        >
-                            <option value="">All Durations</option>
-                            {uniqueDurations.sort().map(duration => (
-                                <option key={duration} value={duration}>{duration}</option>
-                            ))}
-                        </select>
+                    <div className="lg:hidden flex flex-col gap-4 mb-8">
+                        <div className="flex gap-3">
+                            <Dropdown
+                                className="flex-1"
+                                options={[
+                                    { id: "all", label: "All Providers" },
+                                    ...providers.map(p => ({ id: p.id, label: p.name }))
+                                ]}
+                                selectedId={selectedProvider}
+                                onSelect={setSelectedProvider}
+                                placeholder="Provider"
+                            />
+                            <Dropdown
+                                className="flex-1"
+                                options={[
+                                    { id: "all", label: "All Durations" },
+                                    ...uniqueDurations.map(d => ({ id: d, label: d }))
+                                ]}
+                                selectedId={selectedDuration}
+                                onSelect={setSelectedDuration}
+                                placeholder="Duration"
+                            />
+                        </div>
                     </div>
 
                     {/* Results Grid */}
@@ -222,65 +158,66 @@ export default function EsimPage() {
                             </div>
                         ) : (
                             <>
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div className="flex -mx-4 px-4 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:pb-0 md:px-0 md:mx-0">
                                     {filteredPackages.map(pkg => (
-                                        <Link
-                                            key={pkg.id}
-                                            href={`/sim/${pkg.slug}`}
-                                            className="group"
-                                        >
-                                            <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-black/10 dark:hover:shadow-black/30 transition-all duration-300 hover:-translate-y-1 flex flex-col">
-                                                {pkg.featureImage && (
-                                                    <div className="aspect-square overflow-hidden bg-gray-100 dark:bg-zinc-800 relative">
-                                                        <img
-                                                            src={pkg.featureImage}
-                                                            alt={pkg.packageName}
-                                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                                        />
-                                                    </div>
-                                                )}
-                                                <div className="p-5 flex flex-col flex-1">
-                                                    <div className="flex items-start justify-between mb-2">
-                                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-1">
-                                                            {pkg.packageName}
-                                                        </h3>
-                                                    </div>
-
-                                                    {pkg.price && (
-                                                        <div className="mb-3">
-                                                            <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                                                                {pkg.price}
-                                                            </span>
+                                        <div key={pkg.id} className="min-w-[280px] md:min-w-0 snap-center h-auto">
+                                            <Link
+                                                href={`/sim/${pkg.slug}`}
+                                                className="group h-full flex flex-col"
+                                            >
+                                                <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-black/10 dark:hover:shadow-black/30 transition-all duration-300 hover:-translate-y-1 flex flex-col">
+                                                    {pkg.featureImage && (
+                                                        <div className="aspect-square overflow-hidden bg-gray-100 dark:bg-zinc-800 relative">
+                                                            <img
+                                                                src={pkg.featureImage}
+                                                                alt={pkg.packageName}
+                                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                            />
                                                         </div>
                                                     )}
+                                                    <div className="p-5 flex flex-col flex-1">
+                                                        <div className="flex items-start justify-between mb-2">
+                                                            <h3 className="text-sm md:text-lg font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-1">
+                                                                {pkg.packageName}
+                                                            </h3>
+                                                        </div>
 
-                                                    <div className="flex flex-wrap gap-2 mb-3">
-                                                        {pkg.provider && (
-                                                            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
-                                                                {pkg.provider.name}
-                                                            </span>
+                                                        {pkg.price && (
+                                                            <div className="mb-3">
+                                                                <span className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                                                                    {pkg.price}
+                                                                </span>
+                                                            </div>
                                                         )}
-                                                        {pkg.duration && (
-                                                            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-                                                                {pkg.duration} {pkg.durationUnit || 'days'}
-                                                            </span>
+
+                                                        <div className="flex flex-wrap gap-2 mb-3">
+                                                            {pkg.provider && (
+                                                                <span className="text-[10px] md:text-xs font-medium px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+                                                                    {pkg.provider.name}
+                                                                </span>
+                                                            )}
+                                                            {pkg.duration && (
+                                                                <span className="text-[10px] md:text-xs font-medium px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                                                                    {pkg.duration} {pkg.durationUnit || 'days'}
+                                                                </span>
+                                                            )}
+                                                        </div>
+
+                                                        {pkg.about && (
+                                                            <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4 flex-1">
+                                                                {pkg.about}
+                                                            </p>
                                                         )}
-                                                    </div>
 
-                                                    {pkg.about && (
-                                                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4 flex-1">
-                                                            {pkg.about}
-                                                        </p>
-                                                    )}
-
-                                                    <div className="mt-auto pt-4 border-t border-[var(--border)]">
-                                                        <div className="flex items-center justify-between text-red-600 dark:text-red-400 font-semibold text-sm group-hover:translate-x-1 transition-transform">
-                                                            View Details <ExternalLink className="h-4 w-4" />
+                                                        <div className="mt-auto pt-4 border-t border-[var(--border)]">
+                                                            <div className="flex items-center justify-between text-red-600 dark:text-red-400 font-semibold text-xs md:text-sm group-hover:translate-x-1 transition-transform">
+                                                                View Details <ExternalLink className="h-4 w-4" />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </Link>
+                                            </Link>
+                                        </div>
                                     ))}
                                 </div>
 
@@ -292,7 +229,7 @@ export default function EsimPage() {
                                         <button
                                             onClick={() => {
                                                 setSelectedProvider("all");
-                                                setSelectedDuration(null);
+                                                setSelectedDuration("all");
                                             }}
                                             className="mt-4 text-red-600 font-medium hover:underline"
                                         >

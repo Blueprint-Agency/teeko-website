@@ -8,6 +8,7 @@ import { calculateCombinedRating, calculateCombinedReviewCount } from "@/utils/r
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { Dropdown } from "@/components/shared/Dropdown";
 
 interface RestaurantsPageProps {
     initialRestaurants: any[];
@@ -94,25 +95,15 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                     {/* Sidebar Filters (Desktop Focused) */}
                     <div className="w-64 shrink-0 hidden lg:block sticky top-8 self-start">
                         <div className="space-y-8">
-                            {/* Filter Group: Locations */}
-                            <div>
-                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Location</h3>
-                                <div className="relative">
-                                    <select
-                                        value={selectedLocation || ""}
-                                        onChange={(e) => setSelectedLocation(e.target.value || null)}
-                                        className="w-full appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm font-semibold focus:ring-2 focus:ring-red-500 outline-none cursor-pointer pr-10"
-                                    >
-                                        <option value="">All Locations</option>
-                                        {locations.map(loc => (
-                                            <option key={loc.id} value={loc.id}>
-                                                {loc.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                                </div>
-                            </div>
+                            <Dropdown
+                                label="Location"
+                                options={[
+                                    { id: "all", label: "All Locations" },
+                                    ...locations.map(loc => ({ id: loc.id, label: loc.name }))
+                                ]}
+                                selectedId={selectedLocation || "all"}
+                                onSelect={(id) => setSelectedLocation(id === "all" ? null : id)}
+                            />
 
                             {/* Filter Group: Price */}
                             <div>
@@ -201,25 +192,15 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                         </div>
 
                         <div className="flex-1 space-y-8 overflow-y-auto pr-2 scrollbar-hide">
-                            {/* Location Filter */}
-                            <div>
-                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Location</h3>
-                                <div className="relative">
-                                    <select
-                                        value={selectedLocation || ""}
-                                        onChange={(e) => setSelectedLocation(e.target.value || null)}
-                                        className="w-full appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm font-semibold focus:ring-2 focus:ring-red-500 outline-none cursor-pointer pr-10"
-                                    >
-                                        <option value="">All Locations</option>
-                                        {locations.map(loc => (
-                                            <option key={loc.id} value={loc.id}>
-                                                {loc.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                                </div>
-                            </div>
+                            <Dropdown
+                                label="Location"
+                                options={[
+                                    { id: "all", label: "All Locations" },
+                                    ...locations.map(loc => ({ id: loc.id, label: loc.name }))
+                                ]}
+                                selectedId={selectedLocation || "all"}
+                                onSelect={(id) => setSelectedLocation(id === "all" ? null : id)}
+                            />
 
                             {/* Map View Link */}
                             <div className="bg-gray-900 rounded-xl p-6 text-white relative overflow-hidden group cursor-pointer shadow-lg mt-auto">

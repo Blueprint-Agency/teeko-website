@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FOOTER_SECTIONS, LEGAL_LINKS } from "@/lib/navigation";
 
 
 export function Footer() {
@@ -29,59 +30,21 @@ export function Footer() {
                     </div>
 
 
-                    {/* Navigation Links */}
-                    <div>
-                        <h3 className="text-[var(--foreground)] font-semibold mb-4">Navigation</h3>
-                        <ul className="space-y-3">
-                            <li>
-                                <Link href="/" className="text-sm hover:text-red-500 transition-colors">
-                                    Home
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/about" className="text-sm hover:text-red-500 transition-colors">
-                                    About Us
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/restaurants" className="text-sm hover:text-red-500 transition-colors">
-                                    Restaurants
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/blog" className="text-sm hover:text-red-500 transition-colors">
-                                    Blog
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Resources */}
-                    <div>
-                        <h3 className="text-[var(--foreground)] font-semibold mb-4">Resources</h3>
-                        <ul className="space-y-3">
-                            <li>
-                                <Link href="/help" className="text-sm hover:text-red-500 transition-colors">
-                                    Help Center
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/contact" className="text-sm hover:text-red-500 transition-colors">
-                                    Contact Us
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/privacy" className="text-sm hover:text-red-500 transition-colors">
-                                    Privacy Policy
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/terms" className="text-sm hover:text-red-500 transition-colors">
-                                    Terms of Service
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
+                    {/* Dynamic Sections */}
+                    {FOOTER_SECTIONS.map((section) => (
+                        <div key={section.title}>
+                            <h3 className="text-[var(--foreground)] font-semibold mb-4">{section.title}</h3>
+                            <ul className="space-y-3">
+                                {section.links.map((link) => (
+                                    <li key={link.href}>
+                                        <Link href={link.href} className="text-sm hover:text-red-500 transition-colors">
+                                            {link.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
                 </div>
 
                 {/* Bottom Bar */}
@@ -91,12 +54,15 @@ export function Footer() {
                             © {currentYear} Teeko. All rights reserved.
                         </p>
                         <div className="flex gap-6">
-                            <Link href="/privacy" className="text-sm text-[var(--muted)] hover:text-red-500 transition-colors">
-                                Privacy
-                            </Link>
-                            <Link href="/terms" className="text-sm text-[var(--muted)] hover:text-red-500 transition-colors">
-                                Terms
-                            </Link>
+                            {LEGAL_LINKS.map((link) => (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className="text-sm text-[var(--muted)] hover:text-red-500 transition-colors"
+                                >
+                                    {link.label}
+                                </Link>
+                            ))}
                         </div>
                     </div>
                 </div>

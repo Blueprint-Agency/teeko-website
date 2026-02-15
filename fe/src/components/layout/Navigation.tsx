@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Menu, X, Sparkles, User as UserIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeSwitch } from "../shared/ThemeSwitch";
+import { MAIN_MENU } from "@/lib/navigation";
 
 export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -25,12 +26,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const menuItems = [
-        { label: "Home", href: "/" },
-        { label: "Restaurants", href: "/restaurants" },
-        { label: "Travel SIM", href: "/sim" },
-        { label: "Blog", href: "/blog" },
-    ];
+    const menuItems = MAIN_MENU;
 
     return (
         <nav

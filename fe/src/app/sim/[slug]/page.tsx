@@ -114,7 +114,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                             )}
 
                             <div className="p-8 md:p-14 lg:p-20 flex flex-col justify-center">
-                                <div className="mb-10">
+                                <div className="mb-6 md:mb-10">
                                     <div className="flex flex-wrap gap-2 mb-6">
                                         <span className="px-3 py-1 bg-red-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest">
                                             Travel SIM
@@ -129,7 +129,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                         {pkg.packageName}
                                     </h1>
 
-                                    <div className="flex items-baseline mb-8">
+                                    <div className="flex items-baseline mb-4 md:mb-8">
                                         <span className="text-3xl md:text-6xl font-black text-red-600 dark:text-red-500">
                                             {pkg.price}
                                         </span>
@@ -142,7 +142,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                     )}
                                 </div>
 
-                                <div className="pt-10 border-t border-[var(--border)]">
+                                <div className="pt-6 md:pt-10 border-t border-[var(--border)]">
                                     <BookingButton
                                         pkg={{
                                             id: pkg.id,
