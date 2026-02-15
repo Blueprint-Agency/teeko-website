@@ -1,0 +1,40 @@
+name: FE CI/CD
+
+on:
+  push:
+    branches: [ staging, main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    # Select environment based on branch
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/teeko-site-fe:${{ github.ref_name == 'main' && 'latest' || 'staging' }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/teeko-site-fe:${{ github.ref_name == 'main' && 'latest' || 'staging' }}-${{ github.sha }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_AI_APP_URL=${{ vars.NEXT_PUBLIC_AI_APP_URL }}
+            NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ vars.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+            NEXT_PUBLIC_GTM_ID=${{ vars.NEXT_PUBLIC_GTM_ID || 'GTM-58VWTG5C' }}
+            NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
+            BACKEND_URL=${{ vars.BACKEND_URL || 'http://backend-site:3000' }}
+
+
