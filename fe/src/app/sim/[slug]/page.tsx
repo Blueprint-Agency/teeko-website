@@ -125,20 +125,18 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                             </span>
                                         )}
                                     </div>
-                                    <h1 className="text-4xl md:text-5xl lg:text-5xl font-black text-gray-900 dark:text-white mb-6 leading-[1.1]">
+                                    <h1 className="text-3xl md:text-5xl lg:text-5xl font-black text-gray-900 dark:text-white mb-6 leading-[1.1]">
                                         {pkg.packageName}
                                     </h1>
 
-                                    {pkg.price && (
-                                        <div className="flex items-baseline mb-8">
-                                            <span className="text-4xl md:text-6xl font-black text-red-600 dark:text-red-500">
-                                                {pkg.price}
-                                            </span>
-                                        </div>
-                                    )}
+                                    <div className="flex items-baseline mb-8">
+                                        <span className="text-3xl md:text-6xl font-black text-red-600 dark:text-red-500">
+                                            {pkg.price}
+                                        </span>
+                                    </div>
 
                                     {pkg.about && (
-                                        <div className="text-gray-600 dark:text-gray-400 leading-relaxed text-lg whitespace-pre-line max-w-xl">
+                                        <div className="text-gray-600 dark:text-gray-400 leading-relaxed text-base md:text-lg whitespace-pre-line max-w-xl">
                                             {pkg.about}
                                         </div>
                                     )}
@@ -160,18 +158,18 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                     {/* Core Product Features */}
                     {pkg.features && pkg.features.length > 0 && (
                         <div className="space-y-8">
-                            <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white">Core Product Features</h2>
+                            <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">Core Product Features</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 {pkg.features.map((feature, index) => (
                                     <div key={index} className="flex gap-6">
-                                        <div className="text-6xl md:text-8xl font-black text-red-600 tabular-nums shrink-0 leading-none">
+                                        <div className="text-5xl md:text-8xl font-black text-red-600 tabular-nums shrink-0 leading-none">
                                             {(index + 1).toString().padStart(2, '0')}
                                         </div>
                                         <div className="space-y-2 pt-2">
-                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors">
+                                            <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white transition-colors">
                                                 {feature.title}
                                             </h3>
-                                            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                            <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
                                                 {feature.description}
                                             </p>
                                         </div>
@@ -183,45 +181,45 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
 
                     <div className="space-y-10">
                         <div className="space-y-4">
-                            <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white">Supports Multiple Payment Methods</h2>
+                            <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">Supports Multiple Payment Methods</h2>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="flex -mx-4 px-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:grid md:grid-cols-3 gap-6 md:pb-0 md:px-0 md:mx-0">
                             {/* Local Payments */}
-                            <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
+                            <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
                                 <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                                        <h3 className="text-white font-bold text-lg leading-tight">Local digital payment methods</h3>
+                                        <h3 className="text-white font-bold text-base md:text-lg leading-tight">Local digital payment methods</h3>
                                     </div>
                                     <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=800" alt="Local payments" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                 </div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                     It supports major e-wallets in Malaysia, such as DuitNow, ShopeePay, Touch 'n Go eWallet, Grabpay, and Boost.
                                 </p>
                             </div>
 
                             {/* International Payments */}
-                            <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
+                            <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
                                 <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                                        <h3 className="text-white font-bold text-lg leading-tight">International payment methods</h3>
+                                        <h3 className="text-white font-bold text-base md:text-lg leading-tight">International payment methods</h3>
                                     </div>
                                     <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800" alt="International payments" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                 </div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                     It is compatible with credit/debit cards (Visa/MasterCard), FPX online banking, and commonly used international payment channels such as Alipay and WeChat Pay.
                                 </p>
                             </div>
 
                             {/* Automated Flow */}
-                            <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
+                            <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
                                 <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                                        <h3 className="text-white font-bold text-lg leading-tight">Automated processing flow</h3>
+                                        <h3 className="text-white font-bold text-base md:text-lg leading-tight">Automated processing flow</h3>
                                     </div>
                                     <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800" alt="Automation" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                 </div>
-                                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                     Funds arrive in real time, and the system automatically completes SIM card activation and commission settlement, improving efficiency and transparency.
                                 </p>
                             </div>
@@ -233,29 +231,31 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                         <div className="space-y-8 pt-8">
                             <div className="flex items-end justify-between">
                                 <div className="space-y-2">
-                                    <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white">Other Packages</h2>
-                                    <p className="text-gray-600 dark:text-gray-400">Discover more options from {pkg.provider?.name}</p>
+                                    <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">Other Packages</h2>
+                                    <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">Discover more options from {pkg.provider?.name}</p>
                                 </div>
                                 <Link href="/sim" className="text-red-600 dark:text-red-400 font-bold hover:underline hidden md:block">
                                     View All SIMs →
                                 </Link>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="flex -mx-4 px-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:pb-0 sm:px-0 sm:mx-0">
                                 {relatedPackages.map((rp) => (
-                                    <Link key={rp.id} href={`/sim/${rp.slug}`} className="group">
-                                        <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1">
-                                            {rp.featureImage && (
-                                                <div className="aspect-[4/3] overflow-hidden">
-                                                    <img src={rp.featureImage} alt={rp.packageName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                    <div key={rp.id} className="min-w-[260px] sm:min-w-0 snap-center">
+                                        <Link href={`/sim/${rp.slug}`} className="group">
+                                            <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 h-full">
+                                                {rp.featureImage && (
+                                                    <div className="aspect-square overflow-hidden bg-gray-100 dark:bg-zinc-800">
+                                                        <img src={rp.featureImage} alt={rp.packageName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                    </div>
+                                                )}
+                                                <div className="p-4 space-y-2">
+                                                    <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors line-clamp-1">{rp.packageName}</h3>
+                                                    <p className="text-red-600 dark:text-red-500 font-black text-lg">{rp.price}</p>
                                                 </div>
-                                            )}
-                                            <div className="p-4 space-y-2">
-                                                <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors line-clamp-1">{rp.packageName}</h3>
-                                                <p className="text-red-600 dark:text-red-500 font-black text-lg">{rp.price}</p>
                                             </div>
-                                        </div>
-                                    </Link>
+                                        </Link>
+                                    </div>
                                 ))}
                             </div>
                         </div>
