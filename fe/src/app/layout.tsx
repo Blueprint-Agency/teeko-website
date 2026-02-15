@@ -23,11 +23,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
     if (res.ok) {
       const settings = await res.json();
+      const faviconUrl = settings.faviconUrl || "/favicon.ico";
+      // Add cache busting query param if updatedAt exists
+      const cacheBust = settings.updatedAt ? `?v=${new Date(settings.updatedAt).getTime()}` : "";
+
       return {
         title: settings.siteTitle || "Teeko Advisor",
         description: settings.siteDescription || "Discover amazing restaurants near you.",
         icons: {
-          icon: settings.faviconUrl || "/favicon.ico",
+          icon: `${faviconUrl}${cacheBust}`,
+          shortcut: `${faviconUrl}${cacheBust}`,
+          apple: `${faviconUrl}${cacheBust}`, // Optional but good for iOS
         },
         robots: {
           index: settings.googleIndexing,
