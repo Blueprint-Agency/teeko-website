@@ -62,7 +62,7 @@ export const ReviewStatsCard = ({ stats, source }: { stats: ReviewStats, source:
                             <span className="font-bold text-white text-lg">TA</span>
                         </div>
                     )}
-                    <span className="font-bold text-gray-900 dark:text-white text-lg">{stats.source}</span>
+                    <span className="font-bold text-gray-900 dark:text-white text-lg">{source} Rating</span>
                 </div>
                 <ExternalLink className="w-4 h-4 text-gray-400" />
             </div>
