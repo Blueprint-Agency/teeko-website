@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { GoogleTagManager } from '@next/third-parties/google';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,93 +56,25 @@ const themeScript = `
 
 import { MaintenanceProvider } from "@/components/providers/MaintenanceProvider";
 import { GoogleAuthProvider } from "@/components/providers/GoogleAuthProvider";
-import { SnippetInjector } from "@/components/layout/SnippetInjector";
 import { AdminRedirect } from "@/components/layout/AdminRedirect";
-import GTMRouteChange from "@/components/layout/GTMRouteChange";
-import Script from "next/script";
-
-async function getSnippets() {
-  const apiUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-  try {
-    const res = await fetch(`${apiUrl}/admin/public/snippets`, {
-      next: { revalidate: 60 }
-    });
-    if (res.ok) return res.json();
-  } catch (error) {
-    console.warn("Failed to fetch snippets during SSR");
-  }
-  return [];
-}
-
-interface Snippet {
-  id: string;
-  content: string;
-  position: "HEAD" | "BODY";
-  target: "EVERY_PAGE" | "SPECIFIC_PAGE";
-  pagePath: string | null;
-  isActive: boolean;
-}
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const snippets: Snippet[] = await getSnippets();
-
-  // Note: Filtering SPECIFIC_PAGE snippets on the server requires knowing the path.
-  // In Next.js App Router, we usually do this in the layout or page.
-  // However, layout.tsx doesn't receive the current path easily except via parallel routes or headers (hacky).
-  // For simplicity, we'll inject EVERY_PAGE snippets here and let client-side handle specific pages if needed,
-  // OR we just inject all active snippets and let them manage their own logic if they are scripts.
-  // Actually, standard practice for many analytics is "every page".
-
-  const headSnippets = snippets.filter(s => s.isActive && s.position === "HEAD" && s.target === "EVERY_PAGE");
-  const bodySnippets = snippets.filter(s => s.isActive && s.position === "BODY" && s.target === "EVERY_PAGE");
-
   return (
     <html lang="en" suppressHydrationWarning>
+      {process.env.NEXT_PUBLIC_GTM_ID && (
+        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+      )}
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || [];` }} />
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        {/* Render EVERY_PAGE Head snippets */}
-        {headSnippets.map(s => {
-          // If it looks like a script, use Next.js Script component for better execution
-          const isScript = s.content.includes("<script");
-          if (isScript) {
-            const srcMatch = s.content.match(/src=["']([^"']+)["']/i);
-            const src = srcMatch ? srcMatch[1] : undefined;
-            const scriptContent = s.content.replace(/<script[^>]*>|<\/script>/gi, '').trim();
 
-            return (
-              <Script
-                key={s.id}
-                id={`snippet-head-${s.id}`}
-                src={src}
-                strategy="afterInteractive"
-                dangerouslySetInnerHTML={!src ? { __html: scriptContent } : undefined}
-              />
-            );
-          }
-          return <div key={s.id} dangerouslySetInnerHTML={{ __html: s.content }} />; // Fallback
-        })}
-        <SnippetInjector snippets={snippets} position="HEAD" />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-white dark:bg-gray-900`}
       >
-        <GTMRouteChange />
-        {/* Render EVERY_PAGE Body snippets (like GTM noscript) */}
-        {bodySnippets.map(s => (
-          <div
-            key={s.id}
-            id={`snippet-body-${s.id}`}
-            dangerouslySetInnerHTML={{ __html: s.content }}
-            className="hidden"
-          />
-        ))}
-
-        <SnippetInjector snippets={snippets} position="BODY" />
         <AdminRedirect />
         <GoogleAuthProvider>
           <MaintenanceProvider>
@@ -152,4 +85,5 @@ export default async function RootLayout({
     </html>
   );
 }
+
 
