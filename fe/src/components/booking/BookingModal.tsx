@@ -17,6 +17,8 @@ interface BookingModalProps {
     onBookingSuccess?: () => void;
 }
 
+import { sendGTMEvent } from "@next/third-parties/google";
+
 export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: BookingModalProps) {
     const [quantity, setQuantity] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +27,10 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
     const { fetchWithAuth } = useAuthFetch();
 
     if (!isOpen) return null;
+
+    const priceValue = parseFloat(pkg.price?.replace(/[^0-9.]/g, '') || "0") || 0;
+    const currency = pkg.price?.replace(/[0-9.]/g, '').trim() || "RM";
+    const totalPrice = priceValue * quantity;
 
     const handleConfirm = async () => {
         setIsLoading(true);
@@ -42,6 +48,22 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
 
             if (result.error) throw new Error(result.error);
 
+            // Send GTM Purchase Event (Official GA4 / GTM Standard)
+            sendGTMEvent({
+                event: 'purchase',
+                ecommerce: {
+                    transaction_id: result.data?.id || `booking_${Date.now()}`,
+                    value: totalPrice,
+                    currency: currency === 'RM' ? 'MYR' : currency,
+                    items: [{
+                        item_id: pkg.id,
+                        item_name: pkg.packageName,
+                        price: priceValue,
+                        quantity: quantity
+                    }]
+                }
+            });
+
             setIsSuccess(true);
             if (onBookingSuccess) onBookingSuccess();
             setTimeout(() => {
@@ -55,9 +77,8 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
         }
     };
 
-    const priceValue = parseFloat(pkg.price?.replace(/[^0-9.]/g, '') || "0") || 0;
-    const currency = pkg.price?.replace(/[0-9.]/g, '').trim() || "RM";
-    const totalPrice = (priceValue * quantity).toFixed(2);
+
+
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
@@ -91,7 +112,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                     </div>
                                     <div className="flex justify-between items-center pt-2 border-t border-[var(--border)]">
                                         <span className="text-sm text-gray-500 dark:text-zinc-400 font-bold uppercase">Total Price</span>
-                                        <span className="text-lg text-red-600 dark:text-red-400 font-black">{currency} {totalPrice}</span>
+                                        <span className="text-lg text-red-600 dark:text-red-400 font-black">{currency} {totalPrice.toFixed(2)}</span>
                                     </div>
                                 </div>
                             </div>

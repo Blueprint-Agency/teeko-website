@@ -57,6 +57,8 @@ const themeScript = `
 import { MaintenanceProvider } from "@/components/providers/MaintenanceProvider";
 import { GoogleAuthProvider } from "@/components/providers/GoogleAuthProvider";
 import { AdminRedirect } from "@/components/layout/AdminRedirect";
+import GTMTracking from "@/components/layout/GTMTracking";
+import { Suspense } from "react";
 
 export default async function RootLayout({
   children,
@@ -69,7 +71,6 @@ export default async function RootLayout({
         <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
       )}
       <head>
-
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
@@ -78,6 +79,9 @@ export default async function RootLayout({
         <AdminRedirect />
         <GoogleAuthProvider>
           <MaintenanceProvider>
+            <Suspense fallback={null}>
+              <GTMTracking />
+            </Suspense>
             {children}
           </MaintenanceProvider>
         </GoogleAuthProvider>
@@ -85,5 +89,6 @@ export default async function RootLayout({
     </html>
   );
 }
+
 
 
