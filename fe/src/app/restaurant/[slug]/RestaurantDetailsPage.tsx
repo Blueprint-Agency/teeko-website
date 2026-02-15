@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensils, Award, BookOpen } from 'lucide-react';
+import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensils, Award, BookOpen, ExternalLink } from 'lucide-react';
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { ReviewsTab } from "@/components/features/restaurant/ReviewsTab";
@@ -201,14 +201,14 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                             <div className="mb-8 border-b border-gray-200 dark:border-gray-700 pb-8">
                                 <div className="flex justify-between items-start mb-4">
                                     <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white">{restaurant?.name}</h1>
-                                    <div className="flex gap-2">
+                                    {/* <div className="flex gap-2">
                                         <button className="p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-200 dark:hover:border-red-800 hover:text-red-600 dark:hover:text-red-400 transition-all">
                                             <Share2 className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-red-600" />
                                         </button>
                                         <button className="p-2 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-200 dark:hover:border-red-800 hover:text-red-600 dark:hover:text-red-400 transition-all">
                                             <Heart className="w-5 h-5 text-gray-600 dark:text-gray-300 hover:text-red-600" />
                                         </button>
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm mb-6">
@@ -352,26 +352,33 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Location & Contact</h3>
 
                                 {/* Map Placeholder */}
-                                <div className="h-48 bg-gray-100 rounded-xl mb-6 relative overflow-hidden group">
+                                {/* <div className="h-48 bg-gray-100 rounded-xl mb-6 relative overflow-hidden group">
                                     <div className="absolute inset-0 bg-[url('https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/-74.006,40.7128,14,0/600x400?access_token=YOUR_TOKEN')] bg-cover bg-center grayscale opacity-60"></div>
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <button className="bg-white/90 backdrop-blur px-4 py-2 rounded-lg text-sm font-bold text-gray-800 shadow-sm group-hover:scale-105 transition-transform flex items-center gap-2">
-                                            <MapPin className="w-4 h-4 text-red-500" />
-                                            View Map
-                                        </button>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <div className="space-y-4 mb-6">
                                     <div className="flex items-start gap-3">
                                         <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
-                                        <p className="text-gray-600 dark:text-gray-300 text-sm">{restaurant?.address}</p>
+                                        <div className="flex flex-col gap-1">
+                                            <p className="text-gray-600 dark:text-gray-300 text-sm">{restaurant?.address}</p>
+                                            <a
+                                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant?.address || '')}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-red-600 text-xs font-bold hover:underline flex items-center gap-1"
+                                            >
+                                                View on Google Map
+                                                <ExternalLink className="w-3 h-3" />
+                                            </a>
+                                        </div>
                                     </div>
 
-                                    <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-semibold text-gray-700 dark:text-gray-200">
+                                    {/* <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-semibold text-gray-700 dark:text-gray-200">
                                         <BookOpen className="w-4 h-4" />
                                         View Menu
-                                    </button>
+                                    </button> */}
                                     <div className="flex items-center gap-3">
                                         <Phone className="w-5 h-5 text-gray-400" />
                                         <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">{restaurant?.contactInfo?.phone}</p>
