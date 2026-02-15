@@ -29,7 +29,12 @@ export async function generateMetadata(): Promise<Metadata> {
         icons: {
           icon: settings.faviconUrl || "/favicon.ico",
         },
+        robots: {
+          index: settings.googleIndexing,
+          follow: settings.googleIndexing,
+        }
       };
+
     }
   } catch (error) {
     console.warn("Skipping dynamic metadata during build (API unreachable). Using fallbacks.");
