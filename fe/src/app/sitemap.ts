@@ -20,13 +20,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
     };
 
-    // Static pages
+    // Check if indexing is enabled globally
+    try {
+        const settingsRes = await fetch(`${API_BASE_URL}/admin/settings`, { next: { revalidate: 3600 } });
+        if (settingsRes.ok) {
+            const settings = await settingsRes.json();
+            if (settings.googleIndexing === false) {
+                return []; // Return empty sitemap if indexing is disabled
+            }
+        }
+    } catch (error) {
+        console.warn('Could not fetch settings for sitemap, continuing with existing rules.');
+    }
+
+    // Static pages - Exclude /profile and other sensitive routes
     const staticPages = [
         '',
         '/blog',
         '/restaurants',
         '/sim',
-        '/profile',
     ].map((route) => ({
         url: escapeXml(`${baseUrl}${route}`),
         lastModified: new Date(),

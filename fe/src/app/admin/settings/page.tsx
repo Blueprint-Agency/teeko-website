@@ -15,6 +15,7 @@ export default function AdminSettingsPage() {
         siteDescription: "",
         faviconUrl: "",
         maintenanceMode: false,
+        googleIndexing: false,
     });
 
     useEffect(() => {
@@ -32,6 +33,7 @@ export default function AdminSettingsPage() {
                         siteDescription: settingsData.siteDescription || "",
                         faviconUrl: settingsData.faviconUrl || "",
                         maintenanceMode: settingsData.maintenanceMode || false,
+                        googleIndexing: settingsData.googleIndexing || false,
                     });
                 }
             } catch (error) {
@@ -156,6 +158,24 @@ export default function AdminSettingsPage() {
                                 >
                                     <span
                                         className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.maintenanceMode ? 'translate-x-6' : 'translate-x-1'
+                                            }`}
+                                    />
+                                </button>
+                            </div>
+
+                            <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/20">
+                                <div className="flex-1">
+                                    <h3 className="text-sm font-bold text-blue-900 dark:text-blue-400">Google Indexing</h3>
+                                    <p className="text-xs text-blue-700 dark:text-blue-500 mt-1">When enabled, search engines are allowed to crawl and index your site.</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, googleIndexing: !formData.googleIndexing })}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${formData.googleIndexing ? 'bg-blue-600' : 'bg-gray-200 dark:bg-zinc-700'
+                                        }`}
+                                >
+                                    <span
+                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.googleIndexing ? 'translate-x-6' : 'translate-x-1'
                                             }`}
                                     />
                                 </button>

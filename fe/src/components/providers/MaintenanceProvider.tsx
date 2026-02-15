@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { API_BASE_URL } from "@/lib/constants";
-import { Wrench, Clock, RefreshCcw } from "lucide-react";
+import { Wrench, RefreshCcw } from "lucide-react";
 
 export function MaintenanceProvider({ children }: { children: React.ReactNode }) {
     const [isMaintenance, setIsMaintenance] = useState(false);
@@ -67,16 +67,10 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
                         We are currently fine-tuning our platform to serve you better. We'll be back momentarily.
                     </p>
 
-                    <div className="flex items-center justify-center gap-3 bg-[var(--background-alt)] border border-[var(--border)] px-6 py-3 rounded-full">
-                        <Clock className="w-4 h-4 text-primary-600" />
-                        <span className="text-xs font-bold tracking-widest text-[var(--muted)]">
-                            Expected Uptime: Soon
-                        </span>
-                    </div>
                 </div>
 
                 <div className="mt-16 text-[10px] font-bold text-[var(--muted)] tracking-widest">
-                    TEEKO &bull; TRIP ADVISOR &bull; 2026
+                    Teeko AI &bull; 2026
                 </div>
             </div>
         );
