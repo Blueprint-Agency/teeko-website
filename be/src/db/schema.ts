@@ -63,7 +63,10 @@ export const settings = pgTable("settings", {
     siteDescription: text("site_description").default("Discover amazing restaurants near you."),
     faviconUrl: text("favicon_url"),
     maintenanceMode: boolean("maintenance_mode").default(false).notNull(),
+    googleIndexing: boolean("google_indexing").default(false).notNull(),
+
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
+
 });
 
 // SIM status enum

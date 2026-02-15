@@ -20,7 +20,7 @@ export const getSettings = async (req: Request, res: Response) => {
 };
 
 export const updateSettings = async (req: Request, res: Response) => {
-    const { siteTitle, siteDescription, faviconUrl, maintenanceMode } = req.body;
+    const { siteTitle, siteDescription, faviconUrl, maintenanceMode, googleIndexing } = req.body;
 
     try {
         const existing = await db.select().from(settings).limit(1);
@@ -29,7 +29,8 @@ export const updateSettings = async (req: Request, res: Response) => {
                 siteTitle,
                 siteDescription,
                 faviconUrl,
-                maintenanceMode: maintenanceMode ?? false
+                maintenanceMode: maintenanceMode ?? false,
+                googleIndexing: googleIndexing ?? true
             }).returning();
             res.json(newSettings);
         } else {
@@ -40,12 +41,14 @@ export const updateSettings = async (req: Request, res: Response) => {
                     siteDescription,
                     faviconUrl,
                     maintenanceMode: maintenanceMode ?? existing[0].maintenanceMode,
+                    googleIndexing: googleIndexing ?? existing[0].googleIndexing,
                     updatedAt: new Date()
                 })
                 .where(eq(settings.id, existing[0].id))
                 .returning();
             res.json(updated);
         }
+
     } catch (error) {
         console.error("Error updating settings:", error);
         res.status(500).json({ message: "Server error" });
