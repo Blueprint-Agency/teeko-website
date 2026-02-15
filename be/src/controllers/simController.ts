@@ -73,6 +73,7 @@ export const getPackages = async (req: Request, res: Response) => {
                 providerId: simPackages.providerId,
                 featureImage: simPackages.featureImage,
                 price: simPackages.price,
+                duration: simPackages.duration,
                 about: simPackages.about,
                 ctaLink: simPackages.ctaLink,
                 seoTitle: simPackages.seoTitle,
@@ -107,6 +108,7 @@ export const getPublishedPackages = async (req: Request, res: Response) => {
                 slug: simPackages.slug,
                 featureImage: simPackages.featureImage,
                 price: simPackages.price,
+                duration: simPackages.duration,
                 about: simPackages.about,
                 ctaLink: simPackages.ctaLink,
                 seoTitle: simPackages.seoTitle,
@@ -141,6 +143,7 @@ export const getPackageBySlug = async (req: Request, res: Response) => {
                 slug: simPackages.slug,
                 featureImage: simPackages.featureImage,
                 price: simPackages.price,
+                duration: simPackages.duration,
                 about: simPackages.about,
                 ctaLink: simPackages.ctaLink,
                 seoTitle: simPackages.seoTitle,
@@ -191,7 +194,8 @@ export const getPackageById = async (req: Request, res: Response) => {
 };
 
 export const createPackage = async (req: Request, res: Response) => {
-    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, status, features } = req.body;
+    const { packageName, slug, providerId, featureImage, price, duration, about, ctaLink, seoTitle, seoDescription, status, features } = req.body;
+
 
     // Validate price
     if (price) {
@@ -199,6 +203,14 @@ export const createPackage = async (req: Request, res: Response) => {
         const priceRegex = /^\d+$/;
         if (!priceRegex.test(price.toString())) {
             res.status(400).json({ message: "Price must be a whole number (integer) only. No decimals or other characters allowed." });
+            return;
+        }
+    }
+
+    // Validate duration (must be integer if provided)
+    if (duration) {
+        if (!Number.isInteger(Number(duration)) || Number(duration) <= 0) {
+            res.status(400).json({ message: "Duration must be a positive integer." });
             return;
         }
     }
@@ -212,6 +224,8 @@ export const createPackage = async (req: Request, res: Response) => {
                 providerId,
                 featureImage,
                 price: price ? `RM${price}` : null,
+                duration: duration ? parseInt(duration.toString(), 10) : 3,
+                durationUnit: req.body.durationUnit || "days",
                 about,
                 ctaLink,
                 seoTitle,
@@ -231,7 +245,7 @@ export const createPackage = async (req: Request, res: Response) => {
 
 export const updatePackage = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { packageName, slug, providerId, featureImage, price, about, ctaLink, seoTitle, seoDescription, status, features } = req.body;
+    const { packageName, slug, providerId, featureImage, price, duration, about, ctaLink, seoTitle, seoDescription, status, features } = req.body;
 
     let formattedPrice = price;
 
@@ -248,6 +262,14 @@ export const updatePackage = async (req: Request, res: Response) => {
         formattedPrice = `RM${priceStr}`;
     }
 
+    // Validate duration if it's being updated
+    if (duration !== undefined && duration !== null) {
+        if (!Number.isInteger(Number(duration)) || Number(duration) <= 0) {
+            res.status(400).json({ message: "Duration must be a positive integer." });
+            return;
+        }
+    }
+
     try {
         const [updated] = await db
             .update(simPackages)
@@ -257,6 +279,8 @@ export const updatePackage = async (req: Request, res: Response) => {
                 providerId,
                 featureImage,
                 price: formattedPrice,
+                duration: duration ? parseInt(duration.toString(), 10) : undefined,
+                durationUnit: req.body.durationUnit,
                 about,
                 ctaLink,
                 seoTitle,

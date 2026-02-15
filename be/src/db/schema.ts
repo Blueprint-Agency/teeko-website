@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text, boolean, timestamp, jsonb, pgEnum, numeric } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, text, boolean, timestamp, jsonb, pgEnum, numeric, integer } from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum("role", ["USER", "ADMIN", "SUPERADMIN"]);
 
@@ -88,6 +88,8 @@ export const simPackages = pgTable("sim_packages", {
     providerId: uuid("provider_id").references(() => simProviders.id).notNull(),
     featureImage: text("feature_image"),
     price: varchar("price", { length: 100 }),
+    duration: integer("duration").default(3).notNull(),
+    durationUnit: varchar("duration_unit", { length: 20 }).default("days").notNull(),
     about: text("about"),
     ctaLink: text("cta_link"),
     seoTitle: varchar("seo_title"),

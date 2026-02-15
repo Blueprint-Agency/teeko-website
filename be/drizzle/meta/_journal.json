@@ -148,6 +148,13 @@
       "when": 1771156049278,
       "tag": "0020_mushy_shocker",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1771166509020,
+      "tag": "0021_first_valkyrie",
+      "breakpoints": true
     }
   ]
 }
