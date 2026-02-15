@@ -128,14 +128,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                     </div>
                                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{block.linkedEntity.name}</h3>
                                     <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">{block.linkedEntity.description}</p>
-                                    <div className="flex flex-wrap gap-4 mb-6">
-                                        <div className="flex items-center text-sm text-gray-500">
-                                            <MapPin className="h-4 w-4 mr-1 text-red-500" />
-                                            {block.linkedEntity.address}
-                                        </div>
-                                        <div className="flex items-center text-sm text-gray-500">
-                                            <Utensils className="h-4 w-4 mr-1 text-red-500" />
+                                    <div className="flex flex-col gap-2 mb-6 text-sm text-gray-500">
+                                        <div className="flex items-start">
+                                            <Utensils className="h-4 w-4 mr-2 text-red-500 mt-0.5 shrink-0" />
                                             {block.linkedEntity.cuisine}
+                                        </div>
+                                        <div className="flex items-start">
+                                            <MapPin className="h-4 w-4 mr-2 text-red-500 mt-0.5 shrink-0" />
+                                            {block.linkedEntity.address}
                                         </div>
                                     </div>
                                     <Link href={`/restaurant/${block.linkedEntity.slug}`} className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-lg active:scale-95">
