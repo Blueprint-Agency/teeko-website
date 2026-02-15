@@ -91,9 +91,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     );
                 case "paragraph":
                     return (
-                        <p key={block.id} className={`${baseClasses} text-lg leading-relaxed mb-6 whitespace-pre-line`}>
-                            {block.content}
-                        </p>
+                        <div
+                            key={block.id}
+                            className={`${baseClasses} text-lg leading-relaxed mb-6 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:ml-5`}
+                            dangerouslySetInnerHTML={{ __html: block.content }}
+                        />
                     );
                 default:
                     return null;
@@ -185,11 +187,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
                             {post.title}
                         </h1>
-                        {post.metaDescription && (
-                            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 leading-relaxed font-medium max-w-3xl">
-                                {post.metaDescription}
-                            </p>
-                        )}
                     </div>
 
                     {post.featureImage && (
