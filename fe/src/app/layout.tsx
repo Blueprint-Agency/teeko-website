@@ -57,8 +57,8 @@ import { MaintenanceProvider } from "@/components/providers/MaintenanceProvider"
 import { GoogleAuthProvider } from "@/components/providers/GoogleAuthProvider";
 import { SnippetInjector } from "@/components/layout/SnippetInjector";
 import { AdminRedirect } from "@/components/layout/AdminRedirect";
-import GTMTracker from "@/components/layout/GTMTracker";
-import { Suspense } from "react";
+import GTMRouteChange from "@/components/layout/GTMRouteChange";
+import Script from "next/script";
 
 async function getSnippets() {
   const apiUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
@@ -102,27 +102,49 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer = window.dataLayer || [];` }} />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* Render EVERY_PAGE Head snippets */}
+        {headSnippets.map(s => {
+          // If it looks like a script, use Next.js Script component for better execution
+          const isScript = s.content.includes("<script");
+          if (isScript) {
+            const srcMatch = s.content.match(/src=["']([^"']+)["']/i);
+            const src = srcMatch ? srcMatch[1] : undefined;
+            const scriptContent = s.content.replace(/<script[^>]*>|<\/script>/gi, '').trim();
+
+            return (
+              <Script
+                key={s.id}
+                id={`snippet-head-${s.id}`}
+                src={src}
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={!src ? { __html: scriptContent } : undefined}
+              />
+            );
+          }
+          return <div key={s.id} dangerouslySetInnerHTML={{ __html: s.content }} />; // Fallback
+        })}
+        <SnippetInjector snippets={snippets} position="HEAD" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-white dark:bg-gray-900`}
       >
-        {/* Render EVERY_PAGE Head snippets at the top of body to avoid invalid head nesting */}
-        {headSnippets.map(s => (
-          <div key={s.id} dangerouslySetInnerHTML={{ __html: s.content }} style={{ display: 'none' }} />
-        ))}
-        {/* Render EVERY_PAGE Body snippets */}
+        <GTMRouteChange />
+        {/* Render EVERY_PAGE Body snippets (like GTM noscript) */}
         {bodySnippets.map(s => (
-          <div key={s.id} dangerouslySetInnerHTML={{ __html: s.content }} style={{ display: 'none' }} />
+          <div
+            key={s.id}
+            id={`snippet-body-${s.id}`}
+            dangerouslySetInnerHTML={{ __html: s.content }}
+            className="hidden"
+          />
         ))}
-        <SnippetInjector snippets={snippets} position="HEAD" />
+
         <SnippetInjector snippets={snippets} position="BODY" />
         <AdminRedirect />
         <GoogleAuthProvider>
           <MaintenanceProvider>
-            <Suspense fallback={null}>
-              <GTMTracker />
-            </Suspense>
             {children}
           </MaintenanceProvider>
         </GoogleAuthProvider>

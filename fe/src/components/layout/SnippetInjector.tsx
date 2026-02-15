@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { API_BASE_URL } from "@/lib/constants";
+import Script from "next/script";
 
 interface Snippet {
     id: string;
@@ -37,13 +37,31 @@ export function SnippetInjector({ snippets, position }: { snippets: Snippet[], p
 
     return (
         <>
-            {activeSnippets.map((snippet) => (
-                <div
-                    key={snippet.id}
-                    dangerouslySetInnerHTML={{ __html: snippet.content }}
-                    style={{ display: "none" }}
-                />
-            ))}
+            {activeSnippets.map((snippet) => {
+                const isScript = snippet.content.includes("<script");
+                if (isScript) {
+                    const srcMatch = snippet.content.match(/src=["']([^"']+)["']/i);
+                    const src = srcMatch ? srcMatch[1] : undefined;
+                    const scriptContent = snippet.content.replace(/<script[^>]*>|<\/script>/gi, '').trim();
+
+                    return (
+                        <Script
+                            key={snippet.id}
+                            id={`snippet-${snippet.id}`}
+                            src={src}
+                            strategy="afterInteractive"
+                            dangerouslySetInnerHTML={!src ? { __html: scriptContent } : undefined}
+                        />
+                    );
+                }
+                return (
+                    <div
+                        key={snippet.id}
+                        dangerouslySetInnerHTML={{ __html: snippet.content }}
+                        className="hidden"
+                    />
+                );
+            })}
         </>
     );
 }
