@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../db";
 import { restaurants, restaurantImages, locations, restaurantStats, restaurantReviews, restaurantShortVideos } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { getJson } from "serpapi";
 
 export const getRestaurants = async (req: Request, res: Response) => {
@@ -35,7 +35,8 @@ export const getRestaurants = async (req: Request, res: Response) => {
             .from(restaurants)
             .leftJoin(locations, eq(restaurants.locationId, locations.id))
             .leftJoin(restaurantStats, eq(restaurants.id, restaurantStats.restaurantId))
-            .where(eq(restaurants.status, "ACTIVE"));
+            .where(eq(restaurants.status, "ACTIVE"))
+            .orderBy(desc(restaurants.updatedAt));
 
         if (locationSlug) {
             // @ts-ignore - drizzle-orm and express types mismatch sometimes on req.query
