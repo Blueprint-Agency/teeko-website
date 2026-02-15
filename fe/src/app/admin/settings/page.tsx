@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
-import { Save, Loader2, Globe, Image as ImageIcon, Type } from "lucide-react";
+import { Save, Loader2, Globe, Image as ImageIcon, Type, Upload } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 
 export default function AdminSettingsPage() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
     const [formData, setFormData] = useState({
         siteTitle: "",
@@ -44,6 +46,39 @@ export default function AdminSettingsPage() {
         };
         fetchData();
     }, []);
+
+    const handleFaviconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        const token = localStorage.getItem("token");
+        const formDataUpload = new FormData();
+        formDataUpload.append("image", file);
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/admin/settings/upload`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: formDataUpload,
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                setFormData({ ...formData, faviconUrl: data.url });
+                setToast({ message: "Favicon uploaded successfully!", type: "success" });
+            } else {
+                setToast({ message: "Failed to upload favicon", type: "error" });
+            }
+        } catch (error) {
+            console.error(error);
+            setToast({ message: "Error uploading favicon", type: "error" });
+        } finally {
+            setUploading(false);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -127,16 +162,31 @@ export default function AdminSettingsPage() {
 
                         <div>
                             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                <ImageIcon className="h-4 w-4" /> Favicon URL
+                                <ImageIcon className="h-4 w-4" /> Favicon
                             </label>
-                            <div className="flex gap-4">
+                            <div className="flex items-center gap-4">
                                 <input
-                                    type="text"
-                                    className="flex-1 rounded-md border border-gray-200 p-2 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white"
-                                    value={formData.faviconUrl}
-                                    onChange={(e) => setFormData({ ...formData, faviconUrl: e.target.value })}
-                                    placeholder="https://example.com/favicon.ico"
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    ref={fileInputRef}
+                                    onChange={handleFaviconUpload}
                                 />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    disabled={uploading}
+                                    onClick={() => fileInputRef.current?.click()}
+                                >
+                                    {uploading ? (
+                                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                    ) : (
+                                        <Upload className="h-4 w-4 mr-2" />
+                                    )}
+                                    {formData.faviconUrl ? "Change Favicon" : "Upload Favicon"}
+                                </Button>
+
                                 {formData.faviconUrl && (
                                     <div className="h-10 w-10 border rounded bg-gray-50 dark:bg-zinc-800 p-1">
                                         <img src={formData.faviconUrl} alt="Favicon preview" className="h-full w-full object-contain" />
