@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensils, Award, BookOpen } from 'lucide-react';
+import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensils, Award, BookOpen, ExternalLink } from 'lucide-react';
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { ReviewsTab } from "@/components/features/restaurant/ReviewsTab";
