@@ -1,6 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -27,34 +26,8 @@ export function Footer() {
                         <p className="text-sm text-gray-400 mb-6">
                             Your trusted guide to discovering the best places in Malaysia.
                         </p>
-                        {/* Social Icons */}
-                        <div className="flex gap-3">
-                            <a
-                                href="#"
-                                className="w-10 h-10 bg-[var(--card-bg)] hover:bg-[var(--background)] border border-[var(--border)] rounded-full flex items-center justify-center transition-colors"
-                            >
-                                <Facebook className="w-5 h-5 text-gray-400 group-hover:text-red-500" />
-                            </a>
-                            <a
-                                href="#"
-                                className="w-10 h-10 bg-[var(--card-bg)] hover:bg-[var(--background)] border border-[var(--border)] rounded-full flex items-center justify-center transition-colors"
-                            >
-                                <Instagram className="w-5 h-5 text-gray-400" />
-                            </a>
-                            <a
-                                href="#"
-                                className="w-10 h-10 bg-[var(--card-bg)] hover:bg-[var(--background)] border border-[var(--border)] rounded-full flex items-center justify-center transition-colors"
-                            >
-                                <Twitter className="w-5 h-5 text-gray-400" />
-                            </a>
-                            <a
-                                href="#"
-                                className="w-10 h-10 bg-[var(--card-bg)] hover:bg-[var(--background)] border border-[var(--border)] rounded-full flex items-center justify-center transition-colors"
-                            >
-                                <Youtube className="w-5 h-5 text-gray-400" />
-                            </a>
-                        </div>
                     </div>
+
 
                     {/* Navigation Links */}
                     <div>
@@ -109,17 +82,6 @@ export function Footer() {
                             </li>
                         </ul>
                     </div>
-
-                    {/* Payment Methods */}
-                    <div className="col-span-2 md:col-span-1">
-                        <h3 className="text-[var(--foreground)] font-semibold mb-4">We Accept</h3>
-                        <div className="flex flex-wrap gap-2">
-                            <div className="px-3 py-2 bg-[var(--card-bg)] border border-[var(--border)] rounded text-xs font-medium text-[var(--foreground)]">Visa</div>
-                            <div className="px-3 py-2 bg-[var(--card-bg)] border border-[var(--border)] rounded text-xs font-medium text-[var(--foreground)]">Mastercard</div>
-                            <div className="px-3 py-2 bg-[var(--card-bg)] border border-[var(--border)] rounded text-xs font-medium text-[var(--foreground)]">PayPal</div>
-                            <div className="px-3 py-2 bg-[var(--card-bg)] border border-[var(--border)] rounded text-xs font-medium text-[var(--foreground)]">GrabPay</div>
-                        </div>
-                    </div>
                 </div>
 
                 {/* Bottom Bar */}
@@ -143,6 +105,7 @@ export function Footer() {
                 </div>
             </div>
         </footer>
+
     );
 }
 
