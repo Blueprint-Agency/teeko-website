@@ -352,20 +352,27 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Location & Contact</h3>
 
                                 {/* Map Placeholder */}
-                                <div className="h-48 bg-gray-100 rounded-xl mb-6 relative overflow-hidden group">
+                                {/* <div className="h-48 bg-gray-100 rounded-xl mb-6 relative overflow-hidden group">
                                     <div className="absolute inset-0 bg-[url('https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/-74.006,40.7128,14,0/600x400?access_token=YOUR_TOKEN')] bg-cover bg-center grayscale opacity-60"></div>
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <button className="bg-white/90 backdrop-blur px-4 py-2 rounded-lg text-sm font-bold text-gray-800 shadow-sm group-hover:scale-105 transition-transform flex items-center gap-2">
-                                            <MapPin className="w-4 h-4 text-red-500" />
-                                            View Map
-                                        </button>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <div className="space-y-4 mb-6">
                                     <div className="flex items-start gap-3">
                                         <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
-                                        <p className="text-gray-600 dark:text-gray-300 text-sm">{restaurant?.address}</p>
+                                        <div className="flex flex-col gap-1">
+                                            <p className="text-gray-600 dark:text-gray-300 text-sm">{restaurant?.address}</p>
+                                            <a
+                                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant?.address || '')}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-red-600 text-xs font-bold hover:underline flex items-center gap-1"
+                                            >
+                                                View on Google Map
+                                                <ExternalLink className="w-3 h-3" />
+                                            </a>
+                                        </div>
                                     </div>
 
                                     <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-semibold text-gray-700 dark:text-gray-200">
