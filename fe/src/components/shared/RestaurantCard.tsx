@@ -3,6 +3,7 @@
 import { Star, MapPin, BadgePercent, Utensils } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { calculateCombinedRating, calculateCombinedReviewCount } from "@/utils/rating";
 
 interface RestaurantImage {
     caption?: string;
@@ -56,6 +57,9 @@ export function RestaurantCard({
     const router = useRouter();
     const imageUrl = restaurantImages[0]?.url || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80";
 
+    const displayRating = stats ? calculateCombinedRating(stats.googleStats, stats.tripAdvisorStats) : (rating || 0);
+    const displayReviewCount = stats ? calculateCombinedReviewCount(stats.googleStats, stats.tripAdvisorStats) : (reviewCount || 0);
+
     return (
         <div
             onClick={() => router.push(`/restaurant/${slug}`)}
@@ -72,7 +76,7 @@ export function RestaurantCard({
                 {/* Rating Badge */}
                 <div className="absolute top-3 right-3 bg-[var(--card-bg)]/95 backdrop-blur-sm px-2.5 py-1.5 rounded-xl text-xs font-bold text-gray-900 dark:text-white shadow-lg flex items-center gap-1.5">
                     <Star className="w-3.5 h-3.5 fill-red-500 text-red-500" />
-                    {rating}
+                    {displayRating.toFixed(1)}
                 </div>
 
                 {/* Discount Badge */}
@@ -134,7 +138,7 @@ export function RestaurantCard({
 
                     <div className="flex flex-col items-end">
                         <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">Reviews</span>
-                        <span className="text-xs font-bold text-gray-900 dark:text-white">{stats?.googleStats?.totalReviews || 0 + stats?.tripAdvisorStats?.totalReviews || 0} reviews</span>
+                        <span className="text-xs font-bold text-gray-900 dark:text-white">{displayReviewCount} reviews</span>
                     </div>
                 </div>
 
@@ -149,7 +153,7 @@ export function RestaurantCard({
                         >
                             Reserve
                         </button>
-                        <button
+                        {/* <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 router.push(`/restaurant/${slug}#menu`);
@@ -157,7 +161,7 @@ export function RestaurantCard({
                             className="flex-1 border border-[var(--border)] text-gray-700 dark:text-gray-300 text-[10px] font-bold py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-all active:scale-95"
                         >
                             Menu
-                        </button>
+                        </button> */}
                     </div>
                 )}
             </div>

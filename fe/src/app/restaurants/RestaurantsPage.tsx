@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { RestaurantCard } from "@/components/shared/RestaurantCard";
 import { Search, SlidersHorizontal, Map, MapPin, X, ChevronDown } from "lucide-react";
+import { calculateCombinedRating, calculateCombinedReviewCount } from "@/utils/rating";
 
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
@@ -21,7 +22,13 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
     const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
     const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-    const filteredRestaurants = (restaurants || []).filter(restaurant => {
+    const enrichedRestaurants = (restaurants || []).map(r => ({
+        ...r,
+        rating: calculateCombinedRating(r.stats?.googleStats, r.stats?.tripAdvisorStats) || r.rating || 0,
+        reviewCount: calculateCombinedReviewCount(r.stats?.googleStats, r.stats?.tripAdvisorStats) || r.reviewCount || 0
+    }));
+
+    const filteredRestaurants = enrichedRestaurants.filter(restaurant => {
         // Filter by Cuisine
         if (selectedCuisines.length > 0 && !selectedCuisines.includes(restaurant.cuisine)) {
             return false;

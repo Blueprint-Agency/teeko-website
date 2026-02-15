@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { RestaurantCard } from "@/components/shared/RestaurantCard";
 import { LocationCarousel } from "@/components/blog/LocationCarousel";
+import { calculateCombinedRating } from "@/utils/rating";
 
 interface ContentBlock {
     id: string;
@@ -123,7 +124,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                         <span className="px-3 py-1 bg-red-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Editor's Pick</span>
                                         <div className="flex items-center text-yellow-500">
                                             <Star className="h-4 w-4 fill-current" />
-                                            <span className="ml-1 text-sm font-bold text-gray-900 dark:text-white">{block.linkedEntity.stats?.googleStats?.rating || 4.5}</span>
+                                            <span className="ml-1 text-sm font-bold text-gray-900 dark:text-white">
+                                                {calculateCombinedRating(block.linkedEntity.stats?.googleStats, block.linkedEntity.stats?.tripAdvisorStats).toFixed(1)}
+                                            </span>
                                         </div>
                                     </div>
                                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{block.linkedEntity.name}</h3>

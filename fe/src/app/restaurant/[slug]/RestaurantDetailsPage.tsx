@@ -10,6 +10,7 @@ import { SocialsSection } from "@/components/features/restaurant/SocialsSection"
 import { GoogleReview, SocialPost } from "@/components/features/restaurant/ReviewComponents";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { ImageModal } from "@/components/shared/ImageModal";
+import { calculateCombinedRating, calculateCombinedReviewCount } from '@/utils/rating';
 
 const CONSTANT_XHS_POSTS: SocialPost[] = [
     {
@@ -108,6 +109,9 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
     const [restaurant] = useState(initialRestaurant);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+    const combinedRating = calculateCombinedRating(restaurant?.stats?.googleStats, restaurant?.stats?.tripAdvisorStats);
+    const combinedReviewCount = calculateCombinedReviewCount(restaurant?.stats?.googleStats, restaurant?.stats?.tripAdvisorStats);
 
     const imageUrls = restaurant?.restaurantImages?.map((img: any) => img.url) || [];
 
@@ -214,10 +218,12 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm mb-6">
                                     <div className="flex items-center gap-1.5">
                                         <div className="flex text-red-500">
-                                            {[1, 2, 3, 4, 5].map(star => <Star key={star} className={`w-5 h-5 ${star <= Math.floor(((restaurant?.stats?.googleStats?.rating || 0) + (restaurant?.stats?.tripAdvisorStats?.rating || 0)) / 2 || 0) ? 'fill-current' : 'text-gray-300'}`} />)}
+                                            {[1, 2, 3, 4, 5].map(star => (
+                                                <Star key={star} className={`w-5 h-5 ${star <= Math.floor(combinedRating) ? 'fill-current' : 'text-gray-300'}`} />
+                                            ))}
                                         </div>
-                                        <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">{((restaurant?.stats?.googleStats?.rating || 0) + (restaurant?.stats?.tripAdvisorStats?.rating || 0)) / 2}</span>
-                                        <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{(restaurant?.stats?.googleStats?.totalReviews || 0) + (restaurant?.stats?.tripAdvisorStats?.totalReviews || 0)} reviews</span>
+                                        <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">{combinedRating.toFixed(1)}</span>
+                                        <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{combinedReviewCount} reviews</span>
                                     </div>
 
                                     <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">

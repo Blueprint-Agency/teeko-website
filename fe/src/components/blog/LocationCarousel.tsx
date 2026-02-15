@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star, ArrowRight } from "lucide-react";
+import { calculateCombinedRating } from "@/utils/rating";
 import Link from "next/link";
 
 interface Restaurant {
@@ -11,7 +12,10 @@ interface Restaurant {
     cuisine?: string;
     priceRange?: string;
     images?: { url: string }[];
-    stats?: { googleStats?: { rating?: number } };
+    stats?: {
+        googleStats?: { rating: number; totalReviews: number };
+        tripAdvisorStats?: { rating: number; totalReviews: number };
+    };
 }
 
 interface LocationCarouselProps {
@@ -113,7 +117,9 @@ export function LocationCarousel({ restaurants, locationName, locationId }: Loca
                                         <div className="flex items-center gap-2">
                                             <div className="flex items-center gap-1 bg-red-600 px-2 py-0.5 rounded-lg shadow-lg">
                                                 <Star className="h-2.5 w-2.5 fill-white text-white" />
-                                                <span className="text-[10px] font-black text-white">{restaurant.stats?.googleStats?.rating || 4.5}</span>
+                                                <span className="text-[10px] font-black text-white">
+                                                    {calculateCombinedRating(restaurant.stats?.googleStats, restaurant.stats?.tripAdvisorStats).toFixed(1)}
+                                                </span>
                                             </div>
                                             <span className="text-[9px] font-black uppercase tracking-widest text-white bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-lg border border-white/20">
                                                 {restaurant.cuisine || "International"}
