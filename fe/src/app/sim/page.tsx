@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Loader2, ExternalLink, ChevronDown, Sparkles } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Loader2, ExternalLink, ChevronDown, Sparkles, Check } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
-import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
+import { Navigation } from "@/components/layout/Navigation";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 
 interface Provider {
@@ -21,6 +20,8 @@ interface Package {
     slug: string;
     featureImage: string | null;
     price: string | null;
+    duration: number | null;
+    durationUnit: string | null;
     about: string | null;
     provider: Provider | null;
 }
@@ -30,7 +31,11 @@ export default function EsimPage() {
     const [loading, setLoading] = useState(true);
     const [selectedProvider, setSelectedProvider] = useState<string>("all");
     const [providers, setProviders] = useState<Provider[]>([]);
-    const [selectedPriceRange, setSelectedPriceRange] = useState<string | null>(null);
+    const [selectedDuration, setSelectedDuration] = useState<string | null>(null);
+
+    // Custom dropdown support
+    const [providerMenuOpen, setProviderMenuOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,43 +60,40 @@ export default function EsimPage() {
         fetchData();
     }, []);
 
-    const filteredPackages = packages.filter(pkg => {
-        const matchesProvider = selectedProvider === "all" || pkg.provider?.id === selectedProvider;
-
-        // Parse price (remove "RM" and other non-digits)
-        let priceVal = 0;
-        if (pkg.price) {
-            const numericString = pkg.price.replace(/[^\d]/g, "");
-            priceVal = numericString ? parseInt(numericString, 10) : 0;
-        }
-
-        let matchesPrice = true;
-        if (selectedPriceRange) {
-            switch (selectedPriceRange) {
-                case "under50":
-                    matchesPrice = priceVal < 50;
-                    break;
-                case "50-100":
-                    matchesPrice = priceVal >= 50 && priceVal <= 100;
-                    break;
-                case "100-200":
-                    matchesPrice = priceVal > 100 && priceVal <= 200;
-                    break;
-                case "over200":
-                    matchesPrice = priceVal > 200;
-                    break;
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setProviderMenuOpen(false);
             }
         }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
-        return matchesProvider && matchesPrice;
+    // Extract unique durations for filter
+    const uniqueDurations = Array.from(new Set(packages.map(p => {
+        if (!p.duration) return null;
+        return `${p.duration} ${p.durationUnit || 'days'}`;
+    }).filter(item => item !== null))) as string[];
+
+    const filteredPackages = packages.filter(pkg => {
+        const matchesProvider = selectedProvider === "all" || pkg.provider?.id === selectedProvider;
+        const matchesDuration = !selectedDuration || `${pkg.duration} ${pkg.durationUnit || 'days'}` === selectedDuration;
+        return matchesProvider && matchesDuration;
+    }).sort((a, b) => {
+        // Sort by Duration (Low to High)
+        const durationA = a.duration || Infinity;
+        const durationB = b.duration || Infinity;
+
+        const unitA = a.durationUnit || 'days';
+        const unitB = b.durationUnit || 'days';
+
+        const hoursA = unitA === 'days' ? durationA * 24 : durationA;
+        const hoursB = unitB === 'days' ? durationB * 24 : durationB;
+
+        return hoursA - hoursB;
     });
-
-    const priceRanges = [
-        { id: "under50", label: "Under RM50" },
-        { id: "50-100", label: "RM50 - RM100" },
-        { id: "100-200", label: "RM100 - RM200" },
-        { id: "over200", label: "Over RM200" },
-    ];
 
     return (
         <div className="min-h-screen bg-[var(--background)]">
@@ -109,45 +111,76 @@ export default function EsimPage() {
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Sidebar Filters (Desktop) - Match Restaurant Page Style */}
-                    <div className="w-64 shrink-0 hidden lg:block sticky top-8 self-start">
+                    {/* Sidebar Filters (Desktop) */}
+                    <div className="w-64 shrink-0 hidden lg:block sticky top-24 self-start">
                         <div className="space-y-8">
-                            {/* Filter Group: Provider */}
+                            {/* Filter Group: Provider (Custom Dropdown) */}
                             <div>
                                 <h3 className="font-bold text-gray-900 dark:text-white mb-4">Provider</h3>
-                                <div className="relative">
-                                    <select
-                                        value={selectedProvider}
-                                        onChange={(e) => setSelectedProvider(e.target.value)}
-                                        className="w-full appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none cursor-pointer pr-10"
+                                <div className="relative" ref={dropdownRef}>
+                                    <button
+                                        type="button"
+                                        onClick={() => setProviderMenuOpen(!providerMenuOpen)}
+                                        className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none flex items-center justify-between transition-all"
                                     >
-                                        <option value="all">All Providers</option>
-                                        {providers.map(provider => (
-                                            <option key={provider.id} value={provider.id}>
-                                                {provider.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                                        <span className="truncate">
+                                            {selectedProvider === "all" ? "All Providers" : providers.find(p => p.id === selectedProvider)?.name || "Select Provider"}
+                                        </span>
+                                        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${providerMenuOpen ? "rotate-180" : ""}`} />
+                                    </button>
+
+                                    {providerMenuOpen && (
+                                        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl shadow-xl z-20 overflow-hidden max-h-60 overflow-y-auto">
+                                            <button
+                                                className={`w-full text-left px-4 py-3 text-sm transition-colors flex items-center justify-between ${selectedProvider === "all" ? "bg-red-50 dark:bg-red-900/10 text-red-600" : "hover:bg-[var(--background-alt)] text-[var(--foreground)]"}`}
+                                                onClick={() => { setSelectedProvider("all"); setProviderMenuOpen(false); }}
+                                            >
+                                                All Providers
+                                                {selectedProvider === "all" && <Check className="w-4 h-4 text-red-600" />}
+                                            </button>
+                                            {providers.map(provider => (
+                                                <button
+                                                    key={provider.id}
+                                                    className={`w-full text-left px-4 py-3 text-sm transition-colors flex items-center justify-between ${selectedProvider === provider.id ? "bg-red-50 dark:bg-red-900/10 text-red-600" : "hover:bg-[var(--background-alt)] text-[var(--foreground)]"}`}
+                                                    onClick={() => { setSelectedProvider(provider.id); setProviderMenuOpen(false); }}
+                                                >
+                                                    {provider.name}
+                                                    {selectedProvider === provider.id && <Check className="w-4 h-4 text-red-600" />}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
-                            {/* Filter Group: Price (Button Style like Restaurant) */}
+                            {/* Filter Group: Duration (Replaces Price Range) */}
                             <div>
-                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Price Range</h3>
+                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Duration</h3>
                                 <div className="flex flex-wrap gap-2">
-                                    {priceRanges.map(range => (
+                                    <button
+                                        onClick={() => setSelectedDuration(null)}
+                                        className={`px-3 py-2 border rounded-lg text-xs font-semibold transition-all ${!selectedDuration
+                                            ? "bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20"
+                                            : "bg-[var(--card-bg)] border-[var(--border)] text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 dark:hover:text-red-400"
+                                            }`}
+                                    >
+                                        All
+                                    </button>
+                                    {uniqueDurations.sort().map(duration => (
                                         <button
-                                            key={range.id}
-                                            onClick={() => setSelectedPriceRange(selectedPriceRange === range.id ? null : range.id)}
-                                            className={`px-3 py-2 border rounded-lg text-xs font-semibold transition-all ${selectedPriceRange === range.id
+                                            key={duration}
+                                            onClick={() => setSelectedDuration(selectedDuration === duration ? null : duration)}
+                                            className={`px-3 py-2 border rounded-lg text-xs font-semibold transition-all ${selectedDuration === duration
                                                 ? "bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20"
                                                 : "bg-[var(--card-bg)] border-[var(--border)] text-gray-700 dark:text-gray-300 hover:border-red-500 hover:text-red-600 dark:hover:text-red-400"
                                                 }`}
                                         >
-                                            {range.label}
+                                            {duration}
                                         </button>
                                     ))}
+                                    {uniqueDurations.length === 0 && (
+                                        <p className="text-sm text-gray-500 italic">No duration filters available</p>
+                                    )}
                                 </div>
                             </div>
 
@@ -162,25 +195,28 @@ export default function EsimPage() {
                     </div>
 
                     {/* Mobile Filters */}
-                    <div className="lg:hidden flex gap-3 overflow-x-auto pb-2">
+                    <div className="lg:hidden flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                        {/* Mobile Provider Dropdown (Simple Select for Mobile UX usually better, but requirements said "own UI dropdown". Assuming Desktop requirement primarily, but keeping native select for mobile is often better for accessibility/usability unless explicitly asked to change mobile too. I'll stick to native for mobile to avoid complexity unless user complaints, as 'dropdown' usually refers to desktop) */}
                         <select
                             value={selectedProvider}
                             onChange={(e) => setSelectedProvider(e.target.value)}
-                            className="appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white"
+                            className="appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none"
                         >
                             <option value="all">All Providers</option>
                             {providers.map(provider => (
                                 <option key={provider.id} value={provider.id}>{provider.name}</option>
                             ))}
                         </select>
+
+                        {/* Mobile Duration Filter */}
                         <select
-                            value={selectedPriceRange || ""}
-                            onChange={(e) => setSelectedPriceRange(e.target.value || null)}
-                            className="appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white"
+                            value={selectedDuration || ""}
+                            onChange={(e) => setSelectedDuration(e.target.value || null)}
+                            className="appearance-none bg-[var(--card-bg)] border border-[var(--border)] rounded-lg px-4 py-2 text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none"
                         >
-                            <option value="">All Prices</option>
-                            {priceRanges.map(range => (
-                                <option key={range.id} value={range.id}>{range.label}</option>
+                            <option value="">All Durations</option>
+                            {uniqueDurations.sort().map(duration => (
+                                <option key={duration} value={duration}>{duration}</option>
                             ))}
                         </select>
                     </div>
@@ -225,12 +261,18 @@ export default function EsimPage() {
                                                         </div>
                                                     )}
 
-                                                    {pkg.provider && (
-                                                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
-                                                            <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-                                                            {pkg.provider.name}
-                                                        </p>
-                                                    )}
+                                                    <div className="flex flex-wrap gap-2 mb-3">
+                                                        {pkg.provider && (
+                                                            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+                                                                {pkg.provider.name}
+                                                            </span>
+                                                        )}
+                                                        {pkg.duration && (
+                                                            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                                                                {pkg.duration} {pkg.durationUnit || 'days'}
+                                                            </span>
+                                                        )}
+                                                    </div>
 
                                                     {pkg.about && (
                                                         <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4 flex-1">
@@ -257,7 +299,7 @@ export default function EsimPage() {
                                         <button
                                             onClick={() => {
                                                 setSelectedProvider("all");
-                                                setSelectedPriceRange(null);
+                                                setSelectedDuration(null);
                                             }}
                                             className="mt-4 text-red-600 font-medium hover:underline"
                                         >

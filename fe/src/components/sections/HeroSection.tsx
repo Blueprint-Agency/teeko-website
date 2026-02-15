@@ -70,7 +70,7 @@ export function HeroSection() {
                 {/* Quick Stats */}
                 <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-12">
                     <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">500+</div>
+                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">20+</div>
                         <div className="text-[10px] sm:text-xs text-white/70">Places</div>
                     </div>
                     <div className="text-center">
@@ -82,7 +82,7 @@ export function HeroSection() {
                         <div className="text-[10px] sm:text-xs text-white/70">Avg Rating</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">15+</div>
+                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">3</div>
                         <div className="text-[10px] sm:text-xs text-white/70">Cities</div>
                     </div>
                 </div>

@@ -13,6 +13,8 @@ interface Package {
     slug: string;
     featureImage: string | null;
     price: string | null;
+    duration: number | null;
+    durationUnit: string | null;
     about: string | null;
     provider: Provider | null;
 }
@@ -23,6 +25,21 @@ interface EsimSectionProps {
 
 export function EsimSection({ packages }: EsimSectionProps) {
     if (packages.length === 0) return null;
+
+    // Sort by Duration (Low to High)
+    const sortedPackages = [...packages].sort((a, b) => {
+        const durationA = a.duration || Infinity;
+        const durationB = b.duration || Infinity;
+
+        // Normalize to hours if needed (assuming days if unit missing or 'days')
+        const unitA = a.durationUnit || 'days';
+        const unitB = b.durationUnit || 'days';
+
+        const hoursA = unitA === 'days' ? durationA * 24 : durationA;
+        const hoursB = unitB === 'days' ? durationB * 24 : durationB;
+
+        return hoursA - hoursB;
+    });
 
     return (
         <section className="bg-[var(--background)] pb-12 pt-4 sm:pb-16 sm:pt-8 lg:pb-20 lg:pt-10 overflow-hidden">
@@ -37,7 +54,7 @@ export function EsimSection({ packages }: EsimSectionProps) {
                 </div>
 
                 <div className="flex -mx-4 px-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:pb-0 md:px-0 md:mx-0">
-                    {packages.slice(0, 3).map((pkg) => (
+                    {sortedPackages.slice(0, 3).map((pkg) => (
                         <div key={pkg.id} className="min-w-[280px] md:min-w-0 snap-center">
                             <Link
                                 href={`/sim/${pkg.slug}`}
@@ -71,7 +88,7 @@ export function EsimSection({ packages }: EsimSectionProps) {
                                         )}
                                         <div className="mt-4">
                                             <div className="inline-flex items-center justify-center w-full py-2.5 bg-red-600 group-hover:bg-red-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg shadow-red-600/20 group-hover:shadow-red-600/30">
-                                                Check price <ExternalLink className="ml-2 h-4 w-4" />
+                                                Book Now <ExternalLink className="ml-2 h-4 w-4" />
                                             </div>
                                         </div>
                                     </div>

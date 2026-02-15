@@ -32,6 +32,8 @@ export default function EditEsimPackagePage() {
         providerId: "",
         featureImage: "",
         price: "",
+        duration: "3",
+        durationUnit: "days",
         about: "",
         ctaLink: "",
         seoTitle: "",
@@ -64,6 +66,8 @@ export default function EditEsimPackagePage() {
                     providerId: packageData.providerId || "",
                     featureImage: packageData.featureImage || "",
                     price: packageData.price ? packageData.price.replace(/^RM/, "") : "",
+                    duration: packageData.duration ? packageData.duration.toString() : "3",
+                    durationUnit: packageData.durationUnit || "days",
                     about: packageData.about || "",
                     ctaLink: packageData.ctaLink || "",
                     seoTitle: packageData.seoTitle || "",
@@ -237,6 +241,29 @@ export default function EditEsimPackagePage() {
                                         onChange={e => setFormData({ ...formData, price: e.target.value })}
                                         placeholder="29"
                                     />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium dark:text-gray-300">Duration</label>
+                                <div className="flex gap-2 mt-1">
+                                    <input
+                                        type="number"
+                                        required
+                                        className="block w-2/3 rounded-md border border-gray-200 p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white"
+                                        value={formData.duration}
+                                        onChange={e => setFormData({ ...formData, duration: e.target.value })}
+                                        placeholder="e.g. 3"
+                                        min="1"
+                                    />
+                                    <select
+                                        className="block w-1/3 rounded-md border border-gray-200 p-2 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white"
+                                        value={formData.durationUnit}
+                                        onChange={e => setFormData({ ...formData, durationUnit: e.target.value })}
+                                    >
+                                        <option value="days">Days</option>
+                                        <option value="hours">Hours</option>
+                                    </select>
                                 </div>
                             </div>
 

@@ -30,7 +30,6 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
         { label: "Restaurants", href: "/restaurants" },
         { label: "Travel SIM", href: "/sim" },
         { label: "Blog", href: "/blog" },
-        { label: "Teeko App", href: process.env.NEXT_PUBLIC_AI_APP_URL || "#", external: true, special: true },
     ];
 
     return (

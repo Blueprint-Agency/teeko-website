@@ -97,9 +97,6 @@ export function Footer() {
                             <Link href="/terms" className="text-sm text-[var(--muted)] hover:text-red-500 transition-colors">
                                 Terms
                             </Link>
-                            <Link href="/cookies" className="text-sm text-[var(--muted)] hover:text-red-500 transition-colors">
-                                Cookies
-                            </Link>
                         </div>
                     </div>
                 </div>
