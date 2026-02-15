@@ -127,6 +127,13 @@
       "when": 1770959314085,
       "tag": "0017_new_zaladane",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1771153349466,
+      "tag": "0018_outstanding_amazoness",
+      "breakpoints": true
     }
   ]
 }

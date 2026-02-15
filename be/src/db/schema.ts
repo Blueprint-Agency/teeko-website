@@ -167,20 +167,6 @@ export const restaurantShortVideos = pgTable("restaurant_short_videos", {
     channel: varchar("channel").notNull(),
 });
 
-// Snippet position and target enums
-export const snippetPositionEnum = pgEnum("snippet_position", ["HEAD", "BODY"]);
-export const snippetTargetEnum = pgEnum("snippet_target", ["EVERY_PAGE", "SPECIFIC_PAGE"]);
 
-// App Snippets table
-export const appSnippets = pgTable("app_snippets", {
-    id: uuid("id").defaultRandom().primaryKey(),
-    name: varchar("name", { length: 255 }).notNull(),
-    content: text("content").notNull(),
-    position: snippetPositionEnum("position").notNull(),
-    target: snippetTargetEnum("target").notNull(),
-    pagePath: varchar("page_path", { length: 255 }), // e.g. "/restaurants", "/sim"
-    isActive: boolean("is_active").default(true).notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+
 
