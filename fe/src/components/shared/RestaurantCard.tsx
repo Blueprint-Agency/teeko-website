@@ -153,7 +153,7 @@ export function RestaurantCard({
                         >
                             Reserve
                         </button>
-                        <button
+                        {/* <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 router.push(`/restaurant/${slug}#menu`);
@@ -161,7 +161,7 @@ export function RestaurantCard({
                             className="flex-1 border border-[var(--border)] text-gray-700 dark:text-gray-300 text-[10px] font-bold py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-all active:scale-95"
                         >
                             Menu
-                        </button>
+                        </button> */}
                     </div>
                 )}
             </div>
