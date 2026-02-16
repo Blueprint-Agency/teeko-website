@@ -189,7 +189,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                 <img
                                     src={img.url}
                                     alt={`${restaurant.name} ${idx + 1}`}
-                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 pointer-events-none"
                                 />
                             </div>
                         ))}
@@ -341,7 +341,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                                     <img
                                                         src={img.url}
                                                         alt={`Gallery ${idx + 1}`}
-                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 pointer-events-none"
                                                     />
                                                 </div>
                                             ))}

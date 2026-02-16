@@ -171,7 +171,7 @@ export default function EsimPage() {
                                                             <img
                                                                 src={pkg.featureImage}
                                                                 alt={pkg.packageName}
-                                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 pointer-events-none"
                                                             />
                                                         </div>
                                                     )}

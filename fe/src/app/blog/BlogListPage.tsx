@@ -49,7 +49,7 @@ export default function BlogListPage({ initialPosts }: BlogListPageProps) {
                                             <img
                                                 src={post.featureImage}
                                                 alt={post.title}
-                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 pointer-events-none"
                                             />
                                         </div>
                                     )}

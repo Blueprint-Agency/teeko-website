@@ -246,7 +246,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                             <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 h-full">
                                                 {rp.featureImage && (
                                                     <div className="aspect-square overflow-hidden bg-gray-100 dark:bg-zinc-800">
-                                                        <img src={rp.featureImage} alt={rp.packageName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                        <img src={rp.featureImage} alt={rp.packageName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 pointer-events-none" />
                                                     </div>
                                                 )}
                                                 <div className="p-4 space-y-2">

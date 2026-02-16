@@ -61,16 +61,16 @@ export function RestaurantCard({
     const displayReviewCount = stats ? calculateCombinedReviewCount(stats.googleStats, stats.tripAdvisorStats) : (reviewCount || 0);
 
     return (
-        <div
-            onClick={() => router.push(`/restaurant/${slug}`)}
-            className="group bg-[var(--card-bg)] rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-[var(--border)] flex flex-col h-full cursor-pointer relative"
+        <Link
+            href={`/restaurant/${slug}`}
+            className="group block bg-[var(--card-bg)] rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-[var(--border)] flex flex-col h-full cursor-pointer relative"
         >
             {/* Image Section */}
             <div className="relative aspect-[4/3] overflow-hidden">
                 <img
                     src={imageUrl}
                     alt={name}
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 pointer-events-none"
                 />
 
                 {/* Rating Badge */}
@@ -165,7 +165,7 @@ export function RestaurantCard({
                     </div>
                 )}
             </div>
-        </div>
+        </Link>
     );
 }
 
