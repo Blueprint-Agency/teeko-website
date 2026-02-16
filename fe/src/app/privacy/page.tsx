@@ -18,7 +18,7 @@ export default function PrivacyPage() {
                     <div className="prose prose-lg dark:prose-invert max-w-none space-y-6 text-gray-700 dark:text-gray-300">
                         <p className="font-semibold">Effective Date: 23 April 2025</p>
 
-                        <p>This Privacy Policy (“Policy”) describes how Asia Success Resources Sdn Bhd, the operator of Teeko AI (“Teeko”, “we”, “us”, or “our”), collects, uses, processes, and discloses your Personal Data through the use of Teeko’s website (Teeko AI), mobile application, and related transport booking services (collectively, “Services”).</p>
+                        <p>This Privacy Policy (“Policy”) describes how GM Ai Tours Sdn Bhd. (201601011927) (1182858-H), the operator of Teeko AI (“Teeko”, “we”, “us”, or “our”), collects, uses, processes, and discloses your Personal Data through the use of Teeko’s website (Teeko AI), mobile application, and related transport booking services (collectively, “Services”).</p>
 
                         <p>This Policy applies to drivers, passengers, and other individuals interacting with our Services, including but not limited to agents, vendors, or service providers (collectively “you”, “your”, or “yours”).</p>
 
@@ -110,8 +110,8 @@ export default function PrivacyPage() {
                         <p>Policy may change with notice. Continued use implies acceptance.</p>
 
                         <h2 className="text-xl font-bold text-gray-900 dark:text-white mt-8">X. HOW TO CONTACT US</h2>
-                        <p><strong>Name:</strong> Asia Success Resources Sdn Bhd (Attention: Data Protection Officer)</p>
-                        <p><strong>Address:</strong> The Transportation Hub, Level 1, Lot No. L1-5 first floor, Lot No. L1-7 first floor & Lot No. L2-149, Second Floor, TERMINAL KLIA 2, KL INTERNATIONAL AIRPORT, Jalan KLIA 2/1, 64000 KLIA, Selangor</p>
+                        <p><strong>Name:</strong> GM Ai Tours Sdn Bhd. (201601011927) (1182858-H) (Attention: Data Protection Officer)</p>
+                        <p><strong>Address:</strong> No.9G, Street Wing Sunsuria Avenue, Persiaran Mahogany, Kota Damansara PJU5, 47810 Selangor Darul Ehsan</p>
                         <p><strong>Email:</strong> support@teeko.ai</p>
                         <p>We prefer inquiries via email for efficient processing.</p>
                         <p><strong>Language:</strong> This Policy is written in English. In case of conflict with translated versions, the English version prevails.</p>
