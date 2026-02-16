@@ -22,7 +22,7 @@ export const FOOTER_SECTIONS: FooterSection[] = [
         title: "Navigation",
         links: [
             { label: "Home", href: "/" },
-            { label: "About Us", href: "/about" },
+            { label: "Travel SIM", href: "/sim" },
             { label: "Restaurants", href: "/restaurants" },
             { label: "Blog", href: "/blog" },
         ]
