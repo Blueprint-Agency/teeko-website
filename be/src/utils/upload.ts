@@ -13,12 +13,17 @@ const s3Client = new S3Client({
 });
 
 export const uploadImageToR2 = async (file: Express.Multer.File, folder: string = "blogs"): Promise<string> => {
+    const bucketName = process.env.R2_BUCKET_NAME;
+    const publicUrl = process.env.R2_PUBLIC_URL?.replace(/\/$/, ""); // Remove trailing slash if exists
+
     const fileName = `${Date.now()}-${file.originalname}`;
     const key = `${folder}/${fileName}`;
 
+    console.log(`Uploading to R2 - Bucket: ${bucketName}, Folder: ${folder}, File: ${fileName}`);
+
     await s3Client.send(
         new PutObjectCommand({
-            Bucket: process.env.R2_BUCKET_NAME,
+            Bucket: bucketName,
             Key: key,
             Body: file.buffer,
             ContentType: file.mimetype,
@@ -26,7 +31,7 @@ export const uploadImageToR2 = async (file: Express.Multer.File, folder: string 
     );
 
     // According to user report, the path needs the bucket name
-    return `${process.env.R2_PUBLIC_URL}/${process.env.R2_BUCKET_NAME}/${key}`;
+    return `${publicUrl}/${bucketName}/${key}`;
 };
 
 // Legacy placeholder - will be removed once all controllers are updated
