@@ -55,9 +55,9 @@ export const AdminSidebar = () => {
             )}
 
             {/* Sidebar */}
-            <div className={`fixed lg:static inset-y-0 left-0 z-40 flex h-screen w-64 flex-col border-r border-[var(--border)] bg-[var(--card-bg)] transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+            <div className={`fixed lg:static inset-y-0 left-0 z-40 flex h-[100dvh] w-64 flex-col border-r border-[var(--border)] bg-[var(--card-bg)] transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
                 }`}>
-                <div className="flex h-16 items-center justify-center border-b border-[var(--border)]">
+                <div className="flex h-16 shrink-0 items-center justify-center border-b border-[var(--border)]">
                     <span className="text-xl font-bold text-primary-600">Teeko Admin</span>
                 </div>
 
@@ -110,8 +110,7 @@ export const AdminSidebar = () => {
                         );
                     })}
                 </nav>
-
-                <div className="border-t border-[var(--border)] p-4">
+                <div className="border-t border-[var(--border)] p-4 pb-8 lg:pb-4">
                     <button
                         onClick={() => {
                             localStorage.removeItem("token");

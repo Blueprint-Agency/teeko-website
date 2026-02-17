@@ -53,7 +53,7 @@ export default function AdminLayoutClient({
     }
 
     return (
-        <div className="flex h-screen bg-[var(--background)] overflow-hidden">
+        <div className="flex h-[100dvh] bg-[var(--background)] overflow-hidden">
             <AdminSidebar />
             <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-12 pt-16 lg:pt-12 scroll-smooth">
                 <Breadcrumbs />
