@@ -28,6 +28,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/qr/sim",
+        destination: "/sim?utm_source=qr_code&utm_medium=print&utm_campaign=sim_marketing",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
