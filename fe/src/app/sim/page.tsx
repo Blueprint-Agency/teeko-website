@@ -183,10 +183,15 @@ export default function EsimPage() {
                                                         </div>
 
                                                         {pkg.price && (
-                                                            <div className="mb-3">
+                                                            <div className="mb-3 flex items-center gap-2">
                                                                 <span className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
                                                                     {pkg.price}
                                                                 </span>
+                                                                {pkg.price === "RM0" && (
+                                                                    <span className="text-xs font-black text-green-600 dark:text-green-400 uppercase tracking-widest bg-green-100 dark:bg-green-500/20 px-2 py-0.5 rounded-md">
+                                                                        (FREE)
+                                                                    </span>
+                                                                )}
                                                             </div>
                                                         )}
 

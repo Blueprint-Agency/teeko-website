@@ -20,6 +20,18 @@ interface Feature {
     description: string;
 }
 
+interface PaymentMethod {
+    title: string;
+    description: string;
+    imageUrl: string;
+}
+
+interface ContentTemplate {
+    id: string;
+    features: Feature[] | null;
+    paymentMethods: PaymentMethod[] | null;
+}
+
 interface Package {
     id: string;
     packageName: string;
@@ -33,6 +45,7 @@ interface Package {
     providerId: string;
     provider: Provider | null;
     features: Feature[] | null;
+    contentTemplate: ContentTemplate | null;
 }
 
 async function getPackage(slug: string): Promise<Package | null> {
@@ -129,10 +142,15 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                         {pkg.packageName}
                                     </h1>
 
-                                    <div className="flex items-baseline mb-4 md:mb-8">
+                                    <div className="flex items-center gap-4 mb-4 md:mb-8">
                                         <span className="text-3xl md:text-6xl font-black text-red-600 dark:text-red-500">
                                             {pkg.price}
                                         </span>
+                                        {pkg.price === "RM0" && (
+                                            <span className="px-3 py-1 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-lg text-sm md:text-xl font-black uppercase tracking-widest">
+                                                (FREE)
+                                            </span>
+                                        )}
                                     </div>
 
                                     {pkg.about && (
@@ -156,11 +174,11 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                     </div>
 
                     {/* Core Product Features */}
-                    {pkg.features && pkg.features.length > 0 && (
+                    {(pkg.contentTemplate?.features || pkg.features) && (pkg.contentTemplate?.features || pkg.features)!.length > 0 && (
                         <div className="space-y-8">
                             <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">Core Product Features</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {pkg.features.map((feature, index) => (
+                                {(pkg.contentTemplate?.features || pkg.features)!.map((feature, index) => (
                                     <div key={index} className="flex gap-6">
                                         <div className="text-5xl md:text-8xl font-black text-red-600 tabular-nums shrink-0 leading-none">
                                             {(index + 1).toString().padStart(2, '0')}
@@ -185,44 +203,63 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                         </div>
 
                         <div className="flex -mx-4 px-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:grid md:grid-cols-3 gap-6 md:pb-0 md:px-0 md:mx-0">
-                            {/* Local Payments */}
-                            <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
-                                <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                                        <h3 className="text-white font-bold text-base md:text-lg leading-tight">Local digital payment methods</h3>
+                            {pkg.contentTemplate?.paymentMethods && pkg.contentTemplate.paymentMethods.length > 0 ? (
+                                pkg.contentTemplate.paymentMethods.map((method, index) => (
+                                    <div key={index} className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
+                                        <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
+                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">{method.title}</h3>
+                                            </div>
+                                            {method.imageUrl && <img src={method.imageUrl} alt={method.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />}
+                                        </div>
+                                        <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                            {method.description}
+                                        </p>
                                     </div>
-                                    <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=800" alt="Local payments" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                                </div>
-                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                    It supports major e-wallets in Malaysia, such as DuitNow, ShopeePay, Touch 'n Go eWallet, Grabpay, and Boost.
-                                </p>
-                            </div>
+                                ))
+                            ) : (
+                                <>
+                                    {/* Default Fallback (Hardcoded) */}
+                                    {/* Local Payments */}
+                                    <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
+                                        <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
+                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">Local digital payment methods</h3>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=800" alt="Local payments" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                        </div>
+                                        <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                            It supports major e-wallets in Malaysia, such as DuitNow, ShopeePay, Touch 'n Go eWallet, Grabpay, and Boost.
+                                        </p>
+                                    </div>
 
-                            {/* International Payments */}
-                            <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
-                                <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                                        <h3 className="text-white font-bold text-base md:text-lg leading-tight">International payment methods</h3>
+                                    {/* International Payments */}
+                                    <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
+                                        <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
+                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">International payment methods</h3>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800" alt="International payments" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                        </div>
+                                        <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                            It is compatible with credit/debit cards (Visa/MasterCard), FPX online banking, and commonly used international payment channels such as Alipay and WeChat Pay.
+                                        </p>
                                     </div>
-                                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800" alt="International payments" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                                </div>
-                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                    It is compatible with credit/debit cards (Visa/MasterCard), FPX online banking, and commonly used international payment channels such as Alipay and WeChat Pay.
-                                </p>
-                            </div>
 
-                            {/* Automated Flow */}
-                            <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
-                                <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                                        <h3 className="text-white font-bold text-base md:text-lg leading-tight">Automated processing flow</h3>
+                                    {/* Automated Flow */}
+                                    <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
+                                        <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
+                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">Automated processing flow</h3>
+                                            </div>
+                                            <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800" alt="Automation" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                        </div>
+                                        <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                            Funds arrive in real time, and the system automatically completes SIM card activation and commission settlement, improving efficiency and transparency.
+                                        </p>
                                     </div>
-                                    <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800" alt="Automation" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                                </div>
-                                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                    Funds arrive in real time, and the system automatically completes SIM card activation and commission settlement, improving efficiency and transparency.
-                                </p>
-                            </div>
+                                </>
+                            )}
                         </div>
                     </div>
 

@@ -341,7 +341,10 @@ export default function EditEsimPackagePage() {
                     {/* Core Features */}
                     <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold dark:text-white">Core Product Features</h2>
+                            <div>
+                                <h2 className="text-lg font-semibold dark:text-white">Core Product Features</h2>
+                                <p className="text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase tracking-wider mt-0.5">Note: Global content templates take precedence</p>
+                            </div>
                             <Button
                                 type="button"
                                 variant="outline"

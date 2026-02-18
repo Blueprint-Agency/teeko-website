@@ -19,6 +19,7 @@ export const AdminSidebar = () => {
             icon: Smartphone,
             children: [
                 { href: "/admin/sim/providers", label: "Providers" },
+                { href: "/admin/sim/content-template", label: "Content Template" },
                 { href: "/admin/sim/packages", label: "Packages" },
                 { href: "/admin/sim/bookings", label: "Bookings" },
             ]
@@ -127,4 +128,3 @@ export const AdminSidebar = () => {
         </>
     );
 };
-
