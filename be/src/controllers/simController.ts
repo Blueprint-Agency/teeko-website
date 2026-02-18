@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../db";
-import { simProviders, simPackages } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { simProviders, simPackages, simContentTemplates } from "../db/schema";
+import { eq, and } from "drizzle-orm";
 import { uploadImageToR2 } from "../utils/upload";
 
 // SIM Providers
@@ -168,7 +168,18 @@ export const getPackageBySlug = async (req: Request, res: Response) => {
             return;
         }
 
-        res.json(result[0]);
+        const pkg = result[0];
+
+        // Fetch template for this provider
+        const [template] = await db
+            .select()
+            .from(simContentTemplates)
+            .where(eq(simContentTemplates.providerId, pkg.provider?.id as string));
+
+        res.json({
+            ...pkg,
+            contentTemplate: template || null
+        });
     } catch (error) {
         console.error("Error fetching package:", error);
         res.status(500).json({ message: "Server error" });
@@ -346,5 +357,90 @@ export const uploadSimImage = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Error uploading SIM image:", error);
         res.status(500).json({ message: "Upload failed" });
+    }
+};
+
+// SIM Content Templates
+export const getContentTemplates = async (req: Request, res: Response) => {
+    try {
+        const templates = await db.select({
+            id: simContentTemplates.id,
+            providerId: simContentTemplates.providerId,
+            features: simContentTemplates.features,
+            paymentMethods: simContentTemplates.paymentMethods,
+            createdAt: simContentTemplates.createdAt,
+            updatedAt: simContentTemplates.updatedAt,
+            provider: {
+                id: simProviders.id,
+                name: simProviders.name,
+                slug: simProviders.slug,
+            }
+        })
+            .from(simContentTemplates)
+            .leftJoin(simProviders, eq(simContentTemplates.providerId, simProviders.id));
+        res.json(templates);
+    } catch (error) {
+        console.error("Error fetching content templates:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const getContentTemplateById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const [template] = await db.select().from(simContentTemplates).where(eq(simContentTemplates.id, id as string));
+        if (!template) {
+            res.status(404).json({ message: "Template not found" });
+            return;
+        }
+        res.json(template);
+    } catch (error) {
+        console.error("Error fetching content template:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const createContentTemplate = async (req: Request, res: Response) => {
+    const { providerId, features, paymentMethods } = req.body;
+    try {
+        const [newTemplate] = await db.insert(simContentTemplates).values({
+            providerId,
+            features,
+            paymentMethods
+        }).returning();
+        res.status(201).json(newTemplate);
+    } catch (error) {
+        console.error("Error creating content template:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const updateContentTemplate = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { providerId, features, paymentMethods } = req.body;
+    try {
+        const [updated] = await db.update(simContentTemplates)
+            .set({ providerId, features, paymentMethods, updatedAt: new Date() })
+            .where(eq(simContentTemplates.id, id as string))
+            .returning();
+        if (!updated) {
+            res.status(404).json({ message: "Template not found" });
+            return;
+        }
+        res.json(updated);
+    } catch (error) {
+        console.error("Error updating content template:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const deleteContentTemplate = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        await db.delete(simContentTemplates).where(eq(simContentTemplates.id, id as string));
+        res.json({ message: "Template deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting content template:", error);
+        res.status(500).json({ message: "Server error" });
     }
 };

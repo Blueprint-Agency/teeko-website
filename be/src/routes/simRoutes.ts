@@ -12,6 +12,11 @@ import {
     updatePackage,
     deletePackage,
     uploadSimImage,
+    getContentTemplates,
+    getContentTemplateById,
+    createContentTemplate,
+    updateContentTemplate,
+    deleteContentTemplate,
 } from "../controllers/simController";
 import { requireAdmin } from "../middleware/authMiddleware";
 import { upload } from "../middleware/uploadMiddleware";
@@ -33,5 +38,12 @@ router.post("/packages", requireAdmin, createPackage);
 router.post("/packages/upload", requireAdmin, upload.single("image"), uploadSimImage);
 router.patch("/packages/:id", requireAdmin, updatePackage);
 router.delete("/packages/:id", requireAdmin, deletePackage);
+
+// Content Template routes
+router.get("/content-templates", requireAdmin, getContentTemplates);
+router.get("/content-templates/:id", requireAdmin, getContentTemplateById);
+router.post("/content-templates", requireAdmin, createContentTemplate);
+router.patch("/content-templates/:id", requireAdmin, updateContentTemplate);
+router.delete("/content-templates/:id", requireAdmin, deleteContentTemplate);
 
 export default router;

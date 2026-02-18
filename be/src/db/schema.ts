@@ -171,7 +171,12 @@ export const restaurantShortVideos = pgTable("restaurant_short_videos", {
     source: varchar("source").notNull(),
     channel: varchar("channel").notNull(),
 });
-
-
-
-
+// SIM Content Template table
+export const simContentTemplates = pgTable("sim_content_templates", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    providerId: uuid("provider_id").references(() => simProviders.id).notNull().unique(),
+    features: jsonb("features"), // For "Core Product Features"
+    paymentMethods: jsonb("payment_methods"), // For "Supports Multiple Payment Methods"
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
