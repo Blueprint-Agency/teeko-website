@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, ExternalLink, Sparkles } from "lucide-react";
+import { Loader2, ExternalLink, Sparkles, Infinity, Zap, Mail, MapPin } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import Link from "next/link";
 import { Footer } from "@/components/layout/Footer";
@@ -70,23 +70,66 @@ export default function EsimPage() {
         return matchesProvider && matchesDuration;
     }).sort((a, b) => {
         // Sort by Price (Lowest to Highest)
-        const priceA = a.price ? parseInt(a.price.replace(/[^\d]/g, ""), 10) : Infinity;
-        const priceB = b.price ? parseInt(b.price.replace(/[^\d]/g, ""), 10) : Infinity;
-        return priceA - priceB;
+        const priceA = a.price ? (parseInt(a.price.replace(/[^\d]/g, ""), 10) || 0) : Number.MAX_SAFE_INTEGER;
+        const priceB = b.price ? (parseInt(b.price.replace(/[^\d]/g, ""), 10) || 0) : Number.MAX_SAFE_INTEGER;
+        return (priceA as number) - (priceB as number);
     });
 
     return (
         <div className="min-h-screen bg-[var(--background)]">
             <Navigation forceSolid />
-            <main className="max-w-container mx-auto px-4 py-12 pt-24">
-                <Breadcrumbs items={[{ label: "Travel SIM" }]} />
+            <main className="max-w-container mx-auto px-4 py-8 pt-20 md:py-12 md:pt-24">
+                <Breadcrumbs items={[{ label: "Travel SIM Malaysia" }]} />
 
-                <div className="mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-                        Travel SIM Packages
+                <div className="mb-8 md:mb-12">
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight">
+                        Travel SIM Packages in Malaysia
                     </h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-400">
-                        Stay connected wherever you go with our curated Travel SIM offerings
+                </div>
+
+                {/* Feature Icons Section */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-10 md:py-16 border-y border-[var(--border)] mb-10 md:mb-16">
+                    <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-14 h-14 rounded-full border-[3px] border-red-600 flex items-center justify-center text-red-600 bg-red-50 dark:bg-red-950/20">
+                            <Mail size={28} strokeWidth={3} />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-black text-gray-900 dark:text-white mb-1 uppercase tracking-tight">No ID Required</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 leading-snug font-medium">
+                                Fast and easy signup. Just register with your email address to get started instantly.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-14 h-14 rounded-full border-[3px] border-red-600 flex items-center justify-center text-red-600 bg-red-50 dark:bg-red-950/20">
+                            <MapPin size={28} strokeWidth={3} />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-black text-gray-900 dark:text-white mb-1 uppercase tracking-tight">KLIA 2 Collection</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 leading-snug font-medium">
+                                Book anytime and collect your SIM immediately upon landing at KLIA 2 airport.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-14 h-14 rounded-full border-[3px] border-red-600 flex items-center justify-center text-red-600 bg-red-50 dark:bg-red-950/20">
+                            <Infinity size={28} strokeWidth={3} />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-black text-gray-900 dark:text-white mb-1 uppercase tracking-tight">Unlimited 5G Data</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 leading-snug font-medium">
+                                Enjoy high-speed nationwide coverage for every journey across Malaysia.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="text-left mb-10 md:mb-16">
+                    <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
+                        Pick a travel package that suits your travel needs!
+                    </h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl font-medium">
+                        Choose the best high-speed, unlimited 5G data plan for your journey across Malaysia.
                     </p>
                 </div>
 
@@ -113,14 +156,6 @@ export default function EsimPage() {
                                 selectedId={selectedDuration}
                                 onSelect={setSelectedDuration}
                             />
-
-                            {/* Feature Card */}
-                            <div className="bg-gray-900 rounded-xl p-4 text-white relative overflow-hidden group cursor-pointer shadow-lg transition-transform hover:scale-[1.02]">
-                                <div className="absolute inset-0 bg-gradient-to-tr from-red-600/20 to-transparent"></div>
-                                <Sparkles className="w-8 h-8 mb-2 text-red-500" />
-                                <h4 className="font-bold text-lg">New Releases</h4>
-                                <p className="text-gray-400 text-sm">Check out our latest Travel SIM packages</p>
-                            </div>
                         </div>
                     </div>
 
@@ -162,7 +197,7 @@ export default function EsimPage() {
                                     {filteredPackages.map(pkg => (
                                         <div key={pkg.id} className="min-w-[280px] md:min-w-0 snap-center h-auto">
                                             <Link
-                                                href={`/sim/${pkg.slug}`}
+                                                href={`/travel-sim-malaysia/${pkg.slug}`}
                                                 className="group h-full flex flex-col"
                                             >
                                                 <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-black/10 dark:hover:shadow-black/30 transition-all duration-300 hover:-translate-y-1 flex flex-col">
@@ -244,6 +279,59 @@ export default function EsimPage() {
                                 )}
                             </>
                         )}
+                    </div>
+                </div>
+                {/* FAQ / Q&A Section */}
+                <div className="mt-12 md:mt-32 pt-10 md:pt-16 border-t border-[var(--border)]">
+                    <div className="max-w-4xl mx-auto">
+                        <h2 className="text-3xl md:text-4xl font-black text-gray-900 dark:text-white mb-6 md:mb-10 text-center tracking-tight">
+                            Frequently Asked Questions
+                        </h2>
+
+                        <div className="grid gap-4 md:gap-6">
+                            <div className="p-6 md:p-8 rounded-2xl bg-gray-50 dark:bg-zinc-800/30 border border-transparent hover:border-red-600/20 transition-all duration-300">
+                                <h3 className="text-lg font-black text-gray-900 dark:text-white mb-3">Where is this travel SIM card available?</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                                    Teeko Travel SIM is currently only available for use in Malaysia.
+                                </p>
+                            </div>
+
+                            <div className="p-6 md:p-8 rounded-2xl bg-gray-50 dark:bg-zinc-800/30 border border-transparent hover:border-red-600/20 transition-all duration-300">
+                                <h3 className="text-lg font-black text-gray-900 dark:text-white mb-3">How do I sign up for a travel SIM card?</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                                    No ID is required. You can book anytime and simply sign up with your email address to get started.
+                                </p>
+                            </div>
+
+                            <div className="p-6 md:p-8 rounded-2xl bg-gray-50 dark:bg-zinc-800/30 border border-transparent hover:border-red-600/20 transition-all duration-300">
+                                <h3 className="text-lg font-black text-gray-900 dark:text-white mb-3">What travel SIM card packages are available?</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                                    We offer various packages ranging from 12 hours up to 7 days to suit your travel needs.
+                                </p>
+                            </div>
+
+                            <div className="p-6 md:p-8 rounded-2xl bg-gray-50 dark:bg-zinc-800/30 border border-transparent hover:border-red-600/20 transition-all duration-300">
+                                <h3 className="text-lg font-black text-gray-900 dark:text-white mb-3">Who is eligible to book online for a travel SIM card?</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                                    Users must be at least 18 years old to register. Those between 16 and 18 may use the service with parental or legal guardian supervision.
+                                </p>
+                            </div>
+
+                            <div className="p-6 md:p-8 rounded-2xl bg-gray-50 dark:bg-zinc-800/30 border border-transparent hover:border-red-600/20 transition-all duration-300">
+                                <h3 className="text-lg font-black text-gray-900 dark:text-white mb-3">How do I redeem my Travel SIM card?</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                                    Upon booking confirmation, you will receive an email and a verification code.
+                                    Just show our staff at KLIA 2 airport your booking code to receive your SIM immediately upon landing.
+                                </p>
+                            </div>
+
+                            <div className="p-6 md:p-8 rounded-2xl bg-gray-50 dark:bg-zinc-800/30 border border-transparent hover:border-red-600/20 transition-all duration-300">
+                                <h3 className="text-lg font-black text-gray-900 dark:text-white mb-3">Can I cancel my travel SIM booking?</h3>
+                                <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                                    Yes, bookings can be cancelled via the "Your Booking" section under your profile page.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>

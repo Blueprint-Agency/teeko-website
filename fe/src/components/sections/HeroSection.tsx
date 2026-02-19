@@ -55,7 +55,7 @@ export function HeroSection() {
                 {/* CTA Button */}
                 <div className="flex justify-center mb-12">
                     <button
-                        onClick={() => router.push('/sim')}
+                        onClick={() => router.push('/travel-sim-malaysia')}
                         className="group relative px-8 py-5 bg-primary-500 hover:bg-primary-600 text-white text-lg font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-primary-500/40"
                     >
                         {/* Glowing effect base */}

@@ -13,7 +13,7 @@ export interface FooterSection {
 export const MAIN_MENU: NavItem[] = [
     { label: "Home", href: "/" },
     { label: "Restaurants", href: "/restaurants" },
-    { label: "Travel SIM", href: "/sim" },
+    { label: "Travel SIM", href: "/travel-sim-malaysia" },
     { label: "Blog", href: "/blog" },
 ];
 
@@ -22,7 +22,7 @@ export const FOOTER_SECTIONS: FooterSection[] = [
         title: "Navigation",
         links: [
             { label: "Home", href: "/" },
-            { label: "Travel SIM", href: "/sim" },
+            { label: "Travel SIM", href: "/travel-sim-malaysia" },
             { label: "Restaurants", href: "/restaurants" },
             { label: "Blog", href: "/blog" },
         ]

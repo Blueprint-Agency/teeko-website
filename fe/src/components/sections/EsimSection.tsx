@@ -49,7 +49,7 @@ export function EsimSection({ packages }: EsimSectionProps) {
                     {sortedPackages.slice(0, 3).map((pkg) => (
                         <div key={pkg.id} className="min-w-[280px] md:min-w-0 snap-center">
                             <Link
-                                href={`/sim/${pkg.slug}`}
+                                href={`/travel-sim-malaysia/${pkg.slug}`}
                                 className="group block h-full"
                             >
                                 <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1">
@@ -99,7 +99,7 @@ export function EsimSection({ packages }: EsimSectionProps) {
 
                 <div className="text-center mt-12">
                     <Link
-                        href="/sim"
+                        href="/travel-sim-malaysia"
                         className="inline-flex items-center px-8 py-3 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-white font-semibold rounded-full hover:bg-gray-50 dark:hover:bg-zinc-800 transition-all shadow-sm"
                     >
                         View All Travel SIM Packages
