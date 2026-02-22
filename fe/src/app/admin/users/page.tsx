@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Users, Mail, Chrome, ShieldCheck, ShieldAlert, Loader2, Search, Calendar } from "lucide-react";
+import { Users, Mail, Chrome, ShieldCheck, ShieldAlert, Loader2, Search, Calendar, Trash2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 
 interface User {
@@ -18,6 +18,12 @@ export default function UserMonitoringPage() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [verifyingId, setVerifyingId] = useState<string | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    const userStr = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
+    const currentUser = userStr ? JSON.parse(userStr) : null;
+    const isSuperAdmin = currentUser?.role === 'SUPERADMIN';
+    const canManageUsers = isSuperAdmin || currentUser?.permissions?.userManagement;
 
     const fetchUsers = async () => {
         try {
@@ -66,6 +72,33 @@ export default function UserMonitoringPage() {
             alert("An error occurred while verifying the user");
         } finally {
             setVerifyingId(null);
+        }
+    };
+
+    const handleDelete = async (userId: string) => {
+        if (!confirm("Are you sure you want to permanently delete this user? This action cannot be undone.")) return;
+
+        setDeletingId(userId);
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (res.ok) {
+                setUsers(prev => prev.filter(u => u.id !== userId));
+            } else {
+                const data = await res.json();
+                alert(data.message || "Failed to delete user");
+            }
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            alert("An error occurred while deleting the user");
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -144,7 +177,8 @@ export default function UserMonitoringPage() {
                                 <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Auth Method</th>
                                 <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Signup Date</th>
                                 <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Status</th>
-                                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-right">Role</th>
+                                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Role</th>
+                                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
@@ -215,13 +249,25 @@ export default function UserMonitoringPage() {
                                                 </div>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 text-right">
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`inline-block px-2 py-1 rounded-full text-[10px] font-bold uppercase ${user.role === 'SUPERADMIN' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' :
                                                 user.role === 'ADMIN' ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400' :
                                                     'bg-gray-100 text-gray-700 dark:bg-zinc-800 dark:text-gray-400'
                                                 }`}>
                                                 {user.role}
                                             </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                            {canManageUsers && user.role === 'USER' && (
+                                                <button
+                                                    onClick={() => handleDelete(user.id)}
+                                                    disabled={deletingId === user.id}
+                                                    className="p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50"
+                                                    title="Delete User"
+                                                >
+                                                    {deletingId === user.id ? <Loader2 className="h-5 w-5 animate-spin" /> : <Trash2 className="h-5 w-5" />}
+                                                </button>
+                                            )}
                                         </td>
                                     </tr>
                                 ))

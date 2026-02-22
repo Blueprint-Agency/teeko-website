@@ -2,22 +2,29 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Store, MapPin, Settings, LogOut, Smartphone, FileText, Menu, X, ChevronDown, Users } from "lucide-react";
+import { LayoutDashboard, Store, MapPin, Settings, LogOut, Smartphone, FileText, Menu, X, ChevronDown, Users, UserCog, User } from "lucide-react";
 import { useState } from "react";
 
 export const AdminSidebar = () => {
     const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
 
+    const userStr = typeof window !== 'undefined' ? localStorage.getItem("user") : null;
+    const adminUser = userStr ? JSON.parse(userStr) : null;
+    const permissions = adminUser?.permissions || {};
+    const isSuperAdmin = adminUser?.role === 'SUPERADMIN';
+
     const links = [
-        { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { href: "/admin/users", label: "Users", icon: Users },
-        { href: "/admin/restaurants", label: "Restaurants", icon: Store },
-        { href: "/admin/locations", label: "Locations", icon: MapPin },
+        { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard, show: true },
+        { href: "/admin/admins", label: "Admins", icon: UserCog, show: isSuperAdmin },
+        { href: "/admin/users", label: "Users", icon: Users, show: isSuperAdmin || permissions.userManagement },
+        { href: "/admin/restaurants", label: "Restaurants", icon: Store, show: isSuperAdmin || permissions.restaurantManagement },
+        { href: "/admin/locations", label: "Locations", icon: MapPin, show: isSuperAdmin || permissions.restaurantManagement },
         {
             href: "/admin/sim",
             label: "Travel SIM",
             icon: Smartphone,
+            show: isSuperAdmin || permissions.simManagement,
             children: [
                 { href: "/admin/sim/providers", label: "Providers" },
                 { href: "/admin/sim/content-template", label: "Content Template" },
@@ -25,8 +32,9 @@ export const AdminSidebar = () => {
                 { href: "/admin/sim/bookings", label: "Bookings" },
             ]
         },
-        { href: "/admin/blog", label: "Blog", icon: FileText },
-        { href: "/admin/settings", label: "Settings", icon: Settings },
+        { href: "/admin/blog", label: "Blog", icon: FileText, show: isSuperAdmin || permissions.blogManagement },
+        { href: "/admin/settings", label: "Settings", icon: Settings, show: isSuperAdmin || permissions.generalSettings },
+        { href: "/admin/profile", label: "My Profile", icon: User, show: true },
     ];
 
     const handleLinkClick = () => {
@@ -64,7 +72,7 @@ export const AdminSidebar = () => {
                 </div>
 
                 <nav className="flex-1 space-y-1 px-2 py-4 overflow-y-auto">
-                    {links.map((link) => {
+                    {links.filter(l => l.show).map((link) => {
                         const isActive = pathname.startsWith(link.href);
                         const hasChildren = link.children && link.children.length > 0;
                         const Icon = link.icon;

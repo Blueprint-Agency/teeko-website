@@ -34,6 +34,36 @@ export default function AdminLayoutClient({
                 router.push("/");
                 return;
             }
+
+            // Permission Based Routing check
+            const permissions = user.permissions || {};
+            const isSuperAdmin = user.role === 'SUPERADMIN';
+
+            const routePermissions: Record<string, keyof typeof permissions | 'superadmin'> = {
+                '/admin/admins': 'superadmin',
+                '/admin/users': 'userManagement',
+                '/admin/restaurants': 'restaurantManagement',
+                '/admin/locations': 'restaurantManagement',
+                '/admin/sim': 'simManagement',
+                '/admin/blog': 'blogManagement',
+                '/admin/settings': 'generalSettings',
+            };
+
+            const matchingRoute = Object.keys(routePermissions).find(route => pathname.startsWith(route));
+
+            if (matchingRoute) {
+                const required = routePermissions[matchingRoute];
+                if (required === 'superadmin') {
+                    if (!isSuperAdmin) {
+                        router.push('/admin/dashboard');
+                        return;
+                    }
+                } else if (!isSuperAdmin && !permissions[required as keyof typeof permissions]) {
+                    router.push('/admin/dashboard');
+                    return;
+                }
+            }
+
             setIsAuthorized(true);
         } catch (e) {
             router.push("/admin/auth/login");
