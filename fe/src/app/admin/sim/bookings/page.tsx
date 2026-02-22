@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Loader2, RefreshCcw, CheckCircle, XCircle, Clock, ShoppingBag, ShieldCheck, Camera, X, PartyPopper, ChevronUp, ChevronDown, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Loader2, RefreshCcw, CheckCircle, XCircle, Clock, ShoppingBag, ShieldCheck, Camera, X, PartyPopper, ChevronUp, ChevronDown, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Html5Qrcode } from "html5-qrcode";
 import { formatDateGMT8, formatTimeGMT8 } from "@/lib/dateUtils";
@@ -30,12 +30,13 @@ export default function AdminBookingsPage() {
 
     // Pagination, Sorting, Filtering state
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(20);
     const [metaData, setMetaData] = useState({ total: 0, totalPages: 1 });
     const [sortBy, setSortBy] = useState("createdAt");
     const [order, setOrder] = useState("desc");
-    const [statusFilter, setStatusFilter] = useState("all");
+    const [statusFilter, setStatusFilter] = useState("booked");
     const [packageFilter, setPackageFilter] = useState("all");
+    const [emailSearch, setEmailSearch] = useState("");
     const [availablePackages, setAvailablePackages] = useState<string[]>([]);
 
     const scannerRef = useRef<Html5Qrcode | null>(null);
@@ -49,6 +50,7 @@ export default function AdminBookingsPage() {
                 limit: limit.toString(),
                 status: statusFilter,
                 packageName: packageFilter,
+                email: emailSearch,
                 sortBy,
                 order
             });
@@ -71,8 +73,11 @@ export default function AdminBookingsPage() {
     };
 
     useEffect(() => {
-        fetchBookings();
-    }, [page, limit, statusFilter, packageFilter, sortBy, order]);
+        const timer = setTimeout(() => {
+            fetchBookings();
+        }, emailSearch ? 500 : 0);
+        return () => clearTimeout(timer);
+    }, [page, limit, statusFilter, packageFilter, sortBy, order, emailSearch]);
 
     const toggleSort = (column: string) => {
         if (sortBy === column) {
@@ -314,6 +319,17 @@ export default function AdminBookingsPage() {
                         <option key={pkg} value={pkg}>{pkg}</option>
                     ))}
                 </select>
+
+                <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-gray-400" />
+                    <input
+                        type="text"
+                        placeholder="Search by email..."
+                        value={emailSearch}
+                        onChange={(e) => { setEmailSearch(e.target.value); setPage(1); }}
+                        className="pl-9 pr-3 py-1.5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs focus:ring-2 focus:ring-primary-500 outline-none transition-all w-64"
+                    />
+                </div>
 
                 <div className="ml-auto flex items-center gap-2">
                     <span className="text-xs text-gray-500">Show:</span>
