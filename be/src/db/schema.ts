@@ -8,11 +8,19 @@ export const users = pgTable("users", {
     passwordHash: varchar("password_hash"), // Optional for Google users
     googleId: varchar("google_id").unique(),
     role: roleEnum("role").default("USER").notNull(),
+    permissions: jsonb("permissions").default({
+        userManagement: false,
+        blogManagement: false,
+        simManagement: false,
+        restaurantManagement: false,
+        generalSettings: false
+    }).notNull(),
     isVerified: boolean("is_verified").default(false).notNull(),
     verificationToken: varchar("verification_token"),
     verificationCode: varchar("verification_code", { length: 6 }),
     verificationExpires: timestamp("verification_expires"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
+    deletedAt: timestamp("deleted_at"),
 });
 
 export const locations = pgTable("locations", {
