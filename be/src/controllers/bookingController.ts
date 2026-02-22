@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../db";
 import { simBookings, simPackages, users } from "../db/schema";
-import { eq, and, ne } from "drizzle-orm";
+import { eq, and, ne, desc, asc, sql, inArray } from "drizzle-orm";
 import { sendBookingConfirmation, sendCancellationEmail } from "../utils/email";
 import crypto from "crypto";
 
@@ -105,8 +105,20 @@ export const cancelBooking = async (req: AuthRequest, res: Response) => {
 
 export const getUserBookings = async (req: AuthRequest, res: Response) => {
     const userId = req.user.id;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 5;
+    const status = req.query.status as string;
+    const offset = (page - 1) * limit;
 
     try {
+        let whereClause = eq(simBookings.userId, userId);
+
+        if (status === "current") {
+            whereClause = and(whereClause, eq(simBookings.status, "booked")) as any;
+        } else if (status === "past") {
+            whereClause = and(whereClause, inArray(simBookings.status, ["completed", "rejected", "expired", "cancelled"])) as any;
+        }
+
         const bookings = await db.select({
             id: simBookings.id,
             quantity: simBookings.quantity,
@@ -119,9 +131,26 @@ export const getUserBookings = async (req: AuthRequest, res: Response) => {
         })
             .from(simBookings)
             .innerJoin(simPackages, eq(simBookings.simId, simPackages.id))
-            .where(eq(simBookings.userId, userId));
+            .where(whereClause)
+            .orderBy(desc(simBookings.createdAt))
+            .limit(limit)
+            .offset(offset);
 
-        res.json(bookings);
+        const [totalResult] = await db.select({ count: sql<number>`count(*)` })
+            .from(simBookings)
+            .where(whereClause);
+
+        const total = Number(totalResult.count);
+
+        res.json({
+            data: bookings,
+            meta: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
     } catch (error) {
         console.error("Error fetching user bookings:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -129,7 +158,36 @@ export const getUserBookings = async (req: AuthRequest, res: Response) => {
 };
 
 export const getAdminBookings = async (req: Request, res: Response) => {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const offset = (page - 1) * limit;
+    const status = req.query.status as string;
+    const packageName = req.query.packageName as string;
+    const sortBy = req.query.sortBy as string || "createdAt";
+    const order = req.query.order as string || "desc";
+
     try {
+        let whereClause: any = undefined;
+
+        if (status && status !== "all") {
+            whereClause = eq(simBookings.status, status as any);
+        }
+        if (packageName && packageName !== "all") {
+            const packageFilter = eq(simPackages.packageName, packageName);
+            whereClause = whereClause ? and(whereClause, packageFilter) : packageFilter;
+        }
+
+        const validSortColumns: any = {
+            createdAt: simBookings.createdAt,
+            status: simBookings.status,
+            packageName: simPackages.packageName,
+            userEmail: users.email,
+            quantity: simBookings.quantity
+        };
+
+        const sortColumn = validSortColumns[sortBy] || simBookings.createdAt;
+        const sortOrder = order.toLowerCase() === "asc" ? asc(sortColumn) : desc(sortColumn);
+
         const bookings = await db.select({
             id: simBookings.id,
             quantity: simBookings.quantity,
@@ -141,9 +199,38 @@ export const getAdminBookings = async (req: Request, res: Response) => {
         })
             .from(simBookings)
             .innerJoin(simPackages, eq(simBookings.simId, simPackages.id))
-            .innerJoin(users, eq(simBookings.userId, users.id));
+            .innerJoin(users, eq(simBookings.userId, users.id))
+            .where(whereClause)
+            .orderBy(sortOrder)
+            .limit(limit)
+            .offset(offset);
 
-        res.json(bookings);
+        // Get total count for pagination
+        const [totalResult] = await db.select({ count: sql<number>`count(*)` })
+            .from(simBookings)
+            .innerJoin(simPackages, eq(simBookings.simId, simPackages.id))
+            .innerJoin(users, eq(simBookings.userId, users.id))
+            .where(whereClause);
+
+        const total = Number(totalResult.count);
+
+        // Get unique packages for filter dropdown
+        const distinctPackages = await db.select({
+            packageName: simPackages.packageName
+        })
+            .from(simPackages)
+            .groupBy(simPackages.packageName);
+
+        res.json({
+            data: bookings,
+            packages: distinctPackages.map(p => p.packageName),
+            meta: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
     } catch (error) {
         console.error("Error fetching admin bookings:", error);
         res.status(500).json({ message: "Internal server error" });

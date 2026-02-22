@@ -3,7 +3,7 @@ import { db } from "../db";
 import { restaurants, locations, users } from "../db/schema";
 import { sql, eq, isNull } from "drizzle-orm";
 import bcrypt from "bcrypt";
-import { sendVerificationEmail } from "../utils/email";
+import { sendVerificationEmail, sendAdminInvitationEmail } from "../utils/email";
 
 export const getStats = async (req: Request, res: Response) => {
     try {
@@ -125,7 +125,10 @@ export const createAdmin = async (req: Request, res: Response) => {
             isVerified: true
         }).returning();
 
-        res.status(201).json({ message: "Admin created successfully", user: newAdmin });
+        // Send invitation email
+        await sendAdminInvitationEmail(email, password);
+
+        res.status(201).json({ message: "Admin created successfully and invitation sent", user: newAdmin });
     } catch (error) {
         console.error("Error creating admin:", error);
         res.status(500).json({ message: "Server error while creating admin" });

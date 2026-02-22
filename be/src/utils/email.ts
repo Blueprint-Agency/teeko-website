@@ -141,3 +141,41 @@ export const sendCancellationEmail = async (email: string, packageName: string) 
     throw new Error("Could not send cancellation email");
   }
 };
+
+export const sendAdminInvitationEmail = async (email: string, password: string) => {
+  const loginUrl = `${process.env.FRONTEND_URL || 'https://teeko.ai'}/admin/auth/login`;
+
+  const mailOptions = {
+    from: '"Teeko Admin" <no-reply@teeko.ai>',
+    to: email,
+    subject: "Invitation to Teeko Administration Panel",
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h1 style="color: #ef4444; text-align: center;">Admin Access Granted</h1>
+        <p style="font-size: 16px; color: #333;">You have been added as an administrator for the Teeko platform.</p>
+        
+        <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="margin-top: 0; color: #111;">Your Login Credentials</h3>
+          <p style="margin: 5px 0;"><strong>Email:</strong> ${email}</p>
+          <p style="margin: 5px 0;"><strong>Temporary Password:</strong> ${password}</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="${loginUrl}" style="background-color: #ef4444; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Login to Dashboard</a>
+        </div>
+        
+        <p style="font-size: 12px; color: #666; margin-top: 30px; text-align: center;">
+          For security reasons, please change your password immediately after your first login.
+        </p>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Admin invitation email sent to ${email}`);
+  } catch (error) {
+    console.error("Error sending admin invitation email:", error);
+    throw new Error("Could not send admin invitation email");
+  }
+};
