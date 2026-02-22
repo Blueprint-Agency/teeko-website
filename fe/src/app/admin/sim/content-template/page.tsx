@@ -6,6 +6,7 @@ import { Plus, Edit2, Loader2, Trash2, Layout } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import Link from "next/link";
+import { formatDateGMT8 } from "@/lib/dateUtils";
 
 interface Provider {
     id: string;
@@ -73,11 +74,7 @@ export default function ContentTemplatesPage() {
     };
 
     const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        });
+        return formatDateGMT8(dateString);
     };
 
     return (

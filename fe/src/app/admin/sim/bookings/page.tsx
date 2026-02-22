@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Loader2, RefreshCcw, CheckCircle, XCircle, Clock, ShoppingBag, ShieldCheck, Camera, X, PartyPopper } from "lucide-react";
+import { Loader2, RefreshCcw, CheckCircle, XCircle, Clock, ShoppingBag, ShieldCheck, Camera, X, PartyPopper, ChevronUp, ChevronDown, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Html5Qrcode } from "html5-qrcode";
+import { formatDateGMT8, formatTimeGMT8 } from "@/lib/dateUtils";
 
 interface CompletedBooking {
     id: string;
@@ -25,19 +26,41 @@ export default function AdminBookingsPage() {
     const [scannerLoading, setScannerLoading] = useState(false);
     const [completedBooking, setCompletedBooking] = useState<CompletedBooking | null>(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+    // Pagination, Sorting, Filtering state
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [metaData, setMetaData] = useState({ total: 0, totalPages: 1 });
+    const [sortBy, setSortBy] = useState("createdAt");
+    const [order, setOrder] = useState("desc");
+    const [statusFilter, setStatusFilter] = useState("all");
+    const [packageFilter, setPackageFilter] = useState("all");
+    const [availablePackages, setAvailablePackages] = useState<string[]>([]);
+
     const scannerRef = useRef<Html5Qrcode | null>(null);
 
     const fetchBookings = async () => {
+        setLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/bookings/admin/all`, {
+            const params = new URLSearchParams({
+                page: page.toString(),
+                limit: limit.toString(),
+                status: statusFilter,
+                packageName: packageFilter,
+                sortBy,
+                order
+            });
+            const res = await fetch(`${API_BASE_URL}/bookings/admin/all?${params}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             });
             const data = await res.json();
             if (res.ok) {
-                setBookings(data);
+                setBookings(data.data);
+                setAvailablePackages(data.packages);
+                setMetaData(data.meta);
             }
         } catch (err) {
             console.error("Failed to fetch bookings:", err);
@@ -48,7 +71,22 @@ export default function AdminBookingsPage() {
 
     useEffect(() => {
         fetchBookings();
-    }, []);
+    }, [page, limit, statusFilter, packageFilter, sortBy, order]);
+
+    const toggleSort = (column: string) => {
+        if (sortBy === column) {
+            setOrder(order === "asc" ? "desc" : "asc");
+        } else {
+            setSortBy(column);
+            setOrder("desc");
+        }
+        setPage(1);
+    };
+
+    const renderSortIcon = (column: string) => {
+        if (sortBy !== column) return <ChevronUp className="w-3 h-3 opacity-20" />;
+        return order === "asc" ? <ChevronUp className="w-3 h-3 text-primary-600" /> : <ChevronDown className="w-3 h-3 text-primary-600" />;
+    };
 
     // Cleanup scanner on unmount
     useEffect(() => {
@@ -245,6 +283,51 @@ export default function AdminBookingsPage() {
                 </form>
             </div>
 
+            {/* Filters */}
+            <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-xl border border-gray-100 dark:border-zinc-800">
+                <div className="flex items-center gap-2">
+                    <Filter className="w-4 h-4 text-gray-400" />
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Filters:</span>
+                </div>
+
+                <select
+                    value={statusFilter}
+                    onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+                    className="px-3 py-1.5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs focus:ring-2 focus:ring-primary-500 outline-none transition-all"
+                >
+                    <option value="all">All Statuses</option>
+                    <option value="booked">Booked</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                    <option value="expired">Expired</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+
+                <select
+                    value={packageFilter}
+                    onChange={(e) => { setPackageFilter(e.target.value); setPage(1); }}
+                    className="px-3 py-1.5 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs focus:ring-2 focus:ring-primary-500 outline-none transition-all"
+                >
+                    <option value="all">All Packages</option>
+                    {availablePackages.map(pkg => (
+                        <option key={pkg} value={pkg}>{pkg}</option>
+                    ))}
+                </select>
+
+                <div className="ml-auto flex items-center gap-2">
+                    <span className="text-xs text-gray-500">Show:</span>
+                    <select
+                        value={limit}
+                        onChange={(e) => { setLimit(Number(e.target.value)); setPage(1); }}
+                        className="px-2 py-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg text-xs outline-none"
+                    >
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={50}>50</option>
+                    </select>
+                </div>
+            </div>
+
             {/* QR Scanner Modal */}
             {isScannerOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
@@ -354,17 +437,27 @@ export default function AdminBookingsPage() {
                     <table className="w-full text-left text-sm">
                         <thead className="bg-gray-50 dark:bg-zinc-950 text-gray-500 dark:text-zinc-400 font-bold uppercase tracking-wider text-[10px]">
                             <tr>
-                                <th className="px-6 py-4">User</th>
-                                <th className="px-6 py-4">Package</th>
+                                <th className="px-6 py-4 cursor-pointer hover:text-primary-600 transition-colors" onClick={() => toggleSort("userEmail")}>
+                                    <div className="flex items-center gap-1">User {renderSortIcon("userEmail")}</div>
+                                </th>
+                                <th className="px-6 py-4 cursor-pointer hover:text-primary-600 transition-colors" onClick={() => toggleSort("packageName")}>
+                                    <div className="flex items-center gap-1">Package {renderSortIcon("packageName")}</div>
+                                </th>
                                 <th className="px-6 py-4">Verification Code</th>
-                                <th className="px-6 py-4 text-center">Qty</th>
-                                <th className="px-6 py-4">Date</th>
-                                <th className="px-6 py-4">Status</th>
+                                <th className="px-6 py-4 text-center cursor-pointer hover:text-primary-600 transition-colors" onClick={() => toggleSort("quantity")}>
+                                    <div className="flex items-center justify-center gap-1">Qty {renderSortIcon("quantity")}</div>
+                                </th>
+                                <th className="px-6 py-4 cursor-pointer hover:text-primary-600 transition-colors" onClick={() => toggleSort("createdAt")}>
+                                    <div className="flex items-center gap-1">Date & Time {renderSortIcon("createdAt")}</div>
+                                </th>
+                                <th className="px-6 py-4 cursor-pointer hover:text-primary-600 transition-colors" onClick={() => toggleSort("status")}>
+                                    <div className="flex items-center gap-1">Status {renderSortIcon("status")}</div>
+                                </th>
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100 dark:divide-zinc-800">
-                            {bookings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((booking) => (
+                            {bookings.map((booking) => (
                                 <tr key={booking.id} className="hover:bg-gray-50/50 dark:hover:bg-zinc-800/50">
                                     <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                                         {booking.userEmail}
@@ -378,8 +471,13 @@ export default function AdminBookingsPage() {
                                     <td className="px-6 py-4 text-center font-bold">
                                         {booking.quantity}
                                     </td>
-                                    <td className="px-6 py-4 text-gray-500 text-xs text-nowrap">
-                                        {new Date(booking.createdAt).toLocaleDateString()}
+                                    <td className="px-6 py-4 text-gray-500 text-[10px] leading-relaxed">
+                                        <div className="font-bold text-gray-700 dark:text-gray-300">
+                                            {formatDateGMT8(booking.createdAt)}
+                                        </div>
+                                        <div>
+                                            {formatTimeGMT8(booking.createdAt)}
+                                        </div>
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-transparent ${getStatusColor(booking.status)}`}>
@@ -432,6 +530,33 @@ export default function AdminBookingsPage() {
                     </table>
                 </div>
             </div>
+
+            {/* Pagination */}
+            {metaData.totalPages > 1 && (
+                <div className="flex items-center justify-between px-2 pt-2">
+                    <div className="text-xs text-gray-500">
+                        Showing page <span className="font-bold text-gray-900 dark:text-white">{page}</span> of <span className="font-bold text-gray-900 dark:text-white">{metaData.totalPages}</span>
+                        <span className="mx-2">•</span>
+                        Total <span className="font-bold text-gray-900 dark:text-white">{metaData.total}</span> bookings
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setPage(p => Math.max(1, p - 1))}
+                            disabled={page === 1}
+                            className="p-2 border border-gray-200 dark:border-zinc-800 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                            onClick={() => setPage(p => Math.min(metaData.totalPages, p + 1))}
+                            disabled={page === metaData.totalPages}
+                            className="p-2 border border-gray-200 dark:border-zinc-800 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        >
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

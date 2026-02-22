@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Users, Mail, Chrome, ShieldCheck, ShieldAlert, Loader2, Search, Calendar, Trash2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
+import { formatDateGMT8, formatTimeGMT8 } from "@/lib/dateUtils";
 
 interface User {
     id: string;
@@ -222,10 +223,10 @@ export default function UserMonitoringPage() {
                                             <div className="flex flex-col">
                                                 <span className="text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1.5">
                                                     <Calendar className="h-3.5 w-3.5 text-gray-400" />
-                                                    {new Date(user.createdAt).toLocaleDateString()}
+                                                    {formatDateGMT8(user.createdAt)}
                                                 </span>
                                                 <span className="text-[10px] text-gray-400">
-                                                    {new Date(user.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    {formatTimeGMT8(user.createdAt)}
                                                 </span>
                                             </div>
                                         </td>
