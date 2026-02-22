@@ -42,11 +42,18 @@ export const sendVerificationEmail = async (email: string, code: string) => {
   }
 };
 
-export const sendBookingConfirmation = async (email: string, packageName: string, quantity: string, price: string, verificationCode: string) => {
+export const sendBookingConfirmation = async (email: string, packageName: string, quantity: string, price: string, verificationCode: string, collectionDate?: string) => {
   // Extract numeric value from price string (e.g., "RM 50" -> 50)
   const priceValue = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
   const currency = price.replace(/[0-9.]/g, '').trim() || "RM";
   const total = (priceValue * parseInt(quantity)).toFixed(2);
+
+  const formattedCollectionDate = collectionDate ? new Date(collectionDate).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'Asia/Singapore'
+  }) : null;
 
   // Generate QR code as buffer for CID attachment (works with Gmail)
   let qrCodeBuffer: Buffer | null = null;
@@ -92,6 +99,7 @@ export const sendBookingConfirmation = async (email: string, packageName: string
           <p style="margin: 5px 0;"><strong>Package:</strong> ${packageName}</p>
           <p style="margin: 5px 0;"><strong>Unit Price:</strong> ${price}</p>
           <p style="margin: 5px 0;"><strong>Quantity:</strong> ${quantity}</p>
+          ${formattedCollectionDate ? `<p style="margin: 5px 0;"><strong>Collection Date:</strong> ${formattedCollectionDate}</p>` : ''}
           <hr style="border: none; border-top: 1px solid #ddd; margin: 15px 0;">
           <p style="margin: 5px 0; font-size: 18px;"><strong>Total Price:</strong> ${currency} ${total}</p>
         </div>

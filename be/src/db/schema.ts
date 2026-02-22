@@ -121,6 +121,7 @@ export const simBookings = pgTable("sim_bookings", {
     status: simBookingStatusEnum("status").default("booked").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    collectionDate: timestamp("collection_date"),
     verificationCode: varchar("verification_code", { length: 12 }).unique(),
 });
 

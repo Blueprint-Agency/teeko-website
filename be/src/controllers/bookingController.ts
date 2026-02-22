@@ -10,7 +10,7 @@ interface AuthRequest extends Request {
 }
 
 export const createBooking = async (req: AuthRequest, res: Response) => {
-    const { simId, quantity } = req.body;
+    const { simId, quantity, collectionDate } = req.body;
     const userId = req.user.id;
 
     try {
@@ -46,12 +46,13 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
                 simId,
                 quantity: quantity.toString(),
                 status: "booked",
+                collectionDate: collectionDate ? new Date(collectionDate) : null,
                 verificationCode
             }).returning();
             newBooking = insertedBooking;
 
             // Send confirmation email within transaction
-            await sendBookingConfirmation(req.user.email, sim[0].packageName, quantity.toString(), sim[0].price || "Contact for Price", verificationCode);
+            await sendBookingConfirmation(req.user.email, sim[0].packageName, quantity.toString(), sim[0].price || "Contact for Price", verificationCode, collectionDate);
         });
 
         res.status(201).json(newBooking);
