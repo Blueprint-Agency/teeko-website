@@ -42,6 +42,34 @@ export const sendVerificationEmail = async (email: string, code: string) => {
   }
 };
 
+export const sendPasswordChangeVerificationEmail = async (email: string, code: string) => {
+  const mailOptions = {
+    from: '"Teeko Security" <no-reply@teeko.ai>',
+    to: email,
+    subject: "Security Alert: Verify Password Change - Teeko",
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h1 style="color: #ef4444; text-align: center;">Verify Password Change</h1>
+        <p style="font-size: 16px; color: #333;">We received a request to change the password for your Teeko administrator account.</p>
+        <p style="font-size: 16px; color: #333;">Please use the following verification code to confirm this change:</p>
+        <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0;">
+          <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #111;">${code}</span>
+        </div>
+        <p style="font-size: 14px; color: #666;">This code will expire in 10 minutes.</p>
+        <p style="font-size: 14px; color: #666;">If you did not request this change, please log in to your account and change your password immediately or contact our support.</p>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Password change verification email sent to ${email}`);
+  } catch (error) {
+    console.error("Error sending password change email:", error);
+    throw new Error("Could not send password change verification email");
+  }
+};
+
 export const sendBookingConfirmation = async (email: string, packageName: string, quantity: string, price: string, verificationCode: string, collectionDate?: string) => {
   // Extract numeric value from price string (e.g., "RM 50" -> 50)
   const priceValue = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;

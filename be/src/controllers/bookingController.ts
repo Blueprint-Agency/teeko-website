@@ -128,6 +128,7 @@ export const getUserBookings = async (req: AuthRequest, res: Response) => {
             packageName: simPackages.packageName,
             price: simPackages.price,
             featureImage: simPackages.featureImage,
+            collectionDate: simBookings.collectionDate,
             verificationCode: simBookings.verificationCode
         })
             .from(simBookings)
@@ -196,6 +197,7 @@ export const getAdminBookings = async (req: Request, res: Response) => {
             createdAt: simBookings.createdAt,
             packageName: simPackages.packageName,
             userEmail: users.email,
+            collectionDate: simBookings.collectionDate,
             verificationCode: simBookings.verificationCode
         })
             .from(simBookings)

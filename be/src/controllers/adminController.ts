@@ -3,7 +3,7 @@ import { db } from "../db";
 import { restaurants, locations, users } from "../db/schema";
 import { sql, eq, isNull } from "drizzle-orm";
 import bcrypt from "bcrypt";
-import { sendVerificationEmail, sendAdminInvitationEmail } from "../utils/email";
+import { sendVerificationEmail, sendAdminInvitationEmail, sendPasswordChangeVerificationEmail } from "../utils/email";
 
 export const getStats = async (req: Request, res: Response) => {
     try {
@@ -221,7 +221,7 @@ export const requestPasswordChangeCode = async (req: any, res: Response) => {
             .set({ verificationCode, verificationExpires })
             .where(eq(users.id, userId));
 
-        await sendVerificationEmail(user.email, verificationCode);
+        await sendPasswordChangeVerificationEmail(user.email, verificationCode);
 
         res.json({ message: "Verification code sent to your email" });
     } catch (error) {
