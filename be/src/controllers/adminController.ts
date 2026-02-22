@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../db";
 import { restaurants, locations, users } from "../db/schema";
-import { sql, eq, isNull } from "drizzle-orm";
+import { sql, eq, isNull, and, ilike } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { sendVerificationEmail, sendAdminInvitationEmail, sendPasswordChangeVerificationEmail } from "../utils/email";
 
@@ -24,6 +24,16 @@ export const getStats = async (req: Request, res: Response) => {
 
 export const getUsers = async (req: Request, res: Response) => {
     try {
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 20;
+        const offset = (page - 1) * limit;
+        const email = req.query.email as string;
+
+        let whereClause = isNull(users.deletedAt);
+        if (email) {
+            whereClause = and(whereClause, ilike(users.email, `%${email}%`)) as any;
+        }
+
         const allUsers = await db.select({
             id: users.id,
             email: users.email,
@@ -33,7 +43,18 @@ export const getUsers = async (req: Request, res: Response) => {
             createdAt: users.createdAt,
             hasPassword: sql<boolean>`CASE WHEN ${users.passwordHash} IS NOT NULL THEN TRUE ELSE FALSE END`,
             hasGoogle: sql<boolean>`CASE WHEN ${users.googleId} IS NOT NULL THEN TRUE ELSE FALSE END`,
-        }).from(users).where(isNull(users.deletedAt)).orderBy(sql`${users.createdAt} DESC`);
+        })
+            .from(users)
+            .where(whereClause)
+            .orderBy(sql`${users.createdAt} DESC`)
+            .limit(limit)
+            .offset(offset);
+
+        const [totalResult] = await db.select({ count: sql<number>`count(*)` })
+            .from(users)
+            .where(whereClause);
+
+        const total = Number(totalResult.count);
 
         const usersWithMethod = allUsers.map(user => {
             let method = "Unknown";
@@ -56,7 +77,15 @@ export const getUsers = async (req: Request, res: Response) => {
             };
         });
 
-        res.json(usersWithMethod);
+        res.json({
+            data: usersWithMethod,
+            meta: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
     } catch (error) {
         console.error("Error fetching users:", error);
         res.status(500).json({ message: "Server error while fetching users" });

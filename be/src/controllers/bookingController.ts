@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../db";
 import { simBookings, simPackages, users } from "../db/schema";
-import { eq, and, ne, desc, asc, sql, inArray } from "drizzle-orm";
+import { eq, and, ne, desc, asc, sql, inArray, ilike } from "drizzle-orm";
 import { sendBookingConfirmation, sendCancellationEmail } from "../utils/email";
 import crypto from "crypto";
 
@@ -165,6 +165,7 @@ export const getAdminBookings = async (req: Request, res: Response) => {
     const offset = (page - 1) * limit;
     const status = req.query.status as string;
     const packageName = req.query.packageName as string;
+    const email = req.query.email as string;
     const sortBy = req.query.sortBy as string || "createdAt";
     const order = req.query.order as string || "desc";
 
@@ -177,6 +178,10 @@ export const getAdminBookings = async (req: Request, res: Response) => {
         if (packageName && packageName !== "all") {
             const packageFilter = eq(simPackages.packageName, packageName);
             whereClause = whereClause ? and(whereClause, packageFilter) : packageFilter;
+        }
+        if (email) {
+            const emailFilter = ilike(users.email, `%${email}%`);
+            whereClause = whereClause ? and(whereClause, emailFilter) : emailFilter;
         }
 
         const validSortColumns: any = {
