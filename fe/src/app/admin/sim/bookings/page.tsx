@@ -14,6 +14,7 @@ interface CompletedBooking {
     userEmail: string;
     verificationCode: string;
     createdAt: string;
+    collectionDate?: string;
 }
 
 export default function AdminBookingsPage() {
@@ -416,6 +417,15 @@ export default function AdminBookingsPage() {
                                     <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Code</span>
                                     <span className="text-sm font-mono font-bold text-primary-600">{completedBooking.verificationCode}</span>
                                 </div>
+                                {completedBooking.collectionDate && (
+                                    <>
+                                        <div className="border-t border-gray-200 dark:border-zinc-700"></div>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Collection</span>
+                                            <span className="text-sm font-bold text-red-600">{formatDateGMT8(completedBooking.collectionDate)}</span>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
 
@@ -448,7 +458,10 @@ export default function AdminBookingsPage() {
                                     <div className="flex items-center justify-center gap-1">Qty {renderSortIcon("quantity")}</div>
                                 </th>
                                 <th className="px-6 py-4 cursor-pointer hover:text-primary-600 transition-colors" onClick={() => toggleSort("createdAt")}>
-                                    <div className="flex items-center gap-1">Date & Time {renderSortIcon("createdAt")}</div>
+                                    <div className="flex items-center gap-1">Booking Date {renderSortIcon("createdAt")}</div>
+                                </th>
+                                <th className="px-6 py-4 cursor-pointer hover:text-primary-600 transition-colors" onClick={() => toggleSort("collectionDate")}>
+                                    <div className="flex items-center gap-1">Collection Date{renderSortIcon("collectionDate")}</div>
                                 </th>
                                 <th className="px-6 py-4 cursor-pointer hover:text-primary-600 transition-colors" onClick={() => toggleSort("status")}>
                                     <div className="flex items-center gap-1">Status {renderSortIcon("status")}</div>
@@ -478,6 +491,15 @@ export default function AdminBookingsPage() {
                                         <div>
                                             {formatTimeGMT8(booking.createdAt)}
                                         </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {booking.collectionDate ? (
+                                            <div className="font-bold text-gray-700 dark:text-gray-300 text-[10px]">
+                                                {formatDateGMT8(booking.collectionDate)}
+                                            </div>
+                                        ) : (
+                                            <span className="text-gray-400 text-[10px] italic">Not set</span>
+                                        )}
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-transparent ${getStatusColor(booking.status)}`}>

@@ -91,7 +91,7 @@ export default function ProfilePage() {
                         <div className="h-24 w-24 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 text-4xl font-bold mb-6 ring-8 ring-primary-50 dark:ring-primary-900/10">
                             {adminUser?.email?.[0]?.toUpperCase()}
                         </div>
-                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1">{adminUser?.email}</h2>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-1 break-all px-4">{adminUser?.email}</h2>
                         <span className="px-3 py-1 rounded-full bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400 text-xs font-bold uppercase tracking-wider mb-6">
                             {adminUser?.role}
                         </span>
@@ -121,8 +121,8 @@ export default function ProfilePage() {
                                 </div>
                             ) : Object.entries(permissions).map(([key, value]) => (
                                 <div key={key} className={`flex items-center justify-between p-3 rounded-2xl border text-sm transition-all ${value
-                                        ? 'bg-green-50/50 dark:bg-green-900/10 border-green-100 dark:border-green-900/20 text-green-700 dark:text-green-400'
-                                        : 'bg-gray-50 dark:bg-zinc-800/50 border-gray-100 dark:border-zinc-800 text-gray-400'
+                                    ? 'bg-green-50/50 dark:bg-green-900/10 border-green-100 dark:border-green-900/20 text-green-700 dark:text-green-400'
+                                    : 'bg-gray-50 dark:bg-zinc-800/50 border-gray-100 dark:border-zinc-800 text-gray-400'
                                     }`}>
                                     <span className="capitalize">{key.replace(/Management|Settings/g, ' Management').replace('general', 'General')}</span>
                                     {value ? <CheckCircle2 className="h-4 w-4" /> : <X className="h-4 w-4 opacity-30" />}
@@ -147,8 +147,8 @@ export default function ProfilePage() {
 
                         {message && (
                             <div className={`p-4 rounded-2xl mb-8 flex items-center gap-3 text-sm animate-in fade-in slide-in-from-top-2 ${message.type === 'success'
-                                    ? 'bg-green-50 text-green-700 border border-green-100 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/30'
-                                    : 'bg-red-50 text-red-700 border border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30'
+                                ? 'bg-green-50 text-green-700 border border-green-100 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/30'
+                                : 'bg-red-50 text-red-700 border border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-900/30'
                                 }`}>
                                 {message.type === 'success' ? <CheckCircle2 className="h-5 w-5 shrink-0" /> : <AlertCircle className="h-5 w-5 shrink-0" />}
                                 {message.text}
