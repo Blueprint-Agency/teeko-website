@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getStats, getUsers, verifyUser, createAdmin, updateAdminPermissions, deleteAdmin, requestPasswordChangeCode, verifyPasswordChangeAndSet, deleteUser } from "../controllers/adminController";
+import { getStats, getUsers, getAdmins, verifyUser, createAdmin, updateAdminPermissions, deleteAdmin, requestPasswordChangeCode, verifyPasswordChangeAndSet, deleteUser } from "../controllers/adminController";
 import { getSettings, updateSettings, uploadFavicon } from "../controllers/settingsController";
 import { adminLogin } from "../controllers/authController";
 import { requireAdmin, requireSuperAdmin } from "../middleware/authMiddleware";
@@ -14,6 +14,7 @@ router.post("/users/:userId/verify", requireAdmin, verifyUser);
 router.delete("/users/:userId", requireAdmin, deleteUser);
 
 // Admin Management (Superadmin only)
+router.get("/admins", requireSuperAdmin, getAdmins);
 router.post("/admins", requireSuperAdmin, createAdmin);
 router.patch("/admins/:userId", requireSuperAdmin, updateAdminPermissions);
 router.delete("/admins/:userId", requireSuperAdmin, deleteAdmin);

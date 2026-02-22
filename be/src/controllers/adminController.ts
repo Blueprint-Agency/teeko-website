@@ -9,7 +9,7 @@ export const getStats = async (req: Request, res: Response) => {
     try {
         const [restaurantCount] = await db.select({ count: sql<number>`count(*)` }).from(restaurants);
         const [locationCount] = await db.select({ count: sql<number>`count(*)` }).from(locations);
-        const [userCount] = await db.select({ count: sql<number>`count(*)` }).from(users).where(isNull(users.deletedAt));
+        const [userCount] = await db.select({ count: sql<number>`count(*)` }).from(users).where(and(isNull(users.deletedAt), eq(users.role, "USER")));
 
         res.json({
             restaurants: Number(restaurantCount.count),
@@ -29,7 +29,7 @@ export const getUsers = async (req: Request, res: Response) => {
         const offset = (page - 1) * limit;
         const email = req.query.email as string;
 
-        let whereClause = isNull(users.deletedAt);
+        let whereClause = and(isNull(users.deletedAt), eq(users.role, "USER"));
         if (email) {
             whereClause = and(whereClause, ilike(users.email, `%${email}%`)) as any;
         }
@@ -92,6 +92,30 @@ export const getUsers = async (req: Request, res: Response) => {
     }
 };
 
+export const getAdmins = async (req: Request, res: Response) => {
+    try {
+        const admins = await db.select({
+            id: users.id,
+            email: users.email,
+            role: users.role,
+            isVerified: users.isVerified,
+            permissions: users.permissions,
+            createdAt: users.createdAt,
+        })
+            .from(users)
+            .where(and(
+                isNull(users.deletedAt),
+                sql`${users.role} IN ('ADMIN', 'SUPERADMIN')`
+            ))
+            .orderBy(sql`${users.createdAt} DESC`);
+
+        res.json(admins);
+    } catch (error) {
+        console.error("Error fetching admins:", error);
+        res.status(500).json({ message: "Server error while fetching admins" });
+    }
+};
+
 export const verifyUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params as { userId: string };
@@ -108,7 +132,7 @@ export const verifyUser = async (req: Request, res: Response) => {
                 verificationExpires: null,
                 verificationToken: null
             })
-            .where(sql`${users.id} = ${userId}`)
+            .where(and(eq(users.id, userId), eq(users.role, "USER")))
             .returning();
 
         if (!updatedUser) {
@@ -196,7 +220,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
         const [deletedUser] = await db.update(users)
             .set({ deletedAt: new Date() })
-            .where(eq(users.id, userId))
+            .where(and(eq(users.id, userId), eq(users.role, "USER")))
             .returning();
 
         if (!deletedUser) {
