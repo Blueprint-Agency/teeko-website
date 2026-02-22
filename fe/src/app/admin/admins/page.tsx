@@ -45,13 +45,12 @@ export default function AdminManagementPage() {
     const fetchAdmins = async () => {
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/admin/users`, {
+            const res = await fetch(`${API_BASE_URL}/admin/admins`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             const data = await res.json();
             if (res.ok) {
-                // Filter only ADMIN and SUPERADMIN
-                setAdmins(data.filter((u: any) => u.role === "ADMIN" || u.role === "SUPERADMIN"));
+                setAdmins(data);
             }
         } catch (error) {
             console.error("Failed to fetch admins:", error);
