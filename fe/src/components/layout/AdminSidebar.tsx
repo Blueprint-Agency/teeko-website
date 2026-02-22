@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Store, MapPin, Settings, LogOut, Smartphone, FileText, Menu, X, ChevronDown } from "lucide-react";
+import { LayoutDashboard, Store, MapPin, Settings, LogOut, Smartphone, FileText, Menu, X, ChevronDown, Users } from "lucide-react";
 import { useState } from "react";
 
 export const AdminSidebar = () => {
@@ -11,6 +11,7 @@ export const AdminSidebar = () => {
 
     const links = [
         { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+        { href: "/admin/users", label: "Users", icon: Users },
         { href: "/admin/restaurants", label: "Restaurants", icon: Store },
         { href: "/admin/locations", label: "Locations", icon: MapPin },
         {

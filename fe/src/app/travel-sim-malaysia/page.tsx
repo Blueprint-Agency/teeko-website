@@ -290,7 +290,7 @@ export default function EsimPage() {
 
                         <div className="grid gap-4 md:gap-6">
                             <div className="p-6 md:p-8 rounded-2xl bg-gray-50 dark:bg-zinc-800/30 border border-transparent hover:border-red-600/20 transition-all duration-300">
-                                <h3 className="text-lg font-black text-gray-900 dark:text-white mb-3">Where is this travel SIM card available?</h3>
+                                <h3 className="text-lg font-black text-gray-900 dark:text-white mb-3">Where is this0 travel SIM card available?</h3>
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
                                     Teeko Travel SIM is currently only available for use in Malaysia.
                                 </p>
