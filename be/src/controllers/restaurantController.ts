@@ -1,14 +1,23 @@
 import { Request, Response } from "express";
 import { db } from "../db";
 import { restaurants, restaurantImages, locations, restaurantStats, restaurantReviews, restaurantShortVideos } from "../db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and, SQL } from "drizzle-orm";
 import { getJson } from "serpapi";
 
 export const getRestaurants = async (req: Request, res: Response) => {
-    const { location: locationSlug } = req.query;
+    const { location: locationSlug, status } = req.query;
 
     try {
-        let query = db.select({
+        const conditions: (SQL | undefined)[] = [];
+        if (locationSlug) {
+            conditions.push(eq(locations.slug, locationSlug as string));
+        }
+
+        if (status) {
+            conditions.push(eq(restaurants.status, status as "ACTIVE" | "INACTIVE"));
+        }
+
+        const allRestaurants = await db.select({
             id: restaurants.id,
             status: restaurants.status,
             name: restaurants.name,
@@ -35,15 +44,8 @@ export const getRestaurants = async (req: Request, res: Response) => {
             .from(restaurants)
             .leftJoin(locations, eq(restaurants.locationId, locations.id))
             .leftJoin(restaurantStats, eq(restaurants.id, restaurantStats.restaurantId))
-            .where(eq(restaurants.status, "ACTIVE"))
+            .where(and(...conditions))
             .orderBy(desc(restaurants.updatedAt));
-
-        if (locationSlug) {
-            // @ts-ignore - drizzle-orm and express types mismatch sometimes on req.query
-            query = query.where(eq(locations.slug, locationSlug as string));
-        }
-
-        const allRestaurants = await query;
 
         // Get images and reviews for each restaurant
         const restaurantsWithDetails = await Promise.all(allRestaurants.map(async (res) => {
@@ -67,6 +69,7 @@ export const getRestaurantBySlug = async (req: Request, res: Response) => {
     try {
         const result = await db.select({
             id: restaurants.id,
+            status: restaurants.status,
             name: restaurants.name,
             slug: restaurants.slug,
             description: restaurants.description,
@@ -93,7 +96,10 @@ export const getRestaurantBySlug = async (req: Request, res: Response) => {
             .from(restaurants)
             .leftJoin(locations, eq(restaurants.locationId, locations.id))
             .leftJoin(restaurantStats, eq(restaurants.id, restaurantStats.restaurantId))
-            .where(eq(restaurants.slug, slug as string));
+            .where(and(
+                eq(restaurants.slug, slug as string),
+                eq(restaurants.status, "ACTIVE")
+            ));
 
         if (result.length === 0) {
             res.status(404).json({ message: "Restaurant not found" });
@@ -505,7 +511,7 @@ export const updateRestaurantStatus = async (req: Request, res: Response) => {
         const [updatedRestaurant] = await db
             .update(restaurants)
             .set({
-                status,
+                status: status as "ACTIVE" | "INACTIVE",
                 updatedAt: new Date(),
             })
             .where(eq(restaurants.id, id as string))
