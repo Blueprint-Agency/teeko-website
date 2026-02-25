@@ -20,7 +20,7 @@ async function getLocations() {
 
 async function getRestaurants() {
     try {
-        const res = await fetch(`${API_BASE_URL}/restaurants`, { cache: "no-store" });
+        const res = await fetch(`${API_BASE_URL}/restaurants?status=ACTIVE`, { cache: "no-store" });
         if (!res.ok) return [];
         return res.json();
     } catch (error) {
