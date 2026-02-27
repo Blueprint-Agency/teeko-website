@@ -445,28 +445,10 @@ export default function AdminManagementPage() {
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Role</label>
-                                    <div className="flex gap-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setEditRole("ADMIN")}
-                                            className={`flex-1 py-2 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border ${editRole === "ADMIN"
-                                                ? "bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400 shadow-sm"
-                                                : "bg-gray-50 border-gray-100 text-gray-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-500"
-                                                }`}
-                                        >
-                                            Admin
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setEditRole("SUPERADMIN")}
-                                            className={`flex-1 py-2 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border ${editRole === "SUPERADMIN"
-                                                ? "bg-purple-50 border-purple-200 text-purple-700 dark:bg-purple-900/20 dark:border-purple-800 dark:text-purple-400 shadow-sm"
-                                                : "bg-gray-50 border-gray-100 text-gray-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-500"
-                                                }`}
-                                        >
-                                            Superadmin
-                                        </button>
+                                    <div className="py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-gray-50 border border-gray-100 text-gray-900 dark:bg-zinc-800 dark:border-zinc-700 dark:text-white text-center select-none shadow-sm">
+                                        {editingAdmin.role}
                                     </div>
+                                    <p className="mt-2 text-[10px] text-gray-400 text-center uppercase tracking-widest font-bold">Role cannot be changed via dashboard</p>
                                 </div>
                             </div>
 
