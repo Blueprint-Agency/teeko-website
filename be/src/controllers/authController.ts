@@ -3,10 +3,11 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { db } from "../db";
 import { users } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { sendVerificationEmail } from "../utils/email";
 import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
+import { handleUserLoginStreak } from "../utils/points";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -14,7 +15,7 @@ export const register = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
-        const existingUserResult = await db.select().from(users).where(eq(users.email, email));
+        const existingUserResult = await db.select().from(users).where(sql`lower(${users.email}) = lower(${email}) AND ${users.deletedAt} IS NULL`);
         const existingUser = existingUserResult[0];
 
         const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -98,15 +99,18 @@ export const verifyCode = async (req: Request, res: Response) => {
             .where(eq(users.id, user.id));
 
         const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role },
+            { id: user.id, email: user.email, role: user.role, permissions: user.permissions },
             process.env.JWT_SECRET as string,
             { expiresIn: "10h" }
         );
 
+        const streakData = await handleUserLoginStreak(user.id);
+
         res.json({
             message: "Email verified successfully",
             token,
-            user: { id: user.id, email: user.email, role: user.role }
+            user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions },
+            streak: streakData
         });
     } catch (error) {
         console.error(error);
@@ -154,7 +158,7 @@ export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
-        const userResult = await db.select().from(users).where(eq(users.email, email));
+        const userResult = await db.select().from(users).where(sql`${users.email} = ${email} AND ${users.deletedAt} IS NULL`);
         const user = userResult[0];
 
         if (!user) {
@@ -181,12 +185,14 @@ export const login = async (req: Request, res: Response) => {
         }
 
         const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role },
+            { id: user.id, email: user.email, role: user.role, permissions: user.permissions },
             process.env.JWT_SECRET as string,
             { expiresIn: "1h" }
         );
 
-        res.json({ token, user: { id: user.id, email: user.email, role: user.role } });
+        const streakData = await handleUserLoginStreak(user.id);
+
+        res.json({ token, user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions }, streak: streakData });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });
@@ -226,7 +232,7 @@ export const adminLogin = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     try {
-        const userResult = await db.select().from(users).where(eq(users.email, email));
+        const userResult = await db.select().from(users).where(sql`${users.email} = ${email} AND ${users.deletedAt} IS NULL`);
         const user = userResult[0];
 
         if (!user) {
@@ -252,12 +258,12 @@ export const adminLogin = async (req: Request, res: Response) => {
         }
 
         const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role },
+            { id: user.id, email: user.email, role: user.role, permissions: user.permissions },
             process.env.JWT_SECRET as string,
             { expiresIn: "10h" } // Longer session for admin
         );
 
-        res.json({ token, user: { id: user.id, email: user.email, role: user.role } });
+        res.json({ token, user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions } });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });
@@ -287,7 +293,7 @@ export const googleLogin = async (req: Request, res: Response) => {
         }
 
         // Check if user exists
-        let userResult = await db.select().from(users).where(eq(users.email, email));
+        let userResult = await db.select().from(users).where(sql`${users.email} = ${email} AND ${users.deletedAt} IS NULL`);
         let user = userResult[0];
 
         if (user) {
@@ -307,14 +313,17 @@ export const googleLogin = async (req: Request, res: Response) => {
         }
 
         const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role },
+            { id: user.id, email: user.email, role: user.role, permissions: user.permissions },
             process.env.JWT_SECRET as string,
             { expiresIn: "10h" }
         );
 
+        const streakData = await handleUserLoginStreak(user.id);
+
         res.json({
             token,
-            user: { id: user.id, email: user.email, role: user.role }
+            user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions },
+            streak: streakData
         });
     } catch (error) {
         console.error(error);

@@ -8,10 +8,30 @@ export const users = pgTable("users", {
     passwordHash: varchar("password_hash"), // Optional for Google users
     googleId: varchar("google_id").unique(),
     role: roleEnum("role").default("USER").notNull(),
+    permissions: jsonb("permissions").default({
+        userManagement: false,
+        blogManagement: false,
+        simManagement: false,
+        restaurantManagement: false,
+        generalSettings: false
+    }).notNull(),
     isVerified: boolean("is_verified").default(false).notNull(),
     verificationToken: varchar("verification_token"),
     verificationCode: varchar("verification_code", { length: 6 }),
     verificationExpires: timestamp("verification_expires"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    deletedAt: timestamp("deleted_at"),
+    points: integer("points").default(0).notNull(),
+    currentStreak: integer("current_streak").default(0).notNull(),
+    longestStreak: integer("longest_streak").default(0).notNull(),
+    lastLoginAt: timestamp("last_login_at"),
+});
+
+export const pointHistory = pgTable("point_history", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id").references(() => users.id).notNull(),
+    event: varchar("event", { length: 255 }).notNull(),
+    pointsEarned: integer("points_earned").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -113,6 +133,7 @@ export const simBookings = pgTable("sim_bookings", {
     status: simBookingStatusEnum("status").default("booked").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
+    collectionDate: timestamp("collection_date"),
     verificationCode: varchar("verification_code", { length: 12 }).unique(),
 });
 

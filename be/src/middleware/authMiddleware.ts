@@ -33,3 +33,13 @@ export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction
         next();
     });
 };
+
+export const requireSuperAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
+    authenticateToken(req, res, () => {
+        if (req.user?.role !== "SUPERADMIN") {
+            res.status(403).json({ message: "Superadmin access required" });
+            return;
+        }
+        next();
+    });
+};
