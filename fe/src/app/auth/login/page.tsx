@@ -52,6 +52,11 @@ export default function LoginPage() {
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
 
+            if (data.streak) {
+                localStorage.setItem("streak_popup", JSON.stringify(data.streak));
+                window.dispatchEvent(new Event("streak-updated"));
+            }
+
             // Redirect based on role
             if (data.user.role === "ADMIN" || data.user.role === "SUPERADMIN") {
                 router.push("/admin");
@@ -80,6 +85,11 @@ export default function LoginPage() {
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
+
+            if (data.streak) {
+                localStorage.setItem("streak_popup", JSON.stringify(data.streak));
+                window.dispatchEvent(new Event("streak-updated"));
+            }
 
             if (data.user.role === "ADMIN" || data.user.role === "SUPERADMIN") {
                 router.push("/admin");

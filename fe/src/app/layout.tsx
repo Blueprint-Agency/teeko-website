@@ -70,6 +70,7 @@ import { GoogleAuthProvider } from "@/components/providers/GoogleAuthProvider";
 import { AdminRedirect } from "@/components/layout/AdminRedirect";
 import GTMTracking from "@/components/layout/GTMTracking";
 import { Suspense } from "react";
+import { StreakRoadmapModal } from "@/components/shared/StreakRoadmapModal";
 
 export default async function RootLayout({
   children,
@@ -94,6 +95,7 @@ export default async function RootLayout({
               <GTMTracking />
             </Suspense>
             {children}
+            <StreakRoadmapModal />
           </MaintenanceProvider>
         </GoogleAuthProvider>
       </body>
