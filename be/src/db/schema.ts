@@ -21,6 +21,18 @@ export const users = pgTable("users", {
     verificationExpires: timestamp("verification_expires"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     deletedAt: timestamp("deleted_at"),
+    points: integer("points").default(0).notNull(),
+    currentStreak: integer("current_streak").default(0).notNull(),
+    longestStreak: integer("longest_streak").default(0).notNull(),
+    lastLoginAt: timestamp("last_login_at"),
+});
+
+export const pointHistory = pgTable("point_history", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id").references(() => users.id).notNull(),
+    event: varchar("event", { length: 255 }).notNull(),
+    pointsEarned: integer("points_earned").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const locations = pgTable("locations", {

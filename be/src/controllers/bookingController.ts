@@ -4,6 +4,7 @@ import { simBookings, simPackages, users } from "../db/schema";
 import { eq, and, ne, desc, asc, sql, inArray, ilike } from "drizzle-orm";
 import { sendBookingConfirmation, sendCancellationEmail } from "../utils/email";
 import crypto from "crypto";
+import { addPoints } from "../utils/points";
 
 interface AuthRequest extends Request {
     user?: any;
@@ -54,6 +55,9 @@ export const createBooking = async (req: AuthRequest, res: Response) => {
             // Send confirmation email within transaction
             await sendBookingConfirmation(req.user.email, sim[0].packageName, quantity.toString(), sim[0].price || "Contact for Price", verificationCode, collectionDate);
         });
+
+        // Add 20 points for successful booking
+        await addPoints(userId, `Booked SIM Card: ${sim[0].packageName}`, 20);
 
         res.status(201).json(newBooking);
     } catch (error: any) {

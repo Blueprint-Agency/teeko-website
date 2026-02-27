@@ -7,6 +7,7 @@ import { eq, sql } from "drizzle-orm";
 import { sendVerificationEmail } from "../utils/email";
 import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
+import { handleUserLoginStreak } from "../utils/points";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -103,10 +104,13 @@ export const verifyCode = async (req: Request, res: Response) => {
             { expiresIn: "10h" }
         );
 
+        const streakData = await handleUserLoginStreak(user.id);
+
         res.json({
             message: "Email verified successfully",
             token,
-            user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions }
+            user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions },
+            streak: streakData
         });
     } catch (error) {
         console.error(error);
@@ -186,7 +190,9 @@ export const login = async (req: Request, res: Response) => {
             { expiresIn: "1h" }
         );
 
-        res.json({ token, user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions } });
+        const streakData = await handleUserLoginStreak(user.id);
+
+        res.json({ token, user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions }, streak: streakData });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error" });
@@ -312,9 +318,12 @@ export const googleLogin = async (req: Request, res: Response) => {
             { expiresIn: "10h" }
         );
 
+        const streakData = await handleUserLoginStreak(user.id);
+
         res.json({
             token,
-            user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions }
+            user: { id: user.id, email: user.email, role: user.role, permissions: user.permissions },
+            streak: streakData
         });
     } catch (error) {
         console.error(error);
