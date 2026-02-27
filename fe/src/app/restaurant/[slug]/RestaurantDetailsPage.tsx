@@ -11,6 +11,7 @@ import { GoogleReview, SocialPost } from "@/components/features/restaurant/Revie
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { ImageModal } from "@/components/shared/ImageModal";
 import { calculateCombinedRating, calculateCombinedReviewCount } from '@/utils/rating';
+import { API_BASE_URL } from "@/lib/constants";
 
 const CONSTANT_XHS_POSTS: SocialPost[] = [
     {
@@ -164,6 +165,27 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
         setModalOpen(true);
     };
 
+    const handleReserveClick = () => {
+        // Asynchronously try to log points if user is logged in
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        if (token) {
+            try {
+                // We don't await this so it doesn't block navigation
+                fetch(`${API_BASE_URL}/users/points/reserve-restaurant`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ restaurantId: restaurant?.id })
+                });
+            } catch (err) {
+                // Ignore failures silently
+            }
+        }
+        window.open(restaurant?.reservationUrl, "_blank");
+    };
+
     return (
         <div className="min-h-screen bg-[var(--background)] pb-12">
             <Navigation forceSolid />
@@ -246,7 +268,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                         <span className="text-base">{restaurant?.address}</span>
                                     </div>
                                     <button
-                                        onClick={() => window.open(restaurant?.reservationUrl, "_blank")}
+                                        onClick={handleReserveClick}
                                         className="bg-red-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
                                     >
                                         Reserve a Table

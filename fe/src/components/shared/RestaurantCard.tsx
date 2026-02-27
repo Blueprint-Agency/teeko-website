@@ -4,7 +4,6 @@ import { Star, MapPin, BadgePercent, Utensils } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { calculateCombinedRating, calculateCombinedReviewCount } from "@/utils/rating";
-import { API_BASE_URL } from "@/lib/constants";
 
 interface RestaurantImage {
     caption?: string;
@@ -61,27 +60,8 @@ export function RestaurantCard({
     const displayRating = stats ? calculateCombinedRating(stats.googleStats, stats.tripAdvisorStats) : (rating || 0);
     const displayReviewCount = stats ? calculateCombinedReviewCount(stats.googleStats, stats.tripAdvisorStats) : (reviewCount || 0);
 
-    const handleReserveClick = async (e: React.MouseEvent) => {
+    const handleReserveClick = (e: React.MouseEvent) => {
         e.stopPropagation();
-
-        // Asynchronously try to log points if user is logged in
-        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-        if (token) {
-            try {
-                // We don't await this so it doesn't block navigation
-                fetch(`${API_BASE_URL}/users/points/reserve-restaurant`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ restaurantId: id })
-                });
-            } catch (err) {
-                // Ignore failures silently
-            }
-        }
-
         router.push(`/restaurant/${slug}#reserve`);
     };
 
