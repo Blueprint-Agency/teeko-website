@@ -195,7 +195,15 @@ export const updateAdminPermissions = async (req: Request, res: Response) => {
 
         const updateData: any = {};
         if (permissions) updateData.permissions = permissions;
-        if (role) updateData.role = role;
+
+        if (role) {
+            // Prevent setting role to SUPERADMIN from the dashboard
+            if (role === "SUPERADMIN") {
+                res.status(403).json({ message: "Cannot assign SUPERADMIN role via dashboard" });
+                return;
+            }
+            updateData.role = role;
+        }
 
         const [updatedUser] = await db.update(users)
             .set(updateData)
