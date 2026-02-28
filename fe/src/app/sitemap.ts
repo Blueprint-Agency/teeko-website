@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '',
         '/blog',
         '/restaurants',
-        '/sim',
+        '/travel-sim-malaysia',
     ].map((route) => ({
         url: escapeXml(`${baseUrl}${route}`),
         lastModified: new Date(),
@@ -81,7 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const simPages = (Array.isArray(simPackages) ? simPackages : []).map((pkg: any) => {
             const date = new Date(pkg.updatedAt || pkg.createdAt);
             return {
-                url: escapeXml(`${baseUrl}/sim/${pkg.slug}`),
+                url: escapeXml(`${baseUrl}/travel-sim-malaysia/${pkg.slug}`),
                 lastModified: isNaN(date.getTime()) ? new Date() : date,
                 changeFrequency: 'monthly' as const,
                 priority: 0.6,

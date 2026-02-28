@@ -2,6 +2,7 @@
 
 import { Loader2, Calendar, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { formatBlogDateGMT8 } from "@/lib/dateUtils";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
@@ -56,11 +57,7 @@ export default function BlogListPage({ initialPosts }: BlogListPageProps) {
                                     <div className="p-6 md:p-8 flex-1">
                                         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
                                             <Calendar className="h-4 w-4" />
-                                            {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric'
-                                            })}
+                                            {formatBlogDateGMT8(post.publishedAt)}
                                         </div>
                                         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
                                             {post.title}

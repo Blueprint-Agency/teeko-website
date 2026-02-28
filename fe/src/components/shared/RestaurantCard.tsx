@@ -60,6 +60,11 @@ export function RestaurantCard({
     const displayRating = stats ? calculateCombinedRating(stats.googleStats, stats.tripAdvisorStats) : (rating || 0);
     const displayReviewCount = stats ? calculateCombinedReviewCount(stats.googleStats, stats.tripAdvisorStats) : (reviewCount || 0);
 
+    const handleReserveClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        router.push(`/restaurant/${slug}#reserve`);
+    };
+
     return (
         <Link
             href={`/restaurant/${slug}`}
@@ -145,10 +150,7 @@ export function RestaurantCard({
                 {showActions && (
                     <div className="mt-3 flex gap-2">
                         <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                router.push(`/restaurant/${slug}#reserve`);
-                            }}
+                            onClick={handleReserveClick}
                             className="flex-1 bg-red-600 text-[10px] text-white font-bold py-2 rounded-xl hover:bg-red-700 transition-all shadow-md active:scale-95"
                         >
                             Reserve

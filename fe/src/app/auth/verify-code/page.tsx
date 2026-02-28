@@ -84,6 +84,12 @@ export default function VerifyCodePage() {
             // Verification successful
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
+
+            if (data.streak) {
+                localStorage.setItem("streak_popup", JSON.stringify(data.streak));
+                window.dispatchEvent(new Event("streak-updated"));
+            }
+
             localStorage.removeItem("verify_email");
             router.push("/profile");
         } catch (err: any) {

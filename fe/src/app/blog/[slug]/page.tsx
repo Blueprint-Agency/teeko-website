@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { RestaurantCard } from "@/components/shared/RestaurantCard";
 import { LocationCarousel } from "@/components/blog/LocationCarousel";
 import { calculateCombinedRating } from "@/utils/rating";
+import { formatBlogDateGMT8 } from "@/lib/dateUtils";
 
 interface ContentBlock {
     id: string;
@@ -181,11 +182,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                             </span>
                             <span className="w-1 h-1 bg-gray-300 rounded-full" />
                             <Calendar className="h-4 w-4" />
-                            {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            })}
+                            {formatBlogDateGMT8(post.publishedAt)}
                         </div>
                         <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
                             {post.title}

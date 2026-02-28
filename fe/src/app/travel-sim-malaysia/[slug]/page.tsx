@@ -107,7 +107,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
             <main className="max-w-container mx-auto px-4 py-12 pt-20">
                 <Breadcrumbs
                     items={[
-                        { label: "Travel SIM", href: "/sim" },
+                        { label: "Travel SIM Malaysia", href: "/travel-sim-malaysia" },
                         { label: pkg.packageName }
                     ]}
                 />
@@ -271,7 +271,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                     <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">Other Packages</h2>
                                     <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">Discover more options from {pkg.provider?.name}</p>
                                 </div>
-                                <Link href="/sim" className="text-red-600 dark:text-red-400 font-bold hover:underline hidden md:block">
+                                <Link href="/travel-sim-malaysia" className="text-red-600 dark:text-red-400 font-bold hover:underline hidden md:block">
                                     View All SIMs →
                                 </Link>
                             </div>
@@ -279,7 +279,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                             <div className="flex -mx-4 px-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:pb-0 sm:px-0 sm:mx-0">
                                 {relatedPackages.map((rp) => (
                                     <div key={rp.id} className="min-w-[260px] sm:min-w-0 snap-center">
-                                        <Link href={`/sim/${rp.slug}`} className="group">
+                                        <Link href={`/travel-sim-malaysia/${rp.slug}`} className="group">
                                             <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 h-full">
                                                 {rp.featureImage && (
                                                     <div className="aspect-square overflow-hidden bg-gray-100 dark:bg-zinc-800">

@@ -6,6 +6,7 @@ import { Plus, Edit2, Loader2, Trash2, Archive } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import Link from "next/link";
+import { formatDateGMT8 } from "@/lib/dateUtils";
 
 interface BlogPost {
     id: string;
@@ -161,7 +162,7 @@ export default function AdminBlogPage() {
                                             </span>
                                         </td>
                                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                            {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : "—"}
+                                            {post.publishedAt ? formatDateGMT8(post.publishedAt) : "—"}
                                         </td>
                                         <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium space-x-3">
                                             <Link

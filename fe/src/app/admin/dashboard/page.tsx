@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { Store, MapPin, Users, Loader2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 
@@ -36,9 +37,9 @@ export default function AdminDashboardPage() {
     }, []);
 
     const statCards = [
-        { label: "Total Restaurants", value: loading ? "..." : stats.restaurants.toString(), icon: Store, color: "text-blue-600", bg: "bg-blue-100 dark:bg-blue-900/30" },
-        { label: "Total Locations", value: loading ? "..." : stats.locations.toString(), icon: MapPin, color: "text-green-600", bg: "bg-green-100 dark:bg-green-900/30" },
-        { label: "Total Users", value: loading ? "..." : stats.users.toString(), icon: Users, color: "text-purple-600", bg: "bg-purple-100 dark:bg-purple-900/30" },
+        { label: "Total Restaurants", value: loading ? "..." : stats.restaurants.toString(), icon: Store, color: "text-blue-600", bg: "bg-blue-100 dark:bg-blue-900/30", href: "/admin/restaurants" },
+        { label: "Total Locations", value: loading ? "..." : stats.locations.toString(), icon: MapPin, color: "text-green-600", bg: "bg-green-100 dark:bg-green-900/30", href: "/admin/locations" },
+        { label: "Total Users", value: loading ? "..." : stats.users.toString(), icon: Users, color: "text-purple-600", bg: "bg-purple-100 dark:bg-purple-900/30", href: "/admin/users" },
     ];
 
     return (
@@ -49,7 +50,11 @@ export default function AdminDashboardPage() {
                 {statCards.map((stat) => {
                     const Icon = stat.icon;
                     return (
-                        <div key={stat.label} className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800">
+                        <Link
+                            key={stat.label}
+                            href={stat.href}
+                            className="rounded-xl bg-white p-6 shadow-sm dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 hover:shadow-md transition-shadow transition-transform hover:-translate-y-1 block"
+                        >
                             <div className="flex items-center gap-4">
                                 <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${stat.bg}`}>
                                     {loading ? (
@@ -65,7 +70,7 @@ export default function AdminDashboardPage() {
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     );
                 })}
             </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Calendar, ArrowRight } from "lucide-react";
+import { formatBlogDateGMT8 } from "@/lib/dateUtils";
 
 interface BlogPost {
     id: string;
@@ -49,11 +50,7 @@ export function BlogSection({ posts }: BlogSectionProps) {
                                     <div className="p-5 flex flex-col flex-1">
                                         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
                                             <Calendar className="h-4 w-4" />
-                                            {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric'
-                                            })}
+                                            {formatBlogDateGMT8(post.publishedAt)}
                                         </div>
                                         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
                                             {post.title}

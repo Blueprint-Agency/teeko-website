@@ -6,6 +6,7 @@ import { Plus, Edit2, Loader2, Trash2, Globe } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import Link from "next/link";
+import { formatDateTimeGMT8 } from "@/lib/dateUtils";
 
 interface Provider {
     id: string;
@@ -117,13 +118,7 @@ export default function AdminEsimPackagesPage() {
 
     const formatDate = (dateString: string | null) => {
         if (!dateString) return "N/A";
-        return new Date(dateString).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-        });
+        return formatDateTimeGMT8(dateString);
     };
 
     const getStatusStyle = (status: string) => {
