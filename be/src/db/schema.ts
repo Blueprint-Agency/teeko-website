@@ -201,3 +201,18 @@ export const simContentTemplates = pgTable("sim_content_templates", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+// User Referral Codes table
+export const userReferralCodes = pgTable("user_referral_codes", {
+    userId: uuid("user_id").references(() => users.id).primaryKey(),
+    code: varchar("code", { length: 4 }).notNull().unique(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Referrals table (links referrer and referee)
+export const referrals = pgTable("referrals", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    referrerId: uuid("referrer_id").references(() => users.id).notNull(),
+    refereeId: uuid("referee_id").references(() => users.id).notNull().unique(), // One user can only be referred by one person
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+});

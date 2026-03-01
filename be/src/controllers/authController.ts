@@ -8,11 +8,13 @@ import { sendVerificationEmail } from "../utils/email";
 import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
 import { handleUserLoginStreak } from "../utils/points";
+import { userReferralCodes, referrals } from "../db/schema";
+import { generateReferralCode } from "../utils/referral";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const register = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password, referralCode } = req.body;
 
     try {
         const existingUserResult = await db.select().from(users).where(sql`lower(${users.email}) = lower(${email}) AND ${users.deletedAt} IS NULL`);
@@ -45,7 +47,7 @@ export const register = async (req: Request, res: Response) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await db.transaction(async (tx) => {
-            await tx
+            const newUserResult = await tx
                 .insert(users)
                 .values({
                     email,
@@ -54,7 +56,29 @@ export const register = async (req: Request, res: Response) => {
                     verificationCode,
                     verificationExpires,
                     isVerified: false,
-                });
+                })
+                .returning();
+
+            const newUser = newUserResult[0];
+
+            // Generate referral code for the new user
+            const code = generateReferralCode();
+            await tx.insert(userReferralCodes).values({
+                userId: newUser.id,
+                code,
+            });
+
+            // Process referral if code provided
+            if (referralCode) {
+                const referrerResult = await tx.select().from(userReferralCodes).where(eq(userReferralCodes.code, referralCode));
+                const referrer = referrerResult[0];
+                if (referrer) {
+                    await tx.insert(referrals).values({
+                        referrerId: referrer.userId,
+                        refereeId: newUser.id,
+                    });
+                }
+            }
 
             await sendVerificationEmail(email, verificationCode);
         });
@@ -303,13 +327,20 @@ export const googleLogin = async (req: Request, res: Response) => {
             }
         } else {
             // Create new user
-            const newUser = await db.insert(users).values({
+            const newUserResult = await db.insert(users).values({
                 email,
                 googleId,
                 isVerified: true, // Google emails are already verified
                 role: "USER"
             }).returning();
-            user = newUser[0];
+            user = newUserResult[0];
+
+            // Generate referral code for Google users too
+            const code = generateReferralCode();
+            await db.insert(userReferralCodes).values({
+                userId: user.id,
+                code,
+            });
         }
 
         const token = jwt.sign(
