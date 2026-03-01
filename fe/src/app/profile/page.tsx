@@ -8,6 +8,7 @@ import { User, Mail, Shield, LogOut, Loader2 } from "lucide-react";
 import { UserBookings } from "@/components/booking/UserBookings";
 import { UserPoints } from "@/components/profile/UserPoints";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { ReferralSection } from "@/components/features/user/ReferralSection";
 
 export default function ProfilePage() {
     const router = useRouter();
@@ -123,6 +124,11 @@ export default function ProfilePage() {
                         <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--border)]">
                             <h3 className="font-bold text-gray-900 dark:text-white mb-6 text-lg">My Travel SIM Bookings</h3>
                             <UserBookings />
+                        </div>
+
+                        {/* Referral Section */}
+                        <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--border)]">
+                            <ReferralSection />
                         </div>
                     </div>
                 </div>
