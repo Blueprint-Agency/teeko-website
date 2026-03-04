@@ -295,7 +295,7 @@ export const adminLogin = async (req: Request, res: Response) => {
 };
 
 export const googleLogin = async (req: Request, res: Response) => {
-    const { credential } = req.body;
+    const { credential, referralCode } = req.body;
 
     try {
         const ticket = await client.verifyIdToken({
@@ -327,19 +327,33 @@ export const googleLogin = async (req: Request, res: Response) => {
             }
         } else {
             // Create new user
-            const newUserResult = await db.insert(users).values({
-                email,
-                googleId,
-                isVerified: true, // Google emails are already verified
-                role: "USER"
-            }).returning();
-            user = newUserResult[0];
+            await db.transaction(async (tx) => {
+                const newUserResult = await tx.insert(users).values({
+                    email,
+                    googleId,
+                    isVerified: true, // Google emails are already verified
+                    role: "USER"
+                }).returning();
+                user = newUserResult[0];
 
-            // Generate referral code for Google users too
-            const code = generateReferralCode();
-            await db.insert(userReferralCodes).values({
-                userId: user.id,
-                code,
+                // Generate referral code for Google users too
+                const code = generateReferralCode();
+                await tx.insert(userReferralCodes).values({
+                    userId: user.id,
+                    code,
+                });
+
+                // Set referral relationship if referralCode is provided
+                if (referralCode) {
+                    const referrerResult = await tx.select().from(userReferralCodes).where(eq(userReferralCodes.code, referralCode));
+                    const referrer = referrerResult[0];
+                    if (referrer) {
+                        await tx.insert(referrals).values({
+                            referrerId: referrer.userId,
+                            refereeId: user.id,
+                        });
+                    }
+                }
             });
         }
 
