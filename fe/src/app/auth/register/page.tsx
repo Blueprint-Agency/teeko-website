@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
-import { Mail, Lock, Eye, EyeOff, Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader2, CheckCircle2, XCircle, Gift } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -15,6 +15,7 @@ export default function RegisterPage() {
         email: "",
         password: "",
         confirmPassword: "",
+        referralCode: "",
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -63,7 +64,8 @@ export default function RegisterPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     email: formData.email,
-                    password: formData.password
+                    password: formData.password,
+                    referralCode: formData.referralCode
                 }),
             });
 
@@ -90,7 +92,10 @@ export default function RegisterPage() {
             const res = await fetch(`${API_BASE_URL}/auth/google-login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ credential: credentialResponse.credential }),
+                body: JSON.stringify({
+                    credential: credentialResponse.credential,
+                    referralCode: formData.referralCode
+                }),
             });
 
             const data = await res.json();
@@ -260,6 +265,25 @@ export default function RegisterPage() {
                                         {strength.symbol ? <CheckCircle2 className="w-3.5 h-3.5 text-green-500" /> : <XCircle className="w-3.5 h-3.5 text-gray-300 dark:text-zinc-700" />}
                                         <span className={`text-[11px] font-bold tracking-wider ${strength.symbol ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-zinc-600'}`}>at least one symbol</span>
                                     </div>
+                                </div>
+                            </div>
+
+                            {/* Referral Code Field */}
+                            <div className="space-y-1.5">
+                                <label htmlFor="referralCode" className="block text-xs font-bold text-gray-700 dark:text-zinc-300 ml-1 uppercase tracking-wider">
+                                    Referral Code (Optional)
+                                </label>
+                                <div className="relative group">
+                                    <Gift className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-red-600 transition-colors" />
+                                    <input
+                                        id="referralCode"
+                                        type="text"
+                                        value={formData.referralCode}
+                                        onChange={(e) => setFormData({ ...formData, referralCode: e.target.value.toUpperCase() })}
+                                        className="w-full pl-11 pr-4 py-3 bg-gray-50/50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-red-600/10 focus:border-red-600 dark:focus:border-red-600 transition-all uppercase"
+                                        placeholder="CODE"
+                                        maxLength={4}
+                                    />
                                 </div>
                             </div>
 
