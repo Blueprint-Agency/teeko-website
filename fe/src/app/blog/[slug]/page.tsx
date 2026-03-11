@@ -95,7 +95,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     return (
                         <div
                             key={block.id}
-                            className={`${baseClasses} text-lg leading-relaxed mb-6 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:ml-5`}
+                            className={`${baseClasses} text-lg leading-relaxed mb-6 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:ml-5 [&_*]:!text-inherit`}
                             dangerouslySetInnerHTML={{ __html: block.content }}
                         />
                     );

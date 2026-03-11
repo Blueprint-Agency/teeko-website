@@ -171,14 +171,14 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations, 
                                                 value={block.content}
                                                 onChange={(val) => updateBlock(index, { content: val })}
                                                 placeholder="Write something compelling..."
-                                                className="text-base text-gray-800 dark:text-gray-100 leading-relaxed font-medium"
+                                                className="text-base text-black dark:text-white leading-relaxed font-medium"
                                             />
                                         ) : (
                                             <AutoExpandingTextarea
                                                 value={block.content}
                                                 onChange={(val) => updateBlock(index, { content: val })}
                                                 placeholder={`${block.blockType.toUpperCase()} Heading...`}
-                                                className="text-xl font-black text-gray-900 dark:text-white tracking-tight"
+                                                className="text-xl font-black text-black dark:text-white tracking-tight"
                                             />
                                         )}
                                     </div>
@@ -294,12 +294,19 @@ function RichTextEditor({ value, onChange, placeholder, className }: { value: st
         onChange(html);
     };
 
+    const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const text = e.clipboardData.getData('text/plain');
+        document.execCommand('insertText', false, text);
+    };
+
     return (
         <div
             ref={contentEditableRef}
             contentEditable
             onInput={handleInput}
-            className={`w-full bg-transparent outline-none min-h-[1.5em] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-300 ${className} [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:ml-5`}
+            onPaste={handlePaste}
+            className={`w-full bg-transparent outline-none min-h-[1.5em] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-300 ${className} [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:ml-5 [&_*]:!text-inherit`}
             data-placeholder={placeholder}
             suppressContentEditableWarning={true}
             style={{ whiteSpace: 'pre-wrap' }}
