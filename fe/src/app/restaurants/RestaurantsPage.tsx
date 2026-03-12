@@ -1,60 +1,100 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RestaurantCard } from "@/components/shared/RestaurantCard";
-import { Search, SlidersHorizontal, Map, MapPin, X, ChevronDown } from "lucide-react";
+import { Search, SlidersHorizontal, Map, MapPin, X, ChevronDown, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { calculateCombinedRating, calculateCombinedReviewCount } from "@/utils/rating";
+import { API_BASE_URL } from "@/lib/constants";
 
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { Dropdown } from "@/components/shared/Dropdown";
+import { Pagination } from "@/components/shared/Pagination";
 
 interface RestaurantsPageProps {
-    initialRestaurants: any[];
+    initialRestaurants: {
+        data: any[];
+        pagination: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPages: number;
+        }
+    };
     locations: any[];
 }
 
 const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps) => {
-    const [restaurants] = useState(initialRestaurants);
+    const [restaurants, setRestaurants] = useState(initialRestaurants);
+    const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState("all");
     const [selectedCuisines, setSelectedCuisines] = useState<string[]>([]);
     const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
     const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
     const [showMobileFilters, setShowMobileFilters] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(initialRestaurants.pagination?.page || 1);
+    const itemsPerPage = 9;
 
-    const enrichedRestaurants = (restaurants || []).map(r => ({
+    const enrichedRestaurants = (restaurants?.data || []).map(r => ({
         ...r,
         rating: calculateCombinedRating(r.stats?.googleStats, r.stats?.tripAdvisorStats) || r.rating || 0,
         reviewCount: calculateCombinedReviewCount(r.stats?.googleStats, r.stats?.tripAdvisorStats) || r.reviewCount || 0
     }));
 
-    const filteredRestaurants = enrichedRestaurants.filter(restaurant => {
-        // Filter by Cuisine
-        if (selectedCuisines.length > 0 && !selectedCuisines.includes(restaurant.cuisine)) {
-            return false;
+    const fetchRestaurants = async (params: any) => {
+        try {
+            setLoading(true);
+            const queryParams = new URLSearchParams({
+                page: params.page.toString(),
+                limit: itemsPerPage.toString(),
+                status: "ACTIVE",
+                ...(params.search && { name: params.search }),
+                ...(params.location && { location: params.location }),
+                ...(params.price && { price: params.price }),
+                ...(params.cuisines?.length > 0 && { cuisines: params.cuisines.join(",") }),
+                ...(params.sortBy && { sortBy: params.sortBy })
+            });
+
+            const res = await fetch(`${API_BASE_URL}/restaurants?${queryParams.toString()}`);
+            const data = await res.json();
+            setRestaurants(data);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
         }
-        // Filter by Price
-        if (selectedPrice) {
-            const priceParts = restaurant.priceRange?.split("-").map((p: string) => p.trim());
-            if (!priceParts?.includes(selectedPrice)) {
-                return false;
-            }
-        }
-        // Filter by Location
-        if (selectedLocation && restaurant.location.id !== selectedLocation) {
-            return false;
-        }
-        return true;
-    }).sort((a, b) => {
-        if (activeTab === "top rated") {
-            return b.rating - a.rating;
-        } else if (activeTab === "most reviewed") {
-            return b.reviewCount - a.reviewCount;
-        }
-        // Default sort (e.g. by ID or original order) for "all restaurants" or fallback
-        return 0;
-    });
+    };
+
+    // Debounce search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+            setCurrentPage(1);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
+    useEffect(() => {
+        // Map activeTab to API sort
+        let sortBy = "createdAt";
+        if (activeTab === "top rated") sortBy = "rating";
+        else if (activeTab === "most reviewed") sortBy = "reviewCount";
+
+        fetchRestaurants({
+            page: currentPage,
+            search: debouncedSearch,
+            location: selectedLocation,
+            price: selectedPrice,
+            cuisines: selectedCuisines,
+            sortBy
+        });
+    }, [currentPage, debouncedSearch, selectedLocation, selectedPrice, selectedCuisines, activeTab]);
+
+    const totalPages = restaurants.pagination?.totalPages || 1;
+    const paginatedRestaurants = enrichedRestaurants; // Data is already paginated from API
 
     const toggleCuisine = (cuisine: string) => {
         setSelectedCuisines(prev =>
@@ -88,6 +128,23 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                         <SlidersHorizontal className="w-5 h-5" />
                         Filters
                     </button>
+                </div>
+
+                {/* Search Bar - Public */}
+                <div className="mt-8 mb-8">
+                    <div className="relative max-w-2xl">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Search restaurants by name..."
+                            value={searchQuery}
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setCurrentPage(1); // Reset to first page on search
+                            }}
+                            className="w-full pl-12 pr-4 py-4 bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl focus:ring-2 focus:ring-red-600 outline-none transition-all"
+                        />
+                    </div>
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-8">
@@ -152,15 +209,48 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                                     </button>
                                 ))}
                             </div>
-                            <span className="text-gray-500 dark:text-gray-400 text-sm font-medium whitespace-nowrap">Showing {filteredRestaurants.length} of {restaurants?.length || 0} results</span>
+                            <span className="text-gray-500 dark:text-gray-400 text-sm font-medium whitespace-nowrap">
+                                Showing {paginatedRestaurants.length} of {restaurants?.pagination?.total || 0} results
+                            </span>
                         </div>
 
-                        {/* Restaurant Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {filteredRestaurants.map((restaurant) => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+                            {loading && (
+                                <div className="absolute inset-0 bg-white/50 dark:bg-black/50 z-10 flex items-center justify-center backdrop-blur-[2px] rounded-2xl">
+                                    <Loader2 className="w-10 h-10 animate-spin text-red-600" />
+                                </div>
+                            )}
+                            {paginatedRestaurants.map((restaurant) => (
                                 <RestaurantCard key={restaurant.id} {...restaurant} />
                             ))}
                         </div>
+
+                        {paginatedRestaurants.length === 0 && (
+                            <div className="text-center py-20">
+                                <p className="text-gray-500 dark:text-gray-400 text-lg">No restaurants found matching your criteria.</p>
+                                <button
+                                    onClick={() => {
+                                        setSearchQuery("");
+                                        setSelectedCuisines([]);
+                                        setSelectedPrice(null);
+                                        setSelectedLocation(null);
+                                        setActiveTab("all");
+                                    }}
+                                    className="mt-4 text-red-600 font-bold hover:underline"
+                                >
+                                    Clear all filters
+                                </button>
+                            </div>
+                        )}
+
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={(page) => {
+                                setCurrentPage(page);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                        />
 
                         {/* Pagination / Load More */}
                         {/* <div className="mt-12 text-center">

@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import { Plus, Edit2, Loader2, Check, X } from "lucide-react";
+import { Plus, Edit2, Loader2, Check, X, Search } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
+import { Pagination } from "@/components/shared/Pagination";
 
 interface Restaurant {
     id: string;
@@ -19,17 +20,30 @@ export default function AdminRestaurantsPage() {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
     const [loading, setLoading] = useState(true);
     const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const itemsPerPage = 10;
 
-    const fetchRestaurants = async () => {
+    const fetchRestaurants = async (page: number, search: string) => {
         try {
+            setLoading(true);
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/restaurants`, {
+            const queryParams = new URLSearchParams({
+                page: page.toString(),
+                limit: itemsPerPage.toString(),
+                ...(search && { name: search })
+            });
+
+            const res = await fetch(`${API_BASE_URL}/restaurants?${queryParams.toString()}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             });
             const data = await res.json();
-            setRestaurants(Array.isArray(data) ? data : []);
+            setRestaurants(Array.isArray(data.data) ? data.data : []);
+            setTotalPages(data.pagination?.totalPages || 1);
         } catch (e) {
             console.error(e);
         } finally {
@@ -37,9 +51,18 @@ export default function AdminRestaurantsPage() {
         }
     }
 
+    // Debounce search
     useEffect(() => {
-        fetchRestaurants();
-    }, []);
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+            setCurrentPage(1); // Reset to page 1 on search
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
+    useEffect(() => {
+        fetchRestaurants(currentPage, debouncedSearch);
+    }, [currentPage, debouncedSearch]);
 
     const handleToggleStatus = async (restaurant: Restaurant) => {
         try {
@@ -94,6 +117,20 @@ export default function AdminRestaurantsPage() {
                         <Plus className="mr-2 h-4 w-4" /> Add Restaurant
                     </Button>
                 </Link>
+            </div>
+
+            <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                    type="text"
+                    placeholder="Search restaurants..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setCurrentPage(1);
+                    }}
+                    className="pl-10 pr-4 py-2 w-full max-w-md border border-gray-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-red-600 transition-all"
+                />
             </div>
 
             {loading ? (
@@ -152,6 +189,12 @@ export default function AdminRestaurantsPage() {
                             </tbody>
                         </table>
                     </div>
+
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
                 </>
             )}
 
