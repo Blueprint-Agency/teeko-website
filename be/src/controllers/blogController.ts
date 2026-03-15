@@ -153,6 +153,7 @@ export const createPost = async (req: Request, res: Response) => {
                     orderIndex: String(index),
                     locationId: block.locationId,
                     restaurantId: block.restaurantId,
+                    imageSize: block.imageSize,
                 }))
             );
         }
@@ -212,6 +213,7 @@ export const updatePost = async (req: Request, res: Response) => {
                     orderIndex: String(index),
                     locationId: block.locationId,
                     restaurantId: block.restaurantId,
+                    imageSize: block.imageSize,
                 }))
             );
         }
@@ -275,7 +277,12 @@ export const uploadBlogImage = async (req: Request, res: Response) => {
             return;
         }
 
-        const imageUrl = await uploadImageToR2(file, "blogs");
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const folder = `blogs/${year}/${month}`;
+
+        const imageUrl = await uploadImageToR2(file, folder);
         console.log("Uploaded image to R2, returning URL:", imageUrl);
 
         // If blogPostId is provided (e.g. from Edit page), update DB immediately

@@ -197,6 +197,13 @@
       "when": 1772210858074,
       "tag": "0027_talented_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1773581643763,
+      "tag": "0028_narrow_microchip",
+      "breakpoints": true
     }
   ]
 }

@@ -164,6 +164,7 @@ export const blogContentBlocks = pgTable("blog_content_blocks", {
     orderIndex: varchar("order_index", { length: 10 }).notNull(), // For ordering blocks
     locationId: uuid("location_id").references(() => locations.id), // Link to a location
     restaurantId: uuid("restaurant_id").references(() => restaurants.id), // Link to a restaurant
+    imageSize: varchar("image_size", { length: 20 }).default("large"), // 'small', 'medium', 'large'
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 export const restaurantStats = pgTable("restaurant_stats", {
