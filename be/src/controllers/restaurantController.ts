@@ -1,21 +1,45 @@
 import { Request, Response } from "express";
 import { db } from "../db";
 import { restaurants, restaurantImages, locations, restaurantStats, restaurantReviews, restaurantShortVideos } from "../db/schema";
-import { eq, desc, and, SQL } from "drizzle-orm";
+import { eq, desc, and, SQL, ilike, count, sql } from "drizzle-orm";
 import { getJson } from "serpapi";
 
 export const getRestaurants = async (req: Request, res: Response) => {
-    const { location: locationSlug, status } = req.query;
+    const { location: locationId, status, name, price, page = 1, limit = 10 } = req.query;
+    const pageNum = Number(page);
+    const limitNum = Number(limit);
+    const offset = (pageNum - 1) * limitNum;
 
     try {
         const conditions: (SQL | undefined)[] = [];
-        if (locationSlug) {
-            conditions.push(eq(locations.slug, locationSlug as string));
+        if (locationId) {
+            conditions.push(eq(locations.id, locationId as string));
         }
 
         if (status) {
             conditions.push(eq(restaurants.status, status as "ACTIVE" | "INACTIVE"));
         }
+
+        if (name) {
+            conditions.push(ilike(restaurants.name, `%${name}%`));
+        }
+
+        if (price) {
+            const requestedLevel = (price as string).trim().length;
+            conditions.push(sql`
+                ${requestedLevel} >= length(trim(split_part(${restaurants.priceRange}, '-', 1))) 
+                AND ${requestedLevel} <= (case when ${restaurants.priceRange} like '%-%' then length(trim(split_part(${restaurants.priceRange}, '-', 2))) else length(trim(${restaurants.priceRange})) end)
+            `);
+        }
+
+        // Get total count for pagination
+        const [totalCountResult] = await db
+            .select({ count: count() })
+            .from(restaurants)
+            .leftJoin(locations, eq(restaurants.locationId, locations.id))
+            .where(and(...conditions));
+
+        const total = Number(totalCountResult?.count || 0);
 
         const allRestaurants = await db.select({
             id: restaurants.id,
@@ -45,7 +69,9 @@ export const getRestaurants = async (req: Request, res: Response) => {
             .leftJoin(locations, eq(restaurants.locationId, locations.id))
             .leftJoin(restaurantStats, eq(restaurants.id, restaurantStats.restaurantId))
             .where(and(...conditions))
-            .orderBy(desc(restaurants.updatedAt));
+            .orderBy(desc(restaurants.updatedAt))
+            .limit(limitNum)
+            .offset(offset);
 
         // Get images and reviews for each restaurant
         const restaurantsWithDetails = await Promise.all(allRestaurants.map(async (res) => {
@@ -56,7 +82,15 @@ export const getRestaurants = async (req: Request, res: Response) => {
             return { ...res, restaurantImages: images, googleReviews, shortVideos };
         }));
 
-        res.json(restaurantsWithDetails);
+        res.json({
+            data: restaurantsWithDetails,
+            pagination: {
+                total,
+                page: pageNum,
+                limit: limitNum,
+                totalPages: Math.ceil(total / limitNum)
+            }
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server error while fetching restaurants" });
