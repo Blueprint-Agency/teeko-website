@@ -7,6 +7,7 @@ import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { useRouter, useParams } from "next/navigation";
 import { BlogContentEditor } from "@/components/admin/BlogContentEditor";
+import { ContentBlock } from "@/types/blog";
 
 interface Location {
     id: string;
@@ -19,12 +20,7 @@ interface Restaurant {
     locationId: string;
 }
 
-interface ContentBlock {
-    blockType: "h2" | "h3" | "h4" | "paragraph" | "location" | "restaurant";
-    content: string;
-    locationId?: string;
-    restaurantId?: string;
-}
+
 
 export default function EditBlogPostPage() {
     const router = useRouter();
