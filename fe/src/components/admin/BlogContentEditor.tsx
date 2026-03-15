@@ -341,7 +341,26 @@ function RichTextEditor({ value, onChange, placeholder, className }: { value: st
     const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
         e.preventDefault();
         const text = e.clipboardData.getData('text/plain');
-        document.execCommand('insertText', false, text);
+
+        const selection = window.getSelection();
+        if (!selection || !selection.rangeCount) return;
+
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+
+        const textNode = document.createTextNode(text);
+        range.insertNode(textNode);
+
+        // Move cursor to the end of the newly inserted text
+        const newRange = document.createRange();
+        newRange.setStartAfter(textNode);
+        newRange.setEndAfter(textNode);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+
+        if (contentEditableRef.current) {
+            onChange(contentEditableRef.current.innerHTML);
+        }
     };
 
     return (
