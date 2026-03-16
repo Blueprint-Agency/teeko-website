@@ -10,17 +10,9 @@ import { RestaurantCard } from "@/components/shared/RestaurantCard";
 import { LocationCarousel } from "@/components/blog/LocationCarousel";
 import { calculateCombinedRating } from "@/utils/rating";
 import { formatBlogDateGMT8 } from "@/lib/dateUtils";
+import { ContentBlock } from "@/types/blog";
 
-interface ContentBlock {
-    id: string;
-    blockType: "h2" | "h3" | "h4" | "paragraph" | "location" | "restaurant";
-    content: string;
-    orderIndex: string;
-    locationId?: string;
-    restaurantId?: string;
-    linkedEntity?: any;
-    suggestions?: any[];
-}
+
 
 interface BlogPost {
     id: string;
@@ -92,12 +84,34 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         </h4>
                     );
                 case "paragraph":
+                    // Automatically add target="_blank" to all links
+                    const processedContent = block.content.replace(
+                        /<a /g,
+                        '<a target="_blank" rel="noopener noreferrer" '
+                    );
                     return (
                         <div
                             key={block.id}
-                            className={`${baseClasses} text-lg leading-relaxed mb-6 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:ml-5 [&_*]:!text-inherit`}
-                            dangerouslySetInnerHTML={{ __html: block.content }}
+                            className={`${baseClasses} text-lg leading-relaxed mb-6 [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:ml-5 [&_a]:text-red-600 dark:[&_a]:text-red-400 [&_a]:underline [&_a]:font-bold`}
+                            dangerouslySetInnerHTML={{ __html: processedContent }}
                         />
+                    );
+                case "image":
+                    const sizeClasses = {
+                        small: "max-h-[250px]",
+                        medium: "max-h-[500px]",
+                        large: "max-h-[1000px]"
+                    };
+                    const currentSize = block.imageSize || "large";
+
+                    return (
+                        <div key={block.id} className="my-10 flex justify-center">
+                            <img
+                                src={block.content}
+                                alt="Blog content"
+                                className={`max-w-full h-auto object-contain rounded-3xl shadow-xl border border-gray-100 dark:border-zinc-800 ${sizeClasses[currentSize as keyof typeof sizeClasses]}`}
+                            />
+                        </div>
                     );
                 default:
                     return null;

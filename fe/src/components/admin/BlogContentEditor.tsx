@@ -3,15 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import {
     GripVertical, Trash2, Plus, Copy, Bold, Italic, Link as LinkIcon, List,
-    Type, MapPin, Utensils, X, Search, ChevronDown
+    Type, MapPin, Utensils, X, Search, ChevronDown, Image as ImageIcon, Loader2
 } from "lucide-react";
+import { ContentBlock } from "@/types/blog";
 
-interface ContentBlock {
-    blockType: "h2" | "h3" | "h4" | "paragraph" | "location" | "restaurant";
-    content: string;
-    locationId?: string;
-    restaurantId?: string;
-}
+
 
 interface BlogContentEditorProps {
     contentBlocks: ContentBlock[];
@@ -151,14 +147,17 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations, 
                                                     onClick={() => document.execCommand('italic', false)}
                                                     label="Italic"
                                                 />
-                                                {/* <FormattingButton
+                                                <FormattingButton
                                                     icon={<LinkIcon className="h-3 w-3" />}
                                                     onClick={() => {
-                                                        const url = prompt("Enter URL:");
-                                                        if (url) document.execCommand('createLink', false, url);
+                                                        const url = window.prompt("Enter URL:", "https://");
+                                                        if (url) {
+                                                            // Simple execCommand for now, but focus back and ensure selection
+                                                            document.execCommand('createLink', false, url);
+                                                        }
                                                     }}
                                                     label="Link"
-                                                /> */}
+                                                />
                                                 <FormattingButton
                                                     icon={<List className="h-3 w-3" />}
                                                     onClick={() => document.execCommand('insertUnorderedList', false)}
@@ -217,6 +216,51 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations, 
                                         />
                                     </div>
                                 )}
+
+                                {block.blockType === "image" && (
+                                    <div className="space-y-4">
+                                        {block.content ? (
+                                            <div className="space-y-4">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    {(["small", "medium", "large"] as const).map((size) => (
+                                                        <button
+                                                            key={size}
+                                                            type="button"
+                                                            onClick={() => updateBlock(index, { imageSize: size })}
+                                                            className={`px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-full transition-all border ${block.imageSize === size || (!block.imageSize && size === "large")
+                                                                ? "bg-red-600 border-red-600 text-white"
+                                                                : "bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 text-gray-500 dark:text-gray-400 hover:border-red-200"
+                                                                }`}
+                                                        >
+                                                            {size}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                                <div className={`relative group/img flex justify-center`}>
+                                                    <img
+                                                        src={block.content}
+                                                        alt="Blog content"
+                                                        className={`max-w-full h-auto object-contain rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm ${block.imageSize === "small" ? "max-h-[200px]" : block.imageSize === "medium" ? "max-h-[400px]" : "max-h-[800px]"}`}
+                                                    />
+                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => updateBlock(index, { content: "" })}
+                                                            className="p-2 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all"
+                                                            title="Replace Image"
+                                                        >
+                                                            <Plus className="h-5 w-5" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <ImageUploader
+                                                onUpload={(url) => updateBlock(index, { content: url, imageSize: "large" })}
+                                            />
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -234,7 +278,6 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations, 
                     </button>
                 </div>
             </div>
-
             {/* Toolbox Overlay */}
             {insertIndex !== null && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
@@ -261,6 +304,7 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations, 
                             </div>
                             <div className="space-y-4">
                                 <h4 className="text-[10px] font-black uppercase tracking-widest text-gray-400 pl-2">Smart Widgets</h4>
+                                <WidgetButton icon={<ImageIcon className="h-4 w-4 text-purple-500" />} label="Image" onClick={() => addBlock("image", insertIndex)} />
                                 <WidgetButton icon={<MapPin className="h-4 w-4 text-red-500" />} label="Location Guide" onClick={() => addBlock("location", insertIndex)} />
                                 <WidgetButton icon={<Utensils className="h-4 w-4 text-orange-500" />} label="Restaurant Card" onClick={() => addBlock("restaurant", insertIndex)} />
                             </div>
@@ -297,7 +341,26 @@ function RichTextEditor({ value, onChange, placeholder, className }: { value: st
     const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
         e.preventDefault();
         const text = e.clipboardData.getData('text/plain');
-        document.execCommand('insertText', false, text);
+
+        const selection = window.getSelection();
+        if (!selection || !selection.rangeCount) return;
+
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+
+        const textNode = document.createTextNode(text);
+        range.insertNode(textNode);
+
+        // Move cursor to the end of the newly inserted text
+        const newRange = document.createRange();
+        newRange.setStartAfter(textNode);
+        newRange.setEndAfter(textNode);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+
+        if (contentEditableRef.current) {
+            onChange(contentEditableRef.current.innerHTML);
+        }
     };
 
     return (
@@ -306,7 +369,7 @@ function RichTextEditor({ value, onChange, placeholder, className }: { value: st
             contentEditable
             onInput={handleInput}
             onPaste={handlePaste}
-            className={`w-full bg-transparent outline-none min-h-[1.5em] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-300 ${className} [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:ml-5 [&_*]:!text-inherit`}
+            className={`w-full bg-transparent outline-none min-h-[1.5em] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-300 ${className} [&_ul]:list-disc [&_ul]:list-outside [&_ul]:ml-5 [&_ol]:list-decimal [&_ol]:list-outside [&_ol]:ml-5 [&_a]:text-red-500 [&_a]:underline [&_a]:font-bold`}
             data-placeholder={placeholder}
             suppressContentEditableWarning={true}
             style={{ whiteSpace: 'pre-wrap' }}
@@ -339,6 +402,74 @@ function AutoExpandingTextarea({ value, onChange, placeholder, className, id }: 
             className={`w-full bg-transparent outline-none resize-none overflow-hidden placeholder-gray-300 ${className}`}
             rows={1}
         />
+    );
+}
+
+import { getAuthToken } from "@/lib/authFetch";
+
+function ImageUploader({ onUpload }: { onUpload: (url: string) => void }) {
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            const token = getAuthToken();
+            const res = await fetch("/api/blog/posts/upload", {
+                method: "POST",
+                headers: {
+                    ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+                },
+                body: formData,
+            });
+
+            if (!res.ok) throw new Error("Upload failed");
+
+            const data = await res.json();
+            onUpload(data.url);
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("Failed to upload image.");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    return (
+        <div
+            onClick={() => !isUploading && fileInputRef.current?.click()}
+            className={`group flex flex-col items-center justify-center p-12 border-2 border-dashed border-gray-100 dark:border-zinc-800 rounded-3xl cursor-pointer hover:border-red-200 hover:bg-red-50/50 dark:hover:bg-red-900/10 transition-all ${isUploading ? 'cursor-not-allowed opacity-50' : ''}`}
+        >
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+                accept="image/*"
+            />
+            {isUploading ? (
+                <div className="flex flex-col items-center gap-3">
+                    <Loader2 className="h-8 w-8 text-red-500 animate-spin" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Uploading...</span>
+                </div>
+            ) : (
+                <div className="flex flex-col items-center gap-3">
+                    <div className="p-4 bg-gray-50 dark:bg-zinc-800 rounded-2xl group-hover:scale-110 transition-transform">
+                        <ImageIcon className="h-6 w-6 text-gray-400 group-hover:text-red-500" />
+                    </div>
+                    <div className="text-center">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-900 dark:text-gray-100 block mb-1">Click to upload image</span>
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">neatly into cloudflare bucket</span>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }
 
