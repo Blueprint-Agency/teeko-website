@@ -39,7 +39,6 @@ export default async function Page({ params }: Props) {
     if (!restaurant) {
         notFound();
     }
-    console.log(restaurant)
 
     return <RestaurantDetailsPage initialRestaurant={restaurant} slug={slug} />;
 }

@@ -60,7 +60,6 @@ export default function CreateBlogPostPage() {
                 const restData = await restRes.json();
                 setLocations(Array.isArray(locData) ? locData : []);
                 setRestaurants(Array.isArray(restData.data) ? restData.data : []);
-                console.log(restData);
             } catch (error) {
                 console.error("Failed to fetch locations/restaurants", error);
             }
