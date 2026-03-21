@@ -4,6 +4,40 @@ import { restaurants, restaurantImages, locations, restaurantStats, restaurantRe
 import { eq, desc, and, SQL, ilike, count, sql } from "drizzle-orm";
 import { getJson } from "serpapi";
 
+export const searchRestaurantOptions = async (req: Request, res: Response) => {
+    const { query, limit = 20 } = req.query;
+    const limitNum = Number(limit);
+
+    try {
+        const conditions: (SQL | undefined)[] = [];
+        
+        if (query) {
+            conditions.push(ilike(restaurants.name, `%${query}%`));
+        }
+
+        const result = await db.select({
+            id: restaurants.id,
+            name: restaurants.name,
+            slug: restaurants.slug,
+            address: restaurants.address,
+            status: restaurants.status,
+            location: {
+                id: locations.id,
+                name: locations.name
+            }
+        })
+        .from(restaurants)
+        .leftJoin(locations, eq(restaurants.locationId, locations.id))
+        .where(conditions.length ? and(...conditions) : undefined)
+        .limit(limitNum);
+
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error while searching restaurant options" });
+    }
+};
+
 export const getRestaurants = async (req: Request, res: Response) => {
     const { location: locationId, status, name, price, page = 1, limit = 10 } = req.query;
     const pageNum = Number(page);
