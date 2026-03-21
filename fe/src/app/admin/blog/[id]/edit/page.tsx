@@ -33,7 +33,6 @@ export default function EditBlogPostPage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
     const [locations, setLocations] = useState<Location[]>([]);
-    const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
     const [formData, setFormData] = useState({
         title: "",
@@ -49,18 +48,11 @@ export default function EditBlogPostPage() {
         const fetchResources = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const [locRes, restRes] = await Promise.all([
-                    fetch(`${API_BASE_URL}/locations`, {
-                        headers: { "Authorization": `Bearer ${token}` }
-                    }),
-                    fetch(`${API_BASE_URL}/restaurants`, {
-                        headers: { "Authorization": `Bearer ${token}` }
-                    })
-                ]);
+                const locRes = await fetch(`${API_BASE_URL}/locations`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
                 const locData = await locRes.json();
-                const restData = await restRes.json();
                 setLocations(Array.isArray(locData) ? locData : []);
-                setRestaurants(Array.isArray(restData) ? restData : []);
             } catch (error) {
                 console.error("Failed to fetch locations/restaurants", error);
             }
@@ -352,7 +344,6 @@ export default function EditBlogPostPage() {
                         contentBlocks={contentBlocks}
                         setContentBlocks={setContentBlocks}
                         locations={locations}
-                        restaurants={restaurants}
                     />
 
                 </form>

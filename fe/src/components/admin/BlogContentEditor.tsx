@@ -7,16 +7,15 @@ import {
 } from "lucide-react";
 import { ContentBlock } from "@/types/blog";
 
-
+import { API_BASE_URL } from "@/lib/constants";
 
 interface BlogContentEditorProps {
     contentBlocks: ContentBlock[];
     setContentBlocks: (blocks: ContentBlock[]) => void;
     locations: any[];
-    restaurants: any[];
 }
 
-export function BlogContentEditor({ contentBlocks, setContentBlocks, locations, restaurants }: BlogContentEditorProps) {
+export function BlogContentEditor({ contentBlocks, setContentBlocks, locations }: BlogContentEditorProps) {
     const [insertIndex, setInsertIndex] = useState<number | null>(null);
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
@@ -208,8 +207,7 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations, 
                                             <Utensils className="h-5 w-5" />
                                             <span className="text-sm font-bold uppercase tracking-widest">Restaurant Widget</span>
                                         </div>
-                                        <SearchableSelect
-                                            options={restaurants.map(r => ({ value: r.id, label: r.name }))}
+                                        <AsyncRestaurantSelect
                                             value={block.restaurantId || ""}
                                             onChange={(val) => updateBlock(index, { restaurantId: val || undefined, locationId: undefined })}
                                             placeholder="Search for a specific restaurant to showcase..."
@@ -567,6 +565,117 @@ function SearchableSelect({ options, value, onChange, placeholder }: { options: 
                             ))
                         ) : (
                             <div className="px-3 py-4 text-xs text-gray-400 text-center">No results found</div>
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function AsyncRestaurantSelect({ value, onChange, placeholder }: { value: string, onChange: (val: string) => void, placeholder: string }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [search, setSearch] = useState("");
+    const [options, setOptions] = useState<{ value: string, label: string }[]>([]);
+    const [loading, setLoading] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // To display the label for initial loaded value if options are empty
+    const selectedOption = options.find(opt => opt.value === value);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const fetchOptions = async () => {
+            setLoading(true);
+            try {
+                const token = getAuthToken();
+                // We assume /restaurants/options/search accepts a "search" query parameter.
+                const res = await fetch(`${API_BASE_URL}/restaurants/options/search?query=${encodeURIComponent(search)}`, {
+                    headers: {
+                        ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+                    }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    let payload = Array.isArray(data) ? data : data.data;
+                    if (Array.isArray(payload)) {
+                        setOptions(payload.map((r: any) => ({ value: r.id, label: r.name })));
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch restaurants", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const timer = setTimeout(() => {
+            fetchOptions();
+        }, 300); // 300ms debounce
+
+        return () => clearTimeout(timer);
+    }, [search, isOpen]);
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            <div
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full flex items-center justify-between rounded-xl border border-gray-200 bg-white p-3 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white cursor-pointer"
+            >
+                <span className={value ? "" : "text-gray-400"}>
+                    {selectedOption ? selectedOption.label : (value ? "Selected Restaurant" : placeholder)}
+                </span>
+                <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+            </div>
+
+            {isOpen && (
+                <div className="absolute z-50 mt-1 w-full rounded-xl border border-gray-200 bg-white dark:bg-zinc-900 dark:border-zinc-800 shadow-xl max-h-64 overflow-hidden flex flex-col">
+                    <div className="p-2 border-b border-gray-100 dark:border-zinc-800">
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <input
+                                type="text"
+                                className="w-full pl-9 pr-4 py-2 bg-gray-50 dark:bg-zinc-800 border-none rounded-lg text-xs outline-none"
+                                placeholder={loading ? "Loading..." : "Search restaurants..."}
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                autoFocus
+                            />
+                            {loading && <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 animate-spin" />}
+                        </div>
+                    </div>
+                    <div className="overflow-y-auto flex-1 p-1">
+                        {options.length > 0 ? (
+                            options.map(opt => (
+                                <div
+                                    key={opt.value}
+                                    onClick={() => {
+                                        onChange(opt.value);
+                                        setIsOpen(false);
+                                        // Push recent selection so it displays correctly when re-opening without a new fetch, or keep search.
+                                        setSearch("");
+                                    }}
+                                    className={`px-3 py-2 text-xs rounded-lg cursor-pointer transition-colors ${value === opt.value ? "bg-red-50 text-red-600" : "hover:bg-gray-50 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-300"}`}
+                                >
+                                    {opt.label}
+                                </div>
+                            ))
+                        ) : (
+                            <div className="px-3 py-4 text-xs text-gray-400 text-center">
+                                {!loading && (search ? "No restaurants found" : "Type to search...")}
+                            </div>
                         )}
                     </div>
                 </div>
