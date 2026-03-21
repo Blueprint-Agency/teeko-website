@@ -1,0 +1,1 @@
+ALTER TABLE "sim_bookings" ADD COLUMN "collection_date" timestamp;

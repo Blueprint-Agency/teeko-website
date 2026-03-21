@@ -1,0 +1,1 @@
+ALTER TABLE "blog_content_blocks" ADD COLUMN "image_size" varchar(20) DEFAULT 'large';
