@@ -70,6 +70,12 @@ jobs:
               echo "R2_BUCKET_NAME=${{ vars.R2_BUCKET_NAME }}"
               echo "R2_PUBLIC_URL=${{ vars.R2_PUBLIC_URL }}"
             } > ${{ vars.DEPLOY_PATH }}/.env.site-be
+            {
+              echo "POSTGRES_USER=${{ vars.DB_USER }}"
+              echo "POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}"
+              echo "POSTGRES_DB=${{ vars.DB_NAME }}"
+            } > ${{ vars.DEPLOY_PATH }}/.env.site-db
             docker pull ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:${{ steps.vars.outputs.tag }}
             cd ${{ vars.DEPLOY_PATH }}
             docker compose up -d --no-deps backend-site
+            docker image prune -f
