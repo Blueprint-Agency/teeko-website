@@ -1,0 +1,1 @@
+ALTER TABLE "restaurant_reviews" ADD COLUMN "user_name" varchar NOT NULL;
