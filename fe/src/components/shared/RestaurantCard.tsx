@@ -153,7 +153,7 @@ export function RestaurantCard({
                             onClick={handleReserveClick}
                             className="flex-1 bg-red-600 text-[10px] text-white font-bold py-2 rounded-xl hover:bg-red-700 transition-all shadow-md active:scale-95"
                         >
-                            Reserve
+                            View Details
                         </button>
                         {/* <button
                             onClick={(e) => {

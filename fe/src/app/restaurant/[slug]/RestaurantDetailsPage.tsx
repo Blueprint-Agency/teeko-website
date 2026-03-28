@@ -183,7 +183,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                 // Ignore failures silently
             }
         }
-        window.open(restaurant?.reservationUrl, "_blank");
+        window.open(restaurant?.reservationUrl ? restaurant?.reservationUrl : restaurant?.stats?.googleStats?.link, "_blank");
     };
 
     return (
@@ -267,12 +267,14 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                         <MapPin className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
                                         <span className="text-base">{restaurant?.address}</span>
                                     </div>
-                                    <button
-                                        onClick={handleReserveClick}
-                                        className="bg-red-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
-                                    >
-                                        Reserve a Table
-                                    </button>
+                                    {(restaurant?.reservationUrl || restaurant?.stats?.googleStats?.link) && (
+                                        <button
+                                            onClick={handleReserveClick}
+                                            className="bg-red-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
+                                        >
+                                            {restaurant?.reservationUrl ? `Reserve a Table` : `Google Maps`}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
 
