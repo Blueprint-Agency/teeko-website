@@ -1,0 +1,2 @@
+ALTER TABLE "esim_bookings" ADD COLUMN "verification_code" varchar(12);--> statement-breakpoint
+ALTER TABLE "esim_bookings" ADD CONSTRAINT "esim_bookings_verification_code_unique" UNIQUE("verification_code");

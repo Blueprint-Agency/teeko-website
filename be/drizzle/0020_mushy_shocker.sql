@@ -1,0 +1,1 @@
+ALTER TABLE "settings" ALTER COLUMN "google_indexing" SET DEFAULT false;

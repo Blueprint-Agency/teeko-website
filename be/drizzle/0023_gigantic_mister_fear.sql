@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "permissions" jsonb DEFAULT '{"userManagement":false,"blogManagement":false,"simManagement":false,"restaurantManagement":false,"generalSettings":false}'::jsonb NOT NULL;
