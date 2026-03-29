@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { clearSession, isTokenExpired } from "@/lib/authFetch";
 
 /**
  * Automatically redirects admins to the dashboard if they land on frontend pages.
@@ -18,6 +19,10 @@ export function AdminRedirect() {
         const token = localStorage.getItem("token");
 
         if (userStr && token) {
+            if (isTokenExpired(token)) {
+                clearSession();
+                return;
+            }
             try {
                 const user = JSON.parse(userStr);
                 if (user.role === "ADMIN" || user.role === "SUPERADMIN") {

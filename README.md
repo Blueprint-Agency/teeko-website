@@ -1,73 +1,41 @@
 # teeko-website
 
-Monorepo for the Teeko website — Next.js frontend and Node.js/Express backend.
-
-## Structure
+Next.js frontend + Express backend monorepo.
 
 ```
-teeko-website/
-├── fe/   # Next.js frontend (port 5000)
-└── be/   # Node.js + Express + Drizzle ORM backend (port 3000)
+fe/   → Next.js (port 5000)
+be/   → Express + Drizzle ORM (port 3000)
 ```
 
-## Local Development
+## Setup
 
-### Prerequisites
+**Prerequisites:** Node.js 23+, Docker Desktop, `make`
 
-- Node.js 23+
-- PostgreSQL running locally
+```bash
+make install   # install dependencies
+make init      # start Postgres, migrate, seed
+make dev       # run fe + be
+```
 
-### Setup
+## Commands
 
-1. Copy env files and fill in values:
-   ```bash
-   cp fe/env.example fe/.env
-   cp be/env.example be/.env
-   ```
-
-2. Install dependencies:
-   ```bash
-   make install
-   ```
-
-3. Run database migrations:
-   ```bash
-   make db-migrate
-   ```
-
-4. Start both services:
-   ```bash
-   make dev
-   ```
-
-   Or run separately in two terminals:
-   ```bash
-   make dev-fe   # http://localhost:5000
-   make dev-be   # http://localhost:3000
-   ```
-
-## Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `make dev` | Run FE + BE in dev mode |
-| `make dev-fe` | Run FE only |
-| `make dev-be` | Run BE only |
-| `make install` | Install deps for both |
+| Command | What it does |
+|---|---|
+| `make dev` | Run FE + BE |
+| `make install` | Install deps |
+| `make init` | Start DB, migrate, seed |
+| `make reset` | Wipe DB container |
 | `make build` | Build both |
-| `make db-migrate` | Run database migrations |
-| `make db-seed` | Seed the database |
+| `make db-migrate` | Run migrations |
+| `make db-seed` | Seed database |
 | `make db-studio` | Open Drizzle Studio |
 
 ## CI/CD
 
-| Branch | Environment | VPS |
-|--------|-------------|-----|
-| `staging` | staging | VPS1 — staging.teeko.ai |
-| `main` | production | VPS2 — teeko.ai |
+| Branch | URL |
+|---|---|
+| `staging` | staging.teeko.ai |
+| `main` | teeko.ai |
 
-Workflows are path-scoped — pushing changes to `fe/` only triggers the FE deploy, and `be/` only triggers the BE deploy.
-
-Images are published to DockerHub as:
-- `blueprintagency/teeko-website-fe`
-- `blueprintagency/teeko-website-be`
+Path-scoped deploys — `fe/` changes only trigger FE, `be/` only BE.
+DockerHub: `blueprintagency/teeko-website-fe`, `blueprintagency/teeko-website-be`

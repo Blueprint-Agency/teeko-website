@@ -1,4 +1,14 @@
-.PHONY: dev dev-fe dev-be install install-fe install-be build build-fe build-be db-migrate db-seed
+.PHONY: dev dev-fe dev-be install install-fe install-be build build-fe build-be db-migrate db-seed init reset
+
+# Local DB setup
+init:
+	@if [ ! -f be/.env ]; then cp be/.env.example be/.env && echo "Created be/.env from .env.example"; fi
+	docker compose up -d --wait
+	make db-migrate
+	make db-seed
+
+reset:
+	docker compose down -v --remove-orphans
 
 # Run both FE and BE in dev mode (requires separate terminals on Windows)
 dev:

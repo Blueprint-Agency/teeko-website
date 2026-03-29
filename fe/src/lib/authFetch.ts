@@ -28,16 +28,25 @@ export const clearSession = () => {
     localStorage.removeItem("user");
 };
 
+// Check if a JWT token is expired by decoding its exp claim (no secret needed)
+export const isTokenExpired = (token: string): boolean => {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.exp * 1000 < Date.now();
+    } catch {
+        return true; // treat malformed tokens as expired
+    }
+};
+
 // Check if response indicates session expiration
 export const isSessionExpiredResponse = (status: number): boolean => {
     return status === 401 || status === 403;
 };
 
-// Redirect to login with session expired message
+// Redirect to homepage (signed out) on session expiry
 export const redirectToLogin = (router: ReturnType<typeof useRouter>, message?: string) => {
     clearSession();
-    const loginUrl = `/auth/login?expired=true${message ? `&message=${encodeURIComponent(message)}` : ''}`;
-    router.push(loginUrl);
+    router.push("/");
 };
 
 /**

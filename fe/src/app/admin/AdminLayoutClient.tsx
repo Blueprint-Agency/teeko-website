@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { AdminSidebar } from "@/components/layout/AdminSidebar";
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs";
+import { clearSession, isTokenExpired } from "@/lib/authFetch";
 
 export default function AdminLayoutClient({
     children,
@@ -25,6 +26,12 @@ export default function AdminLayoutClient({
 
         if (!userStr || !token) {
             router.push("/admin/auth/login");
+            return;
+        }
+
+        if (isTokenExpired(token)) {
+            clearSession();
+            router.push("/");
             return;
         }
 
