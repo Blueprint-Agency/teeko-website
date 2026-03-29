@@ -50,9 +50,9 @@ jobs:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ vars.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          host: ${{ github.ref_name == 'main' && vars.VPS2_HOST || vars.VPS1_HOST }}
+          username: root
+          password: ${{ github.ref_name == 'main' && secrets.VPS2_SSH_PASSWORD || secrets.VPS1_SSH_PASSWORD }}
           script: |
             {
               echo "BACKEND_URL=http://backend-site:3000"
