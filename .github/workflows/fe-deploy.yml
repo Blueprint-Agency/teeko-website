@@ -56,8 +56,8 @@ jobs:
           script: |
             {
               echo "BACKEND_URL=http://backend-site:3000"
-            } > ${{ vars.DEPLOY_PATH }}/.env.site-fe
+            } > /root/stacks/website/.env.site-fe
             docker pull ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:${{ steps.vars.outputs.tag }}
-            cd ${{ vars.DEPLOY_PATH }}
+            cd /root/stacks/website
             docker compose up -d --no-deps site-fe
             docker image prune -f
