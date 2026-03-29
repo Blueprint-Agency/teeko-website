@@ -8,10 +8,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-staging:
-    if: github.ref_name == 'staging'
+  deploy:
+    if: github.ref_name == 'main' || github.ref_name == 'staging'
     runs-on: ubuntu-latest
-    environment: staging
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
 
     steps:
       - name: Checkout
@@ -29,13 +29,13 @@ jobs:
           context: ./be
           push: true
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:staging
-            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:staging-${{ github.sha }}
+            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:${{ github.ref_name == 'main' && 'latest' || 'staging' }}
+            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:${{ github.ref_name == 'main' && 'latest' || 'staging' }}-${{ github.sha }}
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ vars.VPS_HOST }}
+          host: ${{ github.ref_name == 'main' && vars.VPS2_HOST || vars.VPS1_HOST }}
           username: deploy
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
@@ -67,71 +67,7 @@ jobs:
               echo "POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}"
               echo "POSTGRES_DB=${{ vars.DB_NAME }}"
             } > /root/stacks/website/.env.site-db
-            docker pull ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:staging
-            cd /root/stacks/website
-            docker compose up -d --no-deps backend-site
-            docker image prune -f
-
-  deploy-production:
-    if: github.ref_name == 'main'
-    runs-on: ubuntu-latest
-    environment: production
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push BE image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./be
-          push: true
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:latest
-            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:latest-${{ github.sha }}
-
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ vars.VPS_HOST }}
-          username: deploy
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            {
-              echo "PORT=${{ vars.PORT }}"
-              echo "DB_HOST=${{ vars.DB_HOST }}"
-              echo "DB_PORT=${{ vars.DB_PORT }}"
-              echo "DB_USER=${{ vars.DB_USER }}"
-              echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
-              echo "DB_NAME=${{ vars.DB_NAME }}"
-              echo "JWT_SECRET=${{ secrets.JWT_SECRET }}"
-              echo "FRONTEND_URL=${{ vars.FRONTEND_URL }}"
-              echo "SUPERADMIN_USERNAME=${{ vars.SUPERADMIN_USERNAME }}"
-              echo "SUPERADMIN_PASSWORD=${{ secrets.SUPERADMIN_PASSWORD }}"
-              echo "SERPAPI_API_KEY=${{ secrets.SERPAPI_API_KEY }}"
-              echo "SMTP_SERVICE=${{ vars.SMTP_SERVICE }}"
-              echo "SMTP_HOST=${{ vars.SMTP_HOST }}"
-              echo "SMTP_PORT=${{ vars.SMTP_PORT }}"
-              echo "SMTP_USER=${{ vars.SMTP_USER }}"
-              echo "SMTP_PASS=${{ secrets.SMTP_PASS }}"
-              echo "R2_S3_API=${{ vars.R2_S3_API }}"
-              echo "R2_ACCESS_KEY_ID=${{ vars.R2_ACCESS_KEY_ID }}"
-              echo "R2_SECRET_ACCESS_KEY=${{ secrets.R2_SECRET_ACCESS_KEY }}"
-              echo "R2_BUCKET_NAME=${{ vars.R2_BUCKET_NAME }}"
-              echo "R2_PUBLIC_URL=${{ vars.R2_PUBLIC_URL }}"
-            } > /root/stacks/website/.env.site-be
-            {
-              echo "POSTGRES_USER=${{ vars.DB_USER }}"
-              echo "POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}"
-              echo "POSTGRES_DB=${{ vars.DB_NAME }}"
-            } > /root/stacks/website/.env.site-db
-            docker pull ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:latest
+            docker pull ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-be:${{ github.ref_name == 'main' && 'latest' || 'staging' }}
             cd /root/stacks/website
             docker compose up -d --no-deps backend-site
             docker image prune -f
