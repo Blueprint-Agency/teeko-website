@@ -1,3 +1,4 @@
+// deploy trigger 2026-03-30
 import { Navigation } from "@/components/layout/Navigation";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { FeaturedSection } from "@/components/sections/FeaturedSection";
