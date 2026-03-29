@@ -8,22 +8,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy-staging:
+    if: github.ref_name == 'staging'
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    environment: staging
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set image tag
-        id: vars
-        run: |
-          if [ "${{ github.ref_name }}" = "main" ]; then
-            echo "tag=latest" >> $GITHUB_OUTPUT
-          else
-            echo "tag=staging" >> $GITHUB_OUTPUT
-          fi
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -37,8 +29,8 @@ jobs:
           context: ./fe
           push: true
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:${{ steps.vars.outputs.tag }}
-            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:${{ steps.vars.outputs.tag }}-${{ github.sha }}
+            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:staging
+            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:staging-${{ github.sha }}
           build-args: |
             NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_AI_APP_URL=${{ vars.NEXT_PUBLIC_AI_APP_URL }}
@@ -50,14 +42,60 @@ jobs:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ github.ref_name == 'main' && vars.VPS2_HOST || vars.VPS1_HOST }}
-          username: root
-          password: ${{ github.ref_name == 'main' && secrets.VPS2_SSH_PASSWORD || secrets.VPS1_SSH_PASSWORD }}
+          host: ${{ vars.VPS1_HOST }}
+          username: deploy
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             {
               echo "BACKEND_URL=http://backend-site:3000"
             } > /root/stacks/website/.env.site-fe
-            docker pull ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:${{ steps.vars.outputs.tag }}
+            docker pull ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:staging
+            cd /root/stacks/website
+            docker compose up -d --no-deps site-fe
+            docker image prune -f
+
+  deploy-production:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push FE image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./fe
+          push: true
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:latest
+            ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:latest-${{ github.sha }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_AI_APP_URL=${{ vars.NEXT_PUBLIC_AI_APP_URL }}
+            NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ vars.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+            NEXT_PUBLIC_GTM_ID=${{ vars.NEXT_PUBLIC_GTM_ID }}
+            NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
+            BACKEND_URL=${{ vars.BACKEND_URL }}
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ vars.VPS2_HOST }}
+          username: deploy
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            {
+              echo "BACKEND_URL=http://backend-site:3000"
+            } > /root/stacks/website/.env.site-fe
+            docker pull ${{ vars.DOCKERHUB_USERNAME }}/teeko-website-fe:latest
             cd /root/stacks/website
             docker compose up -d --no-deps site-fe
             docker image prune -f
