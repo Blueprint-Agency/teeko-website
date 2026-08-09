@@ -39,10 +39,20 @@ jobs:
             NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL }}
             BACKEND_URL=${{ vars.BACKEND_URL }}
 
+      # Reach the VPS over the tailnet rather than its public IP, so port 22 can be
+      # closed at the firewall. Same pattern teeko-ehailing and kaiteki-web already use.
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          ping: ${{ github.ref_name == 'main' && vars.VPS2_TAILSCALE_HOST || vars.VPS1_TAILSCALE_HOST }}
+
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ github.ref_name == 'main' && vars.VPS2_HOST || vars.VPS1_HOST }}
+          host: ${{ github.ref_name == 'main' && vars.VPS2_TAILSCALE_HOST || vars.VPS1_TAILSCALE_HOST }}
           username: deploy
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
