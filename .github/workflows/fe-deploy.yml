@@ -12,6 +12,9 @@ jobs:
     if: github.ref_name == 'main' || github.ref_name == 'staging'
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
+    # Replaces the action's implicit command_timeout (10m default). Plain ssh
+    # has no such guard and the job default is 6h.
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -49,13 +52,22 @@ jobs:
           tags: tag:ci
           ping: ${{ github.ref_name == 'main' && vars.VPS2_TAILSCALE_HOST || vars.VPS1_TAILSCALE_HOST }}
 
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+
+      # Plain ssh, not appleboy/ssh-action. That action ships no SSH code -- it
+      # curls the drone-ssh binary from GitHub release assets on every run, and
+      # its cache branch never hits on an ephemeral runner. booking-system lost
+      # a deploy to that download on 2026-08-12, before it reached the host.
+      # ssh is already here. Same pattern as infra's deploy-infra.yml.
       - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ github.ref_name == 'main' && vars.VPS2_TAILSCALE_HOST || vars.VPS1_TAILSCALE_HOST }}
-          username: deploy
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
+        run: |
+          ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=accept-new -o ConnectTimeout=90 \
+            "deploy@${{ github.ref_name == 'main' && vars.VPS2_TAILSCALE_HOST || vars.VPS1_TAILSCALE_HOST }}" \
+            'umask 077; f=$(mktemp); cat > "$f" && bash "$f"; rc=$?; rm -f "$f"; exit $rc' <<'REMOTE'
             {
               echo "BACKEND_URL=http://backend-site:3000"
             } > /root/stacks/website/.env.site-fe
@@ -63,3 +75,4 @@ jobs:
             cd /root/stacks/website
             docker compose up -d --no-deps site-fe
             docker image prune -f
+          REMOTE
