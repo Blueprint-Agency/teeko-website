@@ -171,12 +171,7 @@ export default function LoginPage() {
                                     <label htmlFor="password" className="block text-xs font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-wider">
                                         Password
                                     </label>
-                                    <Link
-                                        href="/auth/forgot-password"
-                                        className="text-[10px] font-bold text-red-600 hover:text-red-700 transition-colors uppercase"
-                                    >
-                                        Forgot?
-                                    </Link>
+                                    {/* Password reset is not built (OPEN-ITEMS #6); the "Forgot?" link 404'd and was removed 2026-09-19 */}
                                 </div>
                                 <div className="relative group">
                                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-red-600 transition-colors" />

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { HERO_STATS } from "@/lib/business";
 
 const heroImages = [
     "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80",
@@ -67,24 +68,14 @@ export function HeroSection() {
                     </button>
                 </div>
 
-                {/* Quick Stats */}
+                {/* Quick Stats: values come from lib/business.ts, never inline */}
                 <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-12">
-                    <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">20+</div>
-                        <div className="text-[10px] sm:text-xs text-white/70">Places</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">50K+</div>
-                        <div className="text-[10px] sm:text-xs text-white/70">Reviews</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">4.8</div>
-                        <div className="text-[10px] sm:text-xs text-white/70">Avg Rating</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">3</div>
-                        <div className="text-[10px] sm:text-xs text-white/70">Cities</div>
-                    </div>
+                    {HERO_STATS.map((stat) => (
+                        <div key={stat.label} className="text-center">
+                            <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">{stat.value}</div>
+                            <div className="text-[10px] sm:text-xs text-white/70">{stat.label}</div>
+                        </div>
+                    ))}
                 </div>
 
                 {/* Slide Indicators */}
