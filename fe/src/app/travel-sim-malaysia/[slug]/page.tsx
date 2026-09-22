@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { API_BASE_URL } from "@/lib/constants";
+import { asList } from "@/lib/api";
 import { notFound } from "next/navigation";
 import { ExternalLink, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -66,7 +67,7 @@ async function getRelatedPackages(providerId: string, currentId: string): Promis
             cache: "no-store"
         });
         if (!res.ok) return [];
-        const allPackages = await res.json();
+        const allPackages = asList<Package>(await res.json());
         return allPackages.filter((pkg: Package) =>
             pkg.providerId === providerId && pkg.id !== currentId
         ).slice(0, 4);

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Loader2, ExternalLink, Sparkles, Infinity, Zap, Mail, MapPin } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
+import { asList } from "@/lib/api";
 import Link from "next/link";
 import { Footer } from "@/components/layout/Footer";
 import { Navigation } from "@/components/layout/Navigation";
@@ -45,8 +46,8 @@ export default function EsimPage() {
                 const packagesData = await packagesRes.json();
                 const providersData = await providersRes.json();
 
-                setPackages(Array.isArray(packagesData) ? packagesData : []);
-                setProviders(Array.isArray(providersData) ? providersData : []);
+                setPackages(asList(packagesData));
+                setProviders(asList(providersData));
             } catch (error) {
                 console.error("Failed to fetch data", error);
             } finally {

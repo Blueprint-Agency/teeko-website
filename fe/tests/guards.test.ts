@@ -262,7 +262,52 @@ test("sampleRestaurants is not reachable from any page", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 5. Internal links, redirects and the sitemap resolve to real routes
+// 5. List endpoints are read through asList()
+// ---------------------------------------------------------------------------
+
+test("every list endpoint fetch normalises the response with asList()", () => {
+    // `/restaurants` changed from returning an array to `{data, pagination}`
+    // when pagination was added (2026). Callers doing `Array.isArray(x) ? x : []`
+    // or reading `.length` silently saw an empty list: the homepage lost its
+    // featured section and the sitemap lost all 79 restaurant pages, with no
+    // error anywhere. Reading list responses through asList() survives both
+    // shapes, so this requires it.
+    const LIST_ENDPOINTS = ["/restaurants", "/blog/posts", "/sim/packages", "/sim/providers"];
+    const BACKTICK = String.fromCharCode(96);
+    const bad: string[] = [];
+    for (const file of walk(SRC)) {
+        const f = load(file);
+        // The admin panel drives pagination deliberately and reads the
+        // envelope itself, as does the public restaurants listing page.
+        if (f.path.startsWith("src/app/admin/") || f.path.startsWith("src/components/admin/")) continue;
+        if (f.path === "src/app/restaurants/RestaurantsPage.tsx") continue;
+        // Its server component passes the whole {data, pagination} envelope to
+        // that page as initial state, so it must not flatten it.
+        if (f.path === "src/app/restaurants/page.tsx") continue;
+
+        f.lines.forEach((line, i) => {
+            const hit = LIST_ENDPOINTS.find((e) => line.includes(e + "?") || line.includes(e + BACKTICK));
+            if (!hit || !line.includes("fetch(")) return;
+            // asList may be applied on this line or within the next few.
+            const window = f.lines.slice(i, i + 12).join(" ");
+            if (!window.includes("asList")) bad.push(`${f.path}:${i + 1}  ${hit}`);
+        });
+    }
+    assert.deepEqual(bad, [], `List endpoint fetches that do not use asList(): ${bad.join(" | ")}`);
+});
+
+test("the sitemap asks paginated endpoints for every item", () => {
+    // Without an explicit limit the restaurants endpoint returns its first
+    // page of 10, so the sitemap would list 10 of 79 restaurants and look fine.
+    const sitemap = load(join(APP, "sitemap.ts"));
+    const line = sitemap.lines.find((l) => l.includes("/restaurants?") && l.includes("fetch("));
+    assert.ok(line, "sitemap.ts must fetch /restaurants with query parameters");
+    assert.match(line!, /limit=/, "the sitemap's /restaurants fetch must set an explicit limit");
+    assert.match(line!, /status=ACTIVE/, "the sitemap must request only ACTIVE restaurants");
+});
+
+// ---------------------------------------------------------------------------
+// 6. Internal links, redirects and the sitemap resolve to real routes
 // ---------------------------------------------------------------------------
 
 function collectRoutes(): string[] {

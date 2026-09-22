@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { API_BASE_URL } from '@/lib/constants';
+import { asList, ALL_ITEMS_LIMIT } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 3600; // Cache for 1 hour
@@ -50,15 +51,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     try {
         const [blogsRes, restaurantsRes, simPackagesRes] = await Promise.all([
             fetch(`${API_BASE_URL}/blog/posts`),
-            fetch(`${API_BASE_URL}/restaurants`),
+            // Live restaurants only, and all of them: the endpoint pages at 10 by default.
+            fetch(`${API_BASE_URL}/restaurants?status=ACTIVE&limit=${ALL_ITEMS_LIMIT}`),
             fetch(`${API_BASE_URL}/sim/packages`),
         ]);
 
-        const blogs = await blogsRes.json();
-        const restaurants = await restaurantsRes.json();
-        const simPackages = await simPackagesRes.json();
+        const blogs = asList<any>(await blogsRes.json());
+        const restaurants = asList<any>(await restaurantsRes.json())
+            // restaurants.isIndexed is the per-page switch; absent means indexable.
+            .filter((r: any) => r.isIndexed !== false);
+        const simPackages = asList<any>(await simPackagesRes.json());
 
-        const blogPages = (Array.isArray(blogs) ? blogs : []).map((post: any) => {
+        const blogPages = blogs.map((post: any) => {
             const date = new Date(post.updatedAt || post.createdAt);
             return {
                 url: escapeXml(`${baseUrl}/blog/${post.slug}`),
@@ -68,7 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             };
         });
 
-        const restaurantPages = (Array.isArray(restaurants) ? restaurants : []).map((res: any) => {
+        const restaurantPages = restaurants.map((res: any) => {
             const date = new Date(res.updatedAt || res.createdAt);
             return {
                 url: escapeXml(`${baseUrl}/restaurant/${res.slug}`),
@@ -78,7 +82,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             };
         });
 
-        const simPages = (Array.isArray(simPackages) ? simPackages : []).map((pkg: any) => {
+        const simPages = simPackages.map((pkg: any) => {
             const date = new Date(pkg.updatedAt || pkg.createdAt);
             return {
                 url: escapeXml(`${baseUrl}/travel-sim-malaysia/${pkg.slug}`),

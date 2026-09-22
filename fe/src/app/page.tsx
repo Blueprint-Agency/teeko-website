@@ -6,12 +6,14 @@ import { EsimSection } from "@/components/sections/EsimSection";
 import { BlogSection } from "@/components/sections/BlogSection";
 import { Footer } from "@/components/layout/Footer";
 import { API_BASE_URL } from "@/lib/constants";
+import { asList } from "@/lib/api";
 
 async function getRestaurants() {
   try {
-    const res = await fetch(`${API_BASE_URL}/restaurants`, { cache: "no-store" });
+    // Only live restaurants, and only as many as the featured strip shows.
+    const res = await fetch(`${API_BASE_URL}/restaurants?status=ACTIVE&limit=4`, { cache: "no-store" });
     if (!res.ok) return [];
-    return res.json();
+    return asList(await res.json());
   } catch (error) {
     return [];
   }
@@ -21,7 +23,7 @@ async function getEsimPackages() {
   try {
     const res = await fetch(`${API_BASE_URL}/sim/packages`, { cache: "no-store" });
     if (!res.ok) return [];
-    return res.json();
+    return asList(await res.json());
   } catch (error) {
     return [];
   }
@@ -31,7 +33,7 @@ async function getBlogPosts() {
   try {
     const res = await fetch(`${API_BASE_URL}/blog/posts`, { cache: "no-store" });
     if (!res.ok) return [];
-    return res.json();
+    return asList(await res.json());
   } catch (error) {
     return [];
   }

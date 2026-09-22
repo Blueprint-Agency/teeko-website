@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "@/lib/constants";
+import { asList } from "@/lib/api";
 import BlogListPage from "./BlogListPage";
 import { Metadata } from 'next';
 
@@ -11,7 +12,7 @@ async function getPosts() {
     try {
         const res = await fetch(`${API_BASE_URL}/blog/posts`, { cache: "no-store" });
         if (!res.ok) return [];
-        return res.json();
+        return asList(await res.json());
     } catch (error) {
         console.error("Failed to fetch posts", error);
         return [];

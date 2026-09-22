@@ -78,6 +78,10 @@ export const getRestaurants = async (req: Request, res: Response) => {
         const allRestaurants = await db.select({
             id: restaurants.id,
             status: restaurants.status,
+            // isIndexed and updatedAt are what the sitemap needs to decide
+            // whether a restaurant page belongs in it, and with what lastmod.
+            isIndexed: restaurants.isIndexed,
+            updatedAt: restaurants.updatedAt,
             name: restaurants.name,
             slug: restaurants.slug,
             description: restaurants.description,
