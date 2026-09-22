@@ -21,6 +21,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
     };
 
+    // Only a date the database actually holds counts as a lastmod. An entry
+    // with no usable date is published without one.
+    const editedAt = (...candidates: (string | undefined | null)[]) => {
+        for (const c of candidates) {
+            if (!c) continue;
+            const d = new Date(c);
+            if (!isNaN(d.getTime())) return d;
+        }
+        return undefined;
+    };
+
     // Check if indexing is enabled globally
     try {
         const settingsRes = await fetch(`${API_BASE_URL}/admin/settings`, { next: { revalidate: 3600 } });
@@ -34,7 +45,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         console.warn('Could not fetch settings for sitemap, continuing with existing rules.');
     }
 
-    // Static pages - Exclude /profile and other sensitive routes
+    // A lastmod that is always "now" is a false freshness signal: Google learns
+    // to discount a sitemap whose dates never settle. These four are listing
+    // pages whose content is whatever the database holds, so there is no
+    // meaningful edit date for them. Omitting lastmod says "I do not know",
+    // which is true, rather than "changed today", which is not.
     const staticPages = [
         '',
         '/blog',
@@ -42,7 +57,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/travel-sim-malaysia',
     ].map((route) => ({
         url: escapeXml(`${baseUrl}${route}`),
-        lastModified: new Date(),
         changeFrequency: 'daily' as const,
         priority: route === '' ? 1 : 0.8,
     }));
@@ -62,35 +76,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             .filter((r: any) => r.isIndexed !== false);
         const simPackages = asList<any>(await simPackagesRes.json());
 
-        const blogPages = blogs.map((post: any) => {
-            const date = new Date(post.updatedAt || post.createdAt);
-            return {
-                url: escapeXml(`${baseUrl}/blog/${post.slug}`),
-                lastModified: isNaN(date.getTime()) ? new Date() : date,
-                changeFrequency: 'weekly' as const,
-                priority: 0.7,
-            };
-        });
+        const blogPages = blogs.map((post: any) => ({
+            url: escapeXml(`${baseUrl}/blog/${post.slug}`),
+            lastModified: editedAt(post.updatedAt, post.createdAt, post.publishedAt),
+            changeFrequency: 'weekly' as const,
+            priority: 0.7,
+        }));
 
-        const restaurantPages = restaurants.map((res: any) => {
-            const date = new Date(res.updatedAt || res.createdAt);
-            return {
-                url: escapeXml(`${baseUrl}/restaurant/${res.slug}`),
-                lastModified: isNaN(date.getTime()) ? new Date() : date,
-                changeFrequency: 'weekly' as const,
-                priority: 0.6,
-            };
-        });
+        const restaurantPages = restaurants.map((res: any) => ({
+            url: escapeXml(`${baseUrl}/restaurant/${res.slug}`),
+            lastModified: editedAt(res.updatedAt, res.createdAt),
+            changeFrequency: 'weekly' as const,
+            priority: 0.6,
+        }));
 
-        const simPages = simPackages.map((pkg: any) => {
-            const date = new Date(pkg.updatedAt || pkg.createdAt);
-            return {
-                url: escapeXml(`${baseUrl}/travel-sim-malaysia/${pkg.slug}`),
-                lastModified: isNaN(date.getTime()) ? new Date() : date,
-                changeFrequency: 'monthly' as const,
-                priority: 0.6,
-            };
-        });
+        const simPages = simPackages.map((pkg: any) => ({
+            url: escapeXml(`${baseUrl}/travel-sim-malaysia/${pkg.slug}`),
+            lastModified: editedAt(pkg.updatedAt, pkg.createdAt, pkg.publishedAt),
+            changeFrequency: 'monthly' as const,
+            priority: 0.6,
+        }));
 
         return [...staticPages, ...blogPages, ...restaurantPages, ...simPages];
 

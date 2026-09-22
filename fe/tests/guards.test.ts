@@ -296,6 +296,20 @@ test("every list endpoint fetch normalises the response with asList()", () => {
     assert.deepEqual(bad, [], `List endpoint fetches that do not use asList(): ${bad.join(" | ")}`);
 });
 
+test("no sitemap entry claims it was modified now", () => {
+    // `lastModified: new Date()` is today's date on every request, for every
+    // visit, forever. Ten URLs did that, so a third of the sitemap was
+    // permanently "just changed"; Google discounts a sitemap whose dates never
+    // settle, and this one had not been re-read since March 2026. A date must
+    // come from the database, or be omitted.
+    const sitemap = load(join(APP, "sitemap.ts"));
+    const bad: string[] = [];
+    sitemap.lines.forEach((line, i) => {
+        if (/lastModified:\s*new Date\(\s*\)/.test(line)) bad.push(`src/app/sitemap.ts:${i + 1}`);
+    });
+    assert.deepEqual(bad, [], `Sitemap entries hardcoding the current time as lastmod: ${bad.join(" | ")}`);
+});
+
 test("the sitemap asks paginated endpoints for every item", () => {
     // Without an explicit limit the restaurants endpoint returns its first
     // page of 10, so the sitemap would list 10 of 79 restaurants and look fine.

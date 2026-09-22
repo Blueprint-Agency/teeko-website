@@ -117,6 +117,9 @@ export const getPublishedPackages = async (req: Request, res: Response) => {
                 seoDescription: simPackages.seoDescription,
                 features: simPackages.features,
                 publishedAt: simPackages.publishedAt,
+                // The sitemap needs a real edit date; without it every package
+                // page claimed it changed today, on every request.
+                updatedAt: simPackages.updatedAt,
                 provider: {
                     id: simProviders.id,
                     name: simProviders.name,
