@@ -6,7 +6,7 @@ declined, the reason is recorded so it is not re-pitched every month.
 
 Numbers are referenced from code comments and `AGENTS.md`; do not renumber.
 
-Last updated **2026-09-20**, when the 30-pieces-a-month content goal was recorded (item 2).
+Last updated **2026-09-22**, when the F1 Sepang cluster started and the ttklia operating entity was noted (item 1).
 
 ## 1. ttklia.com conversion path does not exist on the site
 
@@ -23,6 +23,15 @@ Needed to unblock:
 - Whether ttklia.com should be named as "Teeko" or as "ttklia" in copy (brand relation, see #4).
 - Where it sits in the navigation and on the SIM confirmation screen (a visitor who just booked
   a KLIA2 SIM is the best transport lead the site will ever have).
+- The corporate relationship. ttklia.com's footer names **Asia Success Resources Sdn Bhd
+  (803432-K)** as operator, not GM Ai Tours. Until the client confirms how the two relate,
+  copy says "the ttklia F1 shuttle", never "our shuttle" (first applied 2026-09-22 in the F1
+  transport post).
+
+First use, 2026-09-22: the F1 Sepang content cluster (transport guide, hub, tickets) links to
+`https://ttklia.com/tours/f1-sepang-shuttle-bus-trip` with provisional UTMs
+`utm_source=teeko&utm_medium=blog&utm_campaign=f1_sepang_2026`. Drafts live outside the repo in
+`Blueprint Clients/Teeko/content-drafts/` until the admin editor takes them.
 
 ## 2. Bahasa Malaysia and Chinese versions
 

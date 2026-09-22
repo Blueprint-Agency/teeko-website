@@ -11,6 +11,8 @@ import { LocationCarousel } from "@/components/blog/LocationCarousel";
 import { calculateCombinedRating } from "@/utils/rating";
 import { formatBlogDateGMT8 } from "@/lib/dateUtils";
 import { ContentBlock } from "@/types/blog";
+import { CtaCard } from "@/components/blog/CtaCard";
+import { parseCtaContent } from "@/lib/blogCta";
 
 
 
@@ -113,6 +115,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                             />
                         </div>
                     );
+                case "cta":
+                    return <CtaCard key={block.id} {...parseCtaContent(block.content)} />;
                 default:
                     return null;
             }

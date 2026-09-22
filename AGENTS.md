@@ -129,7 +129,10 @@ Then the house rules:
 - **Content model** (`be/src/db/schema.ts`): `restaurants` (keyed by `tripAdvisorLocationId`,
   with `restaurantStats`, `restaurantReviews`, `restaurantImages`, `restaurantShortVideos`),
   `locations`, `simProviders` / `simPackages` / `simContentTemplates` / `simBookings`,
-  `blogPosts` + `blogContentBlocks` (typed blocks, can link a location or restaurant), `users`
+  `blogPosts` + `blogContentBlocks` (typed blocks: `h2`/`h3`/`h4`, `paragraph` as HTML, `image`,
+  `location`, `restaurant`, and `cta` whose `content` is JSON `{heading, subheading, buttonText,
+  url}` rendered by `components/blog/CtaCard.tsx`; put the ttklia link in a `cta` block, not a bare
+  hyperlink), `users`
   with `pointHistory`, `userReferralCodes`, `referrals`, and a singleton `settings` row.
 - **Content is edited in the admin panel** (`/admin`), not in source. Page copy that is
   framework chrome (hero, section headers, footer, legal) lives in components. If a client
