@@ -13,6 +13,7 @@ import { formatBlogDateGMT8 } from "@/lib/dateUtils";
 import { ContentBlock } from "@/types/blog";
 import { CtaCard } from "@/components/blog/CtaCard";
 import { parseCtaContent } from "@/lib/blogCta";
+import { parseImageContent } from "@/lib/blogImage";
 
 
 
@@ -99,6 +100,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         />
                     );
                 case "image":
+                    const image = parseImageContent(block.content);
                     const sizeClasses = {
                         small: "max-h-[250px]",
                         medium: "max-h-[500px]",
@@ -109,8 +111,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     return (
                         <div key={block.id} className="my-10 flex justify-center">
                             <img
-                                src={block.content}
-                                alt="Blog content"
+                                src={image.url}
+                                alt={image.alt || post.title}
                                 className={`max-w-full h-auto object-contain rounded-3xl shadow-xl border border-gray-100 dark:border-zinc-800 ${sizeClasses[currentSize as keyof typeof sizeClasses]}`}
                             />
                         </div>

@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { ContentBlock } from "@/types/blog";
 import { EMPTY_CTA, parseCtaContent, serializeCtaContent, type CtaContent } from "@/lib/blogCta";
+import { parseImageContent, serializeImageContent } from "@/lib/blogImage";
 
 import { API_BASE_URL } from "@/lib/constants";
 
@@ -264,8 +265,8 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations }
                                                 </div>
                                                 <div className={`relative group/img flex justify-center`}>
                                                     <img
-                                                        src={block.content}
-                                                        alt="Blog content"
+                                                        src={parseImageContent(block.content).url}
+                                                        alt={parseImageContent(block.content).alt || "Image preview"}
                                                         className={`max-w-full h-auto object-contain rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm ${block.imageSize === "small" ? "max-h-[200px]" : block.imageSize === "medium" ? "max-h-[400px]" : "max-h-[800px]"}`}
                                                     />
                                                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center gap-2">
@@ -278,6 +279,18 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations }
                                                             <Plus className="h-5 w-5" />
                                                         </button>
                                                     </div>
+                                                </div>
+                                                <div className="mt-3">
+                                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-1.5">
+                                                        Alt text
+                                                    </label>
+                                                    <input
+                                                        className="w-full rounded-xl border border-gray-200 bg-white p-2.5 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white outline-none focus:border-red-400"
+                                                        placeholder="Describe what is in the image, e.g. Coach at the LaLaport BBCC boarding point"
+                                                        value={parseImageContent(block.content).alt}
+                                                        onChange={e => updateBlock(index, { content: serializeImageContent({ url: parseImageContent(block.content).url, alt: e.target.value }) })}
+                                                    />
+                                                    <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1.5">Read by screen readers and search engines. Leave empty only for purely decorative images.</p>
                                                 </div>
                                             </div>
                                         ) : (
