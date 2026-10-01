@@ -1,7 +1,7 @@
 # Content schedule: Teeko
 
 Source: the Content Schedule tab of docs/content-schedule-2026-10-to-2027-03.html (Oct 2026 to
-Mar 2027, prepared 30 Sep 2026). This file is that plan with a status column. The SEO client
+Mar 2027, prepared 30 Sep 2026, October additions 1 Oct 2026). This file is that plan with a status column. The SEO client
 tracker reads it on every push.
 
 **Blog posts are written in the admin panel, not in this repo, so nothing is detected
@@ -12,20 +12,20 @@ it is merged and Live when it is deployed.
 
 **Type** gives the pillar and the language: EN, BM, or ZH (中文). BM and 中文 rows are the
 previous month's topics, retitled to each language's own keyword rather than translated.
-160 pieces count toward the plan. The Build and Optimise rows are extra work and are not part
-of the 160. The Slug column is optional. Fill it in once a post is published, for reference.
+190 pieces count toward the plan (70 EN, 60 BM, 60 中文). The Build and Optimise rows are extra work and
+are not part of the 190. The Slug column is optional. Fill it in once a post is published, for reference.
 
 Keep the ID column. It is how the tracker matches rows. A new row needs a new, unused ID.
 
 ## Month 1: Build + Arrival Core
 
-October 2026. 10 English pieces while the ttklia.com path and the locale layer are built
+October 2026. 20 English pieces while the ttklia.com path and the locale layer are built. tk166–tk175 (Lalaport, private transfer, private driver) were added on 1 Oct 2026
 
 | ID | Piece | Primary keyword | Type | Slug | Status | Evidence |
 |---|---|---|---|---|---|---|
-| tk001 | ttklia.com cta on all 12 existing posts + nav link |  | Build |  | Not started | Not counted in the 160. OPEN-ITEMS #1: waits on the client’s link plan and UTM convention |
-| tk002 | Locale layer: data model, routing, hreflang, switcher |  | Build |  | Not started | Not counted in the 160. OPEN-ITEMS #2: every BM and 中文 piece depends on it |
-| tk003 | GA4 outbound-click event · restaurant page metadata · F1 cluster refresh |  | Build |  | Not started | Not counted in the 160. KPI 2 baseline and a quick ranking lift |
+| tk001 | ttklia.com cta on all 12 existing posts + nav link |  | Build |  | Not started | Not counted in the 190. OPEN-ITEMS #1: waits on the client’s link plan and UTM convention |
+| tk002 | Locale layer: data model, routing, hreflang, switcher |  | Build |  | Not started | Not counted in the 190. OPEN-ITEMS #2: every BM and 中文 piece depends on it |
+| tk003 | GA4 outbound-click event · restaurant page metadata · F1 cluster refresh |  | Build |  | Not started | Not counted in the 190. KPI 2 baseline and a quick ranking lift |
 | tk004 | MDAC: fill in Malaysia's arrival card before you fly | mdac malaysia | Transport · EN |  | Not started | 14,800/mo · SD 32. Route: Homepage: plan the ride |
 | tk005 | KLIA2 to KL Sentral: bus, train, taxi and Grab compared | transport from klia2 to kl sentral | Transport · EN |  | Not started | 1,600/mo · SD 16. Route: Bus: KLIA2 → KL Sentral |
 | tk006 | Arriving at KLIA2: from the gate to your ride | klia2 arrival guide | Transport · EN |  | Not started | Route: Bus destinations list |
@@ -36,10 +36,20 @@ October 2026. 10 English pieces while the ttklia.com path and the locale layer a
 | tk011 | Where to eat near KL Sentral | kl sentral food | Food · EN |  | Not started | 8,100/mo · SD 14. Route: Bus: KLIA2 → KL Sentral |
 | tk012 | Bukit Bintang food | bukit bintang food | Food · EN |  | Not started | 5,400/mo · SD 17. Route: Bus: KLIA2 → Pudu Sentral |
 | tk013 | Tourist SIM in Malaysia: collect at KLIA2 or use an eSIM | tourist sim card malaysia | SIM · EN |  | Not started | 320/mo · SD 17. Route: SIM booking, then bus |
+| tk166 | Singapore to KL by bus: arriving at Lalaport BBCC | singapore to kl bus | Transport · EN |  | Not started | Keyword not yet measured (tool disconnected 1 Oct); measure before briefing. Route: return leg /bus/lalaport-to-bugis, then the onward ride. ⚑ ttklia.com does not sell Singapore → Lalaport (reverse URLs 404); client to confirm |
+| tk167 | Lalaport BBCC Transportation Hub: finding your bus, lockers and lounge | lalaport transportation hub | Transport · EN |  | Not started | 1,000/mo · SD 14. Route: /guide/how-to-get-from-lalaport |
+| tk168 | Lalaport to Singapore by bus: choosing your drop-off point | lalaport to singapore bus | Transport · EN |  | Not started | Keyword not yet measured (tool disconnected 1 Oct); measure before briefing. Route: /bus/lalaport-to-bugis (+23 Singapore stops) |
+| tk169 | KLIA2 to Lalaport BBCC: from the plane to Bukit Bintang | klia2 to lalaport | Transport · EN |  | Not started | Keyword not yet measured (tool disconnected 1 Oct); measure before briefing. Route: /bus/klia2-to-lalaport-bbcc |
+| tk170 | Where to eat at and around Lalaport BBCC | lalaport bbcc food | Food · EN |  | Not started | Keyword not yet measured (tool disconnected 1 Oct); measure before briefing. Route: /bus/klia2-to-lalaport-bbcc. ⚑ Needs Lalaport restaurant rows in admin |
+| tk171 | Around Lalaport BBCC: what's in walking distance, and the MRT, monorail and Grab from there | things to do near lalaport | Destination · EN |  | Not started | Keyword not yet measured (tool disconnected 1 Oct); measure before briefing. Route: /bus/lalaport-to-klia2 |
+| tk172 | Private transfer from KL to KLIA or KLIA2: fixed-price taxi, Grab or bus | private transfer kl to klia | Transport · EN |  | Not started | Keyword not yet measured (tool disconnected 1 Oct); measure before briefing. Route: taxi transfer (sedan, MPV, van). ⚑ KL-side deep link not found; client to supply |
+| tk173 | KLIA2 to your KL hotel by private transfer: sedan, MPV or van | klia2 private transfer | Transport · EN |  | Not started | Keyword not yet measured (tool disconnected 1 Oct); measure before briefing. Route: taxi transfer · /taxi/klia2-to-klia |
+| tk174 | Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work | private driver kuala lumpur | Transport · EN |  | Not started | Keyword not yet measured (tool disconnected 1 Oct); measure before briefing. Route: /car-charter |
+| tk175 | Genting Highlands by private driver: a day trip from KL | private driver genting | Transport · EN |  | Not started | Keyword not yet measured (tool disconnected 1 Oct); measure before briefing. Route: /car-charter. ⚑ Client to confirm Genting is within charter scope; Genting van is Coming Soon |
 
 ## Month 2: KL Food + Genting
 
-November 2026. BM and 中文 launch with Month 1’s topics
+November 2026. BM and 中文 launch with Month 1’s topics. The Lalaport and private-transport set (tk176–tk185) goes to 中文 first
 
 | ID | Piece | Primary keyword | Type | Slug | Status | Evidence |
 |---|---|---|---|---|---|---|
@@ -73,10 +83,20 @@ November 2026. BM and 中文 launch with Month 1’s topics
 | tk041 | 吉隆坡中央车站美食 (Where to eat near KL Sentral) | 吉隆坡美食 | Food · ZH |  | Not started | 1,900/mo · SD 39. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk042 | Bukit Bintang food |  | Food · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → Pudu Sentral |
 | tk043 | 马来西亚电话卡 (Tourist SIM in Malaysia: collect at KLIA2 or use an eSIM) | 马来西亚电话卡 | SIM · ZH |  | Not started | 90/mo · SD 59. Retitled to the locale’s own keyword, not translated. Route: SIM booking, then bus |
+| tk176 | Singapore to KL by bus: arriving at Lalaport BBCC |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: return leg /bus/lalaport-to-bugis, then the onward ride. ⚑ ttklia.com does not sell Singapore → Lalaport (reverse URLs 404); client to confirm |
+| tk177 | Lalaport BBCC Transportation Hub: finding your bus, lockers and lounge |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /guide/how-to-get-from-lalaport |
+| tk178 | Lalaport to Singapore by bus: choosing your drop-off point |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/lalaport-to-bugis (+23 Singapore stops) |
+| tk179 | KLIA2 to Lalaport BBCC: from the plane to Bukit Bintang |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/klia2-to-lalaport-bbcc |
+| tk180 | Where to eat at and around Lalaport BBCC |  | Food · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/klia2-to-lalaport-bbcc. ⚑ Needs Lalaport restaurant rows in admin |
+| tk181 | Around Lalaport BBCC: what's in walking distance, and the MRT, monorail and Grab from there |  | Destination · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/lalaport-to-klia2 |
+| tk182 | Private transfer from KL to KLIA or KLIA2: fixed-price taxi, Grab or bus |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: taxi transfer (sedan, MPV, van). ⚑ KL-side deep link not found; client to supply |
+| tk183 | KLIA2 to your KL hotel by private transfer: sedan, MPV or van |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: taxi transfer · /taxi/klia2-to-klia |
+| tk184 | Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter |
+| tk185 | Genting Highlands by private driver: a day trip from KL |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter. ⚑ Client to confirm Genting is within charter scope; Genting van is Coming Soon |
 
 ## Month 3: Penang & the South
 
-December 2026
+December 2026. Includes the Lalaport and private-transport set in BM (tk186–tk195)
 
 | ID | Piece | Primary keyword | Type | Slug | Status | Evidence |
 |---|---|---|---|---|---|---|
@@ -110,6 +130,16 @@ December 2026
 | tk071 | KL to Genting: bus, taxi and the cable car |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /genting |
 | tk072 | KLIA2 luggage storage |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus destinations list |
 | tk073 | Things to do in Genting |  | Destination · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /genting |
+| tk186 | Singapore to KL by bus: arriving at Lalaport BBCC |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: return leg /bus/lalaport-to-bugis, then the onward ride. ⚑ ttklia.com does not sell Singapore → Lalaport (reverse URLs 404); client to confirm |
+| tk187 | Lalaport BBCC Transportation Hub: finding your bus, lockers and lounge |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /guide/how-to-get-from-lalaport |
+| tk188 | Lalaport to Singapore by bus: choosing your drop-off point |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/lalaport-to-bugis (+23 Singapore stops) |
+| tk189 | KLIA2 to Lalaport BBCC: from the plane to Bukit Bintang |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/klia2-to-lalaport-bbcc |
+| tk190 | Where to eat at and around Lalaport BBCC |  | Food · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/klia2-to-lalaport-bbcc. ⚑ Needs Lalaport restaurant rows in admin |
+| tk191 | Around Lalaport BBCC: what's in walking distance, and the MRT, monorail and Grab from there |  | Destination · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/lalaport-to-klia2 |
+| tk192 | Private transfer from KL to KLIA or KLIA2: fixed-price taxi, Grab or bus |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: taxi transfer (sedan, MPV, van). ⚑ KL-side deep link not found; client to supply |
+| tk193 | KLIA2 to your KL hotel by private transfer: sedan, MPV or van |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: taxi transfer · /taxi/klia2-to-klia |
+| tk194 | Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter |
+| tk195 | Genting Highlands by private driver: a day trip from KL |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter. ⚑ Client to confirm Genting is within charter scope; Genting van is Coming Soon |
 
 ## Month 4: North + Festive Prep
 
@@ -123,7 +153,7 @@ January 2027. Festive pieces go out a month before their search peak
 | tk077 | KLIA2 bus terminal: where it is and how boarding works | klia2 bus terminal | Transport · EN |  | Not started | 320/mo · SD 17. Route: Bus destinations list |
 | tk078 | Grab or taxi at KLIA2 | grab klia2 | Transport · EN |  | Not started | 70/mo · SD 22. Route: Taxi booking |
 | tk079 | KLIA2 to Putrajaya and Cyberjaya | klia2 to putrajaya | Transport · EN |  | Not started | 110/mo · SD 17. Route: Taxi booking |
-| tk080 | Car charter from KLIA2 for families and groups | klia2 car charter | Transport · EN |  | Not started | Route: Car charter |
+| tk080 | Selangor by private driver: Kuala Selangor and Sekinchan in a day | kuala selangor day trip | Transport · EN |  | Not started | Route: /car-charter. Replaced “Car charter from KLIA2 for families and groups” on 1 Oct to avoid overlap with tk174 |
 | tk081 | Chinese New Year in KL 2027: what's open, where to eat | chinese new year kl | Destination · EN |  | Not started | Route: Bus: KLIA2 → KL Sentral |
 | tk082 | Ramadan bazaar in KL 2027 | ramadan bazaar kl | Food · EN |  | Not started | 140/mo · SD 19. Route: Bus: KLIA2 → KL Sentral |
 | tk083 | Thaipusam at Batu Caves: getting there | thaipusam batu caves | Destination · EN |  | Not started | Route: Bus: KLIA2 → KL Sentral |
@@ -170,7 +200,7 @@ February 2027. 7 planned + 3 Search Console slots
 | tk117 | KLIA2 bus terminal: where it is and how boarding works |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus destinations list |
 | tk118 | Grab or taxi at KLIA2 |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi booking |
 | tk119 | KLIA2 to Putrajaya and Cyberjaya |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi booking |
-| tk120 | Car charter from KLIA2 for families and groups |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Car charter |
+| tk120 | Selangor by private driver: Kuala Selangor and Sekinchan in a day |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter |
 | tk121 | Chinese New Year in KL 2027: what's open, where to eat |  | Destination · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk122 | Ramadan bazaar in KL 2027 |  | Food · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk123 | Thaipusam at Batu Caves: getting there |  | Destination · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
@@ -180,11 +210,11 @@ February 2027. 7 planned + 3 Search Console slots
 | tk127 | KLIA2 bus terminal: where it is and how boarding works |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus destinations list |
 | tk128 | Grab or taxi at KLIA2 |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi booking |
 | tk129 | KLIA2 to Putrajaya and Cyberjaya |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi booking |
-| tk130 | Car charter from KLIA2 for families and groups |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Car charter |
+| tk130 | Selangor by private driver: Kuala Selangor and Sekinchan in a day |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter |
 | tk131 | Chinese New Year in KL 2027: what's open, where to eat |  | Destination · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk132 | Ramadan bazaar in KL 2027 |  | Food · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk133 | Thaipusam at Batu Caves: getting there |  | Destination · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
-| tk134 | Refresh pass: rework Month 1–2 pieces at positions 11–30; food-to-route internal links |  | Optimise |  | Not started | Not counted in the 160. From Search Console data |
+| tk134 | Refresh pass: rework Month 1–2 pieces at positions 11–30; food-to-route internal links |  | Optimise |  | Not started | Not counted in the 190. From Search Console data |
 
 ## Month 6: Compound
 
@@ -222,5 +252,5 @@ March 2027. 4 planned + 6 Search Console slots. Month 6 topics reach BM and 中�
 | tk162 | Search Console slot 1, 中文 version |  | GSC slot · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. ⚑ Chosen in the first week of Feb from page-2 queries with no dedicated page |
 | tk163 | Search Console slot 2, 中文 version |  | GSC slot · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. ⚑ Chosen in the first week of Feb from page-2 queries with no dedicated page |
 | tk164 | Search Console slot 3, 中文 version |  | GSC slot · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. ⚑ Chosen in the first week of Feb from page-2 queries with no dedicated page |
-| tk165 | Second refresh pass, schema across the library, 6-month KPI report, Month 7+ calendar |  | Optimise |  | Not started | Not counted in the 160 |
+| tk165 | Second refresh pass, schema across the library, 6-month KPI report, Month 7+ calendar |  | Optimise |  | Not started | Not counted in the 190 |
 
