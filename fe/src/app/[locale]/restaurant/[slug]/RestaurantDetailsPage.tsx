@@ -1,111 +1,27 @@
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Star, MapPin, Phone, Globe, Clock, Share2, Heart, ChevronRight, Utensils, Award, BookOpen, ExternalLink } from 'lucide-react';
+import { Star, MapPin, Phone, Globe, Clock, Utensils, Award, ExternalLink } from 'lucide-react';
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { ReviewsTab } from "@/components/features/restaurant/ReviewsTab";
 import { SocialsSection } from "@/components/features/restaurant/SocialsSection";
-import { GoogleReview, SocialPost } from "@/components/features/restaurant/ReviewComponents";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { ImageModal } from "@/components/shared/ImageModal";
 import { calculateCombinedRating, calculateCombinedReviewCount } from '@/utils/rating';
 import { API_BASE_URL } from "@/lib/constants";
-
-const CONSTANT_XHS_POSTS: SocialPost[] = [
-    {
-        id: "x1",
-        type: "xhs",
-        thumbnail: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80",
-        title: " Hidden Gem in KL! Must try their unagi 🍱✨",
-        author: "FoodieJane",
-        likes: 1205,
-        link: "#"
-    },
-    {
-        id: "x2",
-        type: "xhs",
-        thumbnail: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80",
-        title: "Date night perfection ❤️ The ambience is 10/10",
-        author: "KL_Diaries",
-        likes: 892,
-        link: "#"
-    },
-    {
-        id: "x3",
-        type: "xhs",
-        thumbnail: "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&q=80",
-        title: "Best Sashimi in town?? 🍣 Let's find out!",
-        author: "SashimiLover",
-        likes: 2340,
-        link: "#"
-    }
-];
-
-const CONSTANT_IG_REELS: SocialPost[] = [
-    {
-        id: "i1",
-        type: "ig_reel",
-        thumbnail: "https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80",
-        title: "POV: Fine dining at its best",
-        author: "iketeru_kl",
-        likes: 560,
-        link: "https://www.instagram.com/reel/DS5VSfbErvV/?utm_source=ig_embed&amp;utm_campaign=loading"
-    },
-    {
-        id: "i2",
-        type: "ig_reel",
-        thumbnail: "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80",
-        title: "Chef's Special 🥢",
-        author: "iketeru_kl",
-        likes: 890,
-        link: "https://www.instagram.com/reel/DTjuS7LknBd/?utm_source=ig_embed&amp;utm_campaign=loading"
-    },
-    {
-        id: "i3",
-        type: "ig_reel",
-        thumbnail: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80",
-        title: "Weekend vibes 🥂",
-        author: "visit_kl",
-        likes: 120,
-        link: "#"
-    }
-];
-
-const CONSTANT_GOOGLE_REVIEWS: GoogleReview[] = [
-    {
-        id: "g1",
-        authorName: "Sarah Chen",
-        rating: 5,
-        timeAgo: "2 weeks ago",
-        text: "Absolutely the best Japanese fine dining in KL. The sashimi was incredibly fresh and the service was impeccable. Highly recommend the omakase set.",
-        images: ["https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400&q=80"]
-    },
-    {
-        id: "g2",
-        authorName: "David Miller",
-        rating: 4,
-        timeAgo: "1 month ago",
-        text: "Great atmosphere and lovely garden view. Food was delicious but slightly on the pricey side. Good for special occasions.",
-    },
-    {
-        id: "g3",
-        authorName: "Ahmad Razak",
-        rating: 5,
-        timeAgo: "2 months ago",
-        text: "Authentic experience. The teppanyaki was a show in itself! Will definitely come back.",
-        images: []
-    }
-];
+import { useDict, useLocale } from "@/components/providers/LocaleProvider";
+import { fmt, isTranslated, localized } from "@/lib/i18n";
 
 interface RestaurantDetailsPageProps {
     initialRestaurant: any;
     slug: string;
 }
 
-const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPageProps) => {
-    const router = useRouter();
+const RestaurantDetailsPage = ({ initialRestaurant }: RestaurantDetailsPageProps) => {
+    const dict = useDict();
+    const t = dict.restaurants.detail;
+    const locale = useLocale();
     const [activeTab, setActiveTab] = useState('overview');
     const [restaurant] = useState(initialRestaurant);
     const [modalOpen, setModalOpen] = useState(false);
@@ -115,16 +31,18 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
     const combinedReviewCount = calculateCombinedReviewCount(restaurant?.stats?.googleStats, restaurant?.stats?.tripAdvisorStats);
 
     const imageUrls = restaurant?.restaurantImages?.map((img: any) => img.url) || [];
+    const description = restaurant ? localized(restaurant, locale, "description") : undefined;
+    const untranslated = !!restaurant?.description && !isTranslated(restaurant, locale, "description");
 
     const tabs = useMemo(() => {
         const availableTabs = [
-            { id: 'overview', label: 'Overview', visible: true },
-            { id: 'reviews', label: 'Reviews', visible: !!(restaurant?.googleReviews?.length || restaurant?.stats?.googleStats?.totalReviews || restaurant?.stats?.tripAdvisorStats?.totalReviews) },
-            { id: 'socials', label: 'Socials', visible: !!(restaurant?.shortVideos?.length > 0) },
-            { id: 'photos', label: 'Photos', visible: !!(restaurant?.restaurantImages?.length > 0) },
+            { id: 'overview', label: t.tabOverview, visible: true },
+            { id: 'reviews', label: t.tabReviews, visible: !!(restaurant?.googleReviews?.length || restaurant?.stats?.googleStats?.totalReviews || restaurant?.stats?.tripAdvisorStats?.totalReviews) },
+            { id: 'socials', label: t.tabSocials, visible: !!(restaurant?.shortVideos?.length > 0) },
+            { id: 'photos', label: t.tabPhotos, visible: !!(restaurant?.restaurantImages?.length > 0) },
         ];
         return availableTabs.filter(tab => tab.visible);
-    }, [restaurant]);
+    }, [restaurant, t]);
 
     useEffect(() => {
         const observerOptions = {
@@ -193,8 +111,8 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
             <main className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
                 <Breadcrumbs
                     items={[
-                        { label: "Restaurants", href: "/restaurants" },
-                        { label: restaurant?.name || "Restaurant" }
+                        { label: dict.restaurants.list.breadcrumb, href: "/restaurants" },
+                        { label: restaurant?.name || t.breadcrumbFallback }
                     ]}
                 />
 
@@ -210,7 +128,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                             >
                                 <img
                                     src={img.url}
-                                    alt={`${restaurant.name} ${idx + 1}`}
+                                    alt={fmt(t.photoAlt, { name: restaurant.name, number: idx + 1 })}
                                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 pointer-events-none"
                                 />
                             </div>
@@ -245,7 +163,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                             ))}
                                         </div>
                                         <span className="font-bold text-gray-900 dark:text-gray-100 text-lg">{combinedRating.toFixed(1)}</span>
-                                        <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{combinedReviewCount} reviews</span>
+                                        <span className="text-gray-500 dark:text-gray-400 underline cursor-pointer">{fmt(t.reviewCount, { count: combinedReviewCount })}</span>
                                     </div>
 
                                     <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
@@ -257,9 +175,11 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                         <span className="font-medium text-gray-900 dark:text-gray-100">{restaurant?.priceRange}</span>
                                     </div>
 
-                                    <div className={`px-3 py-1 rounded-full text-xs font-bold ${restaurant?.isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                        {restaurant?.isOpen ? 'Open Now' : 'Closed'}
-                                    </div>
+                                    {restaurant?.isOpen !== undefined && (
+                                        <div className={`px-3 py-1 rounded-full text-xs font-bold ${restaurant?.isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                            {restaurant?.isOpen ? t.openNow : t.closed}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -272,7 +192,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                             onClick={handleReserveClick}
                                             className="bg-red-600 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-red-700 transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
                                         >
-                                            {restaurant?.reservationUrl ? `Reserve a Table` : `Google Maps`}
+                                            {restaurant?.reservationUrl ? t.reserve : t.googleMaps}
                                         </button>
                                     )}
                                 </div>
@@ -312,12 +232,15 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                 {/* Overview Section */}
                                 <div id="overview" className="scroll-mt-48 space-y-10">
                                     <section>
-                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">About</h2>
-                                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">{restaurant?.description}</p>
+                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t.about}</h2>
+                                        {untranslated && (
+                                            <p className="text-sm text-gray-500 dark:text-gray-400 italic mb-3">{dict.common.untranslated.notice}</p>
+                                        )}
+                                        <p lang={untranslated ? "en" : undefined} className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">{description}</p>
                                     </section>
 
                                     {restaurant?.feature?.length > 0 && <section>
-                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Features & Amenities</h2>
+                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t.features}</h2>
                                         <div className="grid grid-cols-2 gap-y-3">
                                             {restaurant?.feature?.map((feature: any) => (
                                                 <div key={feature} className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
@@ -334,7 +257,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                 {/* Reviews Section */}
                                 {(restaurant?.googleReviews?.length > 0 || restaurant?.stats?.googleStats?.totalReviews > 0 || restaurant?.stats?.tripAdvisorStats?.totalReviews > 0) && (
                                     <div id="reviews" className="scroll-mt-48">
-                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Reviews</h2>
+                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t.reviews}</h2>
                                         <ReviewsTab
                                             googleStats={restaurant?.stats?.googleStats}
                                             tripAdvisorStats={restaurant?.stats?.tripAdvisorStats}
@@ -345,7 +268,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
 
                                 {/* Socials Section */}
                                 {restaurant?.shortVideos?.length > 0 && <div id="socials" className="scroll-mt-48">
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Socials Feed</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t.socials}</h2>
                                     <SocialsSection
                                         shortVideos={restaurant?.shortVideos}
                                     />
@@ -354,7 +277,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                 {/* Photos Section */}
                                 {restaurant?.restaurantImages?.length > 0 && (
                                     <div id="photos" className="scroll-mt-48">
-                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Photos</h2>
+                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t.photos}</h2>
                                         <div className="flex sm:grid grid-cols-2 sm:grid-cols-4 gap-3 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory">
                                             {restaurant?.restaurantImages?.map((img: any, idx: number) => (
                                                 <div
@@ -364,7 +287,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                                 >
                                                     <img
                                                         src={img.url}
-                                                        alt={`Gallery ${idx + 1}`}
+                                                        alt={fmt(t.galleryAlt, { number: idx + 1 })}
                                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 pointer-events-none"
                                                     />
                                                 </div>
@@ -379,7 +302,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                         {/* Sticky Sidebar */}
                         <div className="w-full lg:w-80 shrink-0 space-y-6">
                             <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 sticky top-8">
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Location & Contact</h3>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{t.locationContact}</h3>
 
                                 {/* Map Placeholder */}
                                 {/* <div className="h-48 bg-gray-100 rounded-xl mb-6 relative overflow-hidden group">
@@ -399,7 +322,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                                 rel="noopener noreferrer"
                                                 className="text-red-600 text-xs font-bold hover:underline flex items-center gap-1"
                                             >
-                                                View on Google Map
+                                                {t.viewOnGoogleMap}
                                                 <ExternalLink className="w-3 h-3" />
                                             </a>
                                         </div>
@@ -415,7 +338,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <Globe className="w-5 h-5 text-gray-400" />
-                                        <a href={restaurant?.contactInfo?.website} target="_blank" className="text-red-600 text-sm font-medium hover:underline">Visit Website</a>
+                                        <a href={restaurant?.contactInfo?.website} target="_blank" className="text-red-600 text-sm font-medium hover:underline">{t.visitWebsite}</a>
                                     </div>
                                 </div>
 
@@ -423,7 +346,7 @@ const RestaurantDetailsPage = ({ initialRestaurant, slug }: RestaurantDetailsPag
 
                                 {restaurant?.operatingHours?.length > 0 && <div className="mb-6">
                                     <h4 className="font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                                        <Clock className="w-4 h-4 text-red-500" /> Opening Hours
+                                        <Clock className="w-4 h-4 text-red-500" /> {t.openingHours}
                                     </h4>
                                     <div className="space-y-2 text-sm">
                                         {restaurant?.operatingHours?.map((h: any, i: any) => (

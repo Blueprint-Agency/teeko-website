@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ExternalLink, ShoppingBag, LogIn, CheckCircle2, ArrowRight } from "lucide-react";
+import { ShoppingBag, LogIn, ArrowRight } from "lucide-react";
 import { BookingModal } from "./BookingModal";
 import { API_BASE_URL } from "@/lib/constants";
 import { useAuthFetch } from "@/lib/authFetch";
+import { useDict, useLocalePath } from "@/components/providers/LocaleProvider";
 
 interface BookingButtonProps {
     pkg: {
@@ -13,9 +14,14 @@ interface BookingButtonProps {
         packageName: string;
         price: string | null;
     };
+    /** Package name in the page's language. `pkg.packageName` stays English for analytics. */
+    displayName?: string;
 }
 
-export function BookingButton({ pkg }: BookingButtonProps) {
+export function BookingButton({ pkg, displayName }: BookingButtonProps) {
+    const dict = useDict();
+    const t = dict.booking.button;
+    const localePath = useLocalePath();
     const router = useRouter();
     const [user, setUser] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,11 +54,11 @@ export function BookingButton({ pkg }: BookingButtonProps) {
 
     const handleBooking = () => {
         if (!user) {
-            router.push("/auth/login?redirect=" + encodeURIComponent(window.location.pathname));
+            router.push(localePath("/auth/login") + "?redirect=" + encodeURIComponent(window.location.pathname));
             return;
         }
         if (isBooked) {
-            router.push("/profile");
+            router.push(localePath("/profile"));
             return;
         }
         setIsModalOpen(true);
@@ -68,11 +74,11 @@ export function BookingButton({ pkg }: BookingButtonProps) {
                     }`}
             >
                 {!user ? (
-                    <>Sign In to Book <LogIn className="ml-3 h-6 w-6" /></>
+                    <>{t.signInToBook} <LogIn className="ml-3 h-6 w-6" /></>
                 ) : isBooked ? (
-                    <>View Booking <ArrowRight className="ml-3 h-5 w-5" /></>
+                    <>{t.viewBooking} <ArrowRight className="ml-3 h-5 w-5" /></>
                 ) : (
-                    <>Book Now <ShoppingBag className="ml-3 h-6 w-6" /></>
+                    <>{t.bookNow} <ShoppingBag className="ml-3 h-6 w-6" /></>
                 )}
             </button>
 
@@ -81,6 +87,7 @@ export function BookingButton({ pkg }: BookingButtonProps) {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 pkg={pkg}
+                displayName={displayName}
                 user={user}
                 onBookingSuccess={() => setIsBooked(true)}
             />

@@ -1,4 +1,73 @@
-// Filled when this area's components move to the dictionary.
-const restaurants = {};
+// Restaurant list, restaurant detail, restaurant card, reviews and socials.
+// Restaurant names, addresses, cuisines, features, hours, prices, ratings,
+// review counts and review text come from the database and never pass
+// through here.
+const restaurants = {
+    meta: {
+        listTitle: "Restaurants | Teeko",
+        listDescription: "Restaurants in Kuala Lumpur, Penang and Johor Bahru, with Google and TripAdvisor ratings",
+        notFoundTitle: "Restaurant Not Found",
+    },
+    list: {
+        breadcrumb: "Restaurants",
+        title: "Discover Restaurants",
+        subtitle: "Places to eat in Kuala Lumpur, Penang and Johor Bahru, with their Google and TripAdvisor ratings.",
+        filters: "Filters",
+        searchPlaceholder: "Search restaurants by name...",
+        location: "Location",
+        allLocations: "All Locations",
+        price: "Price",
+        mapTitle: "View on Map",
+        mapBody: "Explore restaurants near you",
+        tabAll: "All Restaurants",
+        tabTopRated: "Top Rated",
+        tabMostReviewed: "Most Reviewed",
+        showing: "Showing {count} of {total} results",
+        empty: "No restaurants found matching your criteria.",
+        clearFilters: "Clear all filters",
+        showResults: "Show Results",
+        closeFilters: "Close filters",
+    },
+    card: {
+        openNow: "Open Now",
+        closed: "Closed",
+        price: "Price",
+        reviews: "Reviews",
+        reviewCount: "{count} reviews",
+        viewDetails: "View Details",
+    },
+    detail: {
+        breadcrumbFallback: "Restaurant",
+        photoAlt: "{name} {number}",
+        galleryAlt: "Gallery {number}",
+        reviewCount: "{count} reviews",
+        openNow: "Open Now",
+        closed: "Closed",
+        reserve: "Reserve a Table",
+        googleMaps: "Google Maps",
+        tabOverview: "Overview",
+        tabReviews: "Reviews",
+        tabSocials: "Socials",
+        tabPhotos: "Photos",
+        about: "About",
+        features: "Features & Amenities",
+        reviews: "Reviews",
+        socials: "Socials Feed",
+        photos: "Photos",
+        locationContact: "Location & Contact",
+        viewOnGoogleMap: "View on Google Map",
+        visitWebsite: "Visit Website",
+        openingHours: "Opening Hours",
+    },
+    reviews: {
+        sourceRating: "{source} Rating",
+        reviewCount: "{count} reviews",
+        latestFromGoogle: "Latest from Google",
+        viewMoreOnGoogle: "View more on Google",
+        reviewImageAlt: "Review",
+        socialPostAlt: "Social Media Post",
+        trendingOn: "Trending on {source}",
+    },
+};
 
 export default restaurants;

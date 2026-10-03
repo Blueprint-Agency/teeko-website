@@ -10,7 +10,7 @@ const common = {
         toggleMenu: "Open or close the menu",
     },
     footer: {
-        tagline: "Your trusted guide to discovering the best places in Malaysia.",
+        tagline: "Places to eat, travel SIMs and guides for your trip to Malaysia.",
         navigation: "Navigation",
         resources: "Resources",
         privacyPolicy: "Privacy Policy",
@@ -29,7 +29,7 @@ const common = {
     },
     meta: {
         siteTitle: "Teeko Advisor - Discover Malaysia",
-        siteDescription: "Find the best places and destinations in Malaysia.",
+        siteDescription: "Places to eat, travel SIMs and guides for your trip to Malaysia.",
     },
     shared: {
         breadcrumb: "Breadcrumb",

@@ -2,8 +2,23 @@ import Link from "next/link";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { CheckCircle } from "lucide-react";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getDictionary } from "@/lib/dictionaries";
+import { isLocale, pathFor } from "@/lib/i18n";
+import { pageMetadata, samePath } from "@/lib/seo";
 
-export default function VerifyPage() {
+export async function generateMetadata({ params }: PageProps<"/[locale]/auth/verify">): Promise<Metadata> {
+    const { locale } = await params;
+    if (!isLocale(locale)) return {};
+    const dict = await getDictionary(locale);
+    return pageMetadata({ locale, paths: samePath("/auth/verify"), title: dict.auth.meta.verifyTitle });
+}
+
+export default async function VerifyPage({ params }: PageProps<"/[locale]/auth/verify">) {
+    const { locale } = await params;
+    if (!isLocale(locale)) notFound();
+    const t = (await getDictionary(locale)).auth.verify;
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
             <Navigation forceSolid />
@@ -17,29 +32,28 @@ export default function VerifyPage() {
 
                         {/* Title */}
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                            Email Verified!
+                            {t.title}
                         </h1>
 
                         {/* Description */}
                         <p className="text-gray-600 dark:text-gray-400 mb-8">
-                            Your email has been successfully verified. You can now sign in to your account
-                            and start discovering amazing restaurants.
+                            {t.body}
                         </p>
 
                         {/* Action Button */}
                         <Link
-                            href="/auth/login"
+                            href={pathFor(locale, "/auth/login")}
                             className="inline-block w-full py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-lg transition-colors shadow-sm"
                         >
-                            Sign In to Your Account
+                            {t.signInCta}
                         </Link>
 
                         {/* Home Link */}
                         <Link
-                            href="/"
+                            href={pathFor(locale, "/")}
                             className="inline-block mt-4 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                         >
-                            Return to Homepage
+                            {t.backHome}
                         </Link>
                     </div>
                 </div>

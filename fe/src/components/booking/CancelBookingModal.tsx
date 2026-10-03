@@ -1,6 +1,8 @@
 "use client";
 
-import { X, AlertTriangle, Loader2 } from "lucide-react";
+import { AlertTriangle, Loader2 } from "lucide-react";
+import { useDict } from "@/components/providers/LocaleProvider";
+import { withValue } from "./withValue";
 
 interface CancelBookingModalProps {
     isOpen: boolean;
@@ -11,6 +13,7 @@ interface CancelBookingModalProps {
 }
 
 export function CancelBookingModal({ isOpen, onClose, onConfirm, isLoading, packageName }: CancelBookingModalProps) {
+    const t = useDict().booking.cancel;
     if (!isOpen) return null;
 
     return (
@@ -25,9 +28,9 @@ export function CancelBookingModal({ isOpen, onClose, onConfirm, isLoading, pack
                     <AlertTriangle className="w-7 h-7 sm:w-8 sm:h-8 text-red-600" />
                 </div>
 
-                <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">Cancel Booking?</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">{t.title}</h2>
                 <p className="text-xs sm:text-sm text-gray-500 dark:text-zinc-400 mb-6 sm:mb-8">
-                    Are you sure you want to cancel your booking for <span className="text-gray-900 dark:text-white font-bold">{packageName}</span>? This action cannot be undone.
+                    {withValue(t.body, "name", <span className="text-gray-900 dark:text-white font-bold">{packageName}</span>)}
                 </p>
 
                 <div className="space-y-2.5">
@@ -39,10 +42,10 @@ export function CancelBookingModal({ isOpen, onClose, onConfirm, isLoading, pack
                         {isLoading ? (
                             <>
                                 <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
-                                <span>Cancelling...</span>
+                                <span>{t.cancelling}</span>
                             </>
                         ) : (
-                            "Yes, Cancel Booking"
+                            t.confirm
                         )}
                     </button>
 
@@ -51,7 +54,7 @@ export function CancelBookingModal({ isOpen, onClose, onConfirm, isLoading, pack
                         disabled={isLoading}
                         className="w-full py-3 sm:py-4 bg-[var(--card-bg)] text-gray-600 dark:text-gray-300 text-sm font-bold rounded-xl sm:rounded-2xl hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all border border-[var(--border)]"
                     >
-                        Keep Booking
+                        {t.keep}
                     </button>
                 </div>
             </div>

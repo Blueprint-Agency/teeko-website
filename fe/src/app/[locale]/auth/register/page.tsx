@@ -8,9 +8,14 @@ import { Footer } from "@/components/layout/Footer";
 import { Mail, Lock, Eye, EyeOff, Loader2, CheckCircle2, XCircle, Gift } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { GoogleLogin } from "@react-oauth/google";
+import { useDict, useLocalePath } from "@/components/providers/LocaleProvider";
 
 export default function RegisterPage() {
     const router = useRouter();
+    const dict = useDict();
+    const t = dict.auth.register;
+    const shared = dict.auth.shared;
+    const localePath = useLocalePath();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -47,13 +52,13 @@ export default function RegisterPage() {
         setError("");
 
         if (!isPasswordStrong) {
-            setError("Please fulfill all password requirements.");
+            setError(t.weakPassword);
             setIsLoading(false);
             return;
         }
 
         if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match");
+            setError(t.passwordMismatch);
             setIsLoading(false);
             return;
         }
@@ -72,12 +77,12 @@ export default function RegisterPage() {
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.message || "Registration failed");
+                throw new Error(data.message || t.registrationFailed);
             }
 
             // Successfully triggered registration, now need to verify code
             localStorage.setItem("verify_email", formData.email);
-            router.push("/auth/verify-code");
+            router.push(localePath("/auth/verify-code"));
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -99,12 +104,12 @@ export default function RegisterPage() {
             });
 
             const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Google registration failed");
+            if (!res.ok) throw new Error(data.message || t.googleRegistrationFailed);
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
 
-            router.push("/");
+            router.push(localePath("/"));
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -128,15 +133,15 @@ export default function RegisterPage() {
                         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white dark:bg-zinc-900 shadow-xl shadow-black/5 mb-4 overflow-hidden border border-gray-100 dark:border-zinc-800">
                             <img
                                 src="/teeko-icon.png"
-                                alt="Teeko"
+                                alt={shared.logoAlt}
                                 className="w-full h-full object-cover"
                             />
                         </div>
                         <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1.5 tracking-tight">
-                            Create Account
+                            {t.title}
                         </h1>
                         <p className="text-gray-600 dark:text-zinc-400 text-sm font-medium">
-                            Join Teeko to discover amazing places
+                            {t.subtitle}
                         </p>
                     </div>
 
@@ -152,7 +157,7 @@ export default function RegisterPage() {
                             {/* Email Field */}
                             <div className="space-y-1.5">
                                 <label htmlFor="email" className="block text-xs font-bold text-gray-700 dark:text-zinc-300 ml-1 uppercase tracking-wider">
-                                    Email Address
+                                    {shared.emailLabel}
                                 </label>
                                 <div className="relative group">
                                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-red-600 transition-colors" />
@@ -171,7 +176,7 @@ export default function RegisterPage() {
                             {/* Password Field */}
                             <div className="space-y-1.5">
                                 <label htmlFor="password" className="block text-xs font-bold text-gray-700 dark:text-zinc-300 ml-1 uppercase tracking-wider">
-                                    Password
+                                    {shared.passwordLabel}
                                 </label>
                                 <div className="relative group">
                                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-red-600 transition-colors" />
@@ -187,6 +192,7 @@ export default function RegisterPage() {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
+                                        aria-label={showPassword ? shared.hidePassword : shared.showPassword}
                                         className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors"
                                     >
                                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -212,7 +218,7 @@ export default function RegisterPage() {
                             {/* Confirm Password Field */}
                             <div className="space-y-1.5">
                                 <label htmlFor="confirmPassword" className="block text-xs font-bold text-gray-700 dark:text-zinc-300 ml-1 uppercase tracking-wider">
-                                    Confirm Password
+                                    {t.confirmPasswordLabel}
                                 </label>
                                 <div className="relative group">
                                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-red-600 transition-colors" />
@@ -228,6 +234,7 @@ export default function RegisterPage() {
                                     <button
                                         type="button"
                                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        aria-label={showConfirmPassword ? t.hideConfirmPassword : t.showConfirmPassword}
                                         className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors"
                                     >
                                         {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -255,15 +262,15 @@ export default function RegisterPage() {
                                 <div className="grid grid-cols-1 gap-2">
                                     <div className="flex items-center gap-2">
                                         {strength.length ? <CheckCircle2 className="w-3.5 h-3.5 text-green-500" /> : <XCircle className="w-3.5 h-3.5 text-gray-300 dark:text-zinc-700" />}
-                                        <span className={`text-[11px] font-bold tracking-wider ${strength.length ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-zinc-600'}`}>at least 8 characters</span>
+                                        <span className={`text-[11px] font-bold tracking-wider ${strength.length ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-zinc-600'}`}>{t.requirementLength}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         {strength.number ? <CheckCircle2 className="w-3.5 h-3.5 text-green-500" /> : <XCircle className="w-3.5 h-3.5 text-gray-300 dark:text-zinc-700" />}
-                                        <span className={`text-[11px] font-bold tracking-wider ${strength.number ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-zinc-600'}`}>at least one number</span>
+                                        <span className={`text-[11px] font-bold tracking-wider ${strength.number ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-zinc-600'}`}>{t.requirementNumber}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         {strength.symbol ? <CheckCircle2 className="w-3.5 h-3.5 text-green-500" /> : <XCircle className="w-3.5 h-3.5 text-gray-300 dark:text-zinc-700" />}
-                                        <span className={`text-[11px] font-bold tracking-wider ${strength.symbol ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-zinc-600'}`}>at least one symbol</span>
+                                        <span className={`text-[11px] font-bold tracking-wider ${strength.symbol ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-zinc-600'}`}>{t.requirementSymbol}</span>
                                     </div>
                                 </div>
                             </div>
@@ -271,7 +278,7 @@ export default function RegisterPage() {
                             {/* Referral Code Field */}
                             <div className="space-y-1.5">
                                 <label htmlFor="referralCode" className="block text-xs font-bold text-gray-700 dark:text-zinc-300 ml-1 uppercase tracking-wider">
-                                    Referral Code (Optional)
+                                    {t.referralLabel}
                                 </label>
                                 <div className="relative group">
                                     <Gift className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-red-600 transition-colors" />
@@ -281,7 +288,7 @@ export default function RegisterPage() {
                                         value={formData.referralCode}
                                         onChange={(e) => setFormData({ ...formData, referralCode: e.target.value.toUpperCase() })}
                                         className="w-full pl-11 pr-4 py-3 bg-gray-50/50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-red-600/10 focus:border-red-600 dark:focus:border-red-600 transition-all uppercase"
-                                        placeholder="CODE"
+                                        placeholder={t.referralPlaceholder}
                                         maxLength={4}
                                     />
                                 </div>
@@ -296,10 +303,10 @@ export default function RegisterPage() {
                                 {isLoading ? (
                                     <>
                                         <Loader2 className="w-4 h-4 animate-spin" />
-                                        <span>Creating account...</span>
+                                        <span>{t.creatingAccount}</span>
                                     </>
                                 ) : (
-                                    <span>Create Account</span>
+                                    <span>{shared.createAccount}</span>
                                 )}
                             </button>
                         </form>
@@ -307,7 +314,7 @@ export default function RegisterPage() {
                         <div className="mt-6 w-full flex justify-center">
                             <GoogleLogin
                                 onSuccess={handleGoogleSuccess}
-                                onError={() => setError("Google Signup Failed")}
+                                onError={() => setError(t.googleSignupError)}
                                 theme="filled_blue"
                                 shape="pill"
                                 width="100%"
@@ -321,15 +328,15 @@ export default function RegisterPage() {
                                 <div className="w-full border-t border-gray-100 dark:border-zinc-800"></div>
                             </div>
                             <div className="relative flex justify-center text-[10px] items-center">
-                                <span className="bg-white dark:bg-zinc-900 px-3 text-gray-400 dark:text-zinc-500 font-bold tracking-[0.2em] leading-none uppercase">Already have one?</span>
+                                <span className="bg-white dark:bg-zinc-900 px-3 text-gray-400 dark:text-zinc-500 font-bold tracking-[0.2em] leading-none uppercase">{t.alreadyHaveOne}</span>
                             </div>
                         </div>
 
                         <Link
-                            href="/auth/login"
+                            href={localePath("/auth/login")}
                             className="mt-5 w-full py-3 flex items-center justify-center text-sm font-bold text-gray-700 dark:text-zinc-300 border border-gray-200 dark:border-zinc-800 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-all active:scale-[0.98]"
                         >
-                            Sign In
+                            {shared.signIn}
                         </Link>
                     </div>
                 </div>

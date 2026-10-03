@@ -1,6 +1,76 @@
 import type { DictionaryArea } from "../types";
 
 // Unreviewed first draft (2026-10-03): awaiting the client's BM reviewer.
-const auth: DictionaryArea<"auth"> = {};
+const auth: DictionaryArea<"auth"> = {
+    meta: {
+        loginTitle: "Log masuk | Teeko",
+        registerTitle: "Daftar akaun | Teeko",
+        verifyTitle: "E-mel disahkan | Teeko",
+        verifyCodeTitle: "Sahkan e-mel | Teeko",
+    },
+    shared: {
+        logoAlt: "Teeko",
+        emailLabel: "Alamat E-mel",
+        passwordLabel: "Kata Laluan",
+        showPassword: "Tunjuk kata laluan",
+        hidePassword: "Sembunyi kata laluan",
+        signIn: "Log Masuk",
+        createAccount: "Daftar Akaun",
+        requestFailed: "Permintaan gagal",
+        networkError: "Ralat rangkaian",
+    },
+    login: {
+        title: "Selamat Kembali",
+        subtitle: "Teruskan perjalanan anda bersama Teeko",
+        sessionExpired: "Sesi anda telah tamat. Sila log masuk semula.",
+        emailPlaceholder: "Masukkan e-mel anda",
+        rememberMe: "Ingat saya",
+        signingIn: "Sedang log masuk...",
+        or: "Atau",
+        loginFailed: "Log masuk gagal",
+        googleLoginFailed: "Log masuk Google gagal",
+        googleLoginError: "Log masuk Google gagal",
+    },
+    register: {
+        title: "Daftar Akaun",
+        subtitle: "Sertai Teeko untuk cari tempat menarik",
+        confirmPasswordLabel: "Sahkan Kata Laluan",
+        showConfirmPassword: "Tunjuk pengesahan kata laluan",
+        hideConfirmPassword: "Sembunyi pengesahan kata laluan",
+        requirementLength: "sekurang-kurangnya 8 aksara",
+        requirementNumber: "sekurang-kurangnya satu nombor",
+        requirementSymbol: "sekurang-kurangnya satu simbol",
+        referralLabel: "Kod Rujukan (Pilihan)",
+        referralPlaceholder: "KOD",
+        creatingAccount: "Sedang mendaftar...",
+        alreadyHaveOne: "Sudah ada akaun?",
+        weakPassword: "Sila penuhi semua syarat kata laluan.",
+        passwordMismatch: "Kata laluan tidak sepadan",
+        registrationFailed: "Pendaftaran gagal",
+        googleRegistrationFailed: "Pendaftaran Google gagal",
+        googleSignupError: "Pendaftaran Google gagal",
+    },
+    verify: {
+        title: "E-mel Disahkan!",
+        body: "E-mel anda telah disahkan. Anda kini boleh log masuk ke akaun anda dan mula mencari restoran.",
+        signInCta: "Log Masuk ke Akaun Anda",
+        backHome: "Kembali ke Laman Utama",
+    },
+    verifyCode: {
+        backToRegister: "KEMBALI KE PENDAFTARAN",
+        title: "Sahkan E-mel",
+        sentTo: "Kami telah menghantar kod pengesahan 6 digit ke {email}",
+        digitLabel: "Digit {n} daripada 6",
+        enterAllDigits: "Sila masukkan kesemua 6 digit.",
+        verificationFailed: "Pengesahan gagal",
+        resendFailed: "Kod gagal dihantar semula",
+        newCodeSent: "Kod baharu telah dihantar!",
+        verify: "Sahkan Kod",
+        expiresIn: "Kod tamat dalam {time}",
+        expired: "Kod telah tamat",
+        resend: "HANTAR KOD BAHARU",
+        noEmail: "Tidak terima e-mel? Semak folder spam anda atau cuba e-mel lain.",
+    },
+};
 
 export default auth;

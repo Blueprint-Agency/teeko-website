@@ -6,22 +6,33 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Loader2, RefreshCcw, ArrowLeft, ShieldCheck } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
+import { fmt } from "@/lib/i18n";
 import Link from "next/link";
+import { useDict, useLocalePath } from "@/components/providers/LocaleProvider";
+
+/** Renders a dictionary string with one `{key}` placeholder replaced by a node. */
+function withSlot(template: string, key: string, node: React.ReactNode) {
+    const [before, after = ""] = template.split(`{${key}}`);
+    return <>{before}{node}{after}</>;
+}
 
 export default function VerifyCodePage() {
     const router = useRouter();
+    const t = useDict().auth.verifyCode;
+    const localePath = useLocalePath();
     const [email, setEmail] = useState("");
     const [code, setCode] = useState(["", "", "", "", "", ""]);
     const [isLoading, setIsLoading] = useState(false);
     const [isResending, setIsResending] = useState(false);
     const [error, setError] = useState("");
+    const [notice, setNotice] = useState("");
     const [timer, setTimer] = useState(180); // 3 minutes
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     useEffect(() => {
         const storedEmail = localStorage.getItem("verify_email");
         if (!storedEmail) {
-            router.push("/auth/register");
+            router.push(localePath("/auth/register"));
             return;
         }
         setEmail(storedEmail);
@@ -31,7 +42,7 @@ export default function VerifyCodePage() {
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [router]);
+    }, [router, localePath]);
 
     const formatTime = (seconds: number) => {
         const m = Math.floor(seconds / 60);
@@ -61,12 +72,13 @@ export default function VerifyCodePage() {
         e?.preventDefault();
         const verificationCode = code.join("");
         if (verificationCode.length !== 6) {
-            setError("Please enter all 6 digits.");
+            setError(t.enterAllDigits);
             return;
         }
 
         setIsLoading(true);
         setError("");
+        setNotice("");
 
         try {
             const res = await fetch(`${API_BASE_URL}/auth/verify-code`, {
@@ -78,7 +90,7 @@ export default function VerifyCodePage() {
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.message || "Verification failed");
+                throw new Error(data.message || t.verificationFailed);
             }
 
             // Verification successful
@@ -91,7 +103,7 @@ export default function VerifyCodePage() {
             }
 
             localStorage.removeItem("verify_email");
-            router.push("/profile");
+            router.push(localePath("/profile"));
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -102,6 +114,7 @@ export default function VerifyCodePage() {
     const handleResend = async () => {
         setIsResending(true);
         setError("");
+        setNotice("");
         try {
             const res = await fetch(`${API_BASE_URL}/auth/resend-code`, {
                 method: "POST",
@@ -111,13 +124,13 @@ export default function VerifyCodePage() {
 
             if (!res.ok) {
                 const data = await res.json();
-                throw new Error(data.message || "Failed to resend code");
+                throw new Error(data.message || t.resendFailed);
             }
 
             setTimer(180);
             setCode(["", "", "", "", "", ""]);
             inputRefs.current[0]?.focus();
-            setError("New code sent!");
+            setNotice(t.newCodeSent);
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -141,7 +154,7 @@ export default function VerifyCodePage() {
                         className="mb-8 flex items-center gap-2 text-xs font-bold text-[var(--muted)] hover:text-primary-600 transition-colors"
                     >
                         <ArrowLeft className="w-3 h-3" />
-                        BACK TO REGISTER
+                        {t.backToRegister}
                     </button>
 
                     <div className="text-center mb-8">
@@ -149,18 +162,18 @@ export default function VerifyCodePage() {
                             <ShieldCheck className="w-8 h-8 text-primary-600" />
                         </div>
                         <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2 tracking-tight">
-                            Verify Email
+                            {t.title}
                         </h1>
                         <p className="text-[var(--muted)] text-sm max-w-xs mx-auto">
-                            We've sent a 6-digit verification code to <span className="text-[var(--foreground)] font-semibold">{email}</span>
+                            {withSlot(t.sentTo, "email", <span className="text-[var(--foreground)] font-semibold">{email}</span>)}
                         </p>
                     </div>
 
                     <div className="bg-[var(--card-bg)]/70 backdrop-blur-xl rounded-[40px] shadow-2xl p-8 border border-[var(--border)]">
-                        {error && (
-                            <div className={`mb-6 p-4 rounded-2xl text-xs flex items-start gap-3 ${error.includes('sent') ? 'bg-green-500/10 border-green-500/20 text-green-600' : 'bg-primary-500/10 border-primary-500/20 text-primary-600'}`}>
-                                <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${error.includes('sent') ? 'bg-green-600' : 'bg-primary-600'}`} />
-                                {error}
+                        {(error || notice) && (
+                            <div className={`mb-6 p-4 rounded-2xl text-xs flex items-start gap-3 ${notice ? 'bg-green-500/10 border-green-500/20 text-green-600' : 'bg-primary-500/10 border-primary-500/20 text-primary-600'}`}>
+                                <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${notice ? 'bg-green-600' : 'bg-primary-600'}`} />
+                                {notice || error}
                             </div>
                         )}
 
@@ -172,6 +185,8 @@ export default function VerifyCodePage() {
                                         ref={(el) => { inputRefs.current[idx] = el; }}
                                         type="text"
                                         maxLength={1}
+                                        inputMode="numeric"
+                                        aria-label={fmt(t.digitLabel, { n: idx + 1 })}
                                         value={digit}
                                         onChange={(e) => handleChange(idx, e.target.value)}
                                         onKeyDown={(e) => handleKeyDown(idx, e)}
@@ -186,15 +201,15 @@ export default function VerifyCodePage() {
                                     disabled={isLoading || code.some(d => !d)}
                                     className="w-full py-4 bg-primary-500 hover:bg-primary-600 text-white text-sm font-bold rounded-2xl transition-all shadow-xl shadow-primary-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                                 >
-                                    {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Verify Code"}
+                                    {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : t.verify}
                                 </button>
 
                                 <div className="flex flex-col items-center gap-4">
                                     <div className="flex items-center gap-2 text-xs font-semibold text-[var(--muted)]">
                                         {timer > 0 ? (
-                                            <>Code expires in <span className="text-primary-600">{formatTime(timer)}</span></>
+                                            withSlot(t.expiresIn, "time", <span className="text-primary-600">{formatTime(timer)}</span>)
                                         ) : (
-                                            <span className="text-primary-600">Code expired</span>
+                                            <span className="text-primary-600">{t.expired}</span>
                                         )}
                                     </div>
 
@@ -205,7 +220,7 @@ export default function VerifyCodePage() {
                                         className="flex items-center gap-2 text-xs font-bold text-primary-600 hover:text-primary-700 disabled:opacity-50"
                                     >
                                         <RefreshCcw className={`w-3 h-3 ${isResending ? 'animate-spin' : ''}`} />
-                                        RESEND NEW CODE
+                                        {t.resend}
                                     </button>
                                 </div>
                             </div>
@@ -213,8 +228,8 @@ export default function VerifyCodePage() {
                     </div>
 
                     <div className="mt-8 text-center">
-                        <Link href="/auth/register" className="text-xs font-bold text-[var(--muted)] hover:text-primary-600 transition-colors">
-                            Did not receive the email? Check your spam folder or try another email.
+                        <Link href={localePath("/auth/register")} className="text-xs font-bold text-[var(--muted)] hover:text-primary-600 transition-colors">
+                            {t.noEmail}
                         </Link>
                     </div>
                 </div>

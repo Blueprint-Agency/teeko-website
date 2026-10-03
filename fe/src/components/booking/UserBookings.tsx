@@ -6,8 +6,20 @@ import { API_BASE_URL } from "@/lib/constants";
 import { CancelBookingModal } from "./CancelBookingModal";
 import { QRCodeCanvas } from "qrcode.react";
 import { useAuthFetch } from "@/lib/authFetch";
+import { useDict, useLocale } from "@/components/providers/LocaleProvider";
+import { fmt, localized, type Translations } from "@/lib/i18n";
+import { withValue } from "./withValue";
 
 export function UserBookings() {
+    const dict = useDict();
+    const t = dict.booking.list;
+    const locale = useLocale();
+    // Package name in the page's language when the API sends `translations`
+    // with the booking; otherwise the stored English name.
+    const nameOf = (booking: { packageName?: string; translations?: Translations<{ packageName: string }> } | null): string =>
+        booking ? localized(booking, locale, "packageName") || "" : "";
+    const statusLabel = (status: string): string =>
+        (t.status as Record<string, string>)[status] ?? status;
     const { fetchWithAuth } = useAuthFetch();
     const [bookings, setBookings] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -34,11 +46,11 @@ export function UserBookings() {
                 setTotalPages(result.data.meta.totalPages);
                 setTotal(result.data.meta.total);
             } else {
-                setError(result.error || "Failed to load bookings");
+                setError(result.error || t.loadFailed);
             }
         } catch (err) {
             console.error("Failed to fetch bookings:", err);
-            setError("Failed to load bookings");
+            setError(t.loadFailed);
         } finally {
             setLoading(false);
         }
@@ -92,11 +104,11 @@ export function UserBookings() {
                 setIsCancelModalOpen(false);
                 fetchBookings(page, activeTab);
             } else {
-                alert(result.error || "Failed to cancel booking");
+                alert(result.error || t.cancelFailed);
             }
         } catch (err) {
             console.error("Cancel error:", err);
-            alert("An error occurred while cancelling");
+            alert(t.cancelError);
         } finally {
             setCancellingId(null);
             if (!cancellingId) setSelectedBooking(null);
@@ -136,7 +148,7 @@ export function UserBookings() {
                         : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                         }`}
                 >
-                    Current
+                    {t.current}
                 </button>
                 <button
                     onClick={() => handleTabChange('past')}
@@ -145,7 +157,7 @@ export function UserBookings() {
                         : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                         }`}
                 >
-                    Past
+                    {t.past}
                 </button>
             </div>
 
@@ -162,9 +174,9 @@ export function UserBookings() {
                     <div className="w-16 h-16 bg-[var(--card-bg)] rounded-3xl flex items-center justify-center mx-auto mb-5 border border-[var(--border)] shadow-sm">
                         <ShoppingBag className="w-8 h-8 text-gray-300 dark:text-gray-600" />
                     </div>
-                    <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">No {activeTab} bookings</p>
+                    <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">{activeTab === 'current' ? t.noCurrent : t.noPast}</p>
                     <p className="text-xs text-gray-500 mt-2">
-                        {activeTab === 'current' ? "You don't have any active SIM bookings." : "Your booking history will appear here."}
+                        {activeTab === 'current' ? t.emptyCurrent : t.emptyPast}
                     </p>
                 </div>
             ) : (
@@ -175,7 +187,7 @@ export function UserBookings() {
                                 <div className="flex items-start gap-5">
                                     <div className="w-12 h-12 rounded-xl bg-[var(--card-bg)] border border-[var(--border)] flex-shrink-0 overflow-hidden flex items-center justify-center group-hover:scale-105 transition-transform">
                                         {booking.featureImage ? (
-                                            <img src={booking.featureImage} alt={booking.packageName} className="w-full h-full object-cover" />
+                                            <img src={booking.featureImage} alt={nameOf(booking)} className="w-full h-full object-cover" />
                                         ) : (
                                             <ShoppingBag className="w-6 h-6 text-gray-400" />
                                         )}
@@ -184,16 +196,16 @@ export function UserBookings() {
                                     <div className="flex-1 min-w-0 pt-0.5">
                                         <div className="flex items-start justify-between gap-4">
                                             <div>
-                                                <h4 className="font-bold text-gray-900 dark:text-white text-base leading-tight truncate mb-1">{booking.packageName}</h4>
+                                                <h4 className="font-bold text-gray-900 dark:text-white text-base leading-tight truncate mb-1">{nameOf(booking)}</h4>
                                                 <div className="flex items-center gap-3">
-                                                    <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest bg-[var(--card-bg)] px-2 py-0.5 rounded-md border border-[var(--border)]">QTY: {booking.quantity}</span>
+                                                    <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest bg-[var(--card-bg)] px-2 py-0.5 rounded-md border border-[var(--border)]">{fmt(t.quantity, { n: booking.quantity })}</span>
                                                     <span className="text-sm font-bold text-red-600 dark:text-red-400">{booking.price}</span>
                                                 </div>
                                             </div>
 
                                             <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[10px] font-bold uppercase tracking-wider ${getStatusColor(booking.status)}`}>
                                                 {getStatusIcon(booking.status)}
-                                                {booking.status}
+                                                {statusLabel(booking.status)}
                                             </div>
                                         </div>
                                     </div>
@@ -203,7 +215,8 @@ export function UserBookings() {
                                             onClick={() => handleCancelClick(booking)}
                                             disabled={cancellingId === booking.id}
                                             className="p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all disabled:opacity-50 flex-shrink-0"
-                                            title="Cancel Booking"
+                                            title={t.cancelBooking}
+                                            aria-label={t.cancelBooking}
                                         >
                                             {cancellingId === booking.id ? (
                                                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -221,7 +234,7 @@ export function UserBookings() {
                                             className="w-full flex items-center justify-center gap-2.5 px-4 py-3 text-xs font-bold bg-[var(--card-bg)] text-gray-900 dark:text-white rounded-xl hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all uppercase tracking-widest border border-[var(--border)] shadow-sm active:scale-[0.98]"
                                         >
                                             <QrCode className="w-4 h-4" />
-                                            Show Verification Code
+                                            {t.showCode}
                                         </button>
                                     </div>
                                 )}
@@ -233,11 +246,12 @@ export function UserBookings() {
                     {totalPages > 1 && (
                         <div className="flex items-center justify-between pt-6 border-t border-[var(--border)]">
                             <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-                                Page <span className="text-gray-900 dark:text-white">{page}</span> of {totalPages}
+                                {withValue(fmt(t.page, { total: totalPages }), "page", <span className="text-gray-900 dark:text-white">{page}</span>)}
                             </p>
                             <div className="flex gap-2">
                                 <button
                                     onClick={handlePrevPage}
+                                    aria-label={dict.common.shared.previousPage}
                                     disabled={page === 1}
                                     className="p-2 rounded-xl bg-[var(--background-alt)] border border-[var(--border)] text-gray-500 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                                 >
@@ -245,6 +259,7 @@ export function UserBookings() {
                                 </button>
                                 <button
                                     onClick={handleNextPage}
+                                    aria-label={dict.common.shared.nextPage}
                                     disabled={page === totalPages}
                                     className="p-2 rounded-xl bg-[var(--background-alt)] border border-[var(--border)] text-gray-500 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                                 >
@@ -261,7 +276,7 @@ export function UserBookings() {
                 onClose={() => setIsCancelModalOpen(false)}
                 onConfirm={confirmCancel}
                 isLoading={cancellingId !== null}
-                packageName={selectedBooking?.packageName || ""}
+                packageName={nameOf(selectedBooking)}
             />
 
             {/* QR Modal */}
@@ -275,6 +290,7 @@ export function UserBookings() {
                     <div className="bg-[var(--background-alt)] rounded-[2.5rem] w-full max-w-sm border border-[var(--border)] overflow-hidden shadow-2xl p-8 sm:p-10 text-center relative animate-in fade-in zoom-in duration-300">
                         <button
                             onClick={() => setIsQRModalOpen(false)}
+                            aria-label={dict.common.shared.close}
                             className="absolute top-6 right-6 p-2 rounded-full bg-[var(--card-bg)] hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors border border-[var(--border)]"
                         >
                             <X className="w-5 h-5 text-gray-400" />
@@ -284,8 +300,8 @@ export function UserBookings() {
                             <div className="w-16 h-16 bg-red-50 dark:bg-red-900/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-red-100 dark:border-red-900/30">
                                 <QrCode className="w-8 h-8 text-red-600" />
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Verify Booking</h3>
-                            <p className="text-xs text-gray-500 mt-1 uppercase tracking-widest font-bold">Present this to staff</p>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">{t.verifyTitle}</h3>
+                            <p className="text-xs text-gray-500 mt-1 uppercase tracking-widest font-bold">{t.presentToStaff}</p>
                         </div>
 
                         <div className="bg-white p-5 rounded-[2rem] inline-block shadow-xl border border-gray-100 mb-8 transform transition-transform hover:scale-105">
@@ -298,7 +314,7 @@ export function UserBookings() {
                         </div>
 
                         <div className="bg-[var(--card-bg)] rounded-2xl p-6 border border-[var(--border)]">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] block mb-2">Manual Verification Code</span>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] block mb-2">{t.manualCode}</span>
                             <span className="text-3xl font-black text-gray-900 dark:text-white tracking-[0.2em] font-mono">{qrBooking.verificationCode}</span>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
-// deploy trigger 2026-03-29
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Navigation } from "@/components/layout/Navigation";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { FeaturedSection } from "@/components/sections/FeaturedSection";
@@ -7,6 +8,9 @@ import { BlogSection } from "@/components/sections/BlogSection";
 import { Footer } from "@/components/layout/Footer";
 import { API_BASE_URL } from "@/lib/constants";
 import { asList } from "@/lib/api";
+import { getDictionary } from "@/lib/dictionaries";
+import { isLocale, type Locale } from "@/lib/i18n";
+import { pageMetadata, samePath } from "@/lib/seo";
 
 async function getRestaurants() {
   try {
@@ -14,7 +18,7 @@ async function getRestaurants() {
     const res = await fetch(`${API_BASE_URL}/restaurants?status=ACTIVE&limit=4`, { cache: "no-store" });
     if (!res.ok) return [];
     return asList(await res.json());
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -24,26 +28,38 @@ async function getEsimPackages() {
     const res = await fetch(`${API_BASE_URL}/sim/packages`, { cache: "no-store" });
     if (!res.ok) return [];
     return asList(await res.json());
-  } catch (error) {
+  } catch {
     return [];
   }
 }
 
-async function getBlogPosts() {
+async function getBlogPosts(locale: Locale) {
   try {
-    const res = await fetch(`${API_BASE_URL}/blog/posts`, { cache: "no-store" });
+    const res = await fetch(`${API_BASE_URL}/blog/posts?locale=${locale}`, { cache: "no-store" });
     if (!res.ok) return [];
     return asList(await res.json());
-  } catch (error) {
+  } catch {
     return [];
   }
 }
 
-export default async function Home() {
-  const [restaurants, esimPackages, blogPosts] = await Promise.all([
+// Title and description come from the settings row via the locale layout;
+// this only adds canonical and hreflang.
+export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return pageMetadata({ locale, paths: samePath("/") });
+}
+
+export default async function Home({ params }: PageProps<"/[locale]">) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+
+  const [restaurants, esimPackages, blogPosts, dict] = await Promise.all([
     getRestaurants(),
     getEsimPackages(),
-    getBlogPosts()
+    getBlogPosts(locale),
+    getDictionary(locale),
   ]);
 
   return (
@@ -58,13 +74,12 @@ export default async function Home() {
         )}
 
         {/* 2. Our Esim Providers */}
-        <EsimSection packages={esimPackages} />
+        <EsimSection packages={esimPackages} locale={locale} dict={dict.home.esim} />
 
         {/* 3. Explore Blogs */}
-        <BlogSection posts={blogPosts} />
+        <BlogSection posts={blogPosts} locale={locale} dict={dict.home.blog} />
       </main>
       <Footer />
     </div>
   );
 }
-

@@ -1,6 +1,74 @@
 import type { DictionaryArea } from "../types";
 
 // Unreviewed first draft (2026-10-03): awaiting the client's Chinese reviewer.
-const profile: DictionaryArea<"profile"> = {};
+const profile: DictionaryArea<"profile"> = {
+    meta: {
+        title: "我的账户 | Teeko",
+    },
+    page: {
+        breadcrumb: "我的账户",
+        title: "我的账户",
+        subtitle: "管理你的账户，查看你的旅游电话卡预订",
+        signOut: "退出登录",
+        accountInfo: "账户信息",
+        emailLabel: "电子邮箱",
+        verified: "已验证",
+        roleLabel: "账户类型",
+        pointsAndStreak: "我的积分与连续登录",
+        simBookings: "我的旅游电话卡预订",
+        signOutTitle: "退出登录？",
+        signOutBody: "确定要退出你的账户吗？",
+        signOutConfirm: "确定退出",
+        cancel: "取消",
+    },
+    roles: {
+        USER: "用户",
+        ADMIN: "管理员",
+        SUPERADMIN: "超级管理员",
+    },
+    points: {
+        loadFailed: "积分加载失败",
+        totalPoints: "总积分",
+        currentStreak: "当前连续登录",
+        longestStreak: "最长连续登录",
+        days: "天",
+        recentActivity: "最近记录",
+        noHistory: "还没有积分记录。",
+        noHistoryHint: "预订电话卡或使用应用即可赚取积分！",
+    },
+    referral: {
+        title: "推荐计划",
+        subtitle: "邀请朋友加入 Teeko，一起获得奖励。",
+        yourCode: "你的推荐码",
+        copyCode: "复制推荐码",
+        copied: "已复制",
+        shareHint: "把这个推荐码分享给朋友，即可获得奖励。",
+        beenReferred: "有朋友推荐你？",
+        inputPlaceholder: "输入 4 位推荐码",
+        inputLabel: "推荐码",
+        codeLength: "推荐码必须是 4 位",
+        applyFailed: "推荐码使用失败",
+        apply: "使用推荐码",
+        referredTitle: "推荐成功！",
+        referredBody: "你已经使用过推荐码。",
+        yourReferrals: "你推荐的朋友",
+        total: "共 {count} 位",
+        joined: "加入日期",
+        noReferrals: "还没有推荐记录",
+        noReferralsHint: "朋友使用你的推荐码后，会显示在这里。",
+        fetchFailed: "推荐资料加载失败",
+        applyCodeFailed: "推荐码使用失败",
+    },
+    streak: {
+        close: "关闭",
+        title: "连续登录 {count} 天！",
+        body: "继续保持！每天登录可赚取更多积分。",
+        pointsToday: "今日 +{points} 积分",
+        dayShort: "第{day}天",
+        milestoneTitle: "达成连续 7 天！",
+        milestoneBody: "100 奖励积分已加入你的账户。",
+        cta: "好的，继续！",
+    },
+};
 
 export default profile;

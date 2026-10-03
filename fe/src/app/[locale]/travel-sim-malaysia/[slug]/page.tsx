@@ -1,14 +1,15 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { API_BASE_URL } from "@/lib/constants";
 import { asList } from "@/lib/api";
 import { notFound } from "next/navigation";
-import { ExternalLink, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { BookingButton } from "@/components/booking/BookingButton";
+import { getDictionary } from "@/lib/dictionaries";
+import { availableLocales, fmt, isLocale, isTranslated, localized, pathFor, type Translations } from "@/lib/i18n";
+import { pageMetadata, samePath } from "@/lib/seo";
 
 interface Provider {
     id: string;
@@ -47,6 +48,14 @@ interface Package {
     provider: Provider | null;
     features: Feature[] | null;
     contentTemplate: ContentTemplate | null;
+    // Price, duration and provider are facts and are never translated.
+    translations?: Translations<{
+        packageName: string;
+        about: string;
+        features: Feature[];
+        seoTitle: string;
+        seoDescription: string;
+    }>;
 }
 
 async function getPackage(slug: string): Promise<Package | null> {
@@ -56,7 +65,7 @@ async function getPackage(slug: string): Promise<Package | null> {
         });
         if (!res.ok) return null;
         return res.json();
-    } catch (error) {
+    } catch {
         return null;
     }
 }
@@ -71,36 +80,55 @@ async function getRelatedPackages(providerId: string, currentId: string): Promis
         return allPackages.filter((pkg: Package) =>
             pkg.providerId === providerId && pkg.id !== currentId
         ).slice(0, 4);
-    } catch (error) {
+    } catch {
         return [];
     }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-    const { slug } = await params;
-    const pkg = await getPackage(slug);
+export async function generateMetadata({ params }: PageProps<"/[locale]/travel-sim-malaysia/[slug]">): Promise<Metadata> {
+    const { locale, slug } = await params;
+    if (!isLocale(locale)) return {};
+    const [pkg, dict] = await Promise.all([getPackage(slug), getDictionary(locale)]);
 
     if (!pkg) {
-        return {
-            title: "Package Not Found",
-        };
+        return { title: dict.sim.detail.notFoundTitle };
     }
 
-    return {
-        title: pkg.seoTitle || pkg.packageName,
-        description: pkg.seoDescription || pkg.about || `Learn more about ${pkg.packageName}`,
-    };
+    const name = localized(pkg, locale, "packageName");
+    return pageMetadata({
+        locale,
+        paths: samePath(`/travel-sim-malaysia/${pkg.slug}`),
+        // A language counts only once the package's main text is translated;
+        // until then that version canonicalises to English.
+        indexedIn: availableLocales(pkg, "about"),
+        title: localized(pkg, locale, "seoTitle") || name,
+        description:
+            localized(pkg, locale, "seoDescription") ||
+            localized(pkg, locale, "about") ||
+            fmt(dict.sim.detail.metaFallbackDescription, { name }),
+        images: pkg.featureImage ? [pkg.featureImage] : undefined,
+    });
 }
 
-export default async function EsimPackagePage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
-    const pkg = await getPackage(slug);
+export default async function EsimPackagePage({ params }: PageProps<"/[locale]/travel-sim-malaysia/[slug]">) {
+    const { locale, slug } = await params;
+    if (!isLocale(locale)) notFound();
+    const [pkg, dict] = await Promise.all([getPackage(slug), getDictionary(locale)]);
 
     if (!pkg) {
         notFound();
     }
 
+    const t = dict.sim.detail;
     const relatedPackages = await getRelatedPackages(pkg.providerId, pkg.id);
+    const name = localized(pkg, locale, "packageName");
+    const about = localized(pkg, locale, "about");
+    const untranslated = !isTranslated(pkg, locale, "about");
+    // Translated package features win; otherwise the shared template's
+    // features (English only, no translations column), then the package's own.
+    const translatedFeatures =
+        locale !== "en" && isTranslated(pkg, locale, "features") ? localized(pkg, locale, "features") : null;
+    const features = translatedFeatures || pkg.contentTemplate?.features || pkg.features;
 
     return (
         <div className="min-h-screen bg-[var(--background)]">
@@ -108,10 +136,16 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
             <main className="max-w-container mx-auto px-4 py-12 pt-20">
                 <Breadcrumbs
                     items={[
-                        { label: "Travel SIM Malaysia", href: "/travel-sim-malaysia" },
-                        { label: pkg.packageName }
+                        { label: dict.sim.breadcrumb, href: "/travel-sim-malaysia" },
+                        { label: name }
                     ]}
                 />
+
+                {untranslated && (
+                    <p className="max-w-6xl mx-auto mb-6 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
+                        {dict.common.untranslated.notice}
+                    </p>
+                )}
 
                 <div className="max-w-6xl mx-auto space-y-16">
                     {/* Hero Section */}
@@ -121,7 +155,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                 <div className="aspect-square lg:aspect-auto h-full overflow-hidden bg-gray-100 dark:bg-zinc-800">
                                     <img
                                         src={pkg.featureImage}
-                                        alt={pkg.packageName}
+                                        alt={name}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
@@ -131,7 +165,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                 <div className="mb-6 md:mb-10">
                                     <div className="flex flex-wrap gap-2 mb-6">
                                         <span className="px-3 py-1 bg-red-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest">
-                                            Travel SIM
+                                            {t.badge}
                                         </span>
                                         {pkg.provider && (
                                             <span className="px-3 py-1 bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 rounded-full text-[10px] font-black uppercase tracking-widest">
@@ -140,7 +174,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                         )}
                                     </div>
                                     <h1 className="text-3xl md:text-5xl lg:text-5xl font-black text-gray-900 dark:text-white mb-6 leading-[1.1]">
-                                        {pkg.packageName}
+                                        {name}
                                     </h1>
 
                                     <div className="flex items-center gap-4 mb-4 md:mb-8">
@@ -149,14 +183,14 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                         </span>
                                         {pkg.price === "RM0" && (
                                             <span className="px-3 py-1 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-lg text-sm md:text-xl font-black uppercase tracking-widest">
-                                                (FREE)
+                                                {dict.sim.freeBadge}
                                             </span>
                                         )}
                                     </div>
 
-                                    {pkg.about && (
+                                    {about && (
                                         <div className="text-gray-600 dark:text-gray-400 leading-relaxed text-base md:text-lg whitespace-pre-line max-w-xl">
-                                            {pkg.about}
+                                            {about}
                                         </div>
                                     )}
                                 </div>
@@ -168,6 +202,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                             packageName: pkg.packageName,
                                             price: pkg.price
                                         }}
+                                        displayName={name}
                                     />
                                 </div>
                             </div>
@@ -175,11 +210,11 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                     </div>
 
                     {/* Core Product Features */}
-                    {(pkg.contentTemplate?.features || pkg.features) && (pkg.contentTemplate?.features || pkg.features)!.length > 0 && (
+                    {features && features.length > 0 && (
                         <div className="space-y-8">
-                            <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">Core Product Features</h2>
+                            <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">{t.coreFeatures}</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {(pkg.contentTemplate?.features || pkg.features)!.map((feature, index) => (
+                                {features.map((feature, index) => (
                                     <div key={index} className="flex gap-6">
                                         <div className="text-5xl md:text-8xl font-black text-red-600 tabular-nums shrink-0 leading-none">
                                             {(index + 1).toString().padStart(2, '0')}
@@ -200,7 +235,7 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
 
                     <div className="space-y-10">
                         <div className="space-y-4">
-                            <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">Supports Multiple Payment Methods</h2>
+                            <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">{t.paymentMethods}</h2>
                         </div>
 
                         <div className="flex -mx-4 px-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:grid md:grid-cols-3 gap-6 md:pb-0 md:px-0 md:mx-0">
@@ -225,12 +260,12 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                     <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
                                         <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">Local digital payment methods</h3>
+                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">{t.fallbackPayments.local.title}</h3>
                                             </div>
-                                            <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=800" alt="Local payments" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                            <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=800" alt={t.fallbackPayments.local.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                         </div>
                                         <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                            It supports major e-wallets in Malaysia, such as DuitNow, ShopeePay, Touch 'n Go eWallet, Grabpay, and Boost.
+                                            {t.fallbackPayments.local.body}
                                         </p>
                                     </div>
 
@@ -238,12 +273,12 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                     <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
                                         <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">International payment methods</h3>
+                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">{t.fallbackPayments.international.title}</h3>
                                             </div>
-                                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800" alt="International payments" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=800" alt={t.fallbackPayments.international.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                         </div>
                                         <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                            It is compatible with credit/debit cards (Visa/MasterCard), FPX online banking, and commonly used international payment channels such as Alipay and WeChat Pay.
+                                            {t.fallbackPayments.international.body}
                                         </p>
                                     </div>
 
@@ -251,12 +286,12 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                                     <div className="min-w-[280px] md:min-w-0 snap-center bg-[var(--card-bg)] border border-[var(--border)] rounded-3xl p-6 space-y-4 hover:shadow-xl transition-shadow">
                                         <div className="aspect-[16/9] rounded-2xl bg-gray-100 dark:bg-zinc-800 overflow-hidden relative group">
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
-                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">Automated processing flow</h3>
+                                                <h3 className="text-white font-bold text-base md:text-lg leading-tight">{t.fallbackPayments.automated.title}</h3>
                                             </div>
-                                            <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800" alt="Automation" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                            <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&q=80&w=800" alt={t.fallbackPayments.automated.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                         </div>
                                         <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                            Funds arrive in real time, and the system automatically completes SIM card activation and commission settlement, improving efficiency and transparency.
+                                            {t.fallbackPayments.automated.body}
                                         </p>
                                     </div>
                                 </>
@@ -269,26 +304,26 @@ export default async function EsimPackagePage({ params }: { params: Promise<{ sl
                         <div className="space-y-8 pt-8">
                             <div className="flex items-end justify-between">
                                 <div className="space-y-2">
-                                    <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">Other Packages</h2>
-                                    <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">Discover more options from {pkg.provider?.name}</p>
+                                    <h2 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white">{t.otherPackages}</h2>
+                                    <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">{fmt(t.moreFromProvider, { provider: pkg.provider?.name ?? "" })}</p>
                                 </div>
-                                <Link href="/travel-sim-malaysia" className="text-red-600 dark:text-red-400 font-bold hover:underline hidden md:block">
-                                    View All SIMs →
+                                <Link href={pathFor(locale, "/travel-sim-malaysia")} className="text-red-600 dark:text-red-400 font-bold hover:underline hidden md:block">
+                                    {t.viewAll}
                                 </Link>
                             </div>
 
                             <div className="flex -mx-4 px-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:pb-0 sm:px-0 sm:mx-0">
                                 {relatedPackages.map((rp) => (
                                     <div key={rp.id} className="min-w-[260px] sm:min-w-0 snap-center">
-                                        <Link href={`/travel-sim-malaysia/${rp.slug}`} className="group">
+                                        <Link href={pathFor(locale, `/travel-sim-malaysia/${rp.slug}`)} className="group">
                                             <div className="bg-[var(--card-bg)] border border-[var(--border)] rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 h-full">
                                                 {rp.featureImage && (
                                                     <div className="aspect-square overflow-hidden bg-gray-100 dark:bg-zinc-800">
-                                                        <img src={rp.featureImage} alt={rp.packageName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 pointer-events-none" />
+                                                        <img src={rp.featureImage} alt={localized(rp, locale, "packageName")} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 pointer-events-none" />
                                                     </div>
                                                 )}
                                                 <div className="p-4 space-y-2">
-                                                    <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors line-clamp-1">{rp.packageName}</h3>
+                                                    <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors line-clamp-1">{localized(rp, locale, "packageName")}</h3>
                                                     <p className="text-red-600 dark:text-red-500 font-black text-lg">{rp.price}</p>
                                                 </div>
                                             </div>

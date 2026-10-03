@@ -1,6 +1,76 @@
 import type { DictionaryArea } from "../types";
 
 // Unreviewed first draft (2026-10-03): awaiting the client's Chinese reviewer.
-const auth: DictionaryArea<"auth"> = {};
+const auth: DictionaryArea<"auth"> = {
+    meta: {
+        loginTitle: "登录 | Teeko",
+        registerTitle: "注册账户 | Teeko",
+        verifyTitle: "邮箱已验证 | Teeko",
+        verifyCodeTitle: "验证邮箱 | Teeko",
+    },
+    shared: {
+        logoAlt: "Teeko",
+        emailLabel: "电子邮箱",
+        passwordLabel: "密码",
+        showPassword: "显示密码",
+        hidePassword: "隐藏密码",
+        signIn: "登录",
+        createAccount: "注册账户",
+        requestFailed: "请求失败",
+        networkError: "网络错误",
+    },
+    login: {
+        title: "欢迎回来",
+        subtitle: "登录 Teeko，继续你的旅程",
+        sessionExpired: "登录已过期，请重新登录。",
+        emailPlaceholder: "输入你的电子邮箱",
+        rememberMe: "记住我",
+        signingIn: "正在登录...",
+        or: "或",
+        loginFailed: "登录失败",
+        googleLoginFailed: "Google 登录失败",
+        googleLoginError: "Google 登录失败",
+    },
+    register: {
+        title: "注册账户",
+        subtitle: "加入 Teeko，发现好去处",
+        confirmPasswordLabel: "确认密码",
+        showConfirmPassword: "显示确认密码",
+        hideConfirmPassword: "隐藏确认密码",
+        requirementLength: "至少 8 个字符",
+        requirementNumber: "至少一个数字",
+        requirementSymbol: "至少一个符号",
+        referralLabel: "推荐码（选填）",
+        referralPlaceholder: "推荐码",
+        creatingAccount: "正在注册...",
+        alreadyHaveOne: "已有账户？",
+        weakPassword: "请满足所有密码要求。",
+        passwordMismatch: "两次输入的密码不一致",
+        registrationFailed: "注册失败",
+        googleRegistrationFailed: "Google 注册失败",
+        googleSignupError: "Google 注册失败",
+    },
+    verify: {
+        title: "邮箱已验证！",
+        body: "你的邮箱已验证成功。现在可以登录账户，开始寻找餐厅。",
+        signInCta: "登录你的账户",
+        backHome: "返回首页",
+    },
+    verifyCode: {
+        backToRegister: "返回注册",
+        title: "验证邮箱",
+        sentTo: "我们已将 6 位验证码发送至 {email}",
+        digitLabel: "第 {n} 位，共 6 位",
+        enterAllDigits: "请输入全部 6 位数字。",
+        verificationFailed: "验证失败",
+        resendFailed: "验证码重发失败",
+        newCodeSent: "新验证码已发送！",
+        verify: "验证",
+        expiresIn: "验证码将在 {time} 后失效",
+        expired: "验证码已失效",
+        resend: "重新发送验证码",
+        noEmail: "没收到邮件？请查看垃圾邮件文件夹，或换一个邮箱试试。",
+    },
+};
 
 export default auth;

@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
-import type { CtaContent } from "@/lib/blogCta";
+import { localizeInternalUrl, type CtaContent } from "@/lib/blogCta";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n";
 
 // Conversion card used inside blog posts (the "cta" content block). Solid red
 // so it reads as the one action on the page; white text and a white button
-// for contrast. External URLs open in a new tab; internal paths stay in the app.
-export function CtaCard({ heading, subheading, buttonText, url }: CtaContent) {
+// for contrast. External URLs open in a new tab; internal paths stay in the app
+// and in the post's language. Heading and button text are the post's own copy,
+// written in the post's language in the admin panel.
+export function CtaCard({ heading, subheading, buttonText, url, locale = DEFAULT_LOCALE }: CtaContent & { locale?: Locale }) {
     if (!heading || !buttonText || !url) return null;
     const external = /^https?:\/\//i.test(url);
     const buttonClass =
@@ -28,7 +31,7 @@ export function CtaCard({ heading, subheading, buttonText, url }: CtaContent) {
                     {buttonText} <ExternalLink className="h-5 w-5" />
                 </a>
             ) : (
-                <Link href={url} className={buttonClass}>
+                <Link href={localizeInternalUrl(url, locale)} className={buttonClass}>
                     {buttonText} <ArrowRight className="h-5 w-5" />
                 </Link>
             )}

@@ -1,6 +1,74 @@
 import type { DictionaryArea } from "../types";
 
 // Unreviewed first draft (2026-10-03): awaiting the client's BM reviewer.
-const profile: DictionaryArea<"profile"> = {};
+const profile: DictionaryArea<"profile"> = {
+    meta: {
+        title: "Profil saya | Teeko",
+    },
+    page: {
+        breadcrumb: "Profil",
+        title: "Profil Saya",
+        subtitle: "Urus akaun anda dan lihat tempahan SIM Pelancong anda",
+        signOut: "Log Keluar",
+        accountInfo: "Maklumat Akaun",
+        emailLabel: "Alamat E-mel",
+        verified: "Disahkan",
+        roleLabel: "Peranan Akaun",
+        pointsAndStreak: "Mata & Streak Saya",
+        simBookings: "Tempahan SIM Pelancong Saya",
+        signOutTitle: "Log Keluar?",
+        signOutBody: "Anda pasti mahu log keluar dari akaun anda?",
+        signOutConfirm: "Ya, Log Keluar",
+        cancel: "Batal",
+    },
+    roles: {
+        USER: "Pengguna",
+        ADMIN: "Admin",
+        SUPERADMIN: "Super admin",
+    },
+    points: {
+        loadFailed: "Mata gagal dimuatkan",
+        totalPoints: "Jumlah Mata",
+        currentStreak: "Streak Semasa",
+        longestStreak: "Streak Terpanjang",
+        days: "Hari",
+        recentActivity: "Aktiviti Terkini",
+        noHistory: "Belum ada sejarah mata.",
+        noHistoryHint: "Tempah kad SIM atau gunakan aplikasi untuk kumpul mata!",
+    },
+    referral: {
+        title: "Program Rujukan",
+        subtitle: "Ajak kawan anda ke Teeko dan dapatkan ganjaran bersama.",
+        yourCode: "Kod Rujukan Anda",
+        copyCode: "Salin kod rujukan",
+        copied: "Disalin",
+        shareHint: "Kongsi kod ini dengan kawan anda untuk dapatkan ganjaran.",
+        beenReferred: "Dirujuk oleh kawan?",
+        inputPlaceholder: "Masukkan kod 4 aksara",
+        inputLabel: "Kod rujukan",
+        codeLength: "Kod rujukan mesti 4 aksara",
+        applyFailed: "Kod gagal digunakan",
+        apply: "Guna Kod",
+        referredTitle: "Rujukan Berjaya!",
+        referredBody: "Anda sudah menggunakan kod rujukan.",
+        yourReferrals: "Rujukan Anda",
+        total: "Jumlah: {count}",
+        joined: "Sertai",
+        noReferrals: "Belum ada rujukan",
+        noReferralsHint: "Kawan anda akan dipaparkan di sini selepas mereka guna kod anda.",
+        fetchFailed: "Data rujukan gagal dimuatkan",
+        applyCodeFailed: "Kod rujukan gagal digunakan",
+    },
+    streak: {
+        close: "Tutup",
+        title: "Streak {count} Hari!",
+        body: "Teruskan! Log masuk setiap hari untuk kumpul lebih banyak mata.",
+        pointsToday: "+{points} Mata Hari Ini",
+        dayShort: "H{day}",
+        milestoneTitle: "Pencapaian 7 Hari!",
+        milestoneBody: "100 mata bonus telah ditambah ke akaun anda.",
+        cta: "Baik, jom!",
+    },
+};
 
 export default profile;

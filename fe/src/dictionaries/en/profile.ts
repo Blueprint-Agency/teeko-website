@@ -1,4 +1,73 @@
-// Filled when this area's components move to the dictionary.
-const profile = {};
+// Account page: profile, points, streaks and referrals. `streak` is also read
+// by StreakRoadmapModal, which sits above LocaleProvider.
+const profile = {
+    meta: {
+        title: "My profile | Teeko",
+    },
+    page: {
+        breadcrumb: "Profile",
+        title: "My Profile",
+        subtitle: "Manage your account and view your Travel SIM bookings",
+        signOut: "Sign Out",
+        accountInfo: "Account Information",
+        emailLabel: "Email Address",
+        verified: "Verified",
+        roleLabel: "Account Role",
+        pointsAndStreak: "My Points & Streak",
+        simBookings: "My Travel SIM Bookings",
+        signOutTitle: "Sign Out?",
+        signOutBody: "Are you sure you want to sign out of your account?",
+        signOutConfirm: "Yes, Sign Out",
+        cancel: "Cancel",
+    },
+    roles: {
+        USER: "User",
+        ADMIN: "Admin",
+        SUPERADMIN: "Super admin",
+    },
+    points: {
+        loadFailed: "Failed to load points",
+        totalPoints: "Total Points",
+        currentStreak: "Current Streak",
+        longestStreak: "Longest Streak",
+        days: "Days",
+        recentActivity: "Recent Activity",
+        noHistory: "No point history yet.",
+        noHistoryHint: "Book a SIM card or interact with the app to earn points!",
+    },
+    referral: {
+        title: "Referral Program",
+        subtitle: "Invite your friends to Teeko and you both earn points.",
+        yourCode: "Your Referral Code",
+        copyCode: "Copy referral code",
+        copied: "Copied",
+        shareHint: "Share this code with your friends to get rewards.",
+        beenReferred: "Been referred?",
+        inputPlaceholder: "Enter 4-character code",
+        inputLabel: "Referral code",
+        codeLength: "Referral code must be 4 characters",
+        applyFailed: "Failed to apply code",
+        apply: "Apply Code",
+        referredTitle: "Successfully Referred!",
+        referredBody: "You've already applied a referral code.",
+        yourReferrals: "Your Referrals",
+        total: "{count} Total",
+        joined: "Joined",
+        noReferrals: "No referrals yet",
+        noReferralsHint: "Your friends will appear here once they use your code.",
+        fetchFailed: "Failed to fetch referral data",
+        applyCodeFailed: "Failed to apply referral code",
+    },
+    streak: {
+        close: "Close",
+        title: "{count} Day Streak!",
+        body: "Keep logging in every day to earn more points.",
+        pointsToday: "+{points} Points Today",
+        dayShort: "D{day}",
+        milestoneTitle: "7-Day Milestone Reached!",
+        milestoneBody: "100 bonus points have been added to your account.",
+        cta: "Got it",
+    },
+};
 
 export default profile;

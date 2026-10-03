@@ -11,6 +11,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { Dropdown } from "@/components/shared/Dropdown";
 import { Pagination } from "@/components/shared/Pagination";
+import { useDict } from "@/components/providers/LocaleProvider";
+import { fmt } from "@/lib/i18n";
 
 interface RestaurantsPageProps {
     initialRestaurants: {
@@ -26,6 +28,7 @@ interface RestaurantsPageProps {
 }
 
 const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps) => {
+    const t = useDict().restaurants.list;
     const [restaurants, setRestaurants] = useState(initialRestaurants);
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState("all");
@@ -110,15 +113,15 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
 
             {/* Main Content */}
             <main className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-                <Breadcrumbs items={[{ label: "Restaurants" }]} />
+                <Breadcrumbs items={[{ label: t.breadcrumb }]} />
 
                 <div className="page-header flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                     <div>
                         <h1 className="page-title">
-                            Discover Restaurants
+                            {t.title}
                         </h1>
                         <p className="text-xl text-muted">
-                            Explore the finest dining spots across Malaysia.
+                            {t.subtitle}
                         </p>
                     </div>
                     <button
@@ -126,7 +129,7 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                         className="lg:hidden flex items-center justify-center gap-2 px-6 py-3 bg-[var(--card-bg)] border border-[var(--border)] rounded-xl font-bold text-gray-700 dark:text-gray-200 hover:bg-[var(--background-alt)] transition-colors"
                     >
                         <SlidersHorizontal className="w-5 h-5" />
-                        Filters
+                        {t.filters}
                     </button>
                 </div>
 
@@ -136,7 +139,8 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                             type="text"
-                            placeholder="Search restaurants by name..."
+                            placeholder={t.searchPlaceholder}
+                            aria-label={t.searchPlaceholder}
                             value={searchQuery}
                             onChange={(e) => {
                                 setSearchQuery(e.target.value);
@@ -153,9 +157,9 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                     <div className="w-64 shrink-0 hidden lg:block sticky top-8 self-start">
                         <div className="space-y-8">
                             <Dropdown
-                                label="Location"
+                                label={t.location}
                                 options={[
-                                    { id: "all", label: "All Locations" },
+                                    { id: "all", label: t.allLocations },
                                     ...locations.map(loc => ({ id: loc.id, label: loc.name }))
                                 ]}
                                 selectedId={selectedLocation || "all"}
@@ -164,7 +168,7 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
 
                             {/* Filter Group: Price */}
                             <div>
-                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">Price</h3>
+                                <h3 className="font-bold text-gray-900 dark:text-white mb-4">{t.price}</h3>
                                 <div className="flex gap-2">
                                     {['$', '$$', '$$$', '$$$$'].map(price => (
                                         <button
@@ -185,8 +189,8 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                             <div className="bg-gray-900 rounded-xl p-4 text-white relative overflow-hidden group cursor-pointer shadow-lg">
                                 <div className="absolute inset-0 bg-gradient-to-tr from-red-600/20 to-transparent"></div>
                                 <Map className="w-8 h-8 mb-2 text-red-500" />
-                                <h4 className="font-bold text-lg">View on Map</h4>
-                                <p className="text-gray-400 text-sm">Explore restaurants near you</p>
+                                <h4 className="font-bold text-lg">{t.mapTitle}</h4>
+                                <p className="text-gray-400 text-sm">{t.mapBody}</p>
                             </div>
                         </div>
                     </div>
@@ -196,21 +200,25 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                         {/* Tabs / Sort */}
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4 overflow-x-auto sm:overflow-visible scrollbar-hide">
                             <div className="flex gap-6 border-b border-[var(--border)] w-full sm:w-auto">
-                                {['All Restaurants', 'Top Rated', 'Most Reviewed'].map(tab => (
+                                {[
+                                    { id: "all", label: t.tabAll },
+                                    { id: "top rated", label: t.tabTopRated },
+                                    { id: "most reviewed", label: t.tabMostReviewed },
+                                ].map(tab => (
                                     <button
-                                        key={tab}
-                                        onClick={() => setActiveTab(tab.toLowerCase())}
-                                        className={`pb-3 font-semibold text-sm transition-all border-b-2 whitespace-nowrap ${activeTab === tab.toLowerCase()
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        className={`pb-3 font-semibold text-sm transition-all border-b-2 whitespace-nowrap ${activeTab === tab.id
                                             ? 'border-red-600 text-red-600'
                                             : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
                                             }`}
                                     >
-                                        {tab}
+                                        {tab.label}
                                     </button>
                                 ))}
                             </div>
                             <span className="text-gray-500 dark:text-gray-400 text-sm font-medium whitespace-nowrap">
-                                Showing {paginatedRestaurants.length} of {restaurants?.pagination?.total || 0} results
+                                {fmt(t.showing, { count: paginatedRestaurants.length, total: restaurants?.pagination?.total || 0 })}
                             </span>
                         </div>
 
@@ -227,7 +235,7 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
 
                         {paginatedRestaurants.length === 0 && (
                             <div className="text-center py-20">
-                                <p className="text-gray-500 dark:text-gray-400 text-lg">No restaurants found matching your criteria.</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-lg">{t.empty}</p>
                                 <button
                                     onClick={() => {
                                         setSearchQuery("");
@@ -238,7 +246,7 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                                     }}
                                     className="mt-4 text-red-600 font-bold hover:underline"
                                 >
-                                    Clear all filters
+                                    {t.clearFilters}
                                 </button>
                             </div>
                         )}
@@ -272,9 +280,10 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                     />
                     <div className="absolute right-0 top-0 bottom-0 w-[300px] bg-[var(--background)] shadow-2xl p-6 flex flex-col">
                         <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-xl font-bold">Filters</h2>
+                            <h2 className="text-xl font-bold">{t.filters}</h2>
                             <button
                                 onClick={() => setShowMobileFilters(false)}
+                                aria-label={t.closeFilters}
                                 className="p-2 rounded-full hover:bg-[var(--background-alt)]"
                             >
                                 <X className="w-6 h-6" />
@@ -283,9 +292,9 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
 
                         <div className="flex-1 space-y-8 overflow-y-auto pr-2 scrollbar-hide">
                             <Dropdown
-                                label="Location"
+                                label={t.location}
                                 options={[
-                                    { id: "all", label: "All Locations" },
+                                    { id: "all", label: t.allLocations },
                                     ...locations.map(loc => ({ id: loc.id, label: loc.name }))
                                 ]}
                                 selectedId={selectedLocation || "all"}
@@ -296,8 +305,8 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                             <div className="bg-gray-900 rounded-xl p-6 text-white relative overflow-hidden group cursor-pointer shadow-lg mt-auto">
                                 <div className="absolute inset-0 bg-gradient-to-tr from-red-600/20 to-transparent"></div>
                                 <Map className="w-8 h-8 mb-2 text-red-500" />
-                                <h4 className="font-bold text-lg">View on Map</h4>
-                                <p className="text-gray-400 text-sm">Explore restaurants near you</p>
+                                <h4 className="font-bold text-lg">{t.mapTitle}</h4>
+                                <p className="text-gray-400 text-sm">{t.mapBody}</p>
                             </div>
                         </div>
 
@@ -306,7 +315,7 @@ const RestaurantsPage = ({ initialRestaurants, locations }: RestaurantsPageProps
                                 onClick={() => setShowMobileFilters(false)}
                                 className="w-full py-4 bg-red-600 text-white font-bold rounded-xl"
                             >
-                                Show Results
+                                {t.showResults}
                             </button>
                         </div>
                     </div>

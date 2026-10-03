@@ -8,9 +8,14 @@ import { Footer } from "@/components/layout/Footer";
 import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { GoogleLogin } from "@react-oauth/google";
+import { useDict, useLocalePath } from "@/components/providers/LocaleProvider";
 
 export default function LoginPage() {
     const router = useRouter();
+    const dict = useDict();
+    const t = dict.auth.login;
+    const shared = dict.auth.shared;
+    const localePath = useLocalePath();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -24,9 +29,9 @@ export default function LoginPage() {
         const expired = searchParams.get("expired");
         const message = searchParams.get("message");
         if (expired === "true") {
-            setSessionExpiredMessage(message || "Your session has expired. Please log in again.");
+            setSessionExpiredMessage(message || t.sessionExpired);
         }
-    }, [searchParams]);
+    }, [searchParams, t.sessionExpired]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -45,7 +50,7 @@ export default function LoginPage() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || "Failed to login");
+                throw new Error(data.message || t.loginFailed);
             }
 
             // Save token and user info
@@ -61,7 +66,7 @@ export default function LoginPage() {
             if (data.user.role === "ADMIN" || data.user.role === "SUPERADMIN") {
                 router.push("/admin");
             } else {
-                router.push("/");
+                router.push(localePath("/"));
             }
         } catch (err: any) {
             setError(err.message);
@@ -81,7 +86,7 @@ export default function LoginPage() {
             });
 
             const data = await res.json();
-            if (!res.ok) throw new Error(data.message || "Google Login failed");
+            if (!res.ok) throw new Error(data.message || t.googleLoginFailed);
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
@@ -94,7 +99,7 @@ export default function LoginPage() {
             if (data.user.role === "ADMIN" || data.user.role === "SUPERADMIN") {
                 router.push("/admin");
             } else {
-                router.push("/");
+                router.push(localePath("/"));
             }
         } catch (err: any) {
             setError(err.message);
@@ -119,15 +124,15 @@ export default function LoginPage() {
                         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white dark:bg-zinc-900 shadow-xl shadow-black/5 mb-4 overflow-hidden border border-gray-100 dark:border-zinc-800">
                             <img
                                 src="/teeko-icon.png"
-                                alt="Teeko"
+                                alt={shared.logoAlt}
                                 className="w-full h-full object-cover"
                             />
                         </div>
                         <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-1.5 tracking-tight">
-                            Welcome Back
+                            {t.title}
                         </h1>
                         <p className="text-gray-600 dark:text-zinc-400 text-sm font-medium">
-                            Continue your journey with Teeko
+                            {t.subtitle}
                         </p>
                     </div>
 
@@ -149,7 +154,7 @@ export default function LoginPage() {
                             {/* Email Field */}
                             <div className="space-y-1.5">
                                 <label htmlFor="email" className="block text-xs font-bold text-gray-700 dark:text-zinc-300 ml-1 uppercase tracking-wider">
-                                    Email Address
+                                    {shared.emailLabel}
                                 </label>
                                 <div className="relative group">
                                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-red-600 transition-colors" />
@@ -160,7 +165,7 @@ export default function LoginPage() {
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
                                         className="w-full pl-11 pr-4 py-3 bg-gray-50/50 dark:bg-zinc-950/50 border border-gray-200 dark:border-zinc-800 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-red-600/10 focus:border-red-600 dark:focus:border-red-600 transition-all"
-                                        placeholder="Enter your email"
+                                        placeholder={t.emailPlaceholder}
                                     />
                                 </div>
                             </div>
@@ -169,7 +174,7 @@ export default function LoginPage() {
                             <div className="space-y-1.5">
                                 <div className="flex items-center justify-between ml-1">
                                     <label htmlFor="password" className="block text-xs font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-wider">
-                                        Password
+                                        {shared.passwordLabel}
                                     </label>
                                     {/* Password reset is not built (OPEN-ITEMS #6); the "Forgot?" link 404'd and was removed 2026-09-19 */}
                                 </div>
@@ -187,6 +192,7 @@ export default function LoginPage() {
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
+                                        aria-label={showPassword ? shared.hidePassword : shared.showPassword}
                                         className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors"
                                     >
                                         {showPassword ? (
@@ -205,7 +211,7 @@ export default function LoginPage() {
                                     className="w-4 h-4 accent-red-600 rounded border-gray-300 dark:border-zinc-800 transition-all cursor-pointer"
                                 />
                                 <label htmlFor="remember" className="text-xs font-semibold text-gray-600 dark:text-zinc-400 cursor-pointer select-none">
-                                    Remember me
+                                    {t.rememberMe}
                                 </label>
                             </div>
 
@@ -218,10 +224,10 @@ export default function LoginPage() {
                                 {isLoading ? (
                                     <>
                                         <Loader2 className="w-4 h-4 animate-spin" />
-                                        <span>Signing in...</span>
+                                        <span>{t.signingIn}</span>
                                     </>
                                 ) : (
-                                    <span>Sign In</span>
+                                    <span>{shared.signIn}</span>
                                 )}
                             </button>
                         </form>
@@ -229,7 +235,7 @@ export default function LoginPage() {
                         <div className="mt-6 w-full flex justify-center">
                             <GoogleLogin
                                 onSuccess={handleGoogleSuccess}
-                                onError={() => setError("Google Login Failed")}
+                                onError={() => setError(t.googleLoginError)}
                                 theme="filled_blue"
                                 shape="pill"
                                 width="100%"
@@ -243,15 +249,15 @@ export default function LoginPage() {
                                 <div className="w-full border-t border-gray-100 dark:border-zinc-800"></div>
                             </div>
                             <div className="relative flex justify-center text-[10px] uppercase">
-                                <span className="bg-white dark:bg-zinc-900 px-3 text-gray-400 dark:text-zinc-500 font-bold tracking-[0.2em] leading-none">Or</span>
+                                <span className="bg-white dark:bg-zinc-900 px-3 text-gray-400 dark:text-zinc-500 font-bold tracking-[0.2em] leading-none">{t.or}</span>
                             </div>
                         </div>
 
                         <Link
-                            href="/auth/register"
+                            href={localePath("/auth/register")}
                             className="mt-5 w-full py-3 flex items-center justify-center text-sm font-bold text-gray-700 dark:text-zinc-300 border border-gray-200 dark:border-zinc-800 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-all active:scale-[0.98]"
                         >
-                            Create Account
+                            {shared.createAccount}
                         </Link>
                     </div>
                 </div>

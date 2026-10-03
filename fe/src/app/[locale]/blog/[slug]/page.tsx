@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { API_BASE_URL } from "@/lib/constants";
 import { notFound } from "next/navigation";
 import { Calendar, ArrowLeft, MapPin, Utensils, Star, ChevronRight } from "lucide-react";
@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
-import { RestaurantCard } from "@/components/shared/RestaurantCard";
 import { LocationCarousel } from "@/components/blog/LocationCarousel";
 import { calculateCombinedRating } from "@/utils/rating";
 import { formatBlogDateGMT8 } from "@/lib/dateUtils";
@@ -14,54 +13,78 @@ import { ContentBlock } from "@/types/blog";
 import { CtaCard } from "@/components/blog/CtaCard";
 import { parseCtaContent } from "@/lib/blogCta";
 import { parseImageContent } from "@/lib/blogImage";
-
-
+import { getDictionary } from "@/lib/dictionaries";
+import { fmt, isLocale, localized, pathFor, type Locale } from "@/lib/i18n";
+import { languageLinks, pageMetadata, type LocalePaths } from "@/lib/seo";
 
 interface BlogPost {
     id: string;
     title: string;
     slug: string;
+    locale: string;
     metaDescription: string | null;
     featureImage: string | null;
     publishedAt: string;
     contentBlocks: ContentBlock[];
+    /** Every published language version of this piece, itself included. */
+    translations?: { locale: string; slug: string }[];
 }
 
-async function getPost(slug: string): Promise<BlogPost | null> {
+async function getPost(slug: string, locale: Locale): Promise<BlogPost | null> {
     try {
-        const res = await fetch(`${API_BASE_URL}/blog/posts/slug/${slug}`, {
+        const res = await fetch(`${API_BASE_URL}/blog/posts/slug/${encodeURIComponent(slug)}?locale=${locale}`, {
             cache: "no-store"
         });
         if (!res.ok) return null;
         return res.json();
-    } catch (error) {
+    } catch {
         return null;
     }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-    const { slug } = await params;
-    const post = await getPost(slug);
-
-    if (!post) {
-        return {
-            title: "Post Not Found",
-        };
-    }
-
-    return {
-        title: post.title,
-        description: post.metaDescription || `Read ${post.title} on our blog`,
-    };
+/** Unprefixed path of each published language version; slugs differ per language. */
+function postPaths(post: BlogPost, locale: Locale): LocalePaths {
+    const paths: LocalePaths = Object.fromEntries(
+        (post.translations ?? [])
+            .filter((t) => isLocale(t.locale))
+            .map((t) => [t.locale, `/blog/${t.slug}`]),
+    );
+    paths[locale] ??= `/blog/${post.slug}`;
+    return paths;
 }
 
-export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
-    const post = await getPost(slug);
+export async function generateMetadata({ params }: PageProps<"/[locale]/blog/[slug]">): Promise<Metadata> {
+    const { locale, slug } = await params;
+    if (!isLocale(locale)) return {};
+    const [post, dict] = await Promise.all([getPost(slug, locale), getDictionary(locale)]);
+
+    if (!post) {
+        return { title: dict.blog.meta.postNotFound };
+    }
+
+    const paths = postPaths(post, locale);
+    return pageMetadata({
+        locale,
+        paths,
+        // Every listed version is a published post in its own language.
+        indexedIn: Object.keys(paths).filter(isLocale),
+        title: post.title,
+        description: post.metaDescription || fmt(dict.blog.meta.postFallbackDescription, { title: post.title }),
+        images: post.featureImage ? [post.featureImage] : undefined,
+    });
+}
+
+export default async function BlogPostPage({ params }: PageProps<"/[locale]/blog/[slug]">) {
+    const { locale, slug } = await params;
+    if (!isLocale(locale)) notFound();
+    const [post, dict] = await Promise.all([getPost(slug, locale), getDictionary(locale)]);
 
     if (!post) {
         notFound();
     }
+
+    const t = dict.blog.post;
+    const paths = postPaths(post, locale);
 
     const renderBlock = (block: ContentBlock) => {
         const baseClasses = "text-gray-800 dark:text-gray-200";
@@ -118,7 +141,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                         </div>
                     );
                 case "cta":
-                    return <CtaCard key={block.id} {...parseCtaContent(block.content)} />;
+                    return <CtaCard key={block.id} {...parseCtaContent(block.content)} locale={locale} />;
                 default:
                     return null;
             }
@@ -142,7 +165,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                 </div>
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2 mb-3">
-                                        <span className="px-3 py-1 bg-red-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">Editor's Pick</span>
+                                        <span className="px-3 py-1 bg-red-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full">{t.editorsPick}</span>
                                         <div className="flex items-center text-yellow-500">
                                             <Star className="h-4 w-4 fill-current" />
                                             <span className="ml-1 text-sm font-bold text-gray-900 dark:text-white">
@@ -151,7 +174,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                         </div>
                                     </div>
                                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{block.linkedEntity.name}</h3>
-                                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">{block.linkedEntity.description}</p>
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">{localized(block.linkedEntity, locale, "description")}</p>
                                     <div className="flex flex-col gap-2 mb-6 text-sm text-gray-500">
                                         <div className="flex items-start">
                                             <Utensils className="h-4 w-4 mr-2 text-red-500 mt-0.5 shrink-0" />
@@ -162,8 +185,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                             {block.linkedEntity.address}
                                         </div>
                                     </div>
-                                    <Link href={`/restaurant/${block.linkedEntity.slug}`} className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-lg active:scale-95">
-                                        View Details & Reserve <ChevronRight className="h-4 w-4" />
+                                    <Link href={pathFor(locale, `/restaurant/${block.linkedEntity.slug}`)} className="inline-flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl transition-all shadow-lg active:scale-95">
+                                        {t.viewDetails} <ChevronRight className="h-4 w-4" />
                                     </Link>
                                 </div>
                             </div>
@@ -175,7 +198,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 {block.locationId && block.suggestions && block.suggestions.length > 0 && (
                     <LocationCarousel
                         restaurants={block.suggestions}
-                        locationName={block.linkedEntity?.name || "this area"}
+                        locationName={block.linkedEntity?.name}
                         locationId={block.locationId}
                     />
                 )}
@@ -185,11 +208,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
     return (
         <div className="min-h-screen bg-[var(--background)]">
-            <Navigation forceSolid />
+            <Navigation forceSolid languageLinks={languageLinks(paths)} />
             <main className="max-w-container mx-auto px-4 py-12 pt-20">
                 <Breadcrumbs
                     items={[
-                        { label: "Blog", href: "/blog" },
+                        { label: dict.blog.list.breadcrumb, href: "/blog" },
                         { label: post.title }
                     ]}
                 />
@@ -198,11 +221,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     <div className="mb-12">
                         <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-6 font-medium">
                             <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full text-xs font-bold uppercase tracking-wider">
-                                Travel Guide
+                                {t.travelGuide}
                             </span>
                             <span className="w-1 h-1 bg-gray-300 rounded-full" />
                             <Calendar className="h-4 w-4" />
-                            {formatBlogDateGMT8(post.publishedAt)}
+                            {formatBlogDateGMT8(post.publishedAt, locale)}
                         </div>
                         <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
                             {post.title}
@@ -225,19 +248,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                             {post.contentBlocks && post.contentBlocks.length > 0 ? (
                                 post.contentBlocks.map(block => renderBlock(block))
                             ) : (
-                                <p className="text-gray-500 dark:text-gray-400">No content available.</p>
+                                <p className="text-gray-500 dark:text-gray-400">{t.noContent}</p>
                             )}
                         </div>
                     </div>
 
                     <div className="mt-20 p-10 bg-gray-50 dark:bg-zinc-800/30 rounded-3xl flex flex-col items-center text-center border border-gray-100 dark:border-zinc-800 shadow-sm">
-                        <h3 className="text-2xl font-bold mb-4">Enjoyed this guide?</h3>
-                        <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md">Discover more amazing spots and secret local favorites in our curated travel collections.</p>
+                        <h3 className="text-2xl font-bold mb-4">{t.enjoyedTitle}</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md">{t.enjoyedBody}</p>
                         <Link
-                            href="/blog"
+                            href={pathFor(locale, "/blog")}
                             className="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-2xl transition-all hover:scale-105"
                         >
-                            <ArrowLeft className="h-4 w-4" /> Explore More Guides
+                            <ArrowLeft className="h-4 w-4" /> {t.exploreMore}
                         </Link>
                     </div>
                 </article>

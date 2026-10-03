@@ -1,11 +1,16 @@
+"use client";
+
 import React from 'react';
 import { SocialPost, SocialMediaGrid } from './ReviewComponents';
+import { useDict } from '@/components/providers/LocaleProvider';
+import { fmt } from '@/lib/i18n';
 
 interface SocialsSectionProps {
     shortVideos: SocialPost[];
 }
 
 export const SocialsSection = ({ shortVideos }: SocialsSectionProps) => {
+    const t = useDict().restaurants.reviews;
     return (
         <section className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {Object.entries(
@@ -27,7 +32,7 @@ export const SocialsSection = ({ shortVideos }: SocialsSectionProps) => {
                 <SocialMediaGrid
                     key={source}
                     posts={posts}
-                    title={`Trending on ${source}`}
+                    title={fmt(t.trendingOn, { source })}
                 />
             ))}
         </section>
