@@ -1,6 +1,6 @@
 import type { DictionaryArea } from "../types";
 
-// Unreviewed first draft (2026-10-03): awaiting the client's BM reviewer.
+// Approved by the client without a separate language review (2026-10-03).
 const booking: DictionaryArea<"booking"> = {
     button: {
         signInToBook: "Log Masuk untuk Tempah",

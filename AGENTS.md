@@ -147,8 +147,8 @@ Persistence Chiro repo and adapted to a database-driven site.
   against English so a missing BM or 中文 key fails the build. Plain strings with `{name}`
   placeholders (`fmt()`), never functions, because the whole dictionary reaches client
   components through `LocaleProvider` (`useDict()`); server code calls `getDictionary(locale)`.
-  **The BM and 中文 dictionaries are an unreviewed first draft (2026-10-03)** until the client
-  names a reviewer per language (OPEN-ITEMS #2).
+  **The client approved the BM and 中文 text without a separate reviewer (2026-10-03)**, so
+  translation quality is on us: write each language natively, never machine-literal.
 - **Database text.** Blog posts: one row per language (`blogPosts.locale`), linked by
   `translationGroupId`; slugs are unique per language so each version carries its own keyword.
   Create a version from the admin editor ("Add BM version"). Restaurants, SIM packages,

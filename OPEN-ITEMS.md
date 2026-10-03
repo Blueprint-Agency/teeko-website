@@ -6,7 +6,7 @@ declined, the reason is recorded so it is not re-pitched every month.
 
 Numbers are referenced from code comments and `AGENTS.md`; do not renumber.
 
-Last updated **2026-10-03**, when the client confirmed the Genting charter and the return-trip transport (item 1) and asked for the trilingual site to be built first (item 2).
+Last updated **2026-10-03**, when the trilingual site went live (item 2), the client waived translation review (item 2) and confirmed the SIM claims (item 11), and the SIM payment cards were logged (item 13).
 
 ## 1. ttklia.com conversion path does not exist on the site
 
@@ -46,17 +46,19 @@ Singapore as of 2026-10-01).
 
 ## 2. Bahasa Malaysia and Chinese versions
 
-**Status: built 2026-10-03 on branch `feat/trilingual` (not yet deployed); open only for
-reviewers. Owner: client (reviewers), Blueprint (build).**
+**Status: resolved 2026-10-03. Live on teeko.ai (main 118c935, migration 0029). Owner:
+Blueprint (build).**
 
 Decisions 2026-10-03 (client): Simplified Chinese; restaurant and SIM pages exist in all three
 languages, with untranslated rows kept out of the sitemap and hreflang; each language version
-of a blog post has its own slug; Blueprint drafts the BM and 中文 interface text and the client
-reviews it. What was built and the rules that follow from it are in AGENTS.md § Multilingual.
+of a blog post has its own slug; Blueprint writes the BM and 中文 text. What was built and the
+rules that follow from it are in AGENTS.md § Multilingual.
 
-**Still needed: a named BM reviewer and a named Chinese reviewer.** The interface dictionaries
-(`fe/src/dictionaries/ms`, `/zh`) are an unreviewed machine-assisted first draft, and from
-Month 2 the schedule needs 20 BM/中文 pieces signed off each month.
+**No translation reviewers (client, 2026-10-03).** The BM and 中文 interface dictionaries
+(`fe/src/dictionaries/ms`, `/zh`) are approved as written, and BM/中文 content is published
+without a separate language review. Translation quality therefore rests on Blueprint: write
+each version natively for its own keyword, keep the copy-voice rules, and let the guard's BM
+and Chinese claims sweep catch promissory wording.
 
 Escalated 2026-09-20: the client's goal is 10 pieces of content a month in all three
 languages (30/month). That cannot start until this item is built, so it now sits ahead of
@@ -78,8 +80,8 @@ Needed to unblock (remaining):
   always; each locale picks its own highest-volume keyword variant. This decides whether they are
   separate content or a translation layer. Recommendation: own keywords per locale, as
   Persistence found (literal translations often measure ~0 volume in Malaysia).
-- Who translates or writes: client, agency, or machine with client review. At 20
-  non-English pieces a month, "client reviews everything" needs a named reviewer per language.
+- Who translates or writes: client, agency, or machine with client review. **Answered
+  2026-10-03:** Blueprint writes; no client language review.
 - Data model: `blogPosts` and `blogContentBlocks` need a locale (and a link between the three
   versions of one piece) so hreflang and the language switcher can be computed, not hand-listed.
 - Routing: `app/[locale]/` with English unprefixed, or three separate slugs. Decide once.
@@ -192,8 +194,11 @@ Not supplied on 2026-09-19 and not derivable from the repo:
 - Social profiles (none linked anywhere on the site).
 - Named people (founder, support lead) for author bylines; `blogPosts.authorId` exists but
   posts render without a visible author.
-- Whether "Unlimited 5G Data" on `/travel-sim-malaysia` is true for every package of every
-  provider, or only some. The page states it for all.
+- ~~Whether "Unlimited 5G Data" on `/travel-sim-malaysia` is true for every package of every
+  provider, or only some.~~ **Confirmed correct by the client 2026-10-03**, together with the
+  other SIM page claims: "No ID Required", collection at KLIA2 on landing, and the FAQ's
+  duration range (12 hours to 7 days), age rules (18+, or 16-18 with a guardian) and
+  Malaysia-only use. They may be used in SIM content in all three languages.
 - Which restaurant reservation partners are in play, if any, beyond the per-row
   `reservationUrl`.
 
@@ -205,3 +210,18 @@ Not supplied on 2026-09-19 and not derivable from the repo:
 renders `src/data/sampleRestaurants.ts`, which has invented ratings and review counts. The
 guard proves no route can reach it today. Decide whether to delete both components and the
 fixture; nothing depends on them.
+
+## 13. SIM detail page payment-method cards
+
+**Status: open. Owner: client (confirm or remove), Blueprint (edit).**
+
+`fe/src/app/[locale]/travel-sim-malaysia/[slug]/page.tsx` shows hard-coded "payment methods"
+cards when a provider's content template has none: e-wallets, cards, FPX, Alipay/WeChat Pay,
+and "funds arrive in real time... automatically completes SIM card activation and commission
+settlement", illustrated with Unsplash stock photos. They predate the trilingual build
+(found 2026-10-03) and are now in all three languages.
+
+They contradict PRODUCT.md: the site collects no payment (packages are RM0 or link out via
+`ctaLink`), and "commission settlement" reads as partner-facing copy. Needed: the client
+confirms these payment methods are real for SIM collection at KLIA2, or the cards are removed
+so the page only shows payment methods from `simContentTemplates`.

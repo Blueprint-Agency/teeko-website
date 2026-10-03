@@ -1,6 +1,6 @@
 import type { DictionaryArea } from "../types";
 
-// Unreviewed first draft (2026-10-03): awaiting the client's Chinese reviewer.
+// Approved by the client without a separate language review (2026-10-03).
 const sim: DictionaryArea<"sim"> = {
     meta: {
         title: "马来西亚旅游电话卡套餐",
