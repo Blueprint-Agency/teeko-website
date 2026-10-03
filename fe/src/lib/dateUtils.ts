@@ -43,11 +43,14 @@ export const formatDateTimeGMT8 = (date: string | Date) => {
     }
 };
 
-export const formatBlogDateGMT8 = (date: string | Date | null | undefined) => {
+import { INTL_LOCALE, type Locale } from "@/lib/i18n";
+
+/** Long date ("3 October 2026", "3 Oktober 2026", "2026年10月3日") in the reader's language. */
+export const formatBlogDateGMT8 = (date: string | Date | null | undefined, locale: Locale = "en") => {
     if (!date) return "-";
     try {
         const d = typeof date === 'string' ? new Date(date) : date;
-        return new Intl.DateTimeFormat('en-US', {
+        return new Intl.DateTimeFormat(INTL_LOCALE[locale], {
             timeZone: 'Asia/Singapore',
             year: 'numeric',
             month: 'long',

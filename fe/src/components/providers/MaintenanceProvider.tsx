@@ -4,11 +4,24 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { API_BASE_URL } from "@/lib/constants";
 import { Wrench, RefreshCcw } from "lucide-react";
+import { localeFromPathname, type Locale } from "@/lib/i18n";
+import enCommon from "@/dictionaries/en/common";
+import msCommon from "@/dictionaries/ms/common";
+import zhCommon from "@/dictionaries/zh/common";
+
+// This provider sits above LocaleProvider (it also wraps the admin panel), so
+// it reads the language from the URL instead of from context.
+const MAINTENANCE_COPY: Record<Locale, typeof enCommon.maintenance> = {
+    en: enCommon.maintenance,
+    ms: msCommon.maintenance,
+    zh: zhCommon.maintenance,
+};
 
 export function MaintenanceProvider({ children }: { children: React.ReactNode }) {
     const [isMaintenance, setIsMaintenance] = useState(false);
     const [loading, setLoading] = useState(true);
     const pathname = usePathname();
+    const copy = MAINTENANCE_COPY[localeFromPathname(pathname ?? "/")];
 
     // IMMEDIATE EXEMPTION: Admin routes are never blocked or delayed
     const isAdminRoute = pathname?.startsWith("/admin");
@@ -41,7 +54,7 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
             <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
                 <div className="flex flex-col items-center gap-4">
                     <RefreshCcw className="w-8 h-8 text-primary-500 animate-spin" />
-                    <span className="text-xs font-semibold tracking-widest text-[var(--muted)]">Loading Experience...</span>
+                    <span className="text-xs font-semibold tracking-widest text-[var(--muted)]">{copy.loading}</span>
                 </div>
             </div>
         );
@@ -58,13 +71,13 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
                 </div>
 
                 <h1 className="text-4xl md:text-6xl font-bold text-[var(--foreground)] mb-6 tracking-tight leading-tight">
-                    Undergoing <br />
-                    <span className="text-primary-600">Maintenance</span>
+                    {copy.titleLine1} <br />
+                    <span className="text-primary-600">{copy.titleLine2}</span>
                 </h1>
 
                 <div className="max-w-md space-y-6">
                     <p className="text-lg font-medium text-[var(--muted)] tracking-tight">
-                        We are currently fine-tuning our platform to serve you better. We'll be back momentarily.
+                        {copy.body}
                     </p>
 
                 </div>

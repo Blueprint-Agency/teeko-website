@@ -1,5 +1,7 @@
 "use client";
 
+import { useDict } from "@/components/providers/LocaleProvider";
+
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -11,6 +13,7 @@ interface ImageModalProps {
 }
 
 export function ImageModal({ images, initialIndex, isOpen, onClose }: ImageModalProps) {
+    const dict = useDict();
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
     useEffect(() => {
@@ -38,7 +41,7 @@ export function ImageModal({ images, initialIndex, isOpen, onClose }: ImageModal
             <button
                 onClick={onClose}
                 className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
-                aria-label="Close"
+                aria-label={dict.common.shared.close}
             >
                 <X className="w-6 h-6" />
             </button>

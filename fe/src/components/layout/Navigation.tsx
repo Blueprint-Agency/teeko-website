@@ -4,10 +4,30 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, Sparkles, User as UserIcon } from "lucide-react";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ThemeSwitch } from "../shared/ThemeSwitch";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { MAIN_MENU } from "@/lib/navigation";
+import { useDict, useLocalePath } from "@/components/providers/LocaleProvider";
+import { stripLocale, type Locale } from "@/lib/i18n";
+import { languageLinks, samePath } from "@/lib/seo";
 
-export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
+/**
+ * `languageLinks`: where the language switcher sends each language. Pages
+ * whose URL differs by language (blog posts) pass it; everything else gets
+ * the same path in every language.
+ */
+export function Navigation({
+    forceSolid = false,
+    languageLinks: links,
+}: {
+    forceSolid?: boolean;
+    languageLinks?: Record<Locale, string>;
+}) {
+    const dict = useDict();
+    const localePath = useLocalePath();
+    const pathname = usePathname();
+    const switcherLinks = links ?? languageLinks(samePath(stripLocale(pathname ?? "/")));
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isScrolledState, setIsScrolledState] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,7 +57,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
         >
             <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-14">
-                    <Link href="/" className="flex items-center gap-2 group">
+                    <Link href={localePath("/")} className="flex items-center gap-2 group">
                         <div className="relative w-7 h-7 rounded-full overflow-hidden shrink-0">
                             <img
                                 src="/teeko-icon.png"
@@ -55,7 +75,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
 
                     {/* Center Menu - Desktop */}
                     <div className="hidden md:flex items-center gap-1">
-                        {menuItems.map((item: any) => (
+                        {menuItems.map((item) => (
                             item.external ? (
                                 <a
                                     key={item.href}
@@ -69,18 +89,18 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                                             : "text-white/90 hover:text-white hover:bg-white/10"
                                         }`}
                                 >
-                                    {item.label}
+                                    {dict.common.nav[item.labelKey]}
                                 </a>
                             ) : (
                                 <Link
                                     key={item.href}
-                                    href={item.href}
+                                    href={localePath(item.href)}
                                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${isScrolled
                                         ? "text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 hover:bg-[var(--background-alt)]"
                                         : "text-white/90 hover:text-white hover:bg-white/10"
                                         }`}
                                 >
-                                    {item.label}
+                                    {dict.common.nav[item.labelKey]}
                                 </Link>
                             )
                         ))}
@@ -88,11 +108,14 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
 
                     {/* Right Actions */}
                     <div className="flex items-center gap-3">
+                        <div className="hidden sm:block">
+                            <LanguageSwitcher links={switcherLinks} tone={isScrolled ? "solid" : "overlay"} />
+                        </div>
                         <ThemeSwitch isScrolled={isScrolled} />
 
                         {isLoggedIn ? (
                             <Link
-                                href="/profile"
+                                href={localePath("/profile")}
                                 className={`hidden sm:flex items-center justify-center w-10 h-10 rounded-full transition-all ${isScrolled
                                     ? "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 hover:text-primary-600"
                                     : "bg-white/10 text-white hover:bg-white/20"
@@ -102,15 +125,17 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                             </Link>
                         ) : (
                             <Link
-                                href="/auth/login"
+                                href={localePath("/auth/login")}
                                 className="hidden sm:inline-flex items-center px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white text-[13px] font-semibold rounded-full transition-colors shadow-sm"
                             >
-                                Sign In
+                                {dict.common.nav.signIn}
                             </Link>
                         )}
 
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            aria-label={dict.common.nav.toggleMenu}
+                            aria-expanded={mobileMenuOpen}
                             className={`md:hidden p-2 rounded-lg transition-colors ${isScrolled
                                 ? "hover:bg-gray-100 dark:hover:bg-gray-800"
                                 : "hover:bg-white/10"
@@ -138,7 +163,7 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                     {/* Menu Panel */}
                     <div className="relative bg-[var(--card-bg)] border-b border-[var(--border)] shadow-2xl mx-4 mt-2 rounded-2xl overflow-hidden border border-[var(--border)]">
                         <div className="p-4 space-y-1">
-                            {menuItems.map((item: any) => (
+                            {menuItems.map((item) => (
                                 item.external ? (
                                     <a
                                         key={item.href}
@@ -151,37 +176,40 @@ export function Navigation({ forceSolid = false }: { forceSolid?: boolean }) {
                                             }`}
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
-                                        {item.label}
+                                        {dict.common.nav[item.labelKey]}
                                     </a>
                                 ) : (
                                     <Link
                                         key={item.href}
-                                        href={item.href}
+                                        href={localePath(item.href)}
                                         className="block px-4 py-3 text-base font-medium text-[var(--foreground)] hover:bg-[var(--background-alt)] rounded-xl transition-colors"
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
-                                        {item.label}
+                                        {dict.common.nav[item.labelKey]}
                                     </Link>
                                 )
                             ))}
                         </div>
+                        <div className="px-8 pb-3">
+                            <LanguageSwitcher links={switcherLinks} />
+                        </div>
                         <div className="p-4 pt-0">
                             {isLoggedIn ? (
                                 <Link
-                                    href="/profile"
+                                    href={localePath("/profile")}
                                     className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-[var(--background-alt)] text-[var(--foreground)] font-semibold rounded-xl transition-colors border border-[var(--border)]"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     <UserIcon className="w-5 h-5" />
-                                    <span>My Profile</span>
+                                    <span>{dict.common.nav.myProfile}</span>
                                 </Link>
                             ) : (
                                 <Link
-                                    href="/auth/login"
+                                    href={localePath("/auth/login")}
                                     className="block w-full px-5 py-3 bg-primary-500 hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors text-center"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
-                                    Sign In
+                                    {dict.common.nav.signIn}
                                 </Link>
                             )}
                         </div>

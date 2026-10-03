@@ -1,5 +1,7 @@
 "use client";
 
+import { useDict } from "@/components/providers/LocaleProvider";
+
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationProps {
@@ -9,6 +11,7 @@ interface PaginationProps {
 }
 
 export const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
+    const dict = useDict();
     if (totalPages <= 1) return null;
 
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -34,7 +37,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
                 onClick={() => onPageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
                 className="p-2 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--background-alt)] transition-colors"
-                aria-label="Previous page"
+                aria-label={dict.common.shared.previousPage}
             >
                 <ChevronLeft className="w-5 h-5" />
             </button>
@@ -65,7 +68,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
                 onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
                 className="p-2 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--background-alt)] transition-colors"
-                aria-label="Next page"
+                aria-label={dict.common.shared.nextPage}
             >
                 <ChevronRight className="w-5 h-5" />
             </button>

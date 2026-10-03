@@ -1,9 +1,18 @@
-import Link from "next/link";
-import { FOOTER_SECTIONS, LEGAL_LINKS } from "@/lib/navigation";
+"use client";
 
+import Link from "next/link";
+import { FOOTER_SECTIONS, LEGAL_LINKS, type FooterLabelKey } from "@/lib/navigation";
+import { useDict, useLocalePath } from "@/components/providers/LocaleProvider";
+import { fmt } from "@/lib/i18n";
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
+    const dict = useDict();
+    const localePath = useLocalePath();
+    const label = (key: FooterLabelKey) =>
+        key in dict.common.nav
+            ? dict.common.nav[key as keyof typeof dict.common.nav]
+            : dict.common.footer[key as keyof typeof dict.common.footer];
 
     return (
         <footer className="bg-[var(--background-alt)] text-[var(--muted)] border-t border-[var(--border)]">
@@ -25,20 +34,20 @@ export function Footer() {
                             </span>
                         </div>
                         <p className="text-sm text-gray-400 mb-6">
-                            Your trusted guide to discovering the best places in Malaysia.
+                            {dict.common.footer.tagline}
                         </p>
                     </div>
 
 
                     {/* Dynamic Sections */}
                     {FOOTER_SECTIONS.map((section) => (
-                        <div key={section.title}>
-                            <h3 className="text-[var(--foreground)] font-semibold mb-4">{section.title}</h3>
+                        <div key={section.titleKey}>
+                            <h3 className="text-[var(--foreground)] font-semibold mb-4">{dict.common.footer[section.titleKey]}</h3>
                             <ul className="space-y-3">
                                 {section.links.map((link) => (
                                     <li key={link.href}>
-                                        <Link href={link.href} className="text-sm hover:text-red-500 transition-colors">
-                                            {link.label}
+                                        <Link href={localePath(link.href)} className="text-sm hover:text-red-500 transition-colors">
+                                            {label(link.labelKey)}
                                         </Link>
                                     </li>
                                 ))}
@@ -51,16 +60,16 @@ export function Footer() {
                 <div className="pt-8 border-t border-[var(--border)]">
                     <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                         <p className="text-sm text-gray-400">
-                            © {currentYear} Teeko. All rights reserved.
+                            {fmt(dict.common.footer.rights, { year: currentYear })}
                         </p>
                         <div className="flex gap-6">
                             {LEGAL_LINKS.map((link) => (
                                 <Link
                                     key={link.href}
-                                    href={link.href}
+                                    href={localePath(link.href)}
                                     className="text-sm text-[var(--muted)] hover:text-red-500 transition-colors"
                                 >
-                                    {link.label}
+                                    {label(link.labelKey)}
                                 </Link>
                             ))}
                         </div>

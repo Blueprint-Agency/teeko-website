@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // The public root layout is app/[locale]/layout.tsx (a dynamic segment) and
+    // admin has its own root, so unmatched URLs need app/global-not-found.tsx.
+    globalNotFound: true,
+  },
   images: {
     remotePatterns: [
       {

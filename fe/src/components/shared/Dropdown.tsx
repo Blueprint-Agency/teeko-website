@@ -1,5 +1,7 @@
 "use client";
 
+import { useDict } from "@/components/providers/LocaleProvider";
+
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown, Check } from "lucide-react";
 
@@ -21,10 +23,11 @@ export function Dropdown({
     options,
     selectedId,
     onSelect,
-    placeholder = "Select option",
+    placeholder,
     label,
     className = ""
 }: DropdownProps) {
+    const dict = useDict();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +52,7 @@ export function Dropdown({
                 className="w-full bg-[var(--card-bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 outline-none flex items-center justify-between transition-all hover:border-red-500/50"
             >
                 <span className="truncate">
-                    {selectedOption ? selectedOption.label : placeholder}
+                    {selectedOption ? selectedOption.label : (placeholder ?? dict.common.shared.selectOption)}
                 </span>
                 <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
             </button>
