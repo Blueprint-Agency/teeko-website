@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/Button";
 import { Save, Loader2, Globe, Image as ImageIcon, Type, Upload } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
+import { TranslationsEditor, emptyTranslations, translationsFromApi, type TranslationField } from "@/components/admin/TranslationsEditor";
+
+const TRANSLATED_FIELDS: TranslationField[] = [
+    { key: "siteTitle", label: "Site Title", kind: "text" },
+    { key: "siteDescription", label: "Meta Description", kind: "textarea", rows: 3 },
+];
 
 export default function AdminSettingsPage() {
     const [loading, setLoading] = useState(true);
@@ -12,6 +18,7 @@ export default function AdminSettingsPage() {
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
+    const [translations, setTranslations] = useState(emptyTranslations());
     const [formData, setFormData] = useState({
         siteTitle: "",
         siteDescription: "",
@@ -37,6 +44,7 @@ export default function AdminSettingsPage() {
                         maintenanceMode: settingsData.maintenanceMode || false,
                         googleIndexing: settingsData.googleIndexing || false,
                     });
+                    setTranslations(translationsFromApi(settingsData.translations, TRANSLATED_FIELDS));
                 }
             } catch (error) {
                 console.error("Failed to fetch settings", error);
@@ -91,7 +99,7 @@ export default function AdminSettingsPage() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, translations }),
             });
 
             if (res.ok) {
@@ -232,6 +240,15 @@ export default function AdminSettingsPage() {
                             </div>
                         </div>
                     </div>
+
+                    <TranslationsEditor
+                        fields={TRANSLATED_FIELDS}
+                        mainField="siteTitle"
+                        value={translations}
+                        onChange={setTranslations}
+                        english={formData}
+                        note="English is edited above. Bahasa Malaysia and 中文 pages use these as the default title and description. Until the site title is translated for a language, that language uses the English title and description."
+                    />
 
                     <div className="flex justify-end pt-4">
                         <Button type="submit" disabled={saving}>

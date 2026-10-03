@@ -7,21 +7,34 @@ import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import Link from "next/link";
 import { formatDateGMT8 } from "@/lib/dateUtils";
+import { LOCALES, LOCALE_LABEL, isLocale, type Locale } from "@/lib/i18n";
 
 interface BlogPost {
     id: string;
     title: string;
     slug: string;
     status: "DRAFT" | "PUBLISHED" | "BIN";
+    locale?: string | null;
+    translationGroupId?: string | null;
     createdAt: string;
     updatedAt: string;
     publishedAt: string | null;
 }
 
+const postLocale = (post: BlogPost): Locale => (isLocale(post.locale) ? post.locale : "en");
+const groupKey = (post: BlogPost) => post.translationGroupId || post.id;
+
+const STATUS_BADGE: Record<BlogPost["status"], string> = {
+    PUBLISHED: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+    DRAFT: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+    BIN: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400",
+};
+
 export default function AdminBlogPage() {
     const [posts, setPosts] = useState<BlogPost[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<"ALL" | "DRAFT" | "PUBLISHED" | "BIN">("ALL");
+    const [languageFilter, setLanguageFilter] = useState<"ALL" | Locale>("ALL");
     const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
     const fetchPosts = async () => {
@@ -87,9 +100,22 @@ export default function AdminBlogPage() {
         }
     };
 
-    const filteredPosts = filter === "ALL"
-        ? posts
-        : posts.filter(post => post.status === filter);
+    // Versions of one piece share a translationGroupId. Group them so each piece
+    // reads as one block (EN, then BM, then 中文), ordered by the newest post in
+    // the group, which is the order the API returns.
+    const groups = new Map<string, BlogPost[]>();
+    for (const post of posts) {
+        const key = groupKey(post);
+        groups.set(key, [...(groups.get(key) ?? []), post]);
+    }
+    for (const versions of groups.values()) {
+        versions.sort((a, b) => LOCALES.indexOf(postLocale(a)) - LOCALES.indexOf(postLocale(b)));
+    }
+
+    const filteredPosts = [...groups.values()].flatMap(versions => versions.filter(post =>
+        (filter === "ALL" || post.status === filter) &&
+        (languageFilter === "ALL" || postLocale(post) === languageFilter)
+    ));
 
     return (
         <div className="space-y-6">
@@ -128,6 +154,21 @@ export default function AdminBlogPage() {
                 ))}
             </div>
 
+            <div className="flex gap-2 overflow-x-auto pb-2 -mt-4">
+                {(["ALL", ...LOCALES] as const).map(locale => (
+                    <button
+                        key={locale}
+                        onClick={() => setLanguageFilter(locale)}
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${languageFilter === locale
+                            ? "bg-zinc-900 text-white dark:bg-white dark:text-zinc-900"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-zinc-800 dark:text-gray-300 dark:hover:bg-zinc-700"
+                            }`}
+                    >
+                        {locale === "ALL" ? "All languages" : LOCALE_LABEL[locale]}
+                    </button>
+                ))}
+            </div>
+
             {loading ? (
                 <div className="flex items-center justify-center h-64">
                     <Loader2 className="h-8 w-8 animate-spin text-red-600" />
@@ -140,24 +181,64 @@ export default function AdminBlogPage() {
                             <thead className="bg-gray-50 dark:bg-zinc-800/50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Title</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Language</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Other versions</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Status</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Published</th>
                                     <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white dark:divide-zinc-800 dark:bg-zinc-900">
-                                {filteredPosts.map((post) => (
-                                    <tr key={post.id}>
+                                {filteredPosts.map((post, index) => {
+                                    const versions = groups.get(groupKey(post)) ?? [post];
+                                    const locale = postLocale(post);
+                                    const startsGroup = index === 0 || groupKey(filteredPosts[index - 1]) !== groupKey(post);
+                                    // New translations copy the English version when there is one.
+                                    const source = versions.find(v => postLocale(v) === "en") ?? post;
+                                    return (
+                                    <tr key={post.id} className={startsGroup ? "" : "bg-gray-50/60 dark:bg-zinc-900/60"}>
                                         <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                                            {post.title}
+                                            {startsGroup ? post.title : (
+                                                <span className="block pl-4 text-gray-700 dark:text-gray-300">
+                                                    <span className="text-gray-400 mr-1" aria-hidden>↳</span>{post.title}
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="whitespace-nowrap px-6 py-4 text-sm">
-                                            <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${post.status === "PUBLISHED"
-                                                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                                : post.status === "DRAFT"
-                                                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                                    : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
-                                                }`}>
+                                            <span className="inline-flex rounded-md border border-gray-200 dark:border-zinc-700 px-2 py-0.5 text-xs font-semibold text-gray-700 dark:text-gray-300">
+                                                {LOCALE_LABEL[locale]}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-xs">
+                                            <div className="flex flex-wrap gap-1">
+                                                {LOCALES.filter(l => l !== locale).map(l => {
+                                                    const version = versions.find(v => postLocale(v) === l);
+                                                    if (version) {
+                                                        return (
+                                                            <Link
+                                                                key={l}
+                                                                href={`/admin/blog/${version.id}/edit`}
+                                                                className={`inline-flex rounded-full px-2 py-0.5 font-semibold whitespace-nowrap hover:underline ${STATUS_BADGE[version.status]}`}
+                                                            >
+                                                                {LOCALE_LABEL[l]}: {version.status.toLowerCase()}
+                                                            </Link>
+                                                        );
+                                                    }
+                                                    return (
+                                                        <Link
+                                                            key={l}
+                                                            href={`/admin/blog/create?translationOf=${source.id}&locale=${l}`}
+                                                            title={`Add ${LOCALE_LABEL[l]} version`}
+                                                            className="inline-flex rounded-full border border-dashed border-gray-300 dark:border-zinc-600 px-2 py-0.5 font-semibold whitespace-nowrap text-gray-500 hover:text-red-600 hover:border-red-400"
+                                                        >
+                                                            {LOCALE_LABEL[l]}: missing +
+                                                        </Link>
+                                                    );
+                                                })}
+                                            </div>
+                                        </td>
+                                        <td className="whitespace-nowrap px-6 py-4 text-sm">
+                                            <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${STATUS_BADGE[post.status]}`}>
                                                 {post.status}
                                             </span>
                                         </td>
@@ -187,10 +268,11 @@ export default function AdminBlogPage() {
                                             </button>
                                         </td>
                                     </tr>
-                                ))}
+                                    );
+                                })}
                                 {filteredPosts.length === 0 && (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">No posts found.</td>
+                                        <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">No posts found.</td>
                                     </tr>
                                 )}
                             </tbody>

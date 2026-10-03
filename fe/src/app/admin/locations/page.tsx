@@ -5,6 +5,13 @@ import { Button } from "@/components/ui/Button";
 import { Plus, Search, Edit2, Loader2, X } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
+import { TranslationsEditor, emptyTranslations, isFieldTranslated, translationsFromApi, type TranslationField } from "@/components/admin/TranslationsEditor";
+import { LOCALE_LABEL, TRANSLATED_LOCALES } from "@/lib/i18n";
+
+const TRANSLATED_FIELDS: TranslationField[] = [
+    { key: "seoTitle", label: "SEO Title", kind: "text" },
+    { key: "seoDescription", label: "SEO Description", kind: "textarea", rows: 2 },
+];
 
 interface Location {
     id: string;
@@ -12,6 +19,7 @@ interface Location {
     slug: string;
     seoTitle?: string;
     seoDescription?: string;
+    translations?: unknown;
 }
 
 export default function AdminLocationsPage() {
@@ -20,6 +28,7 @@ export default function AdminLocationsPage() {
     const [showModal, setShowModal] = useState(false);
     const [editingLocation, setEditingLocation] = useState<Location | null>(null);
     const [formData, setFormData] = useState({ name: "", slug: "", seoTitle: "", seoDescription: "" });
+    const [translations, setTranslations] = useState(emptyTranslations());
     const [submitting, setSubmitting] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
@@ -47,6 +56,7 @@ export default function AdminLocationsPage() {
     const handleOpenCreate = () => {
         setEditingLocation(null);
         setFormData({ name: "", slug: "", seoTitle: "", seoDescription: "" });
+        setTranslations(emptyTranslations());
         setShowModal(true);
     };
 
@@ -58,6 +68,7 @@ export default function AdminLocationsPage() {
             seoTitle: loc.seoTitle || "",
             seoDescription: loc.seoDescription || ""
         });
+        setTranslations(translationsFromApi(loc.translations, TRANSLATED_FIELDS));
         setShowModal(true);
     };
 
@@ -78,7 +89,7 @@ export default function AdminLocationsPage() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, translations }),
             });
 
             if (res.ok) {
@@ -126,6 +137,7 @@ export default function AdminLocationsPage() {
                                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Name</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Slug</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">SEO Title</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Translations</th>
                                     <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Actions</th>
                                 </tr>
                             </thead>
@@ -135,6 +147,22 @@ export default function AdminLocationsPage() {
                                         <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{loc.name}</td>
                                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{loc.slug}</td>
                                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{loc.seoTitle || "-"}</td>
+                                        <td className="whitespace-nowrap px-6 py-4 text-xs space-x-1">
+                                            {TRANSLATED_LOCALES.map((locale) => {
+                                                const done = isFieldTranslated(translationsFromApi(loc.translations, TRANSLATED_FIELDS), locale, "seoDescription");
+                                                return (
+                                                    <span
+                                                        key={locale}
+                                                        className={`inline-flex rounded-full px-2 py-0.5 font-semibold ${done
+                                                            ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                                                            : "bg-gray-100 text-gray-600 dark:bg-zinc-800 dark:text-gray-400"
+                                                            }`}
+                                                    >
+                                                        {LOCALE_LABEL[locale]}: {done ? "translated" : "not translated"}
+                                                    </span>
+                                                );
+                                            })}
+                                        </td>
                                         <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                                             <button
                                                 onClick={() => handleOpenEdit(loc)}
@@ -147,7 +175,7 @@ export default function AdminLocationsPage() {
                                 ))}
                                 {locations.length === 0 && (
                                     <tr>
-                                        <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">No locations found.</td>
+                                        <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">No locations found.</td>
                                     </tr>
                                 )}
                             </tbody>
@@ -160,7 +188,7 @@ export default function AdminLocationsPage() {
 
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-                    <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800">
+                    <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl bg-white p-6 shadow-xl dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-xl font-bold dark:text-white">
                                 {editingLocation ? "Edit Location" : "Add New Location"}
@@ -208,6 +236,14 @@ export default function AdminLocationsPage() {
                                     onChange={e => setFormData({ ...formData, seoDescription: e.target.value })}
                                 />
                             </div>
+                            <TranslationsEditor
+                                fields={TRANSLATED_FIELDS}
+                                mainField="seoDescription"
+                                value={translations}
+                                onChange={setTranslations}
+                                english={formData}
+                                pageNoun="location page"
+                            />
                             <div className="flex justify-end gap-3 mt-6">
                                 <Button type="button" variant="ghost" onClick={() => setShowModal(false)}>Cancel</Button>
                                 <Button type="submit" disabled={submitting}>

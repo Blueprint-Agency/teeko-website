@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { ArrowLeft, Plus, X, Search, Loader2, Save, Trash2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
+import { TranslationsEditor, emptyTranslations, type TranslationField } from "@/components/admin/TranslationsEditor";
+
+const TRANSLATED_FIELDS: TranslationField[] = [
+    { key: "description", label: "Description", kind: "textarea", rows: 5 },
+    { key: "seoTitle", label: "SEO Title", kind: "text" },
+    { key: "seoDescription", label: "SEO Description", kind: "textarea", rows: 2 },
+];
 
 export default function CreateRestaurantPage() {
     const router = useRouter();
@@ -18,6 +25,7 @@ export default function CreateRestaurantPage() {
     const [locations, setLocations] = useState<any[]>([]);
     const [taId, setTaId] = useState("");
     const [activeTab, setActiveTab] = useState("general");
+    const [translations, setTranslations] = useState(emptyTranslations());
     const [formData, setFormData] = useState({
         name: "",
         slug: "",
@@ -239,6 +247,7 @@ export default function CreateRestaurantPage() {
             const submissionData = {
                 ...formData,
                 priceRange,
+                translations,
                 feature: formData.features.filter(f => f.trim() !== ""),
                 googleReviews: formData.googleReviews.map(r => ({
                     ...r,
@@ -290,7 +299,7 @@ export default function CreateRestaurantPage() {
             </div>
 
             <div className="flex gap-1 mb-8 p-1 bg-gray-100 dark:bg-zinc-800 rounded-lg w-fit">
-                {['general', 'contact', 'images', 'reviews', 'reels'].map((tab) => (
+                {['general', 'contact', 'images', 'reviews', 'reels', 'translations'].map((tab) => (
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -926,6 +935,17 @@ export default function CreateRestaurantPage() {
                             ))}
                         </div>
                     </div>
+                )}
+
+                {activeTab === "translations" && (
+                    <TranslationsEditor
+                        fields={TRANSLATED_FIELDS}
+                        mainField="description"
+                        value={translations}
+                        onChange={setTranslations}
+                        english={{ description: formData.description }}
+                        pageNoun="restaurant page"
+                    />
                 )}
 
                 <div className="flex justify-end gap-3 pt-6 border-t dark:border-zinc-800">
