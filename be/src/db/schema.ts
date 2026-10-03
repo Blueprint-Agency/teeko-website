@@ -1,4 +1,12 @@
-import { pgTable, uuid, varchar, text, boolean, timestamp, jsonb, pgEnum, numeric, integer } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, text, boolean, timestamp, jsonb, pgEnum, numeric, integer, unique } from "drizzle-orm/pg-core";
+
+/**
+ * Translated text for the non-English locales. English stays in the normal
+ * columns and is the source of truth; a locale key is present only once that
+ * locale has been written. The frontend treats a row as "available" in a
+ * locale only when its translation exists (see fe/src/lib/i18n.ts).
+ */
+export type Translations<T> = Partial<Record<"ms" | "zh", Partial<T>>>;
 
 export const roleEnum = pgEnum("role", ["USER", "ADMIN", "SUPERADMIN"]);
 
@@ -42,6 +50,8 @@ export const locations = pgTable("locations", {
     seoTitle: varchar("seo_title"),
     seoDescription: text("seo_description"),
     isIndexed: boolean("is_indexed").default(true).notNull(),
+    // Place names stay in Latin script in every locale; only SEO text is translated.
+    translations: jsonb("translations").$type<Translations<{ seoTitle: string; seoDescription: string }>>(),
 });
 
 // Restaurant status enum
@@ -65,6 +75,8 @@ export const restaurants = pgTable("restaurants", {
     seoDescription: text("seo_description"),
     status: restaurantStatusEnum("status").default("ACTIVE").notNull(),
     isIndexed: boolean("is_indexed").default(true).notNull(),
+    // Restaurant names and addresses are never translated (NAP consistency).
+    translations: jsonb("translations").$type<Translations<{ description: string; seoTitle: string; seoDescription: string }>>(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -84,6 +96,7 @@ export const settings = pgTable("settings", {
     faviconUrl: text("favicon_url"),
     maintenanceMode: boolean("maintenance_mode").default(false).notNull(),
     googleIndexing: boolean("google_indexing").default(false).notNull(),
+    translations: jsonb("translations").$type<Translations<{ siteTitle: string; siteDescription: string }>>(),
 
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
 
@@ -115,6 +128,14 @@ export const simPackages = pgTable("sim_packages", {
     seoTitle: varchar("seo_title"),
     seoDescription: text("seo_description"),
     features: jsonb("features"), // [{ title, description }]
+    // Price, duration and provider are facts and are never translated.
+    translations: jsonb("translations").$type<Translations<{
+        packageName: string;
+        about: string;
+        features: { title: string; description: string }[];
+        seoTitle: string;
+        seoDescription: string;
+    }>>(),
     status: simStatusEnum("status").default("DRAFT").notNull(),
     publishedAt: timestamp("published_at"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -145,7 +166,11 @@ export const blogStatusEnum = pgEnum("blog_status", ["DRAFT", "PUBLISHED", "BIN"
 export const blogPosts = pgTable("blog_posts", {
     id: uuid("id").defaultRandom().primaryKey(),
     title: varchar("title", { length: 500 }).notNull(),
-    slug: varchar("slug", { length: 500 }).notNull().unique(),
+    // Unique per locale, not globally: each language version carries its own keyword slug.
+    slug: varchar("slug", { length: 500 }).notNull(),
+    locale: varchar("locale", { length: 5 }).default("en").notNull(), // 'en' | 'ms' | 'zh'
+    // Shared by the EN, BM and ZH versions of one piece; drives hreflang and the switcher.
+    translationGroupId: uuid("translation_group_id"),
     metaDescription: text("meta_description"),
     featureImage: text("feature_image"),
     status: blogStatusEnum("status").default("DRAFT").notNull(),
@@ -153,7 +178,9 @@ export const blogPosts = pgTable("blog_posts", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
     publishedAt: timestamp("published_at"),
-});
+}, (t) => [
+    unique("blog_posts_locale_slug_unique").on(t.locale, t.slug),
+]);
 
 // Blog content blocks (for dynamic headings and paragraphs)
 export const blogContentBlocks = pgTable("blog_content_blocks", {

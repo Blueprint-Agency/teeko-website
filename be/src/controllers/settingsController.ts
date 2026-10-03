@@ -3,6 +3,7 @@ import { db } from "../db";
 import { settings } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { uploadImageToR2 } from "../utils/upload";
+import { sanitizeTranslations } from "../utils/translations";
 
 export const getSettings = async (req: Request, res: Response) => {
     try {
@@ -22,6 +23,7 @@ export const getSettings = async (req: Request, res: Response) => {
 
 export const updateSettings = async (req: Request, res: Response) => {
     const { siteTitle, siteDescription, faviconUrl, maintenanceMode, googleIndexing } = req.body;
+    const translations = sanitizeTranslations(req.body.translations, { siteTitle: "string", siteDescription: "string" });
 
     try {
         const existing = await db.select().from(settings).limit(1);
@@ -31,7 +33,8 @@ export const updateSettings = async (req: Request, res: Response) => {
                 siteDescription,
                 faviconUrl,
                 maintenanceMode: maintenanceMode ?? false,
-                googleIndexing: googleIndexing ?? true
+                googleIndexing: googleIndexing ?? true,
+                translations,
             }).returning();
             res.json(newSettings);
         } else {
@@ -43,6 +46,7 @@ export const updateSettings = async (req: Request, res: Response) => {
                     faviconUrl,
                     maintenanceMode: maintenanceMode ?? existing[0].maintenanceMode,
                     googleIndexing: googleIndexing ?? existing[0].googleIndexing,
+                    translations,
                     updatedAt: new Date()
                 })
                 .where(eq(settings.id, existing[0].id))

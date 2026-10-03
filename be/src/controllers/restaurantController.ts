@@ -3,6 +3,9 @@ import { db } from "../db";
 import { restaurants, restaurantImages, locations, restaurantStats, restaurantReviews, restaurantShortVideos } from "../db/schema";
 import { eq, desc, and, SQL, ilike, count, sql } from "drizzle-orm";
 import { getJson } from "serpapi";
+import { sanitizeTranslations } from "../utils/translations";
+
+const RESTAURANT_TRANSLATED_FIELDS = { description: "string", seoTitle: "string", seoDescription: "string" } as const;
 
 export const searchRestaurantOptions = async (req: Request, res: Response) => {
     const { query, limit = 20 } = req.query;
@@ -85,6 +88,7 @@ export const getRestaurants = async (req: Request, res: Response) => {
             name: restaurants.name,
             slug: restaurants.slug,
             description: restaurants.description,
+            translations: restaurants.translations,
             cuisine: restaurants.cuisine,
             feature: restaurants.feature,
             address: restaurants.address,
@@ -145,6 +149,7 @@ export const getRestaurantBySlug = async (req: Request, res: Response) => {
             name: restaurants.name,
             slug: restaurants.slug,
             description: restaurants.description,
+            translations: restaurants.translations,
             cuisine: restaurants.cuisine,
             feature: restaurants.feature,
             address: restaurants.address,
@@ -199,6 +204,7 @@ export const getRestaurantById = async (req: Request, res: Response) => {
             slug: restaurants.slug,
             locationId: restaurants.locationId,
             description: restaurants.description,
+            translations: restaurants.translations,
             feature: restaurants.feature,
             cuisine: restaurants.cuisine,
             address: restaurants.address,
@@ -235,6 +241,7 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 
 export const createRestaurant = async (req: Request, res: Response) => {
     const { name, slug, tripAdvisorId, locationId, description, address, priceRange, websiteUrl, phone, email, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews, shortVideos } = req.body;
+    const translations = sanitizeTranslations(req.body.translations, RESTAURANT_TRANSLATED_FIELDS);
 
     try {
         // 1. Create Restaurant
@@ -246,6 +253,7 @@ export const createRestaurant = async (req: Request, res: Response) => {
                 locationId,
                 tripAdvisorLocationId: tripAdvisorId,
                 description,
+                translations,
                 address,
                 priceRange,
                 contactInfo: { website: websiteUrl, phone: phone, email: email },
@@ -490,6 +498,7 @@ export const createRestaurantByTripAdvisorID = async (req: Request, res: Respons
 export const updateRestaurant = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { name, slug, locationId, description, address, priceRange, websiteUrl, phone, email, operatingHours, images, feature, cuisine, reservationUrl, googleStats, tripAdvisorStats, googleReviews, shortVideos } = req.body;
+    const translations = sanitizeTranslations(req.body.translations, RESTAURANT_TRANSLATED_FIELDS);
 
     try {
         const [updatedRestaurant] = await db
@@ -506,6 +515,7 @@ export const updateRestaurant = async (req: Request, res: Response) => {
                 feature,
                 cuisine,
                 reservationUrl,
+                translations,
                 updatedAt: new Date(),
             })
             .where(eq(restaurants.id, id as string))
