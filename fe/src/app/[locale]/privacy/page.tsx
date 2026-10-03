@@ -1,16 +1,32 @@
 
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { pageMetadata, languageLinks } from "@/lib/seo";
 
-export const metadata = {
-    title: "Privacy Policy | Teeko",
-    description: "Privacy Policy for Teeko AI"
-};
+// Legal text exists in English only and is pending replacement (OPEN-ITEMS #3),
+// so /ms/privacy and /zh/privacy 404. The footer links every language here.
+const PATHS = { en: "/privacy" };
 
-export default function PrivacyPage() {
+// Built for English only; any other language is a real 404 rather than a
+// "not found" screen served with status 200.
+export const dynamicParams = false;
+export function generateStaticParams() {
+    return [{ locale: "en" }];
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+    return pageMetadata({ locale: "en", paths: PATHS, title: "Privacy Policy | Teeko", description: "Privacy Policy for Teeko AI" });
+}
+
+export default async function PrivacyPage({ params }: PageProps<"/[locale]/privacy">) {
+    const { locale } = await params;
+    if (locale !== "en") notFound();
+
     return (
         <div className="min-h-screen bg-[var(--background)] flex flex-col">
-            <Navigation forceSolid />
+            <Navigation forceSolid languageLinks={languageLinks(PATHS)} />
             <main className="flex-grow pt-24 pb-16">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-8">Privacy Policy</h1>

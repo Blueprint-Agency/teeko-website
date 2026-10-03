@@ -14,6 +14,8 @@ export interface NavItem<K extends string = FooterLabelKey> {
     href: string;
     external?: boolean;
     special?: boolean;
+    /** Exists in English only (legal pages): link the English URL from every language. */
+    englishOnly?: boolean;
 }
 
 export interface FooterSection {
@@ -41,13 +43,13 @@ export const FOOTER_SECTIONS: FooterSection[] = [
     {
         titleKey: "resources",
         links: [
-            { labelKey: "privacyPolicy", href: "/privacy" },
-            { labelKey: "termsOfService", href: "/terms" },
+            { labelKey: "privacyPolicy", href: "/privacy", englishOnly: true },
+            { labelKey: "termsOfService", href: "/terms", englishOnly: true },
         ],
     },
 ];
 
 export const LEGAL_LINKS: NavItem[] = [
-    { labelKey: "privacy", href: "/privacy" },
-    { labelKey: "terms", href: "/terms" },
+    { labelKey: "privacy", href: "/privacy", englishOnly: true },
+    { labelKey: "terms", href: "/terms", englishOnly: true },
 ];

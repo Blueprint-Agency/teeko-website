@@ -46,7 +46,17 @@ Singapore as of 2026-10-01).
 
 ## 2. Bahasa Malaysia and Chinese versions
 
-**Status: open, now REQUIRED. Owner: client (decisions), Blueprint (build).**
+**Status: built 2026-10-03 on branch `feat/trilingual` (not yet deployed); open only for
+reviewers. Owner: client (reviewers), Blueprint (build).**
+
+Decisions 2026-10-03 (client): Simplified Chinese; restaurant and SIM pages exist in all three
+languages, with untranslated rows kept out of the sitemap and hreflang; each language version
+of a blog post has its own slug; Blueprint drafts the BM and 中文 interface text and the client
+reviews it. What was built and the rules that follow from it are in AGENTS.md § Multilingual.
+
+**Still needed: a named BM reviewer and a named Chinese reviewer.** The interface dictionaries
+(`fe/src/dictionaries/ms`, `/zh`) are an unreviewed machine-assisted first draft, and from
+Month 2 the schedule needs 20 BM/中文 pieces signed off each month.
 
 Escalated 2026-09-20: the client's goal is 10 pieces of content a month in all three
 languages (30/month). That cannot start until this item is built, so it now sits ahead of

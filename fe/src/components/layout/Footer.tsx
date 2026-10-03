@@ -46,7 +46,7 @@ export function Footer() {
                             <ul className="space-y-3">
                                 {section.links.map((link) => (
                                     <li key={link.href}>
-                                        <Link href={localePath(link.href)} className="text-sm hover:text-red-500 transition-colors">
+                                        <Link href={link.englishOnly ? link.href : localePath(link.href)} className="text-sm hover:text-red-500 transition-colors">
                                             {label(link.labelKey)}
                                         </Link>
                                     </li>
@@ -66,7 +66,7 @@ export function Footer() {
                             {LEGAL_LINKS.map((link) => (
                                 <Link
                                     key={link.href}
-                                    href={localePath(link.href)}
+                                    href={link.englishOnly ? link.href : localePath(link.href)}
                                     className="text-sm text-[var(--muted)] hover:text-red-500 transition-colors"
                                 >
                                     {label(link.labelKey)}

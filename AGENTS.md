@@ -53,10 +53,12 @@ restaurant booking engine, or transport booking. ttklia.com owns transport; link
 
 **Client goal, 2026-09-20: 10 pieces of content per month, each in English, Chinese and
 Bahasa Malaysia, so 30 published pieces per month.** Content means blog posts unless the
-client says otherwise; every piece must carry a route to ttklia.com. Two things block it
-today: the blog has no locale field and the site has no locale routing (OPEN-ITEMS #2), and
-the keyword strategy per locale is undecided. Do not start writing at volume until both are
-settled, or 30 pieces a month become 30 thin pages a month.
+client says otherwise; every piece must carry a route to ttklia.com. The schedule and its
+status column live in [`docs/content-schedule.md`](docs/content-schedule.md) (the SEO tracker
+reads it). Client decision 2026-10-03: **every piece exists as three URLs, one per language,
+whether or not the translated keyword has measured volume**, and each language's title, slug
+and primary keyword use that language's highest-volume variant, never a literal translation.
+How the three versions are built and linked is in "Multilingual" below.
 
 ## Reference docs
 
@@ -120,6 +122,52 @@ Then the house rules:
 - British/Malaysian English spelling (colour, centre, licence).
 - Written for an inbound tourist who has not landed yet, on a phone, possibly not in English.
 
+## Multilingual
+
+Three languages since 2026-10-03: English (default, **unprefixed** URLs), Bahasa Malaysia
+(`/ms/...`) and Chinese, **Simplified** script (`/zh/...`). Architecture copied from the
+Persistence Chiro repo and adapted to a database-driven site.
+
+- **Routing.** Every public page lives under `fe/src/app/[locale]/`. `fe/src/proxy.ts` (the
+  Next 16 rename of middleware) rewrites unprefixed requests to `/en/...` and 308s any direct
+  `/en/...` hit back, so English has one public URL. The admin panel has its own English-only
+  root layout (`app/admin/layout.tsx`); both roots render `components/layout/RootDocument.tsx`.
+  Unmatched URLs fall through to `app/global-not-found.tsx`. `lib/i18n.ts` is the single source
+  of truth for locales, `pathFor`, `stripLocale` and the database-text helpers.
+- **Never call `headers()`, `cookies()` or another dynamic API in `app/[locale]/layout.tsx` or
+  in anything every page renders** (Navigation, Footer, LanguageSwitcher, LocaleProvider). It
+  de-staticises the whole site; Persistence shipped exactly this once. Guarded.
+- **Links.** Every internal link goes through `pathFor(locale, "/x")` (server) or
+  `localePath("/x")` from `useLocalePath()` (client), with the unprefixed path as a literal so
+  the guard can check it resolves. A bare `href="/x"` in public code drops the visitor back to
+  English; the guard fails on it. Exception: `/privacy` and `/terms` are English-only
+  (`englishOnly` in `lib/navigation.ts`) and 404 under `/ms` and `/zh` until real legal text
+  exists (OPEN-ITEMS #3).
+- **UI text** lives in `fe/src/dictionaries/{en,ms,zh}/<area>.ts`, one file per area, typed
+  against English so a missing BM or 中文 key fails the build. Plain strings with `{name}`
+  placeholders (`fmt()`), never functions, because the whole dictionary reaches client
+  components through `LocaleProvider` (`useDict()`); server code calls `getDictionary(locale)`.
+  **The BM and 中文 dictionaries are an unreviewed first draft (2026-10-03)** until the client
+  names a reviewer per language (OPEN-ITEMS #2).
+- **Database text.** Blog posts: one row per language (`blogPosts.locale`), linked by
+  `translationGroupId`; slugs are unique per language so each version carries its own keyword.
+  Create a version from the admin editor ("Add BM version"). Restaurants, SIM packages,
+  locations and settings keep English in their columns and BM/中文 in a `translations` jsonb
+  (`{ ms?: {...}, zh?: {...} }`); read it with `localized(row, locale, field)`. **Names,
+  addresses, prices, durations, ratings and review text are never translated** (NAP
+  consistency, and third-party data stays as supplied). Place names stay in Latin script in
+  every language: KLIA2, KL Sentral, Bukit Bintang, never 武吉免登.
+- **When a language counts as available.** A restaurant is available in BM/中文 once its
+  `description` is translated, a SIM package once its `about` is, a blog piece once that
+  language's version is published. An unavailable version still renders (translated chrome,
+  English text, a small notice), but canonicalises to English and stays out of hreflang and the
+  sitemap, so Google never sees a thin duplicate. One rule, three consumers:
+  `pageMetadata()` in `lib/seo.ts`, `app/sitemap.ts`, and the language switcher (fed by
+  `languageLinks(paths)`). Never hand-write `alternates` in a page; the guard requires
+  `pageMetadata()`.
+- **The claims sweep covers BM and 中文** (dijamin, termurah, 保证, 最便宜, 官方代理, ...). Copy
+  voice rules apply in every language.
+
 ## Conventions
 
 - **Stack**: `fe/` Next.js 16 app router, React 19, Tailwind 4, TypeScript strict, port 5000.
@@ -140,12 +188,12 @@ Then the house rules:
 - **SEO switches live in the database**: `settings.googleIndexing` (site-wide, default
   `false`), `restaurants.isIndexed`, `locations.isIndexed`. The sitemap returns empty when
   indexing is off. Check the settings row before assuming a page should rank.
-- **Per-page metadata**: blog and SIM detail pages read `seoTitle`/`seoDescription` from the
-  row; restaurant detail metadata is still a generic placeholder
-  (`fe/src/app/restaurant/[slug]/page.tsx`).
-- **Structure**: `src/app` routes, `src/components/{layout,sections,shared,ui,booking,
-  features,profile,providers,admin}`, `src/lib` (constants, auth fetch, navigation,
-  business facts), `src/types`, `src/data` (fixtures only).
+- **Per-page metadata**: every page builds it with `pageMetadata()` from `lib/seo.ts`; blog,
+  SIM and restaurant detail pages read `seoTitle`/`seoDescription` from the row (localized).
+- **Structure**: `src/app/[locale]` public routes, `src/app/admin` admin routes,
+  `src/components/{layout,sections,shared,ui,booking,features,profile,providers,admin}`,
+  `src/dictionaries/{en,ms,zh}` UI text, `src/lib` (i18n, seo, constants, auth fetch,
+  navigation, business facts), `src/types`, `src/data` (fixtures only).
 - **Auth**: email + 6-digit code, or Google. JWT in `localStorage`; `useAuthFetch` handles
   expiry. Admin and user are separate roles with separate login pages.
 - **Analytics**: GTM via `NEXT_PUBLIC_GTM_ID`; `GTMTracking` fires page views; the SIM booking
