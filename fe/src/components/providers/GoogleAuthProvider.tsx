@@ -14,9 +14,11 @@ export function GoogleAuthProvider({ children }: { children: React.ReactNode }) 
     // the visitor arrived in until the next full load.
     const locale = localeFromPathname(usePathname() ?? "/");
 
+    // Always provide the context: the sign-in pages render <GoogleLogin>, which
+    // throws outside a provider. Without a client ID the button simply fails to
+    // sign in instead of taking the whole page (and the build) down.
     if (!clientId) {
         console.warn("Google Client ID is missing. Google Login will not work.");
-        return <>{children}</>;
     }
 
     return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Navigation } from "@/components/layout/Navigation";
@@ -10,7 +10,16 @@ import { API_BASE_URL } from "@/lib/constants";
 import { GoogleLogin } from "@react-oauth/google";
 import { useDict, useLocalePath } from "@/components/providers/LocaleProvider";
 
+// useSearchParams() needs a Suspense boundary in Next 16 or the static build fails.
 export default function LoginPage() {
+    return (
+        <Suspense fallback={null}>
+            <LoginForm />
+        </Suspense>
+    );
+}
+
+function LoginForm() {
     const router = useRouter();
     const dict = useDict();
     const t = dict.auth.login;

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { API_BASE_URL } from "@/lib/constants";
-import { Wrench, RefreshCcw } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { localeFromPathname, type Locale } from "@/lib/i18n";
 import enCommon from "@/dictionaries/en/common";
 import msCommon from "@/dictionaries/ms/common";
@@ -19,7 +19,6 @@ const MAINTENANCE_COPY: Record<Locale, typeof enCommon.maintenance> = {
 
 export function MaintenanceProvider({ children }: { children: React.ReactNode }) {
     const [isMaintenance, setIsMaintenance] = useState(false);
-    const [loading, setLoading] = useState(true);
     const pathname = usePathname();
     const copy = MAINTENANCE_COPY[localeFromPathname(pathname ?? "/")];
 
@@ -39,8 +38,6 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
                 }
             } catch (error) {
                 console.error("Failed to check maintenance mode:", error);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -49,17 +46,11 @@ export function MaintenanceProvider({ children }: { children: React.ReactNode })
 
     if (isAdminRoute) return <>{children}</>;
 
-    if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-                <div className="flex flex-col items-center gap-4">
-                    <RefreshCcw className="w-8 h-8 text-primary-500 animate-spin" />
-                    <span className="text-xs font-semibold tracking-widest text-[var(--muted)]">{copy.loading}</span>
-                </div>
-            </div>
-        );
-    }
-
+    // The page renders immediately and is swapped for the maintenance screen
+    // only when the check says so. Blocking on the check (a "Loading..."
+    // screen until the browser fetch returned) meant the server-rendered HTML
+    // of every public page was that loading screen: no content, no links, no
+    // language switcher for any crawler that does not run JavaScript.
     if (isMaintenance) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background)] p-6 text-center">
