@@ -45,7 +45,7 @@ October 2026. 20 English pieces while the ttklia.com path and the locale layer a
 | tk172 | Private transfer from KL to KLIA or KLIA2: fixed-price taxi, Grab or bus | klia transfer | Transport · EN |  | Not started | 1,300/mo · SD 28. Retargeted 3 Oct: “private transfer kl to klia” measured 0. Route: taxi transfer (sedan, MPV, van). ⚑ KL-side deep link not found; client to supply |
 | tk173 | KLIA2 to your KL hotel by private transfer: sedan, MPV or van | kl airport transfer | Transport · EN |  | Not started | 50/mo in Malaysia, 70/mo in Singapore · SD 42. Retargeted 3 Oct: “klia2 private transfer” measured 0. Route: taxi transfer · /taxi/klia2-to-klia |
 | tk174 | Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work | private driver kuala lumpur | Transport · EN |  | Not started | 70/mo · SD 31. Route: /car-charter |
-| tk175 | Genting Highlands by private driver: a day trip from KL | genting day trip | Transport · EN |  | Not started | 50/mo · SD 30. Retargeted 3 Oct: “private driver genting” and “kl to genting taxi” measured 0–10. Route: /car-charter. ⚑ Client to confirm Genting is within charter scope; Genting van is Coming Soon |
+| tk175 | Genting Highlands by private driver: a day trip from KL | genting day trip | Transport · EN |  | Not started | 50/mo · SD 30. Retargeted 3 Oct: “private driver genting” and “kl to genting taxi” measured 0–10. Route: /car-charter. Client confirmed 3 Oct: the charter covers Genting. Genting van is Coming Soon, so not linked |
 
 ## Month 2: KL Food + Genting
 
@@ -92,7 +92,7 @@ November 2026. BM and 中文 launch with Month 1’s topics. The Lalaport and pr
 | tk182 | Private transfer from KL to KLIA or KLIA2: fixed-price taxi, Grab or bus |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: taxi transfer (sedan, MPV, van). ⚑ KL-side deep link not found; client to supply |
 | tk183 | KLIA2 to your KL hotel by private transfer: sedan, MPV or van |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: taxi transfer · /taxi/klia2-to-klia |
 | tk184 | Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter |
-| tk185 | Genting Highlands by private driver: a day trip from KL |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter. ⚑ Client to confirm Genting is within charter scope; Genting van is Coming Soon |
+| tk185 | Genting Highlands by private driver: a day trip from KL |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter. Client confirmed 3 Oct: the charter covers Genting. Genting van is Coming Soon, so not linked |
 
 ## Month 3: Penang & the South
 
@@ -139,7 +139,7 @@ December 2026. Includes the Lalaport and private-transport set in BM (tk186–tk
 | tk192 | Private transfer from KL to KLIA or KLIA2: fixed-price taxi, Grab or bus |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: taxi transfer (sedan, MPV, van). ⚑ KL-side deep link not found; client to supply |
 | tk193 | KLIA2 to your KL hotel by private transfer: sedan, MPV or van |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: taxi transfer · /taxi/klia2-to-klia |
 | tk194 | Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter |
-| tk195 | Genting Highlands by private driver: a day trip from KL |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter. ⚑ Client to confirm Genting is within charter scope; Genting van is Coming Soon |
+| tk195 | Genting Highlands by private driver: a day trip from KL |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /car-charter. Client confirmed 3 Oct: the charter covers Genting. Genting van is Coming Soon, so not linked |
 
 ## Month 4: North + Festive Prep
 
@@ -186,7 +186,7 @@ February 2027. 7 planned + 3 Search Console slots
 |---|---|---|---|---|---|---|
 | tk104 | Buka puasa buffets in KL (BM version leads) | buffet ramadhan kl | Food · EN |  | Not started | 260/mo · SD 13. Route: Bus: KLIA2 → KL Sentral |
 | tk105 | Travelling in Malaysia over Hari Raya 2027 | balik kampung raya | Transport · EN |  | Not started | Route: Bus destinations list |
-| tk106 | KL Sentral to KLIA2 for your flight home | kl sentral to klia2 | Transport · EN |  | Not started | 3,600/mo · SD 19. Route: Taxi to KLIA, if sold. ⚑ Client to confirm ttklia.com sells this direction |
+| tk106 | KL Sentral to KLIA2 for your flight home | kl sentral to klia2 | Transport · EN |  | Not started | 3,600/mo · SD 19. Route: private transfer to KLIA/KLIA2 (taxi booking). Client confirmed 3 Oct: no bus in this direction, private transport can be ordered |
 | tk107 | eSIM or physical SIM: setting up data before you land | esim malaysia | SIM · EN |  | Not started | 5,400/mo · SD 24. Route: SIM booking, then bus |
 | tk108 | Kopitiam breakfast in KL | kopitiam kl | Food · EN |  | Not started | Route: Bus: KLIA2 → KL Sentral |
 | tk109 | Travelling with children from KLIA2 | klia2 with kids | Transport · EN |  | Not started | Route: Car charter |
@@ -234,7 +234,7 @@ March 2027. 4 planned + 6 Search Console slots. Month 6 topics reach BM and 中�
 | tk144 | Search Console slot 9 |  | GSC slot · EN |  | Not started | ⚑ Chosen in the first week of Mar from live Search Console data |
 | tk145 | Buka puasa buffets in KL (BM version leads) |  | Food · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk146 | Travelling in Malaysia over Hari Raya 2027 |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus destinations list |
-| tk147 | KL Sentral to KLIA2 for your flight home |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi to KLIA, if sold. ⚑ Client to confirm ttklia.com sells this direction |
+| tk147 | KL Sentral to KLIA2 for your flight home |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: private transfer to KLIA/KLIA2 (taxi booking). Client confirmed 3 Oct: no bus in this direction, private transport can be ordered |
 | tk148 | eSIM or physical SIM: setting up data before you land |  | SIM · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: SIM booking, then bus |
 | tk149 | Kopitiam breakfast in KL |  | Food · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk150 | Travelling with children from KLIA2 |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Car charter |
@@ -244,7 +244,7 @@ March 2027. 4 planned + 6 Search Console slots. Month 6 topics reach BM and 中�
 | tk154 | Search Console slot 3, BM version |  | GSC slot · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. ⚑ Chosen in the first week of Feb from page-2 queries with no dedicated page |
 | tk155 | Buka puasa buffets in KL (BM version leads) |  | Food · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk156 | Travelling in Malaysia over Hari Raya 2027 |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus destinations list |
-| tk157 | KL Sentral to KLIA2 for your flight home |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi to KLIA, if sold. ⚑ Client to confirm ttklia.com sells this direction |
+| tk157 | KL Sentral to KLIA2 for your flight home |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: private transfer to KLIA/KLIA2 (taxi booking). Client confirmed 3 Oct: no bus in this direction, private transport can be ordered |
 | tk158 | eSIM or physical SIM: setting up data before you land |  | SIM · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: SIM booking, then bus |
 | tk159 | Kopitiam breakfast in KL |  | Food · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk160 | Travelling with children from KLIA2 |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Car charter |

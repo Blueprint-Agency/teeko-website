@@ -6,7 +6,7 @@ declined, the reason is recorded so it is not re-pitched every month.
 
 Numbers are referenced from code comments and `AGENTS.md`; do not renumber.
 
-Last updated **2026-09-22**, when the F1 Sepang cluster started and the ttklia operating entity was noted (item 1).
+Last updated **2026-10-03**, when the client confirmed the Genting charter and the return-trip transport (item 1) and asked for the trilingual site to be built first (item 2).
 
 ## 1. ttklia.com conversion path does not exist on the site
 
@@ -33,6 +33,17 @@ First use, 2026-09-22: the F1 Sepang content cluster (transport guide, hub, tick
 `utm_source=teeko&utm_medium=blog&utm_campaign=f1_sepang_2026`. Drafts live outside the repo in
 `Blueprint Clients/Teeko/content-drafts/` until the admin editor takes them.
 
+Client answers 2026-10-03:
+- **Car charter covers Genting.** `https://ttklia.com/car-charter` (8 or 10 hour, with driver)
+  may be linked from Genting day-trip content (schedule tk175).
+- **ttklia.com does not sell KL Sentral to KLIA2 by bus, but private transport to the airport
+  can be ordered.** The return-trip piece (tk106) links to the private transfer/taxi booking,
+  not to a bus route.
+
+Still open: deep-link list, UTM convention, "ttklia" vs "Teeko" naming, the corporate
+relationship, and whether ttklia.com will sell Singapore to Lalaport (it sells only Lalaport to
+Singapore as of 2026-10-01).
+
 ## 2. Bahasa Malaysia and Chinese versions
 
 **Status: open, now REQUIRED. Owner: client (decisions), Blueprint (build).**
@@ -46,8 +57,15 @@ Client answered "English, Bahasa Malaysia and Chinese" (2026-09-19). The site ha
 `lang="en"` is hardcoded, there is no locale routing, and the content model has no translation
 fields. ttklia.com already runs EN/ZH/MS, so the audience is real.
 
-Needed to unblock:
-- Do BM and ZH target their own keywords, or mirror English? This decides whether they are
+**Decided 2026-10-03 (client): build the trilingual site now, ahead of the content.** Every
+piece of content exists as three URLs, one per language, whether or not the translated keyword
+has measured search volume. Within each language, the title and primary keyword use the
+highest-volume variant for that language, not a literal translation. Restaurants missing from
+the database are requested from the client piece by piece when the content is written.
+
+Needed to unblock (remaining):
+- Do BM and ZH target their own keywords, or mirror English? **Answered 2026-10-03:** three URLs
+  always; each locale picks its own highest-volume keyword variant. This decides whether they are
   separate content or a translation layer. Recommendation: own keywords per locale, as
   Persistence found (literal translations often measure ~0 volume in Malaysia).
 - Who translates or writes: client, agency, or machine with client review. At 20
