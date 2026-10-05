@@ -7,6 +7,15 @@ import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { TranslationsEditor, emptyTranslations, type TranslationField } from "@/components/admin/TranslationsEditor";
+
+const TRANSLATED_FIELDS: TranslationField[] = [
+    { key: "packageName", label: "Package Name", kind: "text" },
+    { key: "about", label: "About", kind: "textarea", rows: 4 },
+    { key: "features", label: "Core Product Features", kind: "features" },
+    { key: "seoTitle", label: "SEO Title", kind: "text" },
+    { key: "seoDescription", label: "SEO Description", kind: "textarea", rows: 3 },
+];
 
 interface Provider {
     id: string;
@@ -22,6 +31,7 @@ export default function CreateEsimPackagePage() {
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
+    const [translations, setTranslations] = useState(emptyTranslations());
 
     const [formData, setFormData] = useState({
         packageName: "",
@@ -70,7 +80,7 @@ export default function CreateEsimPackagePage() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, translations }),
             });
 
             if (res.ok) {
@@ -387,6 +397,15 @@ export default function CreateEsimPackagePage() {
                             )}
                         </div>
                     </div>
+
+                    <TranslationsEditor
+                        fields={TRANSLATED_FIELDS}
+                        mainField="about"
+                        value={translations}
+                        onChange={setTranslations}
+                        english={formData}
+                        pageNoun="SIM package page"
+                    />
                 </div>
 
                 {/* Right Column: Settings & Actions */}

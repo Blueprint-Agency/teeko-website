@@ -1,0 +1,68 @@
+import type { DictionaryArea } from "../types";
+
+// Approved by the client without a separate language review (2026-10-03).
+const booking: DictionaryArea<"booking"> = {
+    button: {
+        signInToBook: "Log Masuk untuk Tempah",
+        viewBooking: "Lihat Tempahan",
+        bookNow: "Tempah Sekarang",
+    },
+    modal: {
+        title: "Semak Tempahan",
+        emailAddress: "Alamat E-mel",
+        package: "Pakej",
+        unitPrice: "Harga Seunit",
+        notAvailable: "T/A",
+        totalPrice: "Jumlah Harga",
+        quantity: "Kuantiti",
+        decrease: "Kurangkan kuantiti",
+        increase: "Tambah kuantiti",
+        maxPerBooking: "Maksimum 10 setiap tempahan",
+        collectionDate: "Tarikh Pengambilan",
+        selectDate: "Pilih Tarikh",
+        dateRange: "Mesti antara {min} dan {max} (GMT+8)",
+        calendarTitle: "Pilih Tarikh Pengambilan",
+        previousMonth: "Bulan sebelumnya",
+        nextMonth: "Bulan seterusnya",
+        pickBetween: "Pilih tarikh antara {min} - {max}",
+        errorNoDate: "Sila pilih tarikh pengambilan",
+        processing: "Sedang diproses...",
+        confirm: "Sahkan Tempahan",
+        successTitle: "Tempahan Selesai!",
+        successBody: "Pengesahan tempahan telah dihantar ke {email}",
+    },
+    cancel: {
+        title: "Batalkan Tempahan?",
+        body: "Adakah anda pasti mahu membatalkan tempahan anda untuk {name}? Tindakan ini tidak boleh dibuat asal.",
+        cancelling: "Sedang dibatalkan...",
+        confirm: "Ya, Batalkan Tempahan",
+        keep: "Kekalkan Tempahan",
+    },
+    list: {
+        current: "Semasa",
+        past: "Lepas",
+        noCurrent: "Tiada tempahan semasa",
+        noPast: "Tiada tempahan lepas",
+        emptyCurrent: "Anda tiada tempahan SIM yang aktif.",
+        emptyPast: "Sejarah tempahan anda akan dipaparkan di sini.",
+        quantity: "KTT: {n}",
+        status: {
+            booked: "ditempah",
+            cancelled: "dibatalkan",
+            completed: "selesai",
+            expired: "tamat tempoh",
+            rejected: "ditolak",
+        },
+        cancelBooking: "Batalkan Tempahan",
+        showCode: "Tunjuk Kod Pengesahan",
+        page: "Halaman {page} daripada {total}",
+        loadFailed: "Gagal memuatkan tempahan",
+        cancelFailed: "Gagal membatalkan tempahan",
+        cancelError: "Ralat berlaku semasa membatalkan",
+        verifyTitle: "Sahkan Tempahan",
+        presentToStaff: "Tunjukkan kepada kakitangan",
+        manualCode: "Kod Pengesahan Manual",
+    },
+};
+
+export default booking;

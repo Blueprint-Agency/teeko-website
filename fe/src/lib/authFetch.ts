@@ -2,6 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
+import { localeFromPathname, pathFor, type Locale } from "@/lib/i18n";
+import enAuth from "@/dictionaries/en/auth";
+import msAuth from "@/dictionaries/ms/auth";
+import zhAuth from "@/dictionaries/zh/auth";
+
+// A plain module, not a hook, so it reads the language from the URL. On the
+// admin panel (unprefixed) this resolves to English.
+const AUTH_COPY: Record<Locale, typeof enAuth.shared> = { en: enAuth.shared, ms: msAuth.shared, zh: zhAuth.shared };
+const copy = () => AUTH_COPY[typeof window === "undefined" ? "en" : localeFromPathname(window.location.pathname)];
 
 // Types for the fetch wrapper
 interface FetchOptions extends RequestInit {
@@ -43,10 +52,15 @@ export const isSessionExpiredResponse = (status: number): boolean => {
     return status === 401 || status === 403;
 };
 
-// Redirect to homepage (signed out) on session expiry
+// Redirect to the homepage (signed out) on session expiry, in the language the
+// visitor is browsing. `message` is accepted for older callers and not shown.
+// Only public pages call this; the admin panel has its own expiry handling in
+// AdminLayoutClient and AdminRedirect.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const redirectToLogin = (router: ReturnType<typeof useRouter>, message?: string) => {
     clearSession();
-    router.push("/");
+    const locale = localeFromPathname(window.location.pathname);
+    router.push(pathFor(locale, "/"));
 };
 
 /**
@@ -96,12 +110,12 @@ export async function authFetch<T = any>(
             if (response.ok) {
                 data = jsonData;
             } else {
-                error = jsonData.message || jsonData.error || "Request failed";
+                error = jsonData.message || jsonData.error || copy().requestFailed;
             }
         } catch {
             // Response might not be JSON
             if (!response.ok) {
-                error = "Request failed";
+                error = copy().requestFailed;
             }
         }
 
@@ -114,7 +128,7 @@ export async function authFetch<T = any>(
     } catch (err: any) {
         return {
             data: null,
-            error: err.message || "Network error",
+            error: err.message || copy().networkError,
             status: 0,
             isSessionExpired: false,
         };
@@ -135,7 +149,7 @@ export function useAuthFetch() {
 
         // Automatically redirect on session expiration
         if (result.isSessionExpired) {
-            redirectToLogin(router, "Your session has expired. Please log in again.");
+            redirectToLogin(router);
         }
 
         return result;
@@ -153,7 +167,7 @@ export function handleSessionExpired(
     router: ReturnType<typeof useRouter>
 ): boolean {
     if (isSessionExpiredResponse(status)) {
-        redirectToLogin(router, "Your session has expired. Please log in again.");
+        redirectToLogin(router);
         return true;
     }
     return false;

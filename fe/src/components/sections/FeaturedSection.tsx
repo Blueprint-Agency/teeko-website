@@ -1,12 +1,14 @@
 "use client";
 
-import { RestaurantCard } from "../shared/RestaurantCard";
+import { RestaurantCard, type RestaurantCardProps } from "../shared/RestaurantCard";
+import { useDict } from "@/components/providers/LocaleProvider";
 
 interface FeaturedSectionProps {
-    restaurants: any[];
+    restaurants: RestaurantCardProps[];
 }
 
 export function FeaturedSection({ restaurants }: FeaturedSectionProps) {
+    const t = useDict().home.featured;
     if (restaurants.length === 0) return null;
 
     return (
@@ -15,10 +17,10 @@ export function FeaturedSection({ restaurants }: FeaturedSectionProps) {
                 {/* Header */}
                 <div className="section-header">
                     <h2 className="section-title">
-                        Featured Places
+                        {t.title}
                     </h2>
                     <p className="section-description">
-                        Hand-picked destinations that our community loves
+                        {t.description}
                     </p>
                 </div>
 

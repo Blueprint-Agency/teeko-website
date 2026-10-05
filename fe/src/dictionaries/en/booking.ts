@@ -1,0 +1,68 @@
+// SIM booking: the Book button, the booking modal, the cancel dialog and the
+// bookings list on the profile page. `{email}`, `{name}` and `{page}` mark
+// where a highlighted value is placed.
+const booking = {
+    button: {
+        signInToBook: "Sign In to Book",
+        viewBooking: "View Booking",
+        bookNow: "Book Now",
+    },
+    modal: {
+        title: "Review Booking",
+        emailAddress: "Email Address",
+        package: "Package",
+        unitPrice: "Unit Price",
+        notAvailable: "N/A",
+        totalPrice: "Total Price",
+        quantity: "Quantity",
+        decrease: "Decrease quantity",
+        increase: "Increase quantity",
+        maxPerBooking: "Max 10 per booking",
+        collectionDate: "Collection Date",
+        selectDate: "Select Date",
+        dateRange: "Must be between {min} and {max} (GMT+8)",
+        calendarTitle: "Select Collection Date",
+        previousMonth: "Previous month",
+        nextMonth: "Next month",
+        pickBetween: "Pick a date between {min} - {max}",
+        errorNoDate: "Please select a collection date",
+        processing: "Processing...",
+        confirm: "Confirm Booking",
+        successTitle: "Booking Complete!",
+        successBody: "We've sent booking confirmation to {email}",
+    },
+    cancel: {
+        title: "Cancel Booking?",
+        body: "Are you sure you want to cancel your booking for {name}? This action cannot be undone.",
+        cancelling: "Cancelling...",
+        confirm: "Yes, Cancel Booking",
+        keep: "Keep Booking",
+    },
+    list: {
+        current: "Current",
+        past: "Past",
+        noCurrent: "No current bookings",
+        noPast: "No past bookings",
+        emptyCurrent: "You don't have any active SIM bookings.",
+        emptyPast: "Your booking history will appear here.",
+        quantity: "QTY: {n}",
+        status: {
+            booked: "booked",
+            cancelled: "cancelled",
+            completed: "completed",
+            expired: "expired",
+            rejected: "rejected",
+        },
+        cancelBooking: "Cancel Booking",
+        showCode: "Show Verification Code",
+        page: "Page {page} of {total}",
+        loadFailed: "Failed to load bookings",
+        cancelFailed: "Failed to cancel booking",
+        cancelError: "An error occurred while cancelling",
+        verifyTitle: "Verify Booking",
+        presentToStaff: "Present this to staff",
+        manualCode: "Manual Verification Code",
+    },
+};
+
+export default booking;

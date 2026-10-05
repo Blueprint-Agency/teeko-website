@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { HERO_STATS } from "@/lib/business";
+import { useDict, useLocalePath } from "@/components/providers/LocaleProvider";
+import { fmt } from "@/lib/i18n";
 
 const heroImages = [
     "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80",
@@ -14,6 +17,10 @@ const heroImages = [
 export function HeroSection() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const router = useRouter();
+    const dict = useDict();
+    const localePath = useLocalePath();
+    const t = dict.home.hero;
+    const statLabels: Record<string, string> = t.stats;
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -44,47 +51,37 @@ export function HeroSection() {
             <div className="relative z-10 max-w-container mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16">
                 {/* Main Headline */}
                 <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                    Travel Malaysia <span className="text-primary-400 italic">Easy</span> with Teeko
+                    {t.titleBefore}<span className="text-primary-400 italic">{t.titleHighlight}</span>{t.titleAfter}
                 </h1>
 
                 {/* Description */}
                 <p className="text-base sm:text-lg text-white/80 mb-10 max-w-xl mx-auto leading-relaxed">
-                    Discover amazing places across Malaysia, curated just for you
+                    {t.subtitle}
                 </p>
 
                 {/* CTA Button */}
                 <div className="flex justify-center mb-12">
                     <button
-                        onClick={() => router.push('/travel-sim-malaysia')}
+                        onClick={() => router.push(localePath("/travel-sim-malaysia"))}
                         className="group relative px-8 py-5 bg-primary-500 hover:bg-primary-600 text-white text-lg font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-primary-500/40"
                     >
                         {/* Glowing effect base */}
                         <div className="absolute -inset-1 bg-primary-400 rounded-full opacity-20 blur-lg group-hover:opacity-50 transition-opacity animate-pulse" />
 
                         <span className="relative flex items-center gap-3">
-                            Get limited free travel SIM now
+                            {t.cta}
                         </span>
                     </button>
                 </div>
 
-                {/* Quick Stats */}
+                {/* Quick Stats: values come from lib/business.ts, never inline */}
                 <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-12">
-                    <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">20+</div>
-                        <div className="text-[10px] sm:text-xs text-white/70">Places</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">50K+</div>
-                        <div className="text-[10px] sm:text-xs text-white/70">Reviews</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">4.8</div>
-                        <div className="text-[10px] sm:text-xs text-white/70">Avg Rating</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">3</div>
-                        <div className="text-[10px] sm:text-xs text-white/70">Cities</div>
-                    </div>
+                    {HERO_STATS.map((stat) => (
+                        <div key={stat.label} className="text-center">
+                            <div className="text-lg sm:text-2xl lg:text-3xl font-bold text-white mb-0.5">{stat.value}</div>
+                            <div className="text-[10px] sm:text-xs text-white/70">{statLabels[stat.label] ?? stat.label}</div>
+                        </div>
+                    ))}
                 </div>
 
                 {/* Slide Indicators */}
@@ -97,7 +94,7 @@ export function HeroSection() {
                                 ? "w-6 bg-primary-500"
                                 : "bg-white/50 hover:bg-white/70"
                                 }`}
-                            aria-label={`Go to slide ${index + 1}`}
+                            aria-label={fmt(t.goToSlide, { n: index + 1 })}
                         />
                     ))}
                 </div>

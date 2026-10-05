@@ -1,9 +1,11 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Star, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { calculateCombinedRating } from "@/utils/rating";
 import Link from "next/link";
+import { useDict, useLocalePath } from "@/components/providers/LocaleProvider";
+import { fmt } from "@/lib/i18n";
 
 interface Restaurant {
     id: string;
@@ -20,11 +22,14 @@ interface Restaurant {
 
 interface LocationCarouselProps {
     restaurants: Restaurant[];
-    locationName: string;
+    /** Omit to show "this area" in the reader's language. */
+    locationName?: string;
     locationId: string;
 }
 
 export function LocationCarousel({ restaurants, locationName, locationId }: LocationCarouselProps) {
+    const t = useDict().blog.carousel;
+    const localePath = useLocalePath();
     const scrollRef = useRef<HTMLDivElement>(null);
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const [showRightArrow, setShowRightArrow] = useState(true);
@@ -64,11 +69,11 @@ export function LocationCarousel({ restaurants, locationName, locationId }: Loca
         <div className="not-prose mt-8 mb-16 group/carousel relative">
             <div className="flex items-center justify-between mb-8 px-1">
                 <Link
-                    href="/restaurants"
+                    href={localePath("/restaurants")}
                     className="group/heading inline-flex items-center gap-3"
                 >
                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white leading-none hover:text-red-600 transition-colors">
-                        Explore {locationName}
+                        {fmt(t.explore, { name: locationName || t.thisArea })}
                     </h3>
                     <ChevronRight className="h-5 w-5 text-gray-300 group-hover/heading:text-red-600 group-hover/heading:translate-x-1 transition-all" />
                 </Link>
@@ -79,6 +84,7 @@ export function LocationCarousel({ restaurants, locationName, locationId }: Loca
                 {showLeftArrow && (
                     <button
                         onClick={() => scroll("left")}
+                        aria-label={t.scrollLeft}
                         className="absolute left-[-24px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white dark:bg-zinc-900 shadow-xl border border-gray-100 dark:border-zinc-800 flex items-center justify-center text-gray-900 dark:text-white hover:scale-110 active:scale-95 transition-all"
                     >
                         <ChevronLeft className="h-6 w-6" />
@@ -88,6 +94,7 @@ export function LocationCarousel({ restaurants, locationName, locationId }: Loca
                 {showRightArrow && (
                     <button
                         onClick={() => scroll("right")}
+                        aria-label={t.scrollRight}
                         className="absolute right-[-24px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white dark:bg-zinc-900 shadow-xl border border-gray-100 dark:border-zinc-800 flex items-center justify-center text-gray-900 dark:text-white hover:scale-110 active:scale-95 transition-all"
                     >
                         <ChevronRight className="h-6 w-6" />
@@ -101,7 +108,7 @@ export function LocationCarousel({ restaurants, locationName, locationId }: Loca
                     {restaurants.map((restaurant) => (
                         <Link
                             key={restaurant.id}
-                            href={`/restaurant/${restaurant.slug}`}
+                            href={localePath(`/restaurant/${restaurant.slug}`)}
                             className="w-[240px] md:w-[280px] flex-shrink-0 group snap-start block"
                         >
                             <div className="relative aspect-[3/4] rounded-[32px] overflow-hidden shadow-xl transition-all duration-500 group-hover:-translate-y-2">
@@ -122,7 +129,7 @@ export function LocationCarousel({ restaurants, locationName, locationId }: Loca
                                                 </span>
                                             </div>
                                             <span className="text-[9px] font-black uppercase tracking-widest text-white bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-lg border border-white/20">
-                                                {restaurant.cuisine || "International"}
+                                                {restaurant.cuisine || t.international}
                                             </span>
                                         </div>
 
@@ -130,7 +137,7 @@ export function LocationCarousel({ restaurants, locationName, locationId }: Loca
                                             <h4 className="text-white text-xl font-black leading-none uppercase tracking-tighter mb-1.5 group-hover:text-red-400 transition-colors line-clamp-1">{restaurant.name}</h4>
                                             <div className="flex items-center justify-between">
                                                 <span className="text-[9px] font-black text-white/50 uppercase tracking-widest leading-none">
-                                                    {restaurant.priceRange || "$$"} Range
+                                                    {fmt(t.priceRange, { range: restaurant.priceRange || "$$" })}
                                                 </span>
                                             </div>
                                         </div>

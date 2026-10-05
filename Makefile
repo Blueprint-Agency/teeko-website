@@ -1,4 +1,4 @@
-.PHONY: dev dev-fe dev-be install install-fe install-be build build-fe build-be db-migrate db-seed init reset
+.PHONY: dev dev-fe dev-be install install-fe install-be build build-fe build-be test lint db-migrate db-seed init reset
 
 # Local DB setup
 init:
@@ -37,6 +37,13 @@ build-fe:
 
 build-be:
 	cd be && npm run build
+
+# Guard tests and lint (fe only; be has no test runner yet)
+test:
+	cd fe && npm test
+
+lint:
+	cd fe && npm run lint
 
 # Database
 db-migrate:

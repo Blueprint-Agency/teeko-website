@@ -2,23 +2,34 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
-import { Loader2, Trash2, Layout, Upload } from "lucide-react";
+import { Loader2, Trash2, Layout, Upload, ExternalLink, Plus, Languages } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
 import { useRouter, useParams } from "next/navigation";
 import { BlogContentEditor } from "@/components/admin/BlogContentEditor";
 import { ContentBlock } from "@/types/blog";
+import Link from "next/link";
+import { LOCALES, LOCALE_LABEL, LOCALE_NAME, isLocale, pathFor, type Locale } from "@/lib/i18n";
 
 interface Location {
     id: string;
     name: string;
 }
 
-interface Restaurant {
+interface PostVersion {
     id: string;
-    name: string;
-    locationId: string;
+    locale: string;
+    slug: string;
+    status: "DRAFT" | "PUBLISHED" | "BIN";
 }
+
+const STATUS_BADGE: Record<PostVersion["status"], string> = {
+    PUBLISHED: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+    DRAFT: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+    BIN: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400",
+};
+
+const NON_LATIN = /[^\x00-\x7F]/;
 
 
 
@@ -43,6 +54,10 @@ export default function EditBlogPostPage() {
     });
 
     const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>([]);
+    const [locale, setLocale] = useState<Locale>("en");
+    const [versions, setVersions] = useState<PostVersion[]>([]);
+    // What is stored right now, for the "View on site" link (not the unsaved form values).
+    const [saved, setSaved] = useState<{ slug: string; status: PostVersion["status"] }>({ slug: "", status: "DRAFT" });
 
     useEffect(() => {
         const fetchResources = async () => {
@@ -65,6 +80,11 @@ export default function EditBlogPostPage() {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
                 const data = await res.json();
+                if (!res.ok) throw new Error(data.message || "Failed to load post");
+
+                setLocale(isLocale(data.locale) ? data.locale : "en");
+                setVersions(Array.isArray(data.translations) ? data.translations : []);
+                setSaved({ slug: data.slug || "", status: data.status || "DRAFT" });
 
                 setFormData({
                     title: data.title || "",
@@ -84,7 +104,8 @@ export default function EditBlogPostPage() {
                             blockType: type,
                             content: block.content || "",
                             locationId: block.locationId || undefined,
-                            restaurantId: block.restaurantId || undefined
+                            restaurantId: block.restaurantId || undefined,
+                            imageSize: block.imageSize || undefined
                         };
                     }) || []
                 );
@@ -106,6 +127,10 @@ export default function EditBlogPostPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!formData.slug.trim() || NON_LATIN.test(formData.slug)) {
+            setToast({ message: "Type a URL slug in Latin letters (pinyin for Chinese), e.g. klia2-bus-guide.", type: "error" });
+            return;
+        }
         setSubmitting(true);
 
         try {
@@ -128,7 +153,8 @@ export default function EditBlogPostPage() {
                 setToast({ message: "Post updated successfully!", type: "success" });
                 setTimeout(() => router.push("/admin/blog"), 1500);
             } else {
-                setToast({ message: "Failed to update post", type: "error" });
+                const data = await res.json().catch(() => ({}));
+                setToast({ message: data.message || "Failed to update post", type: "error" });
             }
         } catch (error) {
             console.error(error);
@@ -191,11 +217,75 @@ export default function EditBlogPostPage() {
             )}
 
 
-            <div className="flex flex-col items-center mb-12">
+            <div className="flex flex-col items-center mb-12 gap-3">
                 <h1 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Edit Blog Post</h1>
+                <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
+                    <span className="inline-flex items-center rounded-md border border-gray-200 dark:border-zinc-700 px-2 py-1 font-semibold text-gray-700 dark:text-gray-300">
+                        Language: {LOCALE_NAME[locale]}
+                    </span>
+                    {saved.status === "PUBLISHED" && saved.slug && (
+                        <a
+                            href={pathFor(locale, `/blog/${saved.slug}`)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 font-semibold text-red-600 hover:underline"
+                        >
+                            View on site <ExternalLink className="h-3 w-3" />
+                        </a>
+                    )}
+                </div>
             </div>
 
             <div className="max-w-4xl mx-auto space-y-12">
+                {/* Language versions of this piece */}
+                <div className="rounded-3xl border border-gray-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm">
+                    <h2 className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
+                        <Languages className="h-4 w-4" /> Versions
+                    </h2>
+                    <ul className="divide-y divide-gray-100 dark:divide-zinc-800">
+                        {LOCALES.map(l => {
+                            const version: PostVersion | undefined = l === locale
+                                ? { id, locale: l, slug: saved.slug, status: saved.status }
+                                : versions.find(v => v.locale === l);
+                            return (
+                                <li key={l} className="flex flex-wrap items-center gap-3 py-3 text-xs">
+                                    <span className="w-28 font-bold text-gray-700 dark:text-gray-300">{LOCALE_NAME[l]}</span>
+                                    {version ? (
+                                        <>
+                                            <span className={`inline-flex rounded-full px-2 py-0.5 font-semibold ${STATUS_BADGE[version.status] ?? STATUS_BADGE.DRAFT}`}>
+                                                {version.status.toLowerCase()}
+                                            </span>
+                                            <span className="font-mono text-gray-500 dark:text-gray-400 break-all">{pathFor(l, `/blog/${version.slug}`)}</span>
+                                            <span className="ml-auto">
+                                                {version.id === id ? (
+                                                    <span className="text-gray-400">This version</span>
+                                                ) : (
+                                                    <Link href={`/admin/blog/${version.id}/edit`} className="font-semibold text-red-600 hover:underline">
+                                                        Edit
+                                                    </Link>
+                                                )}
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span className="text-gray-400">Missing</span>
+                                            <Link
+                                                href={`/admin/blog/create?translationOf=${id}&locale=${l}`}
+                                                className="ml-auto inline-flex items-center gap-1 rounded-full border border-dashed border-gray-300 dark:border-zinc-600 px-3 py-1 font-semibold text-gray-600 dark:text-gray-300 hover:border-red-400 hover:text-red-600"
+                                            >
+                                                <Plus className="h-3 w-3" /> Add {LOCALE_LABEL[l]} version
+                                            </Link>
+                                        </>
+                                    )}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                    <p className="mt-3 text-[10px] text-gray-400">
+                        A new version copies this post&apos;s cover image and content blocks. Only published versions appear on the site and in Google&apos;s language links.
+                    </p>
+                </div>
+
                 <form id="blog-form" onSubmit={handleSubmit} className="space-y-12">
                     {/* Fundamental Settings */}
                     <div className="rounded-3xl border border-gray-100 bg-white p-8 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm transition-all hover:shadow-md">
@@ -213,7 +303,8 @@ export default function EditBlogPostPage() {
                                         onChange={e => setFormData({
                                             ...formData,
                                             title: e.target.value,
-                                            slug: generateSlug(e.target.value)
+                                            // Chinese titles produce no usable slug; keep the typed one.
+                                            slug: locale === "zh" ? formData.slug : generateSlug(e.target.value)
                                         })}
                                         placeholder="What is the name of this post?"
                                     />
@@ -227,8 +318,13 @@ export default function EditBlogPostPage() {
                                         className="w-full rounded-2xl border border-gray-100 bg-gray-50 px-4 py-2 text-xs dark:bg-zinc-800 dark:border-zinc-700 dark:text-white focus:ring-2 focus:ring-red-500 outline-none transition-all"
                                         value={formData.slug}
                                         onChange={e => setFormData({ ...formData, slug: e.target.value })}
-                                        placeholder="url-friendly-name"
+                                        placeholder={locale === "zh" ? "pinyin-or-english-slug" : "url-friendly-name"}
                                     />
+                                    {locale === "zh" && (
+                                        <p className="mt-1 text-[10px] text-gray-400">
+                                            Type the slug in Latin letters or pinyin, e.g. klia2-jichang-bashi. It does not change when you edit the title.
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
@@ -264,7 +360,7 @@ export default function EditBlogPostPage() {
                                                         name="status"
                                                         value={s.id}
                                                         checked={formData.status === s.id}
-                                                        onChange={e => setFormData({ ...formData, status: e.target.value as any })}
+                                                        onChange={e => setFormData({ ...formData, status: e.target.value as "DRAFT" | "PUBLISHED" | "BIN" })}
                                                         className="sr-only"
                                                     />
                                                     <div className="flex items-center gap-2">

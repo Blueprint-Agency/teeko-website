@@ -7,6 +7,13 @@ import Link from "next/link";
 import { ArrowLeft, Save, Plus, X, Search, Loader2, Trash2 } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { Toast, ToastType } from "@/components/ui/Toast";
+import { TranslationsEditor, emptyTranslations, translationsFromApi, type TranslationField } from "@/components/admin/TranslationsEditor";
+
+const TRANSLATED_FIELDS: TranslationField[] = [
+    { key: "description", label: "Description", kind: "textarea", rows: 5 },
+    { key: "seoTitle", label: "SEO Title", kind: "text" },
+    { key: "seoDescription", label: "SEO Description", kind: "textarea", rows: 2 },
+];
 
 export default function EditRestaurantPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
@@ -37,6 +44,9 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
         googleReviews: [] as any[],
         shortVideos: [] as any[],
     });
+
+    const [translations, setTranslations] = useState(emptyTranslations());
+    const [englishSeo, setEnglishSeo] = useState({ seoTitle: "", seoDescription: "" });
 
     const [syncing, setSyncing] = useState(false);
     const [syncingGoogle, setSyncingGoogle] = useState(false);
@@ -101,6 +111,8 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                             ...(restData.shortVideos || []),
                         ],
                     });
+                    setTranslations(translationsFromApi(restData.translations, TRANSLATED_FIELDS));
+                    setEnglishSeo({ seoTitle: restData.seoTitle || "", seoDescription: restData.seoDescription || "" });
                     setTaId(restData.tripAdvisorId || "");
                     setGoogleSearchQuery(restData.name || "");
                     setSocialSearchQuery(restData.name || "");
@@ -269,6 +281,7 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
             const submissionData = {
                 ...formData,
                 priceRange,
+                translations,
                 feature: formData.features.filter(f => f.trim() !== ""),
                 googleReviews: formData.googleReviews.map(r => ({
                     ...r,
@@ -366,6 +379,7 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                     { id: "images", label: "Images" },
                     { id: "reviews", label: "Reviews" },
                     { id: "reels", label: "Reels" },
+                    { id: "translations", label: "Translations" },
                 ].map((tab) => (
                     <button
                         key={tab.id}
@@ -1005,6 +1019,17 @@ export default function EditRestaurantPage({ params }: { params: Promise<{ id: s
                             ))}
                         </div>
                     </div>
+                )}
+
+                {activeTab === "translations" && (
+                    <TranslationsEditor
+                        fields={TRANSLATED_FIELDS}
+                        mainField="description"
+                        value={translations}
+                        onChange={setTranslations}
+                        english={{ description: formData.description, ...englishSeo }}
+                        pageNoun="restaurant page"
+                    />
                 )}
 
                 <div className="flex justify-end gap-3 pt-6 border-t dark:border-zinc-800">

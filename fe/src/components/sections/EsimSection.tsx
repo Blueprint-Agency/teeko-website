@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import type { Dictionary } from "@/dictionaries/types";
+import { localized, pathFor, type Locale, type Translations } from "@/lib/i18n";
 
 interface Provider {
     id: string;
@@ -17,14 +19,22 @@ interface Package {
     durationUnit: string | null;
     about: string | null;
     provider: Provider | null;
+    translations?: Translations<{ packageName: string; about: string }>;
 }
 
 interface EsimSectionProps {
     packages: Package[];
+    locale: Locale;
+    dict: Dictionary["home"]["esim"];
 }
 
-export function EsimSection({ packages }: EsimSectionProps) {
+export function EsimSection({ packages, locale, dict }: EsimSectionProps) {
     if (packages.length === 0) return null;
+    const units: Record<string, string> = dict.units;
+    const unitLabel = (unit: string | null) => {
+        const stored = unit || "days";
+        return units[stored.toLowerCase()] ?? stored;
+    };
 
     // Sort by Price (Lowest to Highest)
     const sortedPackages = [...packages].sort((a, b) => {
@@ -38,18 +48,20 @@ export function EsimSection({ packages }: EsimSectionProps) {
             <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="section-header">
                     <h2 className="section-title">
-                        Our Travel SIM Providers
+                        {dict.title}
                     </h2>
                     <p className="section-description">
-                        Stay connected globally with our premium Travel SIM partners
+                        {dict.description}
                     </p>
                 </div>
 
                 <div className="flex -mx-4 px-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:pb-0 md:px-0 md:mx-0">
-                    {sortedPackages.slice(0, 3).map((pkg) => (
+                    {sortedPackages.slice(0, 3).map((pkg) => {
+                        const name = localized(pkg, locale, "packageName");
+                        return (
                         <div key={pkg.id} className="min-w-[280px] md:min-w-0 snap-center">
                             <Link
-                                href={`/travel-sim-malaysia/${pkg.slug}`}
+                                href={pathFor(locale, `/travel-sim-malaysia/${pkg.slug}`)}
                                 className="group block h-full"
                             >
                                 <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] overflow-hidden hover:shadow-2xl hover:shadow-red-600/10 transition-all duration-300 hover:-translate-y-1">
@@ -57,7 +69,7 @@ export function EsimSection({ packages }: EsimSectionProps) {
                                         <div className="aspect-square overflow-hidden bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-950 dark:to-orange-950">
                                             <img
                                                 src={pkg.featureImage}
-                                                alt={pkg.packageName}
+                                                alt={name}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                                             />
                                         </div>
@@ -65,7 +77,7 @@ export function EsimSection({ packages }: EsimSectionProps) {
                                     <div className="p-6">
                                         <div className="flex items-start justify-between mb-3">
                                             <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
-                                                {pkg.packageName}
+                                                {name}
                                             </h3>
                                             {pkg.price && (
                                                 <span className="text-lg font-bold text-red-600 dark:text-red-400">
@@ -80,29 +92,30 @@ export function EsimSection({ packages }: EsimSectionProps) {
                                                 </span>
                                                 {pkg.duration && (
                                                     <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-                                                        {pkg.duration} {pkg.durationUnit || 'days'}
+                                                        {pkg.duration} {unitLabel(pkg.durationUnit)}
                                                     </span>
                                                 )}
                                             </div>
                                         )}
                                         <div className="mt-4">
                                             <div className="inline-flex items-center justify-center w-full py-2.5 bg-red-600 group-hover:bg-red-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg shadow-red-600/20 group-hover:shadow-red-600/30">
-                                                Book Now <ExternalLink className="ml-2 h-4 w-4" />
+                                                {dict.bookNow} <ExternalLink className="ml-2 h-4 w-4" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </Link>
                         </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <div className="text-center mt-12">
                     <Link
-                        href="/travel-sim-malaysia"
+                        href={pathFor(locale, "/travel-sim-malaysia")}
                         className="inline-flex items-center px-8 py-3 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-white font-semibold rounded-full hover:bg-gray-50 dark:hover:bg-zinc-800 transition-all shadow-sm"
                     >
-                        View All Travel SIM Packages
+                        {dict.viewAll}
                     </Link>
                 </div>
             </div>

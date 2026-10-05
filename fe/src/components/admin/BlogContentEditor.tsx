@@ -3,9 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import {
     GripVertical, Trash2, Plus, Copy, Bold, Italic, Link as LinkIcon, List,
-    Type, MapPin, Utensils, X, Search, ChevronDown, Image as ImageIcon, Loader2
+    Type, MapPin, Utensils, X, Search, ChevronDown, Image as ImageIcon, Loader2, MousePointerClick
 } from "lucide-react";
 import { ContentBlock } from "@/types/blog";
+import { EMPTY_CTA, parseCtaContent, serializeCtaContent, type CtaContent } from "@/lib/blogCta";
+import { parseImageContent, serializeImageContent } from "@/lib/blogImage";
 
 import { API_BASE_URL } from "@/lib/constants";
 
@@ -23,6 +25,9 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations }
         const newBlock: ContentBlock = { blockType: type, content: "" };
         if (type === "location" || type === "restaurant") {
             newBlock.content = `[${type.toUpperCase()} WIDGET]`;
+        }
+        if (type === "cta") {
+            newBlock.content = serializeCtaContent(EMPTY_CTA);
         }
 
         if (index !== undefined) {
@@ -215,6 +220,30 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations }
                                     </div>
                                 )}
 
+                                {block.blockType === "cta" && (() => {
+                                    const cta = parseCtaContent(block.content);
+                                    const setField = (field: keyof CtaContent, value: string) =>
+                                        updateBlock(index, { content: serializeCtaContent({ ...cta, [field]: value }) });
+                                    const inputClass = "w-full rounded-xl border border-gray-200 bg-white p-2.5 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white outline-none focus:border-red-400";
+                                    return (
+                                        <div className="bg-gray-50 dark:bg-zinc-800/50 rounded-2xl p-6 border border-dashed border-gray-200 dark:border-zinc-700">
+                                            <div className="flex items-center gap-3 mb-4 text-red-600">
+                                                <MousePointerClick className="h-5 w-5" />
+                                                <span className="text-sm font-bold uppercase tracking-widest">CTA Card</span>
+                                            </div>
+                                            <div className="space-y-3">
+                                                <input className={inputClass} placeholder="Heading, e.g. Book the F1 shuttle" value={cta.heading} onChange={e => setField("heading", e.target.value)} />
+                                                <input className={inputClass} placeholder="Subheading, one line of detail" value={cta.subheading} onChange={e => setField("subheading", e.target.value)} />
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <input className={inputClass} placeholder="Button text, e.g. Book on ttklia.com" value={cta.buttonText} onChange={e => setField("buttonText", e.target.value)} />
+                                                    <input className={inputClass} placeholder="URL (https://... or /travel-sim-malaysia)" value={cta.url} onChange={e => setField("url", e.target.value)} />
+                                                </div>
+                                                <p className="text-[10px] text-gray-400 uppercase tracking-widest">Heading, button text and URL are required; the card is hidden on the site until all three are filled.</p>
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
+
                                 {block.blockType === "image" && (
                                     <div className="space-y-4">
                                         {block.content ? (
@@ -236,8 +265,8 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations }
                                                 </div>
                                                 <div className={`relative group/img flex justify-center`}>
                                                     <img
-                                                        src={block.content}
-                                                        alt="Blog content"
+                                                        src={parseImageContent(block.content).url}
+                                                        alt={parseImageContent(block.content).alt || "Image preview"}
                                                         className={`max-w-full h-auto object-contain rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm ${block.imageSize === "small" ? "max-h-[200px]" : block.imageSize === "medium" ? "max-h-[400px]" : "max-h-[800px]"}`}
                                                     />
                                                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center gap-2">
@@ -250,6 +279,18 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations }
                                                             <Plus className="h-5 w-5" />
                                                         </button>
                                                     </div>
+                                                </div>
+                                                <div className="mt-3">
+                                                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-1.5">
+                                                        Alt text
+                                                    </label>
+                                                    <input
+                                                        className="w-full rounded-xl border border-gray-200 bg-white p-2.5 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white outline-none focus:border-red-400"
+                                                        placeholder="Describe what is in the image, e.g. Coach at the LaLaport BBCC boarding point"
+                                                        value={parseImageContent(block.content).alt}
+                                                        onChange={e => updateBlock(index, { content: serializeImageContent({ url: parseImageContent(block.content).url, alt: e.target.value }) })}
+                                                    />
+                                                    <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1.5">Read by screen readers and search engines. Leave empty only for purely decorative images.</p>
                                                 </div>
                                             </div>
                                         ) : (
@@ -305,6 +346,7 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations }
                                 <WidgetButton icon={<ImageIcon className="h-4 w-4 text-purple-500" />} label="Image" onClick={() => addBlock("image", insertIndex)} />
                                 <WidgetButton icon={<MapPin className="h-4 w-4 text-red-500" />} label="Location Guide" onClick={() => addBlock("location", insertIndex)} />
                                 <WidgetButton icon={<Utensils className="h-4 w-4 text-orange-500" />} label="Restaurant Card" onClick={() => addBlock("restaurant", insertIndex)} />
+                                <WidgetButton icon={<MousePointerClick className="h-4 w-4 text-red-600" />} label="CTA Card" onClick={() => addBlock("cta", insertIndex)} />
                             </div>
                         </div>
                     </div>

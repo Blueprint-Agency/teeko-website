@@ -1,5 +1,9 @@
+"use client";
+
 import React from 'react';
-import { Star, MapPin, ExternalLink, ThumbsUp, MessageCircle, Play } from 'lucide-react';
+import { Star, ExternalLink, Play } from 'lucide-react';
+import { useDict, useLocale } from '@/components/providers/LocaleProvider';
+import { fmt, INTL_LOCALE } from '@/lib/i18n';
 
 // --- Types ---
 export interface ReviewStats {
@@ -40,6 +44,8 @@ export interface SocialPost {
 // --- Components ---
 
 export const ReviewStatsCard = ({ stats, source }: { stats: ReviewStats, source: string }) => {
+    const t = useDict().restaurants.reviews;
+    const locale = useLocale();
     if (!stats) return null;
     const isGoogle = source?.toLowerCase() === 'google';
 
@@ -62,7 +68,7 @@ export const ReviewStatsCard = ({ stats, source }: { stats: ReviewStats, source:
                             <span className="font-bold text-white text-lg">TA</span>
                         </div>
                     )}
-                    <span className="font-bold text-gray-900 dark:text-white text-lg">{source} Rating</span>
+                    <span className="font-bold text-gray-900 dark:text-white text-lg">{fmt(t.sourceRating, { source })}</span>
                 </div>
                 <ExternalLink className="w-4 h-4 text-gray-400" />
             </div>
@@ -76,7 +82,7 @@ export const ReviewStatsCard = ({ stats, source }: { stats: ReviewStats, source:
                                 <Star key={star} className={`w-3 h-3 ${star <= Math.round(stats.rating || 0) ? 'fill-current' : 'text-gray-300 dark:text-gray-600'}`} />
                             ))}
                         </div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{(stats.totalReviews || 0).toLocaleString()} reviews</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{fmt(t.reviewCount, { count: (stats.totalReviews || 0).toLocaleString(INTL_LOCALE[locale]) })}</span>
                     </div>
                 </div>
             </div>
@@ -85,10 +91,11 @@ export const ReviewStatsCard = ({ stats, source }: { stats: ReviewStats, source:
 };
 
 export const GoogleReviewsList = ({ reviews, stats }: { reviews: GoogleReview[], stats: ReviewStats }) => {
+    const t = useDict().restaurants.reviews;
     return (
         <div className="space-y-4">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
-                Latest from Google
+                {t.latestFromGoogle}
             </h3>
             <div className="flex sm:grid gap-4 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory">
                 {reviews.map((review) => (
@@ -119,10 +126,10 @@ export const GoogleReviewsList = ({ reviews, stats }: { reviews: GoogleReview[],
                         {((review.user_image && review.user_image.length > 0) || (review.images && review.images.length > 0)) && (
                             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                                 {review.user_image?.map((img, idx) => (
-                                    <img key={`ui-${idx}`} src={img.thumbnail} alt="Review" className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+                                    <img key={`ui-${idx}`} src={img.thumbnail} alt={t.reviewImageAlt} className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
                                 ))}
                                 {review.images?.map((img: any, idx: number) => (
-                                    <img key={`i-${idx}`} src={img?.thumbnail} alt="Review" className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
+                                    <img key={`i-${idx}`} src={img?.thumbnail} alt={t.reviewImageAlt} className="w-20 h-20 rounded-lg object-cover flex-shrink-0" />
                                 ))}
                             </div>
                         )}
@@ -130,7 +137,7 @@ export const GoogleReviewsList = ({ reviews, stats }: { reviews: GoogleReview[],
                 ))}
             </div>
             <button onClick={() => window.open(stats.link, '_blank')} className="w-full py-3 text-sm font-bold text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                View more on Google
+                {t.viewMoreOnGoogle}
             </button>
         </div>
     );
@@ -150,6 +157,7 @@ const HeartIcon = ({ className }: { className?: string }) => (
 
 const SocialCard = ({ post }: { post: SocialPost }) => {
     const isXHS = post.type === 'xhs';
+    const t = useDict().restaurants.reviews;
     return (
         <a
             href={post.link}
@@ -159,7 +167,7 @@ const SocialCard = ({ post }: { post: SocialPost }) => {
         >
             <img
                 src={post.thumbnail}
-                alt={post.title || "Social Media Post"}
+                alt={post.title || t.socialPostAlt}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />

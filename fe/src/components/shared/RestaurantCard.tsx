@@ -4,6 +4,8 @@ import { Star, MapPin, BadgePercent, Utensils } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { calculateCombinedRating, calculateCombinedReviewCount } from "@/utils/rating";
+import { useDict, useLocale, useLocalePath } from "@/components/providers/LocaleProvider";
+import { fmt, localized, type Translations } from "@/lib/i18n";
 
 interface RestaurantImage {
     caption?: string;
@@ -31,6 +33,8 @@ export interface RestaurantCardProps {
     location?: { name: string; slug: string };
     isOpen?: boolean;
     showActions?: boolean;
+    /** Backend `translations` jsonb; only `description` is read here. */
+    translations?: Translations<{ description: string }>;
 }
 
 export function RestaurantCard({
@@ -53,8 +57,13 @@ export function RestaurantCard({
     location,
     isOpen,
     showActions = true,
+    translations,
 }: RestaurantCardProps) {
     const router = useRouter();
+    const locale = useLocale();
+    const localePath = useLocalePath();
+    const t = useDict().restaurants.card;
+    const text = localized({ description, translations }, locale, "description");
     const imageUrl = restaurantImages[0]?.url || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80";
 
     const displayRating = stats ? calculateCombinedRating(stats.googleStats, stats.tripAdvisorStats) : (rating || 0);
@@ -62,12 +71,12 @@ export function RestaurantCard({
 
     const handleReserveClick = (e: React.MouseEvent) => {
         e.stopPropagation();
-        router.push(`/restaurant/${slug}#reserve`);
+        router.push(localePath(`/restaurant/${slug}#reserve`));
     };
 
     return (
         <Link
-            href={`/restaurant/${slug}`}
+            href={localePath(`/restaurant/${slug}`)}
             className="group block bg-[var(--card-bg)] rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-[var(--border)] flex flex-col h-full cursor-pointer relative"
         >
             {/* Image Section */}
@@ -96,7 +105,7 @@ export function RestaurantCard({
                 {isOpen !== undefined && (
                     <div className={`absolute bottom-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-md ${isOpen ? "bg-green-500 text-white" : "bg-gray-500 text-white"
                         }`}>
-                        {isOpen ? "Open Now" : "Closed"}
+                        {isOpen ? t.openNow : t.closed}
                     </div>
                 )}
             </div>
@@ -122,13 +131,13 @@ export function RestaurantCard({
                     {name}
                 </h3>
 
-                {description && (
+                {text && (
                     <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-3 leading-relaxed">
-                        {description}
+                        {text}
                     </p>
                 )}
 
-                {!description && address && (
+                {!text && address && (
                     <div className="flex items-start gap-1.5 text-gray-500 dark:text-gray-400 text-[11px] mb-3">
                         <MapPin className="w-3 h-3 text-red-500 shrink-0 mt-0.5" />
                         <span className="line-clamp-1">{address}</span>
@@ -137,13 +146,13 @@ export function RestaurantCard({
 
                 <div className="mt-auto pt-3 border-t border-[var(--border)] flex items-center justify-between">
                     <div className="flex flex-col">
-                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">Price</span>
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">{t.price}</span>
                         <span className="text-xs font-bold text-gray-900 dark:text-white">{priceRange}</span>
                     </div>
 
                     <div className="flex flex-col items-end">
-                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">Reviews</span>
-                        <span className="text-xs font-bold text-gray-900 dark:text-white">{displayReviewCount} reviews</span>
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">{t.reviews}</span>
+                        <span className="text-xs font-bold text-gray-900 dark:text-white">{fmt(t.reviewCount, { count: displayReviewCount })}</span>
                     </div>
                 </div>
 
@@ -153,7 +162,7 @@ export function RestaurantCard({
                             onClick={handleReserveClick}
                             className="flex-1 bg-red-600 text-[10px] text-white font-bold py-2 rounded-xl hover:bg-red-700 transition-all shadow-md active:scale-95"
                         >
-                            View Details
+                            {t.viewDetails}
                         </button>
                         {/* <button
                             onClick={(e) => {

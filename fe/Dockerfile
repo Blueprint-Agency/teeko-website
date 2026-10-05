@@ -23,6 +23,9 @@ ENV NEXT_PUBLIC_GOOGLE_CLIENT_ID=$NEXT_PUBLIC_GOOGLE_CLIENT_ID
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_PUBLIC_GTM_ID=$NEXT_PUBLIC_GTM_ID
 
+# Guard tests (tests/guards.test.ts) enforce AGENTS.md; a failure stops the deploy.
+RUN npm test
+
 RUN npm run build
 
 CMD ["npm", "start"]

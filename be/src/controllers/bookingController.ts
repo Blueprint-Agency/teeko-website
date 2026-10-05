@@ -130,6 +130,8 @@ export const getUserBookings = async (req: AuthRequest, res: Response) => {
             status: simBookings.status,
             createdAt: simBookings.createdAt,
             packageName: simPackages.packageName,
+            // Lets "My Bookings" show the package name in the visitor's language.
+            translations: simPackages.translations,
             price: simPackages.price,
             featureImage: simPackages.featureImage,
             collectionDate: simBookings.collectionDate,

@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { X, Loader2, Mail, CheckCircle, Smartphone, Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { API_BASE_URL } from "@/lib/constants";
 import { useAuthFetch } from "@/lib/authFetch";
+import { useDict, useLocale } from "@/components/providers/LocaleProvider";
+import { fmt, INTL_LOCALE } from "@/lib/i18n";
+import { withValue } from "./withValue";
 
 interface BookingModalProps {
     isOpen: boolean;
@@ -15,11 +18,16 @@ interface BookingModalProps {
     };
     user: any;
     onBookingSuccess?: () => void;
+    /** Package name in the page's language; the GA4 event keeps `pkg.packageName`. */
+    displayName?: string;
 }
 
 import { sendGTMEvent } from "@next/third-parties/google";
 
-export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: BookingModalProps) {
+export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess, displayName }: BookingModalProps) {
+    const dict = useDict();
+    const t = dict.booking.modal;
+    const locale = useLocale();
     const [quantity, setQuantity] = useState(1);
     const [collectionDate, setCollectionDate] = useState("");
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -66,10 +74,16 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
     };
 
     const formatDisplayDate = (dateStr: string) => {
-        if (!dateStr) return "Select Date";
+        if (!dateStr) return t.selectDate;
         const [y, m, d] = dateStr.split('-');
         return `${d}/${m}/${y}`;
     };
+
+    // Sunday-first single-letter weekday headings in the page's language
+    // (2023-01-01 was a Sunday).
+    const weekdayLabels = Array.from({ length: 7 }, (_, i) =>
+        new Intl.DateTimeFormat(INTL_LOCALE[locale], { weekday: "narrow" }).format(new Date(2023, 0, 1 + i)),
+    );
 
     if (!isOpen) return null;
 
@@ -79,7 +93,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
 
     const handleConfirm = async () => {
         if (!collectionDate) {
-            setError("Please select a collection date");
+            setError(t.errorNoDate);
             return;
         }
 
@@ -139,9 +153,9 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                         <div className="relative p-6 border-b border-[var(--border)]">
                             <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                 <Smartphone className="w-5 h-5 text-red-600" />
-                                Review Booking
+                                {t.title}
                             </h2>
-                            <button onClick={onClose} className="absolute right-6 top-6 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
+                            <button onClick={onClose} aria-label={dict.common.shared.close} className="absolute right-6 top-6 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
@@ -150,19 +164,19 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                             <div className="bg-[var(--card-bg)] rounded-2xl p-4 border border-[var(--border)]">
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center">
-                                        <span className="text-sm text-gray-500 dark:text-zinc-400 font-medium">Email Address</span>
+                                        <span className="text-sm text-gray-500 dark:text-zinc-400 font-medium">{t.emailAddress}</span>
                                         <span className="text-sm text-gray-900 dark:text-white font-bold">{user?.email}</span>
                                     </div>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-sm text-gray-500 dark:text-zinc-400 font-medium">Package</span>
-                                        <span className="text-sm text-gray-900 dark:text-white font-bold">{pkg.packageName}</span>
+                                        <span className="text-sm text-gray-500 dark:text-zinc-400 font-medium">{t.package}</span>
+                                        <span className="text-sm text-gray-900 dark:text-white font-bold">{displayName || pkg.packageName}</span>
                                     </div>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-sm text-gray-500 dark:text-zinc-400 font-medium">Unit Price</span>
-                                        <span className="text-sm text-gray-900 dark:text-white font-bold">{pkg.price || "N/A"}</span>
+                                        <span className="text-sm text-gray-500 dark:text-zinc-400 font-medium">{t.unitPrice}</span>
+                                        <span className="text-sm text-gray-900 dark:text-white font-bold">{pkg.price || t.notAvailable}</span>
                                     </div>
                                     <div className="flex justify-between items-center pt-2 border-t border-[var(--border)]">
-                                        <span className="text-sm text-gray-500 dark:text-zinc-400 font-bold uppercase">Total Price</span>
+                                        <span className="text-sm text-gray-500 dark:text-zinc-400 font-bold uppercase">{t.totalPrice}</span>
                                         <span className="text-lg text-red-600 dark:text-red-400 font-black">{currency} {totalPrice.toFixed(2)}</span>
                                     </div>
                                 </div>
@@ -171,12 +185,13 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                             <div className="space-y-4">
 
                                 <label className="block text-sm font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-wider">
-                                    Quantity
+                                    {t.quantity}
                                 </label>
                                 <div className="flex items-center gap-6">
                                     <div className="flex items-center border border-[var(--border)] rounded-xl bg-[var(--card-bg)] px-2 py-1">
                                         <button
                                             onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                            aria-label={t.decrease}
                                             className="w-10 h-10 flex items-center justify-center text-xl font-bold text-gray-500 hover:text-red-600"
                                         >
                                             -
@@ -186,18 +201,19 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                         </span>
                                         <button
                                             onClick={() => setQuantity(Math.min(10, quantity + 1))}
+                                            aria-label={t.increase}
                                             className="w-10 h-10 flex items-center justify-center text-xl font-bold text-gray-500 hover:text-red-600"
                                         >
                                             +
                                         </button>
                                     </div>
-                                    <p className="text-xs text-gray-500 font-medium">Max 10 per booking</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t.maxPerBooking}</p>
                                 </div>
                             </div>
 
                             <div className="space-y-4 pt-2">
                                 <label className="block text-sm font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-wider">
-                                    Collection Date
+                                    {t.collectionDate}
                                 </label>
                                 <div className="relative">
                                     <button
@@ -212,7 +228,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                     </button>
 
                                     <p className="mt-2 text-[10px] text-gray-500 font-bold uppercase tracking-widest leading-relaxed">
-                                        Must be between {formatDisplayDate(minDateStr)} and {formatDisplayDate(maxDateStr)} (GMT+8)
+                                        {fmt(t.dateRange, { min: formatDisplayDate(minDateStr), max: formatDisplayDate(maxDateStr) })}
                                     </p>
                                 </div>
                             </div>
@@ -221,8 +237,8 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                             {isCalendarOpen && (
                                 <div className="absolute inset-0 z-[110] bg-[var(--background-alt)] flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300">
                                     <div className="flex items-center justify-between p-6 border-b border-[var(--border)]">
-                                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Select Collection Date</h2>
-                                        <button onClick={() => setIsCalendarOpen(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full transition-colors">
+                                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t.calendarTitle}</h2>
+                                        <button onClick={() => setIsCalendarOpen(false)} aria-label={dict.common.shared.close} className="p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-full transition-colors">
                                             <X className="w-5 h-5" />
                                         </button>
                                     </div>
@@ -231,12 +247,13 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                         <div className="max-w-xs mx-auto space-y-6">
                                             <div className="flex items-center justify-between">
                                                 <h4 className="font-bold text-lg text-gray-900 dark:text-white">
-                                                    {viewDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                                                    {viewDate.toLocaleString(INTL_LOCALE[locale], { month: 'long', year: 'numeric' })}
                                                 </h4>
                                                 <div className="flex gap-2">
                                                     <button
                                                         type="button"
                                                         onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}
+                                                        aria-label={t.previousMonth}
                                                         className="p-2 hover:bg-red-500/10 rounded-xl transition-colors border border-[var(--border)]"
                                                     >
                                                         <ChevronLeft className="w-5 h-5 text-gray-400" />
@@ -244,6 +261,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                                     <button
                                                         type="button"
                                                         onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}
+                                                        aria-label={t.nextMonth}
                                                         className="p-2 hover:bg-red-500/10 rounded-xl transition-colors border border-[var(--border)]"
                                                     >
                                                         <ChevronRight className="w-5 h-5 text-gray-400" />
@@ -252,7 +270,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                             </div>
 
                                             <div className="grid grid-cols-7 gap-1">
-                                                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
+                                                {weekdayLabels.map((day, index) => (
                                                     <div key={`${day}-${index}`} className="text-center text-xs font-bold text-gray-400 uppercase py-2">
                                                         {day}
                                                     </div>
@@ -288,7 +306,7 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                             <div className="pt-4 border-t border-[var(--border)]">
                                                 <div className="flex items-center gap-2 text-[10px] text-gray-500 font-bold uppercase tracking-wider">
                                                     <div className="w-2 h-2 rounded-full bg-red-600"></div>
-                                                    Pick a date between {formatDisplayDate(minDateStr)} - {formatDisplayDate(maxDateStr)}
+                                                    {fmt(t.pickBetween, { min: formatDisplayDate(minDateStr), max: formatDisplayDate(maxDateStr) })}
                                                 </div>
                                             </div>
                                         </div>
@@ -310,10 +328,10 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                                 {isLoading ? (
                                     <>
                                         <Loader2 className="w-5 h-5 animate-spin" />
-                                        <span>Processing...</span>
+                                        <span>{t.processing}</span>
                                     </>
                                 ) : (
-                                    <span>Confirm Booking</span>
+                                    <span>{t.confirm}</span>
                                 )}
                             </button>
                         </div>
@@ -323,9 +341,9 @@ export function BookingModal({ isOpen, onClose, pkg, user, onBookingSuccess }: B
                         <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                             <CheckCircle className="w-10 h-10 text-green-500" />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Booking Complete!</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t.successTitle}</h2>
                         <p className="text-gray-500 dark:text-zinc-400 max-w-xs mx-auto">
-                            We've sent booking confirmation to <span className="text-gray-900 dark:text-white font-bold">{user?.email}</span>
+                            {withValue(t.successBody, "email", <span className="text-gray-900 dark:text-white font-bold">{user?.email}</span>)}
                         </p>
                     </div>
                 )}

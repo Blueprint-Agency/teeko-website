@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Teeko Content Schedule</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#eef0f2; --bg:#ffffff; --tint:#f7f8f9;
+  --ink:#1d2328; --slate:#5f6a73; --line:#e5e8eb; --body:#3b454d; --lead:#323c44;
+  --accent:#c8281e; --accent-soft:#fdeeec; --accent-line:#f5cdc9;
+  --amber:#a85a06; --amber-soft:#fdf4e7; --amber-line:#f4e0c4;
+  --green:#2e7d4f; --green-soft:#eef8ef; --green-line:#cde8d4;
+  --blue:#1d5fa8; --blue-soft:#eaf2fb; --blue-line:#cadcf2;
+  --gold:#8f6300; --gold-soft:#fbf3df; --gold-line:#efe0bd;
+  --purple:#6b21a8; --purple-soft:#f3ebfd; --purple-line:#e0ccf5;
+  --muted-pos:#8a949c;
+  --goal-bg:#1d2328; --goal-fg:#ffffff; --goal-accent:#ffb4ad; --goal-muted:#c9d0d5;
+  --shadow:0 1px 40px rgba(29,35,40,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0f1215; --bg:#171b1f; --tint:#1e2328;
+    --ink:#e9edf0; --slate:#9aa5ae; --line:#2c3339; --body:#c3cbd1; --lead:#d3d9de;
+    --accent:#ff6b5f; --accent-soft:#3a1a17; --accent-line:#5a2622;
+    --amber:#f0a54a; --amber-soft:#33240f; --amber-line:#4d3616;
+    --green:#5fc48a; --green-soft:#16301f; --green-line:#24492f;
+    --blue:#7fb3ee; --blue-soft:#162638; --blue-line:#233d5c;
+    --gold:#e0b64a; --gold-soft:#2f2710; --gold-line:#4a3c16;
+    --purple:#c79bf2; --purple-soft:#2a1a3a; --purple-line:#43285e;
+    --muted-pos:#7d8790;
+    --goal-bg:#0b0d0f; --goal-fg:#ffffff; --goal-accent:#ff8f85; --goal-muted:#aab4bb;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0f1215; --bg:#171b1f; --tint:#1e2328;
+  --ink:#e9edf0; --slate:#9aa5ae; --line:#2c3339; --body:#c3cbd1; --lead:#d3d9de;
+  --accent:#ff6b5f; --accent-soft:#3a1a17; --accent-line:#5a2622;
+  --amber:#f0a54a; --amber-soft:#33240f; --amber-line:#4d3616;
+  --green:#5fc48a; --green-soft:#16301f; --green-line:#24492f;
+  --blue:#7fb3ee; --blue-soft:#162638; --blue-line:#233d5c;
+  --gold:#e0b64a; --gold-soft:#2f2710; --gold-line:#4a3c16;
+  --purple:#c79bf2; --purple-soft:#2a1a3a; --purple-line:#43285e;
+  --muted-pos:#7d8790;
+  --goal-bg:#0b0d0f; --goal-fg:#ffffff; --goal-accent:#ff8f85; --goal-muted:#aab4bb;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+.page{max-width:960px;margin:0 auto;background:var(--bg);box-shadow:var(--shadow)}
+h1,h2,h3,.big-num,.kpi-val,.m-badge,.vertebra,.chip,.stat b{font-family:'Fraunces',Georgia,serif}
+h1,h2,h3{text-wrap:balance}
+a{color:var(--accent)}
+strong{color:var(--ink)}
+
+/* Header */
+header{padding:38px 48px 30px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:12px}
+header h1{font-size:34px;line-height:1.12;margin:0 0 10px;font-weight:600}
+header .sub{color:var(--slate);font-size:15px;max-width:660px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.meta-chip{font-size:12px;background:var(--tint);border:1px solid var(--line);border-radius:20px;padding:5px 13px;color:var(--slate);font-weight:500}
+
+/* Tabs */
+.tab-bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;gap:2px;background:var(--bg);border-bottom:1px solid var(--line);padding:0 40px;overflow-x:auto;scrollbar-width:none}
+.tab-btn{flex:none;border:none;background:none;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--slate);padding:15px 14px;cursor:pointer;border-bottom:2.5px solid transparent}
+.tab-btn:hover{color:var(--ink)}
+.tab-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-4px}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{padding:36px 48px 10px}
+.tab-content[hidden]{display:none!important}
+
+section{margin-bottom:40px}
+.sec-title{display:flex;align-items:center;gap:14px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--slate);margin:0 0 18px}
+.sec-title::after{content:"";flex:1;height:1px;background:var(--line)}
+p.lead{font-size:15.5px;color:var(--lead);margin:0 0 16px;max-width:70ch}
+p.note{font-size:13px;color:var(--slate);margin:10px 0 0}
+
+/* Cards */
+.bp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bp-grid.three{grid-template-columns:repeat(3,1fr)}
+.bp-grid.four{grid-template-columns:repeat(4,1fr)}
+.bp{border-radius:12px;padding:18px 18px 16px;border:1px solid var(--line);background:var(--tint)}
+.bp .tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;display:inline-block;margin-bottom:8px;color:var(--slate)}
+.bp .big-num{display:block;font-size:30px;font-weight:700;line-height:1.05;margin-bottom:8px}
+.bp p{margin:0;font-size:13.5px;color:var(--body)}
+.bp.problem{background:var(--amber-soft);border-color:var(--amber-line)}.bp.problem .tag,.bp.problem .big-num{color:var(--amber)}
+.bp.opportunity{background:var(--green-soft);border-color:var(--green-line)}.bp.opportunity .tag,.bp.opportunity .big-num{color:var(--green)}
+.bp.solution{background:var(--accent-soft);border-color:var(--accent-line)}.bp.solution .tag,.bp.solution .big-num{color:var(--accent)}
+.bp.blue{background:var(--blue-soft);border-color:var(--blue-line)}.bp.blue .tag,.bp.blue .big-num{color:var(--blue)}
+.bp.gold{background:var(--gold-soft);border-color:var(--gold-line)}.bp.gold .tag,.bp.gold .big-num{color:var(--gold)}
+.bp.purple{background:var(--purple-soft);border-color:var(--purple-line)}.bp.purple .tag,.bp.purple .big-num{color:var(--purple)}
+.bp.goal{background:var(--goal-bg);border-color:var(--goal-bg);color:var(--goal-fg)}
+.bp.goal .kpi-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--goal-accent);font-weight:700;margin-bottom:6px}
+.bp.goal .kpi-val{font-size:26px;font-weight:700;line-height:1;margin-bottom:7px}
+.bp.goal .kpi-desc{font-size:12.5px;color:var(--goal-muted)}
+.bp.goal .kpi-desc strong{color:var(--goal-fg)}
+.bp.name .big-num{font-size:22px}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);font-weight:600;padding:9px 10px;border-bottom:2px solid var(--ink);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;font-size:13px;color:var(--body)}
+td strong{color:var(--ink)}
+tr.you td{background:var(--accent-soft)}
+tr.sister td{background:var(--tint)}
+td.num,th.num{text-align:right;white-space:nowrap}
+td.vol{font-weight:600;color:var(--ink);text-align:right;white-space:nowrap}
+td.kw{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:11.5px;color:var(--accent)}
+td.dim{color:var(--muted-pos)}
+.pos{font-weight:600;white-space:nowrap}
+.pos-good{color:var(--green)}
+.pos-bad{color:var(--amber)}
+.pos-none{color:var(--muted-pos)}
+.trend-up{color:var(--green);font-weight:600}
+.trend-down{color:var(--amber);font-weight:600}
+.yes{color:var(--green);font-weight:700}
+.no{color:var(--accent);font-weight:700}
+.part{color:var(--amber);font-weight:700}
+.gap-table td:first-child{font-weight:500;color:var(--ink);min-width:220px}
+.gap-table td:not(:first-child){font-size:12.5px}
+.gap-table tr.own td{background:var(--green-soft)}
+
+/* Glance */
+.glance td{padding:11px 10px}
+.glance tr.launch td{background:var(--accent-soft)}
+.m-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);font-weight:700;font-size:13px}
+.glance tr.launch .m-badge{background:var(--accent);color:#fff}
+.glance .focus{font-weight:600;color:var(--ink);white-space:nowrap}
+.glance .count{text-align:right;white-space:nowrap;font-weight:600;color:var(--ink)}
+
+/* Timeline */
+.timeline{position:relative;margin:8px 0 0;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:12px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.month{position:relative;margin-bottom:28px}
+.vertebra{position:absolute;left:-34px;top:0;width:26px;height:26px;border-radius:50%;background:var(--bg);border:2px solid var(--line);color:var(--slate);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.month.launch-month .vertebra{background:var(--accent);border-color:var(--accent);color:#fff}
+.month.push-month .vertebra{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.month h3{margin:0 0 4px;font-size:18px;font-weight:600}
+.month h3 .sub{display:block;font-family:'Inter',system-ui,sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.month ul{margin:8px 0 12px;padding-left:18px}
+.month li{font-size:13.5px;color:var(--body);margin-bottom:5px}
+.chip-row{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:12px;border-radius:20px;padding:4px 12px}
+.chip.bm{background:var(--gold-soft);color:var(--gold)}
+.chip.zh{background:var(--purple-soft);color:var(--purple)}
+.chip.total{background:var(--ink);color:var(--bg)}
+
+/* KPI */
+.kpi td{padding:12px 10px;font-size:13.5px}
+.kpi td.now{color:var(--amber);font-weight:600;text-align:right;white-space:nowrap}
+.kpi td.arrow{color:var(--slate);text-align:center;width:30px}
+.kpi td.target{color:var(--green);font-weight:700;white-space:nowrap}
+
+/* Needs */
+.needs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.need{display:flex;gap:12px;align-items:flex-start;background:var(--tint);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.need .ic{flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',Georgia,serif}
+.need div:last-child{font-size:13px;color:var(--body)}
+.need .ref{display:block;font-size:11px;color:var(--slate);margin-top:3px}
+
+/* Pillar cards */
+.pillar-card{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px;background:var(--bg)}
+.pillar-header{display:flex;gap:14px;align-items:center;margin-bottom:8px}
+.pillar-mark{flex:none;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:18px}
+.pillar-mark.t{background:var(--accent-soft);color:var(--accent)}
+.pillar-mark.f{background:var(--amber-soft);color:var(--amber)}
+.pillar-mark.s{background:var(--blue-soft);color:var(--blue)}
+.pillar-mark.d{background:var(--green-soft);color:var(--green)}
+.pillar-mark.bm{background:var(--gold-soft);color:var(--gold)}
+.pillar-mark.zh{background:var(--purple-soft);color:var(--purple)}
+.pillar-header .sub{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--slate)}
+.pillar-header h3{margin:2px 0 0;font-size:17px;font-weight:600}
+.pillar-card > p{font-size:13.5px;color:var(--body);margin:0 0 10px;max-width:72ch}
+.insight{font-size:12.5px;color:var(--slate);font-style:italic;margin-top:10px;padding-left:12px;border-left:2px solid var(--accent)}
+
+/* Type pills */
+.pill{font-size:10px;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:4px;white-space:nowrap;display:inline-block}
+.pill.t{background:var(--accent-soft);color:var(--accent)}
+.pill.f{background:var(--amber-soft);color:var(--amber)}
+.pill.s{background:var(--blue-soft);color:var(--blue)}
+.pill.d{background:var(--green-soft);color:var(--green)}
+.pill.bm{background:var(--gold-soft);color:var(--gold)}
+.pill.zh{background:var(--purple-soft);color:var(--purple)}
+.pill.dead{background:var(--tint);color:var(--muted-pos);border:1px solid var(--line)}
+.flag{font-size:10.5px;font-weight:600;color:var(--amber);white-space:nowrap}
+
+.kw-summary{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:10px;padding:14px 16px;font-size:13.5px;margin-top:14px;color:var(--lead)}
+.callout{background:var(--tint);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:14px 16px;font-size:13.5px;color:var(--body);margin:14px 0}
+.callout.warn{border-left-color:var(--amber);background:var(--amber-soft);border-color:var(--amber-line)}
+.callout.good{border-left-color:var(--green);background:var(--green-soft);border-color:var(--green-line)}
+
+/* Schedule */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:26px}
+.stat{background:var(--tint);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center}
+.stat b{display:block;font-weight:700;font-size:26px;color:var(--accent);line-height:1.1}
+.stat.bm b{color:var(--gold)} .stat.zh b{color:var(--purple)}
+.stat span{font-size:12px;color:var(--slate);font-weight:600}
+.sched{margin-bottom:40px}
+.sched h3{font-weight:600;font-size:20px;margin:0 0 6px}
+.sched .intro{color:var(--slate);font-size:14px;margin:0 0 14px;max-width:72ch}
+.sched td{padding:7px 10px}
+.sched tr.group td{background:var(--tint);color:var(--accent);font-weight:700;letter-spacing:.06em;font-size:10.5px;text-transform:uppercase;padding:8px 10px}
+.sched td.piece{font-weight:500;color:var(--ink);min-width:220px}
+.sched td.route{font-size:12px;color:var(--slate);min-width:150px}
+.sched-total{margin-top:10px;padding:10px 14px;background:var(--accent-soft);border-radius:8px;font-size:13px;font-weight:600;color:var(--accent)}
+.sched-total.warn{background:var(--amber-soft);color:var(--amber)}
+
+footer{padding:24px 48px 40px;border-top:1px solid var(--line);color:var(--slate);font-size:11.5px;margin-top:20px}
+footer p{margin:0 0 8px;max-width:90ch}
+
+@media(max-width:760px){
+  .bp-grid.four{grid-template-columns:1fr 1fr}
+  .bp-grid.three{grid-template-columns:1fr}
+}
+@media(max-width:680px){
+  header,.tab-content,footer{padding-left:16px;padding-right:16px}
+  .tab-bar{padding:0 8px}
+  .bp-grid,.bp-grid.four,.needs{grid-template-columns:1fr}
+  header h1{font-size:26px}
+  .glance .focus{white-space:normal}
+}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<div class="page">
+<header>
+  <div class="eyebrow">Content Schedule Proposal · Prepared for Teeko</div>
+  <h1>Getting the tourist from KLIA2 arrivals to a booked ride</h1>
+  <div class="sub">A 6-month, three-language content programme for teeko.ai, built on a competitor gap analysis of the KLIA2 transport and Malaysian food SERPs. Every piece ends with a route to book at ttklia.com.</div>
+  <div class="meta-row">
+    <span class="meta-chip"><strong>Client:</strong> Teeko (GM Ai Tours Sdn Bhd.)</span>
+    <span class="meta-chip"><strong>Market:</strong> Inbound travel, KLIA2 and onward</span>
+    <span class="meta-chip"><strong>Term:</strong> Oct 2026 to Mar 2027</span>
+    <span class="meta-chip"><strong>Output:</strong> 190 pieces · EN / BM / 中文</span>
+  </div>
+</header>
+
+<nav class="tab-bar" role="tablist" aria-label="Proposal sections">
+  <button class="tab-btn active" role="tab" data-tab="proposal" aria-selected="true">Proposal &amp; Timeline</button>
+  <button class="tab-btn" role="tab" data-tab="keywords" aria-selected="false">Keyword &amp; Pillar Strategy</button>
+  <button class="tab-btn" role="tab" data-tab="competitor" aria-selected="false">Competitor Gap Analysis</button>
+  <button class="tab-btn" role="tab" data-tab="inventory" aria-selected="false">Content Inventory</button>
+  <button class="tab-btn" role="tab" data-tab="schedule" aria-selected="false">Content Schedule</button>
+</nav>
+
+<!-- ================= TAB 1: PROPOSAL ================= -->
+<div id="tab-proposal" class="tab-content" role="tabpanel">
+
+  <section>
+    <div class="sec-title">The Situation</div>
+    <div class="bp-grid">
+      <div class="bp problem">
+        <span class="tag">The Problem</span>
+        <span class="big-num">DA 3</span>
+        <p>teeko.ai earns about <strong>44 organic visits a month</strong> from 163 ranking keywords, and none of them sit on page 1. The site has <strong>no link to ttklia.com</strong>, the booking destination the client named on 19 Sept 2026. Transport head terms are held by marketplaces with DA 37 to 46 and tens of thousands of referring domains. teeko.ai cannot win those in six months.</p>
+      </div>
+      <div class="bp opportunity">
+        <span class="tag">The Opportunity</span>
+        <span class="big-num">60,000+</span>
+        <p>Monthly Malaysian searches sit on <strong>destination food terms, 10 of the 13 measured at difficulty 24 or lower</strong>: kl sentral food (8,100), klia2 food (8,100), ipoh food (8,100), penang food (9,900), bukit bintang food (5,400). Page 1 includes blogs as weak as <strong>DA 11</strong>. Teeko already has rated restaurant data for these cities, and ttklia.com sells the bus to most of them.</p>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:16px">None of the ranking pages we benchmarked connects the ride to the meal. klia2.info explains the terminal but can't book anything. redBus and BusOnlineTicket sell tickets and say nothing about the place you are going. Food bloggers describe Ipoh and Melaka and never mention how to get there from the airport. Teeko is the only one that can put <strong>the arrival card, the SIM, the ride and the first meal</strong> on one page, because one group runs all of them. The programme is built around that gap: food and arrival content that ranks on soft ground, with every piece ending in a booking route at ttklia.com.</p>
+  </section>
+
+  <section>
+    <div class="sec-title">The 6-Month Goals</div>
+    <div class="bp-grid three">
+      <div class="bp goal">
+        <div class="kpi-label">KPI 1 · Traffic</div>
+        <div class="kpi-val">≈ 20×</div>
+        <div class="kpi-desc">Organic visits from <strong>44 → ~1,000/mo</strong> (Malaysia estimate)</div>
+      </div>
+      <div class="bp goal">
+        <div class="kpi-label">KPI 2 · Conversion</div>
+        <div class="kpi-val">150+/mo</div>
+        <div class="kpi-desc">Tracked <strong>click-throughs to ttklia.com</strong>, from a baseline of 0</div>
+      </div>
+      <div class="bp goal">
+        <div class="kpi-label">KPI 3 · Rankings</div>
+        <div class="kpi-val">5 of 20</div>
+        <div class="kpi-desc">Tracked keywords on <strong>Google page 1</strong>, from 0 today</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Where teeko.ai Stands Today</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Metric</th><th class="num">teeko.ai</th><th class="num">ttklia.com</th><th class="num">klia2.info</th><th class="num">BusOnlineTicket</th><th class="num">redBus MY</th></tr></thead>
+      <tbody>
+        <tr class="you"><td><strong>Organic visits / mo</strong></td><td class="num"><strong>44</strong></td><td class="num">615</td><td class="num">150,264</td><td class="num">240,669</td><td class="num">491,028</td></tr>
+        <tr><td>Ranking keywords</td><td class="num">163</td><td class="num">118</td><td class="num">26,864</td><td class="num">50,011</td><td class="num">104,084</td></tr>
+        <tr><td>Domain Authority</td><td class="num">3</td><td class="num">5</td><td class="num">44</td><td class="num">46</td><td class="num">37</td></tr>
+        <tr><td>Referring domains</td><td class="num">8</td><td class="num">29</td><td class="num">10,660</td><td class="num">7,364</td><td class="num">2,346</td></tr>
+        <tr><td>"klia2 to kl sentral" (1,300/mo)</td><td class="num pos pos-none">not ranking</td><td class="num pos pos-none">not in top 13</td><td class="num pos pos-bad">#13</td><td class="num pos pos-good">#5</td><td class="num pos pos-good">#3</td></tr>
+        <tr><td>12-month trajectory</td><td class="num trend-down">↓ peaked 102 in May</td><td class="num trend-up">↑ 214 → 615</td><td class="num trend-down">↓ 245K → 150K</td><td class="num">→ ~240K</td><td class="num">→ ~500K</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout"><strong>The honest read:</strong> teeko.ai and ttklia.com together have 37 referring domains. The three incumbents have over 20,000. That gap does not close in six months and this plan does not pretend it will. What does close is the gap on low-difficulty food and arrival terms, where page 1 is held by blogs, Instagram posts and mall directories rather than by the marketplaces.</div>
+  </section>
+
+  <section>
+    <div class="sec-title">Timeline at a Glance</div>
+    <div class="tbl-wrap">
+    <table class="glance">
+      <tbody>
+        <tr class="launch"><td><span class="m-badge">1</span></td><td class="focus">Build + Arrival Core</td><td>ttklia.com CTA path, BM/中文 locale layer, outbound click tracking. 10 English arrival and KL food pieces, plus 10 on Lalaport BBCC, Singapore buses, private transfers and private drivers</td><td class="count">20</td></tr>
+        <tr class="launch"><td><span class="m-badge">2</span></td><td class="focus">KL Food + Genting</td><td>Locale launch: Month 1 topics go live in BM and 中文 (the Lalaport set in 中文 first). 10 new English food and Genting pieces</td><td class="count">40</td></tr>
+        <tr><td><span class="m-badge">3</span></td><td class="focus">Penang &amp; the South</td><td>Penang, Melaka, JB food paired with KLIA2 bus routes. Things to do in KL. Year-end. Lalaport set in BM</td><td class="count">40</td></tr>
+        <tr><td><span class="m-badge">4</span></td><td class="focus">North + Festive Prep</td><td>Ipoh cluster, KLIA2 transit, Chinese New Year and Ramadan bazaar pieces published ahead of the peak</td><td class="count">30</td></tr>
+        <tr><td><span class="m-badge">5</span></td><td class="focus">Ramadan &amp; Raya</td><td>Buka puasa, Hari Raya travel, return-trip guide. 3 slots chosen from Search Console data. Refresh pass begins</td><td class="count">30</td></tr>
+        <tr><td><span class="m-badge">6</span></td><td class="focus">Compound</td><td>6 of 10 slots chosen from live Search Console data. Refresh page-2 pieces, full KPI report, Month 7+ plan</td><td class="count">30</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout warn"><strong>Why Month 1 is English only:</strong> the blog has no locale field and the site has no locale routing (OPEN-ITEMS #2), so BM and 中文 pages have nowhere to live yet. English publishes from day one while the locale layer is built. From Month 2 each month ships 10 new English topics plus the previous month's 10 topics in BM and 中文. That one-month lag gives the native reviewers time to work and keeps the client's 30-a-month target from Month 2 onward. The 10 October additions push Months 2 and 3 to 40 while their translations catch up. Month 6's topics reach BM and 中文 in Month 7.</div>
+  </section>
+
+  <section>
+    <div class="sec-title">Month-by-Month Plan</div>
+    <div class="timeline">
+
+      <div class="month launch-month">
+        <div class="vertebra">1</div>
+        <h3><span class="sub">October 2026 · Build</span>ttklia.com Path, Locale Layer, Arrival Core &amp; Lalaport</h3>
+        <ul>
+          <li><strong>ttklia.com conversion path</strong> (OPEN-ITEMS #1): a <code>cta</code> block template with the client's deep links and UTM convention, placed on every existing post and in the nav</li>
+          <li><strong>Locale layer</strong> (OPEN-ITEMS #2): locale field on <code>blogPosts</code>, <code>app/[locale]/</code> routing, computed hreflang, language switcher</li>
+          <li><strong>GA4 outbound event</strong> on every ttklia.com click so KPI 2 has a baseline</li>
+          <li><strong>Restaurant page metadata</strong>: replace the generic placeholder titles. Restaurant pages already rank #19 to #48 for named restaurants with up to 22,200 searches</li>
+          <li><strong>10 English arrival pieces</strong> led by MDAC (14,800/mo), the KLIA2 to KL Sentral comparison and two KL food guides</li>
+          <li><strong>10 English transport pieces</strong> on the Lalaport BBCC hub and Singapore buses, private transfers between KL and KLIA/KLIA2, and private drivers for KL, Selangor and Genting</li>
+        </ul>
+        <div class="chip-row"><span class="chip">20 EN</span><span class="chip total">20 / 190</span></div>
+      </div>
+
+      <div class="month launch-month">
+        <div class="vertebra">2</div>
+        <h3><span class="sub">November 2026 · Locale launch</span>KL Food &amp; Genting</h3>
+        <ul>
+          <li><strong>BM and 中文 go live</strong>: Month 1's 10 topics, each retitled to the locale's own measured keyword, not a literal translation</li>
+          <li><strong>KL food cluster</strong>: KLIA2 food, Petaling Street, Jalan Alor, nasi lemak, halal. Each links to the ride from KLIA2</li>
+          <li><strong>Genting cluster</strong>: the KL to Genting transport comparison, food and things to do, all pointing to ttklia.com's Genting page</li>
+          <li><strong>KLIA2 luggage storage</strong> (720/mo, SD 12), the lowest-difficulty term in the transport pillar</li>
+        </ul>
+        <div class="chip-row"><span class="chip">10 EN</span><span class="chip bm">10 BM</span><span class="chip zh">20 中文</span><span class="chip total">60 / 190</span></div>
+      </div>
+
+      <div class="month">
+        <div class="vertebra">3</div>
+        <h3><span class="sub">December 2026 · Expand</span>Penang, Melaka &amp; Johor Bahru</h3>
+        <ul>
+          <li><strong>Food + route pairs</strong>: Penang food (9,900/mo) with KLIA2 to Penang, Melaka food (6,600) with KLIA2 to Melaka, JB food (2,900, SD 12) with KLIA2 to JB</li>
+          <li><strong>Things to do in Kuala Lumpur</strong> (8,100/mo), the pillar the BM and 中文 place pieces hang from</li>
+          <li><strong>Year-end</strong>: New Year's Eve in KL, SIM plans for the holiday traveller</li>
+        </ul>
+        <div class="chip-row"><span class="chip">10 EN</span><span class="chip bm">20 BM</span><span class="chip zh">10 中文</span><span class="chip total">100 / 190</span></div>
+      </div>
+
+      <div class="month">
+        <div class="vertebra">4</div>
+        <h3><span class="sub">January 2027 · Ahead of the peak</span>Ipoh, Transit &amp; Festive Prep</h3>
+        <ul>
+          <li><strong>Ipoh cluster</strong>: Ipoh food (8,100/mo, SD 16) with the KLIA2 to Ipoh bus</li>
+          <li><strong>Festive pieces a month early</strong>: Chinese New Year falls on 6 Feb 2027 and "ramadan bazaar kl" jumps from 10 to 720 searches in February, so both publish in January</li>
+          <li><strong>Terminal practicals</strong>: KLIA2 transit, bus terminal, Grab or taxi, and a Selangor day trip by private driver</li>
+        </ul>
+        <div class="chip-row"><span class="chip">10 EN</span><span class="chip bm">10 BM</span><span class="chip zh">10 中文</span><span class="chip total">130 / 190</span></div>
+      </div>
+
+      <div class="month push-month">
+        <div class="vertebra">5</div>
+        <h3><span class="sub">February 2027 · Data-led</span>Ramadan, Raya &amp; First Refresh</h3>
+        <ul>
+          <li><strong>Buka puasa buffets in KL</strong>, led in BM ("buffet ramadhan kl" reaches 1,600 in Feb and March)</li>
+          <li><strong>Hari Raya travel</strong> and the return-trip guide (KL Sentral to KLIA2, 3,600/mo, once the client confirms ttklia.com sells that direction)</li>
+          <li><strong>3 slots chosen from Search Console</strong>: expand whatever Months 1 to 3 are ranking for on page 2</li>
+          <li><strong>Refresh pass</strong>: rework pieces stuck at positions 11 to 30; internal links from every food piece to its route piece</li>
+        </ul>
+        <div class="chip-row"><span class="chip">10 EN</span><span class="chip bm">10 BM</span><span class="chip zh">10 中文</span><span class="chip total">160 / 190</span></div>
+      </div>
+
+      <div class="month push-month">
+        <div class="vertebra">6</div>
+        <h3><span class="sub">March 2027 · Compound</span>Search Console–Led Expansion</h3>
+        <ul>
+          <li><strong>6 of 10 slots chosen from live data</strong>: queries teeko.ai already gets impressions for but has no page for</li>
+          <li><strong>Second refresh pass</strong> and schema (Article, FAQ, BreadcrumbList) across the library</li>
+          <li><strong>Full 6-month report</strong> against the three KPIs, and the Month 7+ calendar</li>
+        </ul>
+        <div class="chip-row"><span class="chip">10 EN</span><span class="chip bm">10 BM</span><span class="chip zh">10 中文</span><span class="chip total">190 / 190</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">KPI Targets</div>
+    <div class="tbl-wrap">
+    <table class="kpi">
+      <tbody>
+        <tr><td>Organic visits / month (Ubersuggest, Malaysia)</td><td class="now">44</td><td class="arrow">→</td><td class="target">~1,000</td></tr>
+        <tr><td>Tracked click-throughs to ttklia.com (GA4, UTM)</td><td class="now">0 (no link exists)</td><td class="arrow">→</td><td class="target">150+ / month</td></tr>
+        <tr><td>Tracked keywords on page 1</td><td class="now">0 of 20</td><td class="arrow">→</td><td class="target">5 of 20</td></tr>
+        <tr><td>Published pieces</td><td class="now">12 EN</td><td class="arrow">→</td><td class="target">+190 (70 EN · 60 BM · 60 中文)</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Traffic and ranking targets are directional. They assume the client's sign-off keeps pace with 30 pieces a month and that the locale layer ships in Month 1. Search Console becomes the source of truth once access is granted.</p>
+  </section>
+
+  <section>
+    <div class="sec-title">What We Need From You</div>
+    <div class="needs">
+      <div class="need"><div class="ic">1</div><div><strong>The ttklia.com link plan.</strong> Which pages to deep-link, the UTM convention, whether copy says "ttklia" or "Teeko", and how Asia Success Resources Sdn Bhd relates to GM Ai Tours.<span class="ref">OPEN-ITEMS #1 · blocks Month 1</span></div></div>
+      <div class="need"><div class="ic">2</div><div><strong>Simplified or Traditional Chinese.</strong> ttklia.com uses Simplified. The 吉隆坡美食 SERP is mostly Traditional (Hong Kong and Taiwan sites). One answer before Month 2.<span class="ref">OPEN-ITEMS #2</span></div></div>
+      <div class="need"><div class="ic">3</div><div><strong>A named native reviewer for BM and one for 中文.</strong> 20 locale pieces a month need someone who can sign them off within a week.<span class="ref">OPEN-ITEMS #2</span></div></div>
+      <div class="need"><div class="ic">4</div><div><strong>Restaurant rows in the admin panel before their month:</strong> KLIA2 outlets and Genting (by Month 2), Melaka (Month 3), Ipoh (Month 4). Food guides only list places that are in the database.<span class="ref">AGENTS.md · no invented content</span></div></div>
+      <div class="need"><div class="ic">5</div><div><strong>Photos from the KLIA2 transport hub:</strong> the counter, the bus bays, the SIM collection point. This is the one thing klia2.info has that we don't.<span class="ref">OPEN-ITEMS #7</span></div></div>
+      <div class="need"><div class="ic">6</div><div><strong>Does ttklia.com sell KL Sentral to KLIA2?</strong> Its search only offers KLIA2 or Lalaport as origin, but it has taxi pages to KLIA. This decides the Month 5 return-trip piece.</div></div>
+      <div class="need"><div class="ic">7</div><div><strong>Search Console and GA4 access</strong>, and confirmation that <code>settings.googleIndexing</code> is on in production.</div></div>
+      <div class="need"><div class="ic">8</div><div><strong>Sign-off within 3 to 4 working days</strong> per weekly batch, to hold 30 to 40 pieces a month.</div></div>
+      <div class="need"><div class="ic">9</div><div><strong>Lalaport.</strong> Will ttklia.com sell Singapore to Lalaport? Today it sells only Lalaport to Singapore. We also need restaurant rows for Lalaport BBCC and the streets around it.<span class="ref">Month 1 Lalaport pieces</span></div></div>
+      <div class="need"><div class="ic">10</div><div><strong>Private transport.</strong> The taxi-transfer deep links for KL to KLIA and KLIA2, and whether the 8- and 10-hour car charter covers Genting. Car rental and the Genting van show "Coming Soon", so nothing links to them yet.<span class="ref">Month 1 transfer and driver pieces</span></div></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= TAB 2: KEYWORDS ================= -->
+<div id="tab-keywords" class="tab-content" role="tabpanel" hidden>
+
+  <section>
+    <div class="sec-title">Four Pillars, One Destination</div>
+    <p class="lead">Every piece belongs to one pillar and every pillar ends at ttklia.com. Transport pieces convert directly. Food and destination pieces bring in far more traffic at lower difficulty, then hand the reader to the transport piece or straight to the booking page. The food pillar carries the volume; the transport pillar is where people book.</p>
+    <div class="bp-grid four">
+      <div class="bp solution"><span class="tag">T · Arrival &amp; Transport</span><span class="big-num">Book</span><p>KLIA2 routes, taxi, transit, MDAC. Small volumes, strong intent. Links to a specific ttklia.com route.</p></div>
+      <div class="bp problem"><span class="tag">F · Food Bridge</span><span class="big-num">Rank</span><p>Food guides for places ttklia.com runs buses to. Each carries a "Getting here from KLIA2" block.</p></div>
+      <div class="bp blue"><span class="tag">S · Connectivity</span><span class="big-num">Collect</span><p>SIM and eSIM decisions before landing. Routes to the KLIA2 SIM booking, then transport.</p></div>
+      <div class="bp opportunity"><span class="tag">D · Destinations &amp; Seasonal</span><span class="big-num">Plan</span><p>Things to do, festivals, Raya travel. Timed a month ahead of each search peak.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Pillar T · Arrival &amp; Transport</div>
+    <div class="pillar-card">
+      <div class="pillar-header"><div class="pillar-mark t">T</div><div><span class="sub">Money pillar</span><h3>From the gate to the ride</h3></div></div>
+      <p>Built to answer the question klia2.info answers, and then let the reader book. Each route piece compares every mode (bus, train, taxi, Grab) and names the ttklia.com route that matches.</p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Keyword</th><th class="num">Vol/mo</th><th class="num">SD</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="kw">mdac malaysia</td><td class="vol">14,800</td><td class="num">32</td><td>Every visitor must file it before arrival. The earliest touchpoint in the trip</td></tr>
+          <tr><td class="kw">kl sentral to klia2</td><td class="vol">3,600</td><td class="num">19</td><td>Departure direction. Held until ttklia.com confirms it sells this route</td></tr>
+          <tr><td class="kw">transport from klia2 to kl sentral</td><td class="vol">1,600</td><td class="num">16</td><td>AI Overview at #1. redBus #3, BusOnlineTicket #5</td></tr>
+          <tr><td class="kw">klia2 to kl sentral</td><td class="vol">1,300</td><td class="num">19</td><td>Same page as above</td></tr>
+          <tr><td class="kw">klia2 luggage storage</td><td class="vol">720</td><td class="num">12</td><td>Lowest difficulty in the pillar</td></tr>
+          <tr><td class="kw">kl to genting</td><td class="vol">720</td><td class="num">24</td><td>ttklia.com has a dedicated Genting page</td></tr>
+          <tr><td class="kw">klia to klia2</td><td class="vol">260</td><td class="num">23</td><td>ttklia.com ranks #12 already</td></tr>
+          <tr><td class="kw">klia2 taxi</td><td class="vol">170</td><td class="num">15</td><td>ttklia.com #6, klia2.info #5</td></tr>
+          <tr><td class="kw">klia2 to melaka / ipoh / putrajaya / bukit bintang</td><td class="vol">110–170</td><td class="num">13–29</td><td>Each pairs with a food piece for the same city</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="insight">"klia2 arrival" (2,900) and "klia2 departure" (2,400) look attractive but are flight-status searches, which klia2.info answers with a live tool. They are targeted only as long-tail ("klia2 arrival guide"), not as the head term.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Pillar F · Food Bridge, the Softest Ground</div>
+    <div class="pillar-card">
+      <div class="pillar-header"><div class="pillar-mark f">F</div><div><span class="sub">Traffic pillar</span><h3>Where to eat, and how to get there from KLIA2</h3></div></div>
+      <p>Teeko already stores Google and TripAdvisor ratings for restaurants in KL, Penang and JB. These guides list those real rows with <code>restaurant</code> blocks and end with the ride from the airport. Cities without data yet (Genting, Melaka, Ipoh) are scheduled after their restaurants are added.</p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Keyword</th><th class="num">Vol/mo</th><th class="num">SD</th><th>Paired route at ttklia.com</th></tr></thead>
+        <tbody>
+          <tr><td class="kw">penang food</td><td class="vol">9,900</td><td class="num">14</td><td>KLIA2 → Penang Island (Sungai Nibong) / Butterworth</td></tr>
+          <tr><td class="kw">kl sentral food</td><td class="vol">8,100</td><td class="num">14</td><td>KLIA2 → KL Sentral</td></tr>
+          <tr><td class="kw">klia2 food</td><td class="vol">8,100</td><td class="num">14</td><td>Any route: eat, then board</td></tr>
+          <tr><td class="kw">ipoh food</td><td class="vol">8,100</td><td class="num">16</td><td>KLIA2 → Ipoh Amanjaya</td></tr>
+          <tr><td class="kw">melaka food</td><td class="vol">6,600</td><td class="num">24</td><td>KLIA2 → Melaka Sentral</td></tr>
+          <tr><td class="kw">bukit bintang food</td><td class="vol">5,400</td><td class="num">17</td><td>KLIA2 → KL City Centre (Pudu Sentral)</td></tr>
+          <tr><td class="kw">petaling street food</td><td class="vol">5,400</td><td class="num">26</td><td>KLIA2 → Pudu Sentral</td></tr>
+          <tr><td class="kw">jalan alor food</td><td class="vol">3,600</td><td class="num">31</td><td>KLIA2 → Pudu Sentral</td></tr>
+          <tr><td class="kw">jb food</td><td class="vol">2,900</td><td class="num">12</td><td>KLIA2 → Larkin / Johor Jaya</td></tr>
+          <tr><td class="kw">genting highlands food</td><td class="vol">2,400</td><td class="num">17</td><td>KLIA2 → Awana Genting Highland</td></tr>
+          <tr><td class="kw">best food in kl</td><td class="vol">1,600</td><td class="num">20</td><td>KLIA2 → KL Sentral</td></tr>
+          <tr><td class="kw">nasi lemak kl</td><td class="vol">1,300</td><td class="num">20</td><td>KLIA2 → KL Sentral</td></tr>
+          <tr><td class="kw">jonker street food</td><td class="vol">880</td><td class="num">13</td><td>KLIA2 → Melaka Sentral</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="insight">On "bukit bintang food" a DA 11 blog ranks #6 and an Instagram post ranks #4. That is the level of competition in this pillar.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">Pillars S and D</div>
+    <div class="pillar-card">
+      <div class="pillar-header"><div class="pillar-mark s">S</div><div><span class="sub">Connectivity</span><h3>Sort your data before you land</h3></div></div>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Keyword</th><th class="num">Vol/mo</th><th class="num">SD</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td class="kw">esim malaysia</td><td class="vol">5,400</td><td class="num">24</td><td>Paid difficulty 98: Airalo, Klook and Saily bid on it. Compare honestly; no superlatives</td></tr>
+          <tr><td class="kw">sim card malaysia</td><td class="vol">1,300</td><td class="num">15</td><td>Package prices come from the database, never retyped</td></tr>
+          <tr><td class="kw">tourist sim card malaysia</td><td class="vol">320</td><td class="num">17</td><td>#2 is a DA 8 SIM shop</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-header"><div class="pillar-mark d">D</div><div><span class="sub">Destinations &amp; seasonal</span><h3>Timed to the search calendar</h3></div></div>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Keyword</th><th class="num">Vol/mo</th><th class="num">SD</th><th>Timing</th></tr></thead>
+        <tbody>
+          <tr><td class="kw">things to do in kuala lumpur</td><td class="vol">8,100</td><td class="num">24</td><td>Peaks at 12,100 in December. Publish Month 3</td></tr>
+          <tr><td class="kw">klia2 capsule hotel</td><td class="vol">3,600</td><td class="num">21</td><td>Late-arrival decision piece: stay, or ride now</td></tr>
+          <tr><td class="kw">f1 malaysia</td><td class="vol">2,900</td><td class="num">22</td><td>Existing F1 cluster; refreshed in Month 1</td></tr>
+          <tr><td class="kw">things to do in genting</td><td class="vol">590</td><td class="num">18</td><td>Month 2 with the Genting cluster</td></tr>
+          <tr><td class="kw">ramadan bazaar kl</td><td class="vol">140</td><td class="num">19</td><td>720 in February. Publish January</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">October Additions · Lalaport, Private Transfer, Private Driver</div>
+    <p class="lead">Ten pieces were added to Month 1 on 1 October. Before scheduling them we checked what ttklia.com actually sells, so no piece promises a booking that doesn't exist.</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Service</th><th>ttklia.com page</th><th>Status, 1 Oct 2026</th></tr></thead>
+      <tbody>
+        <tr><td>Lalaport BBCC → Singapore bus, 24 drop-off points</td><td class="kw">/bus/lalaport-to-bugis</td><td><span class="yes">✅</span> Sold</td></tr>
+        <tr><td>Singapore → Lalaport BBCC bus</td><td class="kw dim">none found</td><td><span class="no">❌</span> Not sold. Search origin is KLIA2 or Lalaport only, and reverse URLs return 404</td></tr>
+        <tr><td>KLIA2 → Lalaport BBCC, and Lalaport → KLIA / KLIA2 bus</td><td class="kw">/bus/klia2-to-lalaport-bbcc · /bus/lalaport-to-klia2</td><td><span class="yes">✅</span> Sold</td></tr>
+        <tr><td>Private taxi transfer, fixed price, sedan / MPV / van</td><td class="kw">/taxi/klia2-to-klia</td><td><span class="part">⚠️</span> Sold. KL-side transfer pages not found; deep link to confirm</td></tr>
+        <tr><td>Private driver, 8 or 10 hours (Alphard, Vellfire, Sprinter, BMW i7)</td><td class="kw">/car-charter</td><td><span class="yes">✅</span> Sold. Genting within scope to confirm</td></tr>
+        <tr><td>Shared van to Genting · car rental</td><td class="kw">/genting · /bookings/rentals</td><td><span class="part">⚠️</span> Both "Coming Soon". Not linked</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="bp-grid" style="margin-top:14px">
+      <div class="pillar-card" style="margin:0">
+        <div class="pillar-header"><div class="pillar-mark t">L</div><div><span class="sub">SERP read · Lalaport and Singapore buses</span><h3>A new hub with no settled guide</h3></div></div>
+        <p>Page 1 is launch news (The Straits Times, TheSmartLocal), marketplaces (BusOnlineTicket's terminal page, redBus SG), one coach operator's guide, Reddit and a YouTube vlog. The hub opened in 2026, so nobody yet owns the practical guide to arriving at or leaving from it: where the bays are, lockers, food, and the onward ride. ttklia.com's Lalaport guides are route lists. teeko.ai adds the traveller context and links to them rather than repeating them.</p>
+      </div>
+      <div class="pillar-card" style="margin:0">
+        <div class="pillar-header"><div class="pillar-mark t">P</div><div><span class="sub">SERP read · private driver KL and Genting</span><h3>Held by OTAs and small operators</h3></div></div>
+        <p>Klook, GetYourGuide, TripAdvisor and Daytrip list private transfers and day tours, beside small chauffeur firms and a Facebook group. One operator blog lists ten day trips from KL. None of them suggests where to eat on the way. Teeko's restaurant data can add meal stops along the route, ending at <code>/car-charter</code>.</p>
+      </div>
+    </div>
+    <div class="callout warn"><strong>Measured 3 October:</strong> the strongest term is one Malaysian data missed. "singapore to kl bus" gets <strong>6,600 searches a month in Singapore</strong> at SD 21, against 590 in Malaysia, and the hub name "lalaport bbcc" alone gets 5,400 in Malaysia. Four first-choice phrasings measured zero and were retargeted: the KL to KLIA piece now targets "klia transfer" (1,300, SD 28), the hotel transfer piece "kl airport transfer" (50 MY, 70 SG), the Lalaport walking piece "things to do in bukit bintang" (880, SD 18), and the Genting driver piece "genting day trip" (50). Private-driver search demand is small (70/mo), so those two pieces are there to convert readers who are already on the site, not to bring in traffic. "klia2 to lalaport" measures 10 and is kept only because ttklia.com sells the route. The Singapore → Lalaport piece is written for that 6,600 demand, but its booking links are the return leg (Lalaport → Singapore) and the onward ride from Lalaport.</div>
+  </section>
+
+  <section>
+    <div class="sec-title">BM and 中文: Own Keywords, Not Translations</div>
+    <p class="lead">The client wants every piece in three languages. The data says the three languages want different things. In Malaysian Google, BM and Chinese searchers ask about <strong>food and places</strong>, almost never about airport transport. So each topic ships in all three languages, but the BM and 中文 versions are retitled to the phrase that locale actually searches.</p>
+    <div class="bp-grid">
+      <div class="pillar-card" style="margin:0">
+        <div class="pillar-header"><div class="pillar-mark bm">BM</div><div><span class="sub">Bahasa Malaysia</span><h3>Measured demand</h3></div></div>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Keyword</th><th class="num">Vol</th><th class="num">SD</th></tr></thead>
+          <tbody>
+            <tr><td class="kw">tempat menarik di kl</td><td class="vol">3,600</td><td class="num">37</td></tr>
+            <tr><td class="kw">makanan sedap kl</td><td class="vol">1,000</td><td class="num">24</td></tr>
+            <tr><td class="kw">buffet ramadhan kl</td><td class="vol">260</td><td class="num">13</td></tr>
+            <tr><td class="kw">kl sentral ke klia2</td><td class="vol">260</td><td class="num">14</td></tr>
+            <tr><td class="kw">klia2 ke kl sentral</td><td class="vol">210</td><td class="num">17</td></tr>
+            <tr><td class="kw dim">bas klia2</td><td class="vol dim">40</td><td class="num dim">34</td></tr>
+            <tr><td class="kw dim">kl ke genting</td><td class="vol dim">30</td><td class="num dim">37</td></tr>
+            <tr><td class="kw dim">teksi klia2</td><td class="vol dim">20</td><td class="num dim">37</td></tr>
+            <tr><td class="kw dim">tambang teksi klia2</td><td class="vol dim">10</td><td class="num dim">13</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div class="pillar-card" style="margin:0">
+        <div class="pillar-header"><div class="pillar-mark zh">中</div><div><span class="sub">Chinese</span><h3>Measured demand</h3></div></div>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Keyword</th><th class="num">Vol</th><th class="num">SD</th></tr></thead>
+          <tbody>
+            <tr><td class="kw">槟城美食</td><td class="vol">6,600</td><td class="num">38</td></tr>
+            <tr><td class="kw">吉隆坡美食</td><td class="vol">1,900</td><td class="num">39</td></tr>
+            <tr><td class="kw">吉隆坡景点</td><td class="vol">1,900</td><td class="num">62</td></tr>
+            <tr><td class="kw">马来西亚电话卡</td><td class="vol">90</td><td class="num">59</td></tr>
+            <tr><td class="kw dim">吉隆坡机场到市区</td><td class="vol dim">30</td><td class="num dim">42</td></tr>
+            <tr><td class="kw dim">吉隆坡到云顶</td><td class="vol dim">10</td><td class="num dim">47</td></tr>
+            <tr><td class="kw dim">吉隆坡机场巴士</td><td class="vol dim">10</td><td class="num dim">50</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+    <div class="callout warn"><strong>What this means for the plan:</strong> BM and 中文 transport pieces will not rank for much, because almost nobody searches those phrases on Google in Malaysia. They still ship, for two reasons. They convert readers who arrive from ttklia.com's own 中文 and BM pages, social shares and Xiaohongshu. And these figures count only searchers inside Malaysia: a visitor searching from Shanghai, Taipei or Jakarta before the trip is not in them. The ranking effort for BM and 中文 goes into the food and places pieces, where the demand is.</div>
+  </section>
+
+  <section>
+    <div class="sec-title">Primary Keyword Tracking: the KPI 3 List</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Keyword</th><th class="num">Vol/mo</th><th class="num">SD</th><th>teeko.ai now</th><th>Pillar</th><th>Month</th></tr></thead>
+      <tbody>
+        <tr><td class="kw">mdac malaysia</td><td class="vol">14,800</td><td class="num">32</td><td class="pos pos-none">—</td><td><span class="pill t">TRANSPORT</span></td><td>1</td></tr>
+        <tr><td class="kw">transport from klia2 to kl sentral</td><td class="vol">1,600</td><td class="num">16</td><td class="pos pos-none">—</td><td><span class="pill t">TRANSPORT</span></td><td>1</td></tr>
+        <tr><td class="kw">klia2 to bukit bintang</td><td class="vol">140</td><td class="num">13</td><td class="pos pos-none">—</td><td><span class="pill t">TRANSPORT</span></td><td>1</td></tr>
+        <tr><td class="kw">klia2 taxi</td><td class="vol">170</td><td class="num">15</td><td class="pos pos-none">—</td><td><span class="pill t">TRANSPORT</span></td><td>1</td></tr>
+        <tr><td class="kw">klia2 luggage storage</td><td class="vol">720</td><td class="num">12</td><td class="pos pos-none">—</td><td><span class="pill t">TRANSPORT</span></td><td>2</td></tr>
+        <tr><td class="kw">kl to genting</td><td class="vol">720</td><td class="num">24</td><td class="pos pos-none">—</td><td><span class="pill t">TRANSPORT</span></td><td>2</td></tr>
+        <tr><td class="kw">klia2 to melaka</td><td class="vol">170</td><td class="num">17</td><td class="pos pos-none">—</td><td><span class="pill t">TRANSPORT</span></td><td>3</td></tr>
+        <tr><td class="kw">kl sentral food</td><td class="vol">8,100</td><td class="num">14</td><td class="pos pos-none">—</td><td><span class="pill f">FOOD</span></td><td>1</td></tr>
+        <tr><td class="kw">bukit bintang food</td><td class="vol">5,400</td><td class="num">17</td><td class="pos pos-none">—</td><td><span class="pill f">FOOD</span></td><td>1</td></tr>
+        <tr><td class="kw">klia2 food</td><td class="vol">8,100</td><td class="num">14</td><td class="pos pos-none">—</td><td><span class="pill f">FOOD</span></td><td>2</td></tr>
+        <tr><td class="kw">genting highlands food</td><td class="vol">2,400</td><td class="num">17</td><td class="pos pos-none">—</td><td><span class="pill f">FOOD</span></td><td>2</td></tr>
+        <tr><td class="kw">penang food</td><td class="vol">9,900</td><td class="num">14</td><td class="pos pos-none">—</td><td><span class="pill f">FOOD</span></td><td>3</td></tr>
+        <tr><td class="kw">jb food</td><td class="vol">2,900</td><td class="num">12</td><td class="pos pos-none">—</td><td><span class="pill f">FOOD</span></td><td>3</td></tr>
+        <tr><td class="kw">ipoh food</td><td class="vol">8,100</td><td class="num">16</td><td class="pos pos-none">—</td><td><span class="pill f">FOOD</span></td><td>4</td></tr>
+        <tr><td class="kw">tourist sim card malaysia</td><td class="vol">320</td><td class="num">17</td><td class="pos pos-none">—</td><td><span class="pill s">SIM</span></td><td>1</td></tr>
+        <tr><td class="kw">sim card malaysia</td><td class="vol">1,300</td><td class="num">15</td><td class="pos pos-none">—</td><td><span class="pill s">SIM</span></td><td>3</td></tr>
+        <tr><td class="kw">things to do in kuala lumpur</td><td class="vol">8,100</td><td class="num">24</td><td class="pos pos-none">—</td><td><span class="pill d">DESTINATION</span></td><td>3</td></tr>
+        <tr><td class="kw">klia2 ke kl sentral</td><td class="vol">210</td><td class="num">17</td><td class="pos pos-none">—</td><td><span class="pill bm">BM</span></td><td>2</td></tr>
+        <tr><td class="kw">makanan sedap kl</td><td class="vol">1,000</td><td class="num">24</td><td class="pos pos-none">—</td><td><span class="pill bm">BM</span></td><td>3</td></tr>
+        <tr><td class="kw">吉隆坡美食</td><td class="vol">1,900</td><td class="num">39</td><td class="pos pos-none">—</td><td><span class="pill zh">中文</span></td><td>3</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="kw-summary"><strong>20 tracked keywords, none on page 1 today.</strong> Target by Month 6: <strong>5 of 20</strong>. Eighteen of the twenty have difficulty 24 or lower, which is reachable for a DA 3 site with focused pages.</div>
+  </section>
+
+  <section>
+    <div class="sec-title">Measured and Dropped</div>
+    <p class="lead">Recorded so these do not get re-proposed later.</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Keyword</th><th class="num">Vol/mo</th><th>Why it is out</th></tr></thead>
+      <tbody>
+        <tr><td class="kw dim">kuala lumpur weather</td><td class="vol dim">246,000</td><td>Google answers it with a weather box. No click to win</td></tr>
+        <tr><td class="kw dim">klia2 arrival / klia2 departure</td><td class="vol dim">2,900 / 2,400</td><td>Flight-status intent. Kept only as long-tail inside the arrival guide</td></tr>
+        <tr><td class="kw dim">kl itinerary</td><td class="vol dim">50</td><td>Low volume at SD 49</td></tr>
+        <tr><td class="kw dim">klia2 to sepang circuit</td><td class="vol dim">10</td><td>F1 visitors search the event, not the route. The existing F1 cluster already targets the event</td></tr>
+        <tr><td class="kw dim">airport taxi kl</td><td class="vol dim">10</td><td>No demand in this phrasing</td></tr>
+        <tr><td class="kw dim">touch n go card klia2</td><td class="vol dim">0</td><td>No measured demand. Covered inside the arrival guide instead</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= TAB 3: COMPETITOR ================= -->
+<div id="tab-competitor" class="tab-content" role="tabpanel" hidden>
+
+  <section>
+    <div class="sec-title">Who Actually Ranks</div>
+    <p class="lead">Competitors were taken from the Malaysian SERP for the terms visitors type, not from a list of rivals. Four different kinds of business share page 1 for "klia2 to kl sentral": <strong>official operators</strong> (KLIA Ekspres, Malaysia Airports), <strong>booking marketplaces</strong> (redBus, Easybook, BusOnlineTicket), <strong>one independent guide</strong> (klia2.info), and <strong>forums</strong> (Reddit, TripAdvisor, YouTube, Facebook groups). An AI Overview sits above all of them. When the results are this mixed, the searcher hasn't decided what kind of answer they want, and no single page answers everything they need to know on landing.</p>
+    <div class="bp-grid four">
+      <div class="bp solution name"><span class="tag">Client</span><span class="big-num">teeko.ai</span><p><strong>44</strong>/mo · 163 KW · DA 3<br>8 ref domains<br>Food blog with rated listings.</p></div>
+      <div class="bp name"><span class="tag">Benchmark 1</span><span class="big-num">klia2.info</span><p><strong>150,264</strong>/mo · 26,864 KW · DA 44<br>10,660 ref domains<br>Guide. Explains, can't book.</p></div>
+      <div class="bp purple name"><span class="tag">Benchmark 2</span><span class="big-num">BusOnlineTicket</span><p><strong>240,669</strong>/mo · 50,011 KW · DA 46<br>7,364 ref domains<br>Marketplace with a blog.</p></div>
+      <div class="bp gold name"><span class="tag">Benchmark 3</span><span class="big-num">redBus MY</span><p><strong>491,028</strong>/mo · 104,084 KW · DA 37<br>2,346 ref domains<br>Pure booking, with a BM section.</p></div>
+    </div>
+    <p class="note">ttklia.com (615/mo, DA 5, 29 referring domains) is the sister site and the conversion target, not a competitor. It ranks #6 for "klia2 taxi" and has its own route pages, so teeko.ai links to them rather than writing competing route guides.</p>
+  </section>
+
+  <section>
+    <div class="sec-title">8a · Deep-Dive: the Three Ranking Pages</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Source</th><th class="num">Words</th><th>Structure</th><th>Strengths</th><th>Weaknesses</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>klia2.info /taxis/</strong><br><span class="pos pos-good">#5 "klia2 taxi"</span></td>
+          <td class="num">~1,700</td>
+          <td>Taxi types (metered, budget, premier) → counter on Level 1 of gateway@klia2 → exit Door 4 → fare-by-area table → Grab pickup walk with photos → complaint contact</td>
+          <td>Exact wayfinding: level, door, coupon price, photos of each step. Fare table by area</td>
+          <td>Books nothing, only links out. Fares shown as undated "From RM64–74*". Stops at the car door, with nothing about where you are going. No Chinese or BM version found</td>
+        </tr>
+        <tr>
+          <td><strong>BusOnlineTicket blog</strong><br>"Travel from KL Sentral to KLIA2"<br><span class="pos pos-good">#5 "klia2 to kl sentral"</span></td>
+          <td class="num">~1,200</td>
+          <td>Summary by mode → Bus → Train (KLIA Transit, KLIA Ekspres, fares) → Taxi / Grab → Conclusion</td>
+          <td>Every mode on one page. Sells an Ekspres ticket inline at RM50 against RM55 at the counter</td>
+          <td>Written for the departure direction only. Fares in prose with no date. Stock copy ("seamless"). Nothing on the first hour after landing</td>
+        </tr>
+        <tr>
+          <td><strong>redBus</strong> /klia2-to-kl-sentral<br><span class="pos pos-good">#3 "klia2 to kl sentral"</span></td>
+          <td class="num">~3,700</td>
+          <td>Search widget → filters → operator list with times and live prices → route info</td>
+          <td>Live timetable and prices, bookable in place, discount codes, a BM version under /ms/</td>
+          <td>Bus only. Says nothing about where the bus bay is, how to get there or what to do on arrival. Most of the word count is interface</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout"><strong>The food SERPs work differently.</strong> "klia2 food" is led by the gateway@klia2 mall directory and Malaysia Airports. "bukit bintang food" is led by an Instagram post (#4) and a DA 11 blog (#6), below three local-pack listings. "吉隆坡美食" is led by Hong Kong and Taiwan travel sites writing in Traditional Chinese. No marketplace competes in any of them, and none of the ranking pages mentions how to get there from the airport.</div>
+  </section>
+
+  <section>
+    <div class="sec-title">8b · Gap Analysis</div>
+    <div class="tbl-wrap">
+    <table class="gap-table">
+      <thead><tr><th>Element</th><th>klia2.info</th><th>BusOnlineTicket</th><th>redBus</th><th>Us (teeko.ai)</th></tr></thead>
+      <tbody>
+        <tr class="own"><td><strong>Where to eat at the destination, from rated listings, on the same page as the ride</strong></td><td><span class="no">❌</span> in-terminal shop lists only</td><td><span class="no">❌</span></td><td><span class="no">❌</span></td><td><span class="yes">✅</span> restaurant database with Google + TripAdvisor ratings. <strong>The gap to own</strong></td></tr>
+        <tr class="own"><td><strong>Arrival card, SIM and ride sorted in one plan</strong></td><td><span class="no">❌</span></td><td><span class="no">❌</span></td><td><span class="no">❌</span></td><td><span class="yes">✅</span> one group runs the SIM counter and the transport hub</td></tr>
+        <tr><td>Every mode compared (bus, train, taxi, Grab)</td><td><span class="part">⚠️</span> split across pages</td><td><span class="yes">✅</span></td><td><span class="no">❌</span> bus only</td><td><span class="yes">✅</span> the route-piece template</td></tr>
+        <tr><td>Book the ride from the page</td><td><span class="no">❌</span></td><td><span class="yes">✅</span></td><td><span class="yes">✅</span></td><td><span class="part">⚠️</span> one click to ttklia.com, not on-page</td></tr>
+        <tr><td>Fares kept current</td><td><span class="no">❌</span> "From RM74*"</td><td><span class="no">❌</span> static prose</td><td><span class="yes">✅</span> live</td><td><span class="part">⚠️</span> no fares printed; live price at ttklia.com</td></tr>
+        <tr><td>Chinese version</td><td><span class="no">❌</span> none found</td><td><span class="no">❌</span> none found</td><td><span class="no">❌</span> none found</td><td><span class="part">⚠️</span> planned, blocked on OPEN-ITEMS #2</td></tr>
+        <tr><td>Bahasa Malaysia version</td><td><span class="no">❌</span> none found</td><td><span class="no">❌</span> none found</td><td><span class="yes">✅</span> /ms/</td><td><span class="part">⚠️</span> planned, blocked on OPEN-ITEMS #2</td></tr>
+        <tr><td>First-hand photos of counters and bus bays</td><td><span class="yes">✅</span></td><td><span class="no">❌</span></td><td><span class="no">❌</span></td><td><span class="no">❌</span> no client photography yet (OPEN-ITEMS #7)</td></tr>
+        <tr><td>Authority to rank transport head terms</td><td><span class="yes">✅</span> DA 44</td><td><span class="yes">✅</span> DA 46</td><td><span class="yes">✅</span> DA 37</td><td><span class="no">❌</span> DA 3, 8 referring domains</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">"None found" means none on the page fetched on 30 Sept 2026 and no language section at the usual paths. It is not proof that none exists anywhere on the site.</p>
+  </section>
+
+  <section>
+    <div class="sec-title">SERP Snapshot · Where the Soft Spots Are</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Keyword</th><th class="num">Vol</th><th>Top organic result</th><th>Weakest page-1 result</th><th>teeko.ai</th></tr></thead>
+      <tbody>
+        <tr><td class="kw">klia2 to kl sentral</td><td class="vol">1,300</td><td>kliaekspres.com (DA 48)</td><td>klia2.info (DA 44) at #13</td><td class="pos pos-none">—</td></tr>
+        <tr><td class="kw">klia2 taxi</td><td class="vol">170</td><td>malaysiaairports.com.my (DA 53)</td><td>taxiklia.net (DA 6) at #10</td><td class="pos pos-none">—</td></tr>
+        <tr><td class="kw">klia2 to genting</td><td class="vol">70</td><td>redbus.my (DA 37)</td><td>aerobus.com.my (DA 29) at #8</td><td class="pos pos-none">—</td></tr>
+        <tr><td class="kw">tourist sim card malaysia</td><td class="vol">320</td><td>onmyway333.com (DA 8)</td><td>gogoroaming.my (DA 9) at #9</td><td class="pos pos-none">—</td></tr>
+        <tr><td class="kw">klia2 food</td><td class="vol">8,100</td><td>gatewayklia2.com.my (DA 33)</td><td>klia2.com.my (DA 21) at #6</td><td class="pos pos-none">—</td></tr>
+        <tr><td class="kw">bukit bintang food</td><td class="vol">5,400</td><td>Instagram post</td><td>heritageonaplate.com (DA 11) at #6</td><td class="pos pos-none">—</td></tr>
+        <tr><td class="kw">吉隆坡美食</td><td class="vol">1,900</td><td>hk.trip.com (DA 71)</td><td>lillian.tw (DA 33) at #14</td><td class="pos pos-none">—</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout warn"><strong>Pages with DA 6 to 11 already sit on page 1</strong> for the taxi, SIM and Bukit Bintang food terms. They rank because they point one focused page at one query. teeko.ai at DA 3 is not far behind them, provided each piece does the same.</div>
+  </section>
+
+  <section>
+    <div class="sec-title">Decisions</div>
+    <div class="needs">
+      <div class="need"><div class="ic">1</div><div><strong>Build: the food-bridge template.</strong> Every food guide ends with "Getting here from KLIA2" and a <code>cta</code> block to the matching ttklia.com route. This is the row no competitor has.</div></div>
+      <div class="need"><div class="ic">2</div><div><strong>Build: one comparison per route.</strong> Bus, train, taxi and Grab on one page, the ride booked through ttklia.com, and no fares printed that we can't keep current.</div></div>
+      <div class="need"><div class="ic">3</div><div><strong>Skip: head-term transport pages</strong> ("klia2 bus", "bus to klia"). The marketplaces hold them with over 1,000 times our referring domains. Go after the long tail and the food terms instead.</div></div>
+      <div class="need"><div class="ic">4</div><div><strong>Skip: duplicating ttklia.com's own route guides.</strong> teeko.ai adds the traveller context (food, SIM, arrival card) and links to ttklia's route page.</div></div>
+      <div class="need"><div class="ic">5</div><div><strong>Compensate for no photos:</strong> ask for transport-hub photos in Month 1. Until they arrive, write wayfinding from ttklia.com's own instructions and say where each step is.</div></div>
+      <div class="need"><div class="ic">6</div><div><strong>Compensate for DA 3:</strong> target SD ≤ 24, build internal links from every food piece to its route piece, and add a <code>cta</code> link to ttklia.com on the 12 existing posts.</div></div>
+      <div class="need"><div class="ic">7</div><div><strong>Ask:</strong> Simplified or Traditional Chinese, the reviewers, the reverse route, and restaurant rows for Genting, Melaka and Ipoh.</div></div>
+      <div class="need"><div class="ic">8</div><div><strong>Never in published copy:</strong> competitor names, comparisons with named rivals, or claims about which provider is cheapest or best. This benchmark shapes the pages. It does not appear on them.</div></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= TAB 4: INVENTORY ================= -->
+<div id="tab-inventory" class="tab-content" role="tabpanel" hidden>
+
+  <section>
+    <div class="sec-title">Full Inventory · 70 Topics × 3 Languages</div>
+    <div class="stat-row">
+      <div class="stat"><b>30</b><span>Arrival &amp; Transport</span></div>
+      <div class="stat"><b>19</b><span>Food Bridge</span></div>
+      <div class="stat"><b>3</b><span>Connectivity</span></div>
+      <div class="stat"><b>9</b><span>Destinations &amp; Seasonal</span></div>
+      <div class="stat"><b>9</b><span>Search Console slots</span></div>
+      <div class="stat bm"><b>60</b><span>BM versions</span></div>
+      <div class="stat zh"><b>60</b><span>中文 versions</span></div>
+    </div>
+    <p class="note">The 9 Search Console slots (3 in Month 5, 6 in Month 6) take whichever pillar the ranking data points to. Months 1 to 5 reach BM and 中文 within the six months; Month 6's topics follow in Month 7.</p>
+  </section>
+
+  <section>
+    <div class="sec-title">T · Arrival &amp; Transport</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Topic</th><th>Primary keyword</th><th class="num">Vol</th><th>Month</th></tr></thead>
+      <tbody>
+        <tr><td>MDAC: fill in Malaysia's arrival card before you fly</td><td class="kw">mdac malaysia</td><td class="vol">14,800</td><td>1</td></tr>
+        <tr><td>KLIA2 to KL Sentral: bus, train, taxi and Grab compared</td><td class="kw">transport from klia2 to kl sentral</td><td class="vol">1,600</td><td>1</td></tr>
+        <tr><td>Arriving at KLIA2: from the gate to your ride</td><td class="kw">klia2 arrival guide</td><td class="vol dim">—</td><td>1</td></tr>
+        <tr><td>KLIA2 taxi: counters, coupons and which door</td><td class="kw">klia2 taxi</td><td class="vol">170</td><td>1</td></tr>
+        <tr><td>KLIA2 to Bukit Bintang</td><td class="kw">klia2 to bukit bintang</td><td class="vol">140</td><td>1</td></tr>
+        <tr><td>KLIA to KLIA2 transfer</td><td class="kw">klia to klia2</td><td class="vol">260</td><td>1</td></tr>
+        <tr><td>Landing late at KLIA2: stay at the airport or ride now</td><td class="kw">klia2 capsule hotel</td><td class="vol">3,600</td><td>1</td></tr>
+        <tr><td>Singapore to KL by bus: arriving at Lalaport BBCC <span class="flag">⚑ not sold on ttklia.com</span></td><td class="kw">singapore to kl bus</td><td class="vol">6,600 SG</td><td>1</td></tr>
+        <tr><td>Lalaport BBCC Transportation Hub: finding your bus, lockers and lounge</td><td class="kw">lalaport transportation hub</td><td class="vol">1,000</td><td>1</td></tr>
+        <tr><td>Lalaport to Singapore by bus: choosing your drop-off point</td><td class="kw">lalaport to singapore bus</td><td class="vol">70</td><td>1</td></tr>
+        <tr><td>KLIA2 to Lalaport BBCC: from the plane to Bukit Bintang</td><td class="kw">klia2 to lalaport</td><td class="vol">10</td><td>1</td></tr>
+        <tr><td>Private transfer from KL to KLIA or KLIA2: fixed-price taxi, Grab or bus <span class="flag">⚑ deep link</span></td><td class="kw">klia transfer</td><td class="vol">1,300</td><td>1</td></tr>
+        <tr><td>KLIA2 to your KL hotel by private transfer: sedan, MPV or van</td><td class="kw">kl airport transfer</td><td class="vol">50</td><td>1</td></tr>
+        <tr><td>Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work</td><td class="kw">private driver kuala lumpur</td><td class="vol">70</td><td>1</td></tr>
+        <tr><td>Genting Highlands by private driver: a day trip from KL <span class="flag">⚑ confirm scope</span></td><td class="kw">genting day trip</td><td class="vol">50</td><td>1</td></tr>
+        <tr><td>KLIA2 luggage storage</td><td class="kw">klia2 luggage storage</td><td class="vol">720</td><td>2</td></tr>
+        <tr><td>KL to Genting: bus, taxi and the cable car</td><td class="kw">kl to genting</td><td class="vol">720</td><td>2</td></tr>
+        <tr><td>KLIA2 to Penang by bus</td><td class="kw">klia2 to penang</td><td class="vol">70</td><td>3</td></tr>
+        <tr><td>KLIA2 to Melaka</td><td class="kw">klia2 to melaka</td><td class="vol">170</td><td>3</td></tr>
+        <tr><td>KLIA2 to Johor Bahru</td><td class="kw">klia2 to johor bahru</td><td class="vol">50</td><td>3</td></tr>
+        <tr><td>KLIA2 to Ipoh</td><td class="kw">klia2 to ipoh</td><td class="vol">110</td><td>4</td></tr>
+        <tr><td>KLIA2 transit: leaving the airport on a layover</td><td class="kw">klia2 transit</td><td class="vol">210</td><td>4</td></tr>
+        <tr><td>KLIA2 bus terminal: where it is and how boarding works</td><td class="kw">klia2 bus terminal</td><td class="vol">320</td><td>4</td></tr>
+        <tr><td>Grab or taxi at KLIA2</td><td class="kw">grab klia2</td><td class="vol">70</td><td>4</td></tr>
+        <tr><td>KLIA2 to Putrajaya and Cyberjaya</td><td class="kw">klia2 to putrajaya</td><td class="vol">110</td><td>4</td></tr>
+        <tr><td>Selangor by private driver: Kuala Selangor and Sekinchan in a day</td><td class="kw">kuala selangor day trip</td><td class="vol dim">—</td><td>4</td></tr>
+        <tr><td>KL Sentral to KLIA2 for your flight home <span class="flag">⚑ confirm route</span></td><td class="kw">kl sentral to klia2</td><td class="vol">3,600</td><td>5</td></tr>
+        <tr><td>Travelling in Malaysia over Hari Raya 2027</td><td class="kw">balik kampung raya</td><td class="vol dim">—</td><td>5</td></tr>
+        <tr><td>Travelling with children from KLIA2</td><td class="kw">klia2 with kids</td><td class="vol dim">—</td><td>5</td></tr>
+        <tr><td>KL public transport for first-timers: LRT, MRT and cards</td><td class="kw">kl public transport</td><td class="vol dim">—</td><td>6</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">F · Food Bridge</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Topic</th><th>Primary keyword</th><th class="num">Vol</th><th>Month</th></tr></thead>
+      <tbody>
+        <tr><td>Where to eat near KL Sentral</td><td class="kw">kl sentral food</td><td class="vol">8,100</td><td>1</td></tr>
+        <tr><td>Bukit Bintang food</td><td class="kw">bukit bintang food</td><td class="vol">5,400</td><td>1</td></tr>
+        <tr><td>Where to eat at and around Lalaport BBCC <span class="flag">⚑ Lalaport rows</span></td><td class="kw">lalaport bbcc food</td><td class="vol">260</td><td>1</td></tr>
+        <tr><td>KLIA2 food: where to eat after you land <span class="flag">⚑ outlets in admin</span></td><td class="kw">klia2 food</td><td class="vol">8,100</td><td>2</td></tr>
+        <tr><td>Petaling Street food</td><td class="kw">petaling street food</td><td class="vol">5,400</td><td>2</td></tr>
+        <tr><td>Jalan Alor food</td><td class="kw">jalan alor food</td><td class="vol">3,600</td><td>2</td></tr>
+        <tr><td>Where to eat in KL on your first night</td><td class="kw">best food in kl</td><td class="vol">1,600</td><td>2</td></tr>
+        <tr><td>Nasi lemak in KL</td><td class="kw">nasi lemak kl</td><td class="vol">1,300</td><td>2</td></tr>
+        <tr><td>Halal food in KL</td><td class="kw">halal food kl</td><td class="vol">170</td><td>2</td></tr>
+        <tr><td>Genting Highlands food <span class="flag">⚑ Genting rows</span></td><td class="kw">genting highlands food</td><td class="vol">2,400</td><td>2</td></tr>
+        <tr><td>Penang food</td><td class="kw">penang food</td><td class="vol">9,900</td><td>3</td></tr>
+        <tr><td>Melaka food <span class="flag">⚑ Melaka rows</span></td><td class="kw">melaka food</td><td class="vol">6,600</td><td>3</td></tr>
+        <tr><td>Jonker Street food <span class="flag">⚑ Melaka rows</span></td><td class="kw">jonker street food</td><td class="vol">880</td><td>3</td></tr>
+        <tr><td>JB food</td><td class="kw">jb food</td><td class="vol">2,900</td><td>3</td></tr>
+        <tr><td>Ipoh food <span class="flag">⚑ Ipoh rows</span></td><td class="kw">ipoh food</td><td class="vol">8,100</td><td>4</td></tr>
+        <tr><td>Ramadan bazaar in KL 2027</td><td class="kw">ramadan bazaar kl</td><td class="vol">140</td><td>4</td></tr>
+        <tr><td>Buka puasa buffets in KL (BM-led)</td><td class="kw">buffet ramadhan kl</td><td class="vol">260</td><td>5</td></tr>
+        <tr><td>Kopitiam breakfast in KL</td><td class="kw">kopitiam kl</td><td class="vol dim">—</td><td>5</td></tr>
+        <tr><td>Hawker food in KL: where locals eat</td><td class="kw">hawker food kl</td><td class="vol dim">—</td><td>6</td></tr>
+        <tr><td colspan="4" class="dim">Existing: halal ramen KL, supper in KL, vegan KL, bars in KL, Penang nyonya, halal Penang, top 5 Penang, JB cafés. Each gets a ttklia.com <code>cta</code> in Month 1</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title">S · Connectivity and D · Destinations &amp; Seasonal</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Topic</th><th>Pillar</th><th>Primary keyword</th><th class="num">Vol</th><th>Month</th></tr></thead>
+      <tbody>
+        <tr><td>Tourist SIM in Malaysia: collect at KLIA2 or use an eSIM</td><td><span class="pill s">SIM</span></td><td class="kw">tourist sim card malaysia</td><td class="vol">320</td><td>1</td></tr>
+        <tr><td>Malaysia SIM card: which plan for how many days</td><td><span class="pill s">SIM</span></td><td class="kw">sim card malaysia</td><td class="vol">1,300</td><td>3</td></tr>
+        <tr><td>eSIM or physical SIM: setting up data before you land</td><td><span class="pill s">SIM</span></td><td class="kw">esim malaysia</td><td class="vol">5,400</td><td>5</td></tr>
+        <tr><td>Things to do in Bukit Bintang from Lalaport BBCC: walking distance, MRT, monorail and Grab</td><td><span class="pill d">DEST</span></td><td class="kw">things to do in bukit bintang</td><td class="vol">880</td><td>1</td></tr>
+        <tr><td>Things to do in Genting</td><td><span class="pill d">DEST</span></td><td class="kw">things to do in genting</td><td class="vol">590</td><td>2</td></tr>
+        <tr><td>Things to do in Kuala Lumpur</td><td><span class="pill d">DEST</span></td><td class="kw">things to do in kuala lumpur</td><td class="vol">8,100</td><td>3</td></tr>
+        <tr><td>New Year's Eve in KL: where to watch, how to get back</td><td><span class="pill d">DEST</span></td><td class="kw">new year eve kl</td><td class="vol dim">—</td><td>3</td></tr>
+        <tr><td>Chinese New Year in KL 2027: what's open, where to eat</td><td><span class="pill d">DEST</span></td><td class="kw">chinese new year kl</td><td class="vol dim">—</td><td>4</td></tr>
+        <tr><td>Thaipusam at Batu Caves: getting there</td><td><span class="pill d">DEST</span></td><td class="kw">thaipusam batu caves</td><td class="vol dim">—</td><td>4</td></tr>
+        <tr><td>Penang in 3 days from KLIA2</td><td><span class="pill d">DEST</span></td><td class="kw">penang itinerary</td><td class="vol dim">—</td><td>5</td></tr>
+        <tr><td>Hari Raya week in KL: what's open</td><td><span class="pill d">DEST</span></td><td class="kw">hari raya kl</td><td class="vol dim">—</td><td>6</td></tr>
+        <tr><td>Ipoh in a day from KLIA2</td><td><span class="pill d">DEST</span></td><td class="kw">ipoh day trip</td><td class="vol dim">—</td><td>6</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">"—" means not yet measured. Every unmeasured keyword is checked before the brief is written, and the topic is swapped if it measures near zero.</p>
+  </section>
+
+</div>
+
+<!-- ================= TAB 5: SCHEDULE ================= -->
+<div id="tab-schedule" class="tab-content" role="tabpanel" hidden>
+
+  <section>
+    <div class="sec-title">Content Schedule · October 2026 to March 2027</div>
+    <div class="stat-row">
+      <div class="stat"><b>190</b><span>pieces</span></div>
+      <div class="stat"><b>70</b><span>English</span></div>
+      <div class="stat bm"><b>60</b><span>Bahasa Malaysia</span></div>
+      <div class="stat zh"><b>60</b><span>中文</span></div>
+      <div class="stat"><b>30–40</b><span>per month from M2</span></div>
+    </div>
+    <div class="callout"><strong>How each month works:</strong> 10 new English pieces, plus last month's 10 topics in BM and 中文, retitled to each locale's own keyword. The 10 October additions are translated over Months 2 and 3 (中文 first, then BM), which lifts those two months to 40. Every piece carries a <code>cta</code> content block to <code>https://ttklia.com</code> with the agreed UTM parameters. Pieces are written as admin-panel blog content, not code.</div>
+
+    <div class="sched">
+      <h3>Month 1 · October 2026 · Build + Arrival Core</h3>
+      <p class="intro"><strong>20 English pieces.</strong> The first 10 are built on KL, where the database already holds restaurants, so nothing should wait on new rows; each food piece is checked against the available rows before it is briefed. The second 10, added on 1 October, cover the Lalaport BBCC hub and Singapore buses, private transfers and private drivers; their keywords are measured before briefing. The build work runs alongside.</p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Piece</th><th>Pillar</th><th>Primary keyword</th><th class="num">Vol</th><th class="num">SD</th><th>Route to ttklia.com</th></tr></thead>
+        <tbody>
+          <tr class="group"><td colspan="6">Arrival &amp; Transport · 7</td></tr>
+          <tr><td class="piece">MDAC: fill in Malaysia's arrival card before you fly</td><td><span class="pill t">T</span></td><td class="kw">mdac malaysia</td><td class="vol">14,800</td><td class="num">32</td><td class="route">Homepage: plan the ride</td></tr>
+          <tr><td class="piece">KLIA2 to KL Sentral: bus, train, taxi and Grab compared</td><td><span class="pill t">T</span></td><td class="kw">transport from klia2 to kl sentral</td><td class="vol">1,600</td><td class="num">16</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Arriving at KLIA2: from the gate to your ride</td><td><span class="pill t">T</span></td><td class="kw">klia2 arrival guide</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Bus destinations list</td></tr>
+          <tr><td class="piece">KLIA2 taxi: counters, coupons and which door</td><td><span class="pill t">T</span></td><td class="kw">klia2 taxi</td><td class="vol">170</td><td class="num">15</td><td class="route">Taxi booking</td></tr>
+          <tr><td class="piece">KLIA2 to Bukit Bintang</td><td><span class="pill t">T</span></td><td class="kw">klia2 to bukit bintang</td><td class="vol">140</td><td class="num">13</td><td class="route">Bus: KLIA2 → Pudu Sentral</td></tr>
+          <tr><td class="piece">KLIA to KLIA2 transfer</td><td><span class="pill t">T</span></td><td class="kw">klia to klia2</td><td class="vol">260</td><td class="num">23</td><td class="route">/bus/klia2-to-klia1</td></tr>
+          <tr><td class="piece">Landing late at KLIA2: stay at the airport or ride now</td><td><span class="pill t">T</span></td><td class="kw">klia2 capsule hotel</td><td class="vol">3,600</td><td class="num">21</td><td class="route">Taxi booking</td></tr>
+          <tr class="group"><td colspan="6">Food Bridge · 2 · Connectivity · 1</td></tr>
+          <tr><td class="piece">Where to eat near KL Sentral</td><td><span class="pill f">F</span></td><td class="kw">kl sentral food</td><td class="vol">8,100</td><td class="num">14</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Bukit Bintang food</td><td><span class="pill f">F</span></td><td class="kw">bukit bintang food</td><td class="vol">5,400</td><td class="num">17</td><td class="route">Bus: KLIA2 → Pudu Sentral</td></tr>
+          <tr><td class="piece">Tourist SIM in Malaysia: collect at KLIA2 or use an eSIM</td><td><span class="pill s">S</span></td><td class="kw">tourist sim card malaysia</td><td class="vol">320</td><td class="num">17</td><td class="route">SIM booking, then bus</td></tr>
+          <tr class="group"><td colspan="6">Lalaport, Private Transfer &amp; Private Driver · 10 · added 1 Oct</td></tr>
+          <tr><td class="piece">Singapore to KL by bus: arriving at Lalaport BBCC <span class="flag">⚑ not sold on ttklia.com</span></td><td><span class="pill t">T</span></td><td class="kw">singapore to kl bus</td><td class="vol">6,600 SG</td><td class="num">21</td><td class="route">Return leg: /bus/lalaport-to-bugis</td></tr>
+          <tr><td class="piece">Lalaport BBCC Transportation Hub: finding your bus, lockers and lounge</td><td><span class="pill t">T</span></td><td class="kw">lalaport transportation hub</td><td class="vol">1,000</td><td class="num">14</td><td class="route">/guide/how-to-get-from-lalaport</td></tr>
+          <tr><td class="piece">Lalaport to Singapore by bus: choosing your drop-off point</td><td><span class="pill t">T</span></td><td class="kw">lalaport to singapore bus</td><td class="vol">70</td><td class="num">27</td><td class="route">/bus/lalaport-to-bugis (+23 SG stops)</td></tr>
+          <tr><td class="piece">KLIA2 to Lalaport BBCC: from the plane to Bukit Bintang</td><td><span class="pill t">T</span></td><td class="kw">klia2 to lalaport</td><td class="vol">10</td><td class="num">20</td><td class="route">/bus/klia2-to-lalaport-bbcc</td></tr>
+          <tr><td class="piece">Where to eat at and around Lalaport BBCC <span class="flag">⚑ Lalaport rows</span></td><td><span class="pill f">F</span></td><td class="kw">lalaport bbcc food</td><td class="vol">260</td><td class="num">13</td><td class="route">/bus/klia2-to-lalaport-bbcc</td></tr>
+          <tr><td class="piece">Things to do in Bukit Bintang from Lalaport BBCC: walking distance, MRT, monorail and Grab</td><td><span class="pill d">D</span></td><td class="kw">things to do in bukit bintang</td><td class="vol">880</td><td class="num">18</td><td class="route">/bus/lalaport-to-klia2</td></tr>
+          <tr><td class="piece">Private transfer from KL to KLIA or KLIA2: fixed-price taxi, Grab or bus <span class="flag">⚑ deep link</span></td><td><span class="pill t">T</span></td><td class="kw">klia transfer</td><td class="vol">1,300</td><td class="num">28</td><td class="route">Taxi transfer (sedan, MPV, van)</td></tr>
+          <tr><td class="piece">KLIA2 to your KL hotel by private transfer: sedan, MPV or van</td><td><span class="pill t">T</span></td><td class="kw">kl airport transfer</td><td class="vol">50</td><td class="num">42</td><td class="route">Taxi transfer · /taxi/klia2-to-klia</td></tr>
+          <tr><td class="piece">Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work</td><td><span class="pill t">T</span></td><td class="kw">private driver kuala lumpur</td><td class="vol">70</td><td class="num">31</td><td class="route">/car-charter</td></tr>
+          <tr><td class="piece">Genting Highlands by private driver: a day trip from KL <span class="flag">⚑ confirm scope</span></td><td><span class="pill t">T</span></td><td class="kw">genting day trip</td><td class="vol">50</td><td class="num">30</td><td class="route">/car-charter</td></tr>
+          <tr class="group"><td colspan="6">Build · not counted in the 190</td></tr>
+          <tr><td class="piece">ttklia.com <code>cta</code> on all 12 existing posts + nav link</td><td class="dim">Build</td><td class="dim" colspan="4">OPEN-ITEMS #1</td></tr>
+          <tr><td class="piece">Locale layer: data model, routing, hreflang, switcher</td><td class="dim">Build</td><td class="dim" colspan="4">OPEN-ITEMS #2</td></tr>
+          <tr><td class="piece">GA4 outbound-click event · restaurant page metadata · F1 cluster refresh</td><td class="dim">Build</td><td class="dim" colspan="4">KPI 2 baseline, quick ranking lift</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="sched-total">Month 1: 20 pieces · running 20 / 190</div>
+    </div>
+
+    <div class="sched">
+      <h3>Month 2 · November 2026 · KL Food + Genting</h3>
+      <p class="intro"><strong>10 English + 30 locale.</strong> BM and 中文 launch with Month 1's topics. The Lalaport and private-transport set goes to 中文 first, because Singapore travellers read English and Chinese; its BM versions follow in Month 3.</p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Piece</th><th>Pillar</th><th>Primary keyword</th><th class="num">Vol</th><th class="num">SD</th><th>Route to ttklia.com</th></tr></thead>
+        <tbody>
+          <tr class="group"><td colspan="6">English · 10</td></tr>
+          <tr><td class="piece">KLIA2 food: where to eat after you land <span class="flag">⚑ outlets in admin</span></td><td><span class="pill f">F</span></td><td class="kw">klia2 food</td><td class="vol">8,100</td><td class="num">14</td><td class="route">Bus destinations list</td></tr>
+          <tr><td class="piece">Petaling Street food</td><td><span class="pill f">F</span></td><td class="kw">petaling street food</td><td class="vol">5,400</td><td class="num">26</td><td class="route">Bus: KLIA2 → Pudu Sentral</td></tr>
+          <tr><td class="piece">Jalan Alor food</td><td><span class="pill f">F</span></td><td class="kw">jalan alor food</td><td class="vol">3,600</td><td class="num">31</td><td class="route">Bus: KLIA2 → Pudu Sentral</td></tr>
+          <tr><td class="piece">Where to eat in KL on your first night</td><td><span class="pill f">F</span></td><td class="kw">best food in kl</td><td class="vol">1,600</td><td class="num">20</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Nasi lemak in KL</td><td><span class="pill f">F</span></td><td class="kw">nasi lemak kl</td><td class="vol">1,300</td><td class="num">20</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Halal food in KL</td><td><span class="pill f">F</span></td><td class="kw">halal food kl</td><td class="vol">170</td><td class="num">16</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Genting Highlands food <span class="flag">⚑ Genting rows</span></td><td><span class="pill f">F</span></td><td class="kw">genting highlands food</td><td class="vol">2,400</td><td class="num">17</td><td class="route">/genting</td></tr>
+          <tr><td class="piece">KL to Genting: bus, taxi and the cable car</td><td><span class="pill t">T</span></td><td class="kw">kl to genting</td><td class="vol">720</td><td class="num">24</td><td class="route">/genting</td></tr>
+          <tr><td class="piece">KLIA2 luggage storage</td><td><span class="pill t">T</span></td><td class="kw">klia2 luggage storage</td><td class="vol">720</td><td class="num">12</td><td class="route">Bus destinations list</td></tr>
+          <tr><td class="piece">Things to do in Genting</td><td><span class="pill d">D</span></td><td class="kw">things to do in genting</td><td class="vol">590</td><td class="num">18</td><td class="route">/genting</td></tr>
+          <tr class="group"><td colspan="6">Locale · Month 1 topics · 30</td></tr>
+          <tr><td class="piece">KLIA2 ke KL Sentral / 吉隆坡机场到市区</td><td><span class="pill bm">BM</span> <span class="pill zh">中文</span></td><td class="kw">klia2 ke kl sentral · 吉隆坡机场到市区</td><td class="vol">210 · 30</td><td class="num">17 · 42</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Makan dekat KL Sentral / 吉隆坡中央车站美食</td><td><span class="pill bm">BM</span> <span class="pill zh">中文</span></td><td class="kw">makanan sedap kl · 吉隆坡美食</td><td class="vol">1,000 · 1,900</td><td class="num">24 · 39</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">SIM pelancong / 马来西亚电话卡</td><td><span class="pill bm">BM</span> <span class="pill zh">中文</span></td><td class="kw">— · 马来西亚电话卡</td><td class="vol">— · 90</td><td class="num">— · 59</td><td class="route">SIM booking, then bus</td></tr>
+          <tr><td class="piece" colspan="6"><span class="dim">+ the other 7 Month 1 topics in both languages (MDAC, arrival guide, taxi, Bukit Bintang route and food, KLIA transfer, late arrival). Locale keywords measured at brief stage.</span></td></tr>
+          <tr><td class="piece">Lalaport, private transfer and private driver set (10)</td><td><span class="pill zh">中文</span></td><td class="kw">measured at brief stage</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">As the English versions</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="sched-total">Month 2: 40 pieces · running 60 / 190</div>
+    </div>
+
+    <div class="sched">
+      <h3>Month 3 · December 2026 · Penang &amp; the South</h3>
+      <p class="intro"><strong>10 English + 30 locale.</strong> Each food piece is paired with its route piece and linked both ways. "Things to do in KL" peaks at 12,100 in December.</p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Piece</th><th>Pillar</th><th>Primary keyword</th><th class="num">Vol</th><th class="num">SD</th><th>Route to ttklia.com</th></tr></thead>
+        <tbody>
+          <tr class="group"><td colspan="6">English · 10</td></tr>
+          <tr><td class="piece">Penang food</td><td><span class="pill f">F</span></td><td class="kw">penang food</td><td class="vol">9,900</td><td class="num">14</td><td class="route">Bus: KLIA2 → Sungai Nibong</td></tr>
+          <tr><td class="piece">KLIA2 to Penang by bus</td><td><span class="pill t">T</span></td><td class="kw">klia2 to penang</td><td class="vol">70</td><td class="num">32</td><td class="route">Bus: KLIA2 → Sungai Nibong / Butterworth</td></tr>
+          <tr><td class="piece">Melaka food <span class="flag">⚑ Melaka rows</span></td><td><span class="pill f">F</span></td><td class="kw">melaka food</td><td class="vol">6,600</td><td class="num">24</td><td class="route">Bus: KLIA2 → Melaka Sentral</td></tr>
+          <tr><td class="piece">Jonker Street food <span class="flag">⚑ Melaka rows</span></td><td><span class="pill f">F</span></td><td class="kw">jonker street food</td><td class="vol">880</td><td class="num">13</td><td class="route">Bus: KLIA2 → Melaka Sentral</td></tr>
+          <tr><td class="piece">KLIA2 to Melaka</td><td><span class="pill t">T</span></td><td class="kw">klia2 to melaka</td><td class="vol">170</td><td class="num">17</td><td class="route">Bus: KLIA2 → Melaka Sentral</td></tr>
+          <tr><td class="piece">JB food</td><td><span class="pill f">F</span></td><td class="kw">jb food</td><td class="vol">2,900</td><td class="num">12</td><td class="route">Bus: KLIA2 → Larkin</td></tr>
+          <tr><td class="piece">KLIA2 to Johor Bahru</td><td><span class="pill t">T</span></td><td class="kw">klia2 to johor bahru</td><td class="vol">50</td><td class="num">28</td><td class="route">/bus/klia2-to-johor-jaya · /taxi/klia-to-johor-bahru</td></tr>
+          <tr><td class="piece">Things to do in Kuala Lumpur</td><td><span class="pill d">D</span></td><td class="kw">things to do in kuala lumpur</td><td class="vol">8,100</td><td class="num">24</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Malaysia SIM card: which plan for how many days</td><td><span class="pill s">S</span></td><td class="kw">sim card malaysia</td><td class="vol">1,300</td><td class="num">15</td><td class="route">SIM booking, then bus</td></tr>
+          <tr><td class="piece">New Year's Eve in KL: where to watch, how to get back</td><td><span class="pill d">D</span></td><td class="kw">new year eve kl</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Taxi booking</td></tr>
+          <tr class="group"><td colspan="6">Locale · Month 2 topics + Lalaport set in BM · 30</td></tr>
+          <tr><td class="piece">Makanan sedap KL series / 吉隆坡美食 series (Petaling Street, Jalan Alor, nasi lemak, halal, first night)</td><td><span class="pill bm">BM</span> <span class="pill zh">中文</span></td><td class="kw">makanan sedap kl · 吉隆坡美食</td><td class="vol">1,000 · 1,900</td><td class="num">24 · 39</td><td class="route">Bus: KLIA2 → KL Sentral / Pudu</td></tr>
+          <tr><td class="piece" colspan="6"><span class="dim">+ KLIA2 food, the Genting cluster (3), luggage storage in BM and 中文</span></td></tr>
+          <tr><td class="piece">Lalaport, private transfer and private driver set (10)</td><td><span class="pill bm">BM</span></td><td class="kw">measured at brief stage</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">As the English versions</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="sched-total">Month 3: 40 pieces · running 100 / 190</div>
+    </div>
+
+    <div class="sched">
+      <h3>Month 4 · January 2027 · North + Festive Prep</h3>
+      <p class="intro"><strong>10 English + 20 locale.</strong> Festive pieces go out a month before their search peak. The Penang pieces from Month 3 get 中文 versions aimed at 槟城美食 (6,600/mo).</p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Piece</th><th>Pillar</th><th>Primary keyword</th><th class="num">Vol</th><th class="num">SD</th><th>Route to ttklia.com</th></tr></thead>
+        <tbody>
+          <tr class="group"><td colspan="6">English · 10</td></tr>
+          <tr><td class="piece">Ipoh food <span class="flag">⚑ Ipoh rows</span></td><td><span class="pill f">F</span></td><td class="kw">ipoh food</td><td class="vol">8,100</td><td class="num">16</td><td class="route">Bus: KLIA2 → Ipoh Amanjaya</td></tr>
+          <tr><td class="piece">KLIA2 to Ipoh</td><td><span class="pill t">T</span></td><td class="kw">klia2 to ipoh</td><td class="vol">110</td><td class="num">29</td><td class="route">Bus: KLIA2 → Ipoh Amanjaya</td></tr>
+          <tr><td class="piece">KLIA2 transit: leaving the airport on a layover</td><td><span class="pill t">T</span></td><td class="kw">klia2 transit</td><td class="vol">210</td><td class="num">22</td><td class="route">Taxi booking</td></tr>
+          <tr><td class="piece">KLIA2 bus terminal: where it is and how boarding works</td><td><span class="pill t">T</span></td><td class="kw">klia2 bus terminal</td><td class="vol">320</td><td class="num">17</td><td class="route">Bus destinations list</td></tr>
+          <tr><td class="piece">Grab or taxi at KLIA2</td><td><span class="pill t">T</span></td><td class="kw">grab klia2</td><td class="vol">70</td><td class="num">22</td><td class="route">Taxi booking</td></tr>
+          <tr><td class="piece">KLIA2 to Putrajaya and Cyberjaya</td><td><span class="pill t">T</span></td><td class="kw">klia2 to putrajaya</td><td class="vol">110</td><td class="num">17</td><td class="route">Taxi booking</td></tr>
+          <tr><td class="piece">Selangor by private driver: Kuala Selangor and Sekinchan in a day</td><td><span class="pill t">T</span></td><td class="kw">kuala selangor day trip</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">/car-charter</td></tr>
+          <tr><td class="piece">Chinese New Year in KL 2027: what's open, where to eat</td><td><span class="pill d">D</span></td><td class="kw">chinese new year kl</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Ramadan bazaar in KL 2027</td><td><span class="pill f">F</span></td><td class="kw">ramadan bazaar kl</td><td class="vol">140</td><td class="num">19</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Thaipusam at Batu Caves: getting there</td><td><span class="pill d">D</span></td><td class="kw">thaipusam batu caves</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr class="group"><td colspan="6">Locale · Month 3 topics · 20</td></tr>
+          <tr><td class="piece">Makanan Pulau Pinang / 槟城美食</td><td><span class="pill bm">BM</span> <span class="pill zh">中文</span></td><td class="kw">— · 槟城美食</td><td class="vol">— · 6,600</td><td class="num">— · 38</td><td class="route">Bus: KLIA2 → Sungai Nibong</td></tr>
+          <tr><td class="piece">Tempat menarik di KL / 吉隆坡景点</td><td><span class="pill bm">BM</span> <span class="pill zh">中文</span></td><td class="kw">tempat menarik di kl · 吉隆坡景点</td><td class="vol">3,600 · 1,900</td><td class="num">37 · 62</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece" colspan="6"><span class="dim">+ Melaka (3), JB (2), Penang route, SIM plans, New Year's Eve in BM and 中文</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="sched-total">Month 4: 30 pieces · running 130 / 190</div>
+    </div>
+
+    <div class="sched">
+      <h3>Month 5 · February 2027 · Ramadan, Raya &amp; First Refresh</h3>
+      <p class="intro"><strong>7 planned + 3 from Search Console, plus 20 locale.</strong> Ramadan is expected to begin around 8 February and Hari Raya around 10 March; exact dates follow the official announcement.</p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Piece</th><th>Pillar</th><th>Primary keyword</th><th class="num">Vol</th><th class="num">SD</th><th>Route to ttklia.com</th></tr></thead>
+        <tbody>
+          <tr class="group"><td colspan="6">English · 10</td></tr>
+          <tr><td class="piece">Buka puasa buffets in KL (BM version leads)</td><td><span class="pill f">F</span></td><td class="kw">buffet ramadhan kl</td><td class="vol">260</td><td class="num">13</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Travelling in Malaysia over Hari Raya 2027</td><td><span class="pill t">T</span></td><td class="kw">balik kampung raya</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Bus destinations list</td></tr>
+          <tr><td class="piece">KL Sentral to KLIA2 for your flight home <span class="flag">⚑ confirm route</span></td><td><span class="pill t">T</span></td><td class="kw">kl sentral to klia2</td><td class="vol">3,600</td><td class="num">19</td><td class="route">Taxi to KLIA, if sold</td></tr>
+          <tr><td class="piece">eSIM or physical SIM: setting up data before you land</td><td><span class="pill s">S</span></td><td class="kw">esim malaysia</td><td class="vol">5,400</td><td class="num">24</td><td class="route">SIM booking, then bus</td></tr>
+          <tr><td class="piece">Kopitiam breakfast in KL</td><td><span class="pill f">F</span></td><td class="kw">kopitiam kl</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Travelling with children from KLIA2</td><td><span class="pill t">T</span></td><td class="kw">klia2 with kids</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Car charter</td></tr>
+          <tr><td class="piece">Penang in 3 days from KLIA2</td><td><span class="pill d">D</span></td><td class="kw">penang itinerary</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Bus: KLIA2 → Sungai Nibong</td></tr>
+          <tr><td class="piece dim">Slot 1 · 2 · 3: chosen from Search Console (page-2 queries with no dedicated page)</td><td class="dim">GSC</td><td class="dim" colspan="4">Decided in the first week of February</td></tr>
+          <tr class="group"><td colspan="6">Locale · Month 4 topics · 20</td></tr>
+          <tr><td class="piece" colspan="6"><span class="dim">Ipoh food and route, transit, bus terminal, Grab or taxi, Putrajaya, Selangor by private driver, CNY, Ramadan bazaar (BM leads), Thaipusam</span></td></tr>
+          <tr class="group"><td colspan="6">Refresh · not counted</td></tr>
+          <tr><td class="piece">Rework Month 1–2 pieces sitting at positions 11–30; food-to-route internal links across the library</td><td class="dim">Optimise</td><td class="dim" colspan="4">From Search Console data</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="sched-total">Month 5: 30 pieces · running 160 / 190</div>
+    </div>
+
+    <div class="sched">
+      <h3>Month 6 · March 2027 · Compound</h3>
+      <p class="intro"><strong>4 planned + 6 from Search Console, plus 20 locale.</strong> Five months of ranking data decide most of this month.</p>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Piece</th><th>Pillar</th><th>Primary keyword</th><th class="num">Vol</th><th class="num">SD</th><th>Route to ttklia.com</th></tr></thead>
+        <tbody>
+          <tr class="group"><td colspan="6">English · 10</td></tr>
+          <tr><td class="piece">Hawker food in KL: where locals eat</td><td><span class="pill f">F</span></td><td class="kw">hawker food kl</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Bus: KLIA2 → Pudu Sentral</td></tr>
+          <tr><td class="piece">KL public transport for first-timers: LRT, MRT and cards</td><td><span class="pill t">T</span></td><td class="kw">kl public transport</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Bus: KLIA2 → KL Sentral</td></tr>
+          <tr><td class="piece">Hari Raya week in KL: what's open</td><td><span class="pill d">D</span></td><td class="kw">hari raya kl</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Taxi booking</td></tr>
+          <tr><td class="piece">Ipoh in a day from KLIA2</td><td><span class="pill d">D</span></td><td class="kw">ipoh day trip</td><td class="vol dim">—</td><td class="num dim">—</td><td class="route">Bus: KLIA2 → Ipoh Amanjaya</td></tr>
+          <tr><td class="piece dim">Slots 4 to 9: chosen from Search Console</td><td class="dim">GSC</td><td class="dim" colspan="4">Decided in the first week of March</td></tr>
+          <tr class="group"><td colspan="6">Locale · Month 5 topics · 20</td></tr>
+          <tr><td class="piece" colspan="6"><span class="dim">Buka puasa, Hari Raya travel, return trip, eSIM, kopitiam, children, Penang itinerary, and the 3 GSC slots</span></td></tr>
+          <tr class="group"><td colspan="6">Report · not counted</td></tr>
+          <tr><td class="piece">Second refresh pass, schema across the library, 6-month KPI report, Month 7+ calendar</td><td class="dim">Optimise</td><td class="dim" colspan="4">Month 6 topics go to BM and 中文 in Month 7</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="sched-total">Month 6: 30 pieces · running 190 / 190 ✓</div>
+      <div class="sched-total warn" style="margin-top:8px">Slots in Months 5 and 6 are chosen from live Search Console data, so effort goes to what is already moving rather than to a list fixed in September.</div>
+    </div>
+
+  </section>
+</div>
+
+<footer>
+  <p><strong>Data:</strong> Ubersuggest, location Malaysia (2458), English, Malay and Chinese, pulled 30 September 2026. SERP snapshots are dated between 30 August and 30 September 2026. Competitor pages were read in full on 30 September 2026. Volumes count searchers located in Malaysia only, so inbound visitors searching from their home country, and mainland Chinese travellers who use Baidu or Xiaohongshu, are not in them. Treat figures as directional. Search Console replaces them once access is granted.</p>
+  <p><strong>Benchmarks:</strong> klia2.info, BusOnlineTicket, redBus Malaysia, selected from the live SERP. Competitor names are for internal planning only and do not appear in published copy. ttklia.com is the sister site and conversion target.</p>
+  <p>Prepared for Teeko (GM Ai Tours Sdn Bhd.) by Blueprint Agency, 30 September 2026.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var buttons = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-content');
+  function show(id, scroll){
+    var found = false;
+    panels.forEach(function(p){ var on = p.id === 'tab-' + id; p.hidden = !on; if(on) found = true; });
+    if(!found) return;
+    buttons.forEach(function(b){ var on = b.dataset.tab === id; b.classList.toggle('active', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
+    if(scroll){ var bar = document.querySelector('.tab-bar'); window.scrollTo({top: Math.max(0, bar.offsetTop - 8)}); }
+  }
+  buttons.forEach(function(b){ b.addEventListener('click', function(){ show(b.dataset.tab, true); }); });
+  var h = (location.hash || '').replace('#','');
+  if(h) show(h, false);
+})();
+</script>
+</body>
+</html>

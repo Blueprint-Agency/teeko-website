@@ -1,6 +1,6 @@
 export interface ContentBlock {
     id?: string;
-    blockType: "h2" | "h3" | "h4" | "paragraph" | "location" | "restaurant" | "image";
+    blockType: "h2" | "h3" | "h4" | "paragraph" | "location" | "restaurant" | "image" | "cta";
     content: string;
     orderIndex?: string;
     locationId?: string;

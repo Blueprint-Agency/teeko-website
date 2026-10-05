@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useAuthFetch } from "@/lib/authFetch";
 import { API_BASE_URL } from "@/lib/constants";
+import { useDict } from "@/components/providers/LocaleProvider";
 
 export interface Referee {
     id: string;
@@ -19,6 +20,7 @@ export interface ReferralData {
 
 export function useReferral() {
     const { fetchWithAuth } = useAuthFetch();
+    const t = useDict().profile.referral;
     const [referralData, setReferralData] = useState<ReferralData | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -40,11 +42,11 @@ export function useReferral() {
                 referees: refereesResponse.data || [],
             });
         } catch (err: any) {
-            setError(err.message || "Failed to fetch referral data");
+            setError(err.message || t.fetchFailed);
         } finally {
             setIsLoading(false);
         }
-    }, [fetchWithAuth]);
+    }, [fetchWithAuth, t.fetchFailed]);
 
     const applyReferralCode = async (code: string) => {
         setIsLoading(true);
@@ -61,7 +63,7 @@ export function useReferral() {
             await fetchReferralData();
             return { success: true };
         } catch (err: any) {
-            setError(err.message || "Failed to apply referral code");
+            setError(err.message || t.applyCodeFailed);
             return { success: false, error: err.message };
         } finally {
             setIsLoading(false);

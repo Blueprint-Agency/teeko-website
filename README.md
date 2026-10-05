@@ -2,6 +2,10 @@
 
 Next.js frontend + Express backend monorepo.
 
+Before changing anything, read [AGENTS.md](AGENTS.md) (client rules and facts),
+[OPEN-ITEMS.md](OPEN-ITEMS.md) (what is blocked and why) and [PRODUCT.md](PRODUCT.md)
+(what exists and what must not be invented).
+
 ```
 fe/   → Next.js (port 5000)
 be/   → Express + Drizzle ORM (port 3000)
@@ -26,6 +30,8 @@ make dev       # run fe + be
 | `make init` | Start DB, migrate, seed |
 | `make reset` | Wipe DB container |
 | `make build` | Build both |
+| `make test` | Run FE guard tests (`fe/tests/guards.test.ts`) |
+| `make lint` | Lint FE |
 | `make db-migrate` | Run migrations |
 | `make db-seed` | Seed database |
 | `make db-studio` | Open Drizzle Studio |

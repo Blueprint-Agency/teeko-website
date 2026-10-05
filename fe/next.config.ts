@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // The public root layout is app/[locale]/layout.tsx (a dynamic segment) and
+    // admin has its own root, so unmatched URLs need app/global-not-found.tsx.
+    globalNotFound: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -32,7 +37,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/qr/sim",
-        destination: "/sim?utm_source=qr_code&utm_medium=print&utm_campaign=sim_marketing",
+        // /sim was renamed to /travel-sim-malaysia; the printed QR codes still hit /qr/sim.
+        destination: "/travel-sim-malaysia?utm_source=qr_code&utm_medium=print&utm_campaign=sim_marketing",
         permanent: false,
       },
     ];

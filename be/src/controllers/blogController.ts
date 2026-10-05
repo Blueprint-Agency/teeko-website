@@ -2,7 +2,28 @@ import { Request, Response } from "express";
 import { db } from "../db";
 import { blogPosts, blogContentBlocks, restaurants, locations, restaurantImages, restaurantStats } from "../db/schema";
 import { eq, desc, and, sql } from "drizzle-orm";
+import { randomUUID } from "node:crypto";
 import { uploadImageToR2 } from "../utils/upload";
+import { isLocale, isUniqueViolation, type Locale } from "../utils/translations";
+
+const DUPLICATE_SLUG = "A post with this slug already exists in this language. Choose another slug.";
+
+/** `?locale=en|ms|zh` narrows to one language; `?locale=all` returns every language. Default: en. */
+function localeFilter(value: unknown): Locale | "all" {
+    if (value === "all") return "all";
+    return isLocale(value) ? value : "en";
+}
+
+/** Published language versions of one piece, for hreflang and the language switcher. */
+async function publishedSiblings(translationGroupId: string | null, fallbackId: string) {
+    return db
+        .select({ locale: blogPosts.locale, slug: blogPosts.slug })
+        .from(blogPosts)
+        .where(and(
+            eq(blogPosts.translationGroupId, translationGroupId ?? fallbackId),
+            eq(blogPosts.status, "PUBLISHED"),
+        ));
+}
 
 // Get all blog posts (admin)
 export const getAllPosts = async (req: Request, res: Response) => {
@@ -18,10 +39,13 @@ export const getAllPosts = async (req: Request, res: Response) => {
 // Get published blog posts (public)
 export const getPublishedPosts = async (req: Request, res: Response) => {
     try {
+        const locale = localeFilter(req.query.locale);
         const posts = await db
             .select()
             .from(blogPosts)
-            .where(eq(blogPosts.status, "PUBLISHED"))
+            .where(locale === "all"
+                ? eq(blogPosts.status, "PUBLISHED")
+                : and(eq(blogPosts.status, "PUBLISHED"), eq(blogPosts.locale, locale)))
             .orderBy(desc(blogPosts.publishedAt));
 
         res.json(posts);
@@ -34,12 +58,17 @@ export const getPublishedPosts = async (req: Request, res: Response) => {
 // Get blog post by slug (public)
 export const getPostBySlug = async (req: Request, res: Response) => {
     const { slug } = req.params;
+    const locale = localeFilter(req.query.locale);
 
     try {
         const [post] = await db
             .select()
             .from(blogPosts)
-            .where(and(eq(blogPosts.slug, slug as string), eq(blogPosts.status, "PUBLISHED")));
+            .where(and(
+                eq(blogPosts.slug, slug as string),
+                eq(blogPosts.locale, locale === "all" ? "en" : locale),
+                eq(blogPosts.status, "PUBLISHED"),
+            ));
 
         if (!post) {
             res.status(404).json({ message: "Post not found" });
@@ -91,7 +120,8 @@ export const getPostBySlug = async (req: Request, res: Response) => {
             })
         );
 
-        res.json({ ...post, contentBlocks: enrichedBlocks });
+        const translations = await publishedSiblings(post.translationGroupId, post.id);
+        res.json({ ...post, contentBlocks: enrichedBlocks, translations });
     } catch (error) {
         console.error("Error fetching post:", error);
         res.status(500).json({ message: "Server error" });
@@ -117,7 +147,12 @@ export const getPostById = async (req: Request, res: Response) => {
             .where(eq(blogContentBlocks.blogPostId, id as string))
             .orderBy(sql`CAST(${blogContentBlocks.orderIndex} AS INTEGER)`);
 
-        res.json({ ...post, contentBlocks: blocks });
+        const siblings = await db
+            .select({ id: blogPosts.id, locale: blogPosts.locale, slug: blogPosts.slug, status: blogPosts.status })
+            .from(blogPosts)
+            .where(eq(blogPosts.translationGroupId, post.translationGroupId ?? post.id));
+
+        res.json({ ...post, contentBlocks: blocks, translations: siblings });
     } catch (error) {
         console.error("Error fetching post:", error);
         res.status(500).json({ message: "Server error" });
@@ -127,12 +162,39 @@ export const getPostById = async (req: Request, res: Response) => {
 // Create blog post
 export const createPost = async (req: Request, res: Response) => {
     const { title, slug, metaDescription, featureImage, status, contentBlocks } = req.body;
+    const locale = req.body.locale ?? "en";
+    const requestedGroup: string | undefined = req.body.translationGroupId || undefined;
+
+    if (!isLocale(locale)) {
+        res.status(400).json({ message: "locale must be one of en, ms, zh" });
+        return;
+    }
 
     try {
+        // A translation joins an existing group; it may not duplicate a language already in it.
+        if (requestedGroup) {
+            const existing = await db
+                .select({ locale: blogPosts.locale })
+                .from(blogPosts)
+                .where(eq(blogPosts.translationGroupId, requestedGroup));
+            if (existing.length === 0) {
+                res.status(400).json({ message: "translationGroupId does not match any post" });
+                return;
+            }
+            if (existing.some((p) => p.locale === locale)) {
+                res.status(409).json({ message: `This post already has a ${locale} version.` });
+                return;
+            }
+        }
+
+        const id = randomUUID();
         console.log("Creating post with featureImage:", featureImage);
         const [newPost] = await db
             .insert(blogPosts)
             .values({
+                id,
+                locale,
+                translationGroupId: requestedGroup ?? id,
                 title,
                 slug,
                 metaDescription,
@@ -160,6 +222,10 @@ export const createPost = async (req: Request, res: Response) => {
 
         res.status(201).json(newPost);
     } catch (error) {
+        if (isUniqueViolation(error)) {
+            res.status(409).json({ message: DUPLICATE_SLUG });
+            return;
+        }
         console.error("Error creating post:", error);
         res.status(500).json({ message: "Server error" });
     }
@@ -220,6 +286,10 @@ export const updatePost = async (req: Request, res: Response) => {
 
         res.json(updated);
     } catch (error) {
+        if (isUniqueViolation(error)) {
+            res.status(409).json({ message: DUPLICATE_SLUG });
+            return;
+        }
         console.error("Error updating post:", error);
         res.status(500).json({ message: "Server error" });
     }

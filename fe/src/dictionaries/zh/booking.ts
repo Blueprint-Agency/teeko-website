@@ -1,0 +1,68 @@
+import type { DictionaryArea } from "../types";
+
+// Approved by the client without a separate language review (2026-10-03).
+const booking: DictionaryArea<"booking"> = {
+    button: {
+        signInToBook: "登录后预订",
+        viewBooking: "查看预订",
+        bookNow: "立即预订",
+    },
+    modal: {
+        title: "确认预订信息",
+        emailAddress: "电子邮箱",
+        package: "套餐",
+        unitPrice: "单价",
+        notAvailable: "不适用",
+        totalPrice: "总价",
+        quantity: "数量",
+        decrease: "减少数量",
+        increase: "增加数量",
+        maxPerBooking: "每次预订最多 10 张",
+        collectionDate: "领取日期",
+        selectDate: "选择日期",
+        dateRange: "须在 {min} 至 {max} 之间（GMT+8）",
+        calendarTitle: "选择领取日期",
+        previousMonth: "上个月",
+        nextMonth: "下个月",
+        pickBetween: "请选择 {min} 至 {max} 之间的日期",
+        errorNoDate: "请选择领取日期",
+        processing: "处理中...",
+        confirm: "确认预订",
+        successTitle: "预订成功！",
+        successBody: "预订确认已发送至 {email}",
+    },
+    cancel: {
+        title: "取消预订？",
+        body: "确定要取消 {name} 的预订吗？此操作无法撤销。",
+        cancelling: "正在取消...",
+        confirm: "是的，取消预订",
+        keep: "保留预订",
+    },
+    list: {
+        current: "当前",
+        past: "过往",
+        noCurrent: "没有当前预订",
+        noPast: "没有过往预订",
+        emptyCurrent: "您目前没有有效的电话卡预订。",
+        emptyPast: "您的预订记录将显示在这里。",
+        quantity: "数量：{n}",
+        status: {
+            booked: "已预订",
+            cancelled: "已取消",
+            completed: "已完成",
+            expired: "已过期",
+            rejected: "已拒绝",
+        },
+        cancelBooking: "取消预订",
+        showCode: "显示验证码",
+        page: "第 {page} 页，共 {total} 页",
+        loadFailed: "无法加载预订",
+        cancelFailed: "取消预订失败",
+        cancelError: "取消时出错",
+        verifyTitle: "核验预订",
+        presentToStaff: "请向工作人员出示",
+        manualCode: "人工核验码",
+    },
+};
+
+export default booking;

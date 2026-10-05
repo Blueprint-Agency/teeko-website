@@ -1,9 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Check, Flame, X, Gift } from "lucide-react";
+import { fmt, localeFromPathname, type Locale } from "@/lib/i18n";
+import enProfile from "@/dictionaries/en/profile";
+import msProfile from "@/dictionaries/ms/profile";
+import zhProfile from "@/dictionaries/zh/profile";
+
+// Rendered by RootDocument above LocaleProvider (and on the admin panel), so it
+// reads the language from the URL. Admin URLs are unprefixed, so they get English.
+const STREAK_COPY: Record<Locale, typeof enProfile.streak> = {
+    en: enProfile.streak,
+    ms: msProfile.streak,
+    zh: zhProfile.streak,
+};
 
 export function StreakRoadmapModal() {
+    const pathname = usePathname();
+    const t = STREAK_COPY[localeFromPathname(pathname ?? "/")];
     const [isOpen, setIsOpen] = useState(false);
     const [streakData, setStreakData] = useState<any>(null);
 
@@ -57,6 +72,7 @@ export function StreakRoadmapModal() {
                 <div className="relative pt-10 pb-8 px-8 text-center">
                     <button
                         onClick={() => setIsOpen(false)}
+                        aria-label={t.close}
                         className="absolute right-6 top-6 p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-full"
                     >
                         <X className="w-4 h-4" />
@@ -67,14 +83,14 @@ export function StreakRoadmapModal() {
                     </div>
 
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">
-                        {streakCount} Day Streak!
+                        {fmt(t.title, { count: streakCount })}
                     </h2>
                     <p className="text-gray-500 dark:text-zinc-500 text-[13px] leading-relaxed max-w-[240px] mx-auto">
-                        You're on fire! Keep logging in every day to earn more points.
+                        {t.body}
                     </p>
 
                     <div className="mt-5 inline-flex items-center px-4 py-1.5 bg-green-500/5 dark:bg-green-500/10 text-green-600 dark:text-green-500 text-[11px] font-bold uppercase tracking-widest rounded-full border border-green-500/10">
-                        +{pointsAdded} Points Today
+                        {fmt(t.pointsToday, { points: pointsAdded })}
                     </div>
                 </div>
 
@@ -112,7 +128,7 @@ export function StreakRoadmapModal() {
                                         {isPast ? <Check className="w-3.5 h-3.5" /> : isLastNode ? <Gift className="w-3.5 h-3.5" /> : nodePosition}
                                     </div>
                                     <span className={`text-[9px] font-bold absolute -bottom-6 w-max uppercase tracking-widest ${isCurrent ? 'text-red-600' : 'text-gray-400 dark:text-zinc-600'}`}>
-                                        D{startDay + i}
+                                        {fmt(t.dayShort, { day: startDay + i })}
                                     </span>
                                 </div>
                             );
@@ -122,9 +138,9 @@ export function StreakRoadmapModal() {
                     {isMilestone && (
                         <div className="mt-12 mb-6 p-4 rounded-2xl bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-center animate-in slide-in-from-bottom-2 duration-700 border border-white/10 dark:border-black/5">
                             <h3 className="font-bold flex items-center justify-center gap-2 text-sm">
-                                <Gift className="w-4 h-4" /> 7-Day Milestone Reached!
+                                <Gift className="w-4 h-4" /> {t.milestoneTitle}
                             </h3>
-                            <p className="opacity-70 text-[11px] mt-1">100 bonus points have been added to your account.</p>
+                            <p className="opacity-70 text-[11px] mt-1">{t.milestoneBody}</p>
                         </div>
                     )}
 
@@ -132,7 +148,7 @@ export function StreakRoadmapModal() {
                         onClick={() => setIsOpen(false)}
                         className="mt-4 w-full py-3.5 bg-gray-900 hover:bg-black dark:bg-white dark:text-zinc-950 dark:hover:bg-gray-100 text-white font-bold text-sm rounded-[16px] transition-all active:scale-[0.98] shadow-lg shadow-black/5"
                     >
-                        Awesome, let's go!
+                        {t.cta}
                     </button>
                 </div>
             </div>

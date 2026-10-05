@@ -3,6 +3,9 @@ import { db } from "../db";
 import { simProviders, simPackages, simContentTemplates } from "../db/schema";
 import { eq, and } from "drizzle-orm";
 import { uploadImageToR2 } from "../utils/upload";
+import { sanitizeTranslations } from "../utils/translations";
+
+const SIM_TRANSLATED_FIELDS = { packageName: "string", about: "string", features: "features", seoTitle: "string", seoDescription: "string" } as const;
 
 // SIM Providers
 export const getProviders = async (req: Request, res: Response) => {
@@ -80,6 +83,7 @@ export const getPackages = async (req: Request, res: Response) => {
                 seoTitle: simPackages.seoTitle,
                 seoDescription: simPackages.seoDescription,
                 features: simPackages.features,
+                translations: simPackages.translations,
                 status: simPackages.status,
                 publishedAt: simPackages.publishedAt,
                 createdAt: simPackages.createdAt,
@@ -116,7 +120,11 @@ export const getPublishedPackages = async (req: Request, res: Response) => {
                 seoTitle: simPackages.seoTitle,
                 seoDescription: simPackages.seoDescription,
                 features: simPackages.features,
+                translations: simPackages.translations,
                 publishedAt: simPackages.publishedAt,
+                // The sitemap needs a real edit date; without it every package
+                // page claimed it changed today, on every request.
+                updatedAt: simPackages.updatedAt,
                 provider: {
                     id: simProviders.id,
                     name: simProviders.name,
@@ -152,6 +160,7 @@ export const getPackageBySlug = async (req: Request, res: Response) => {
                 seoTitle: simPackages.seoTitle,
                 seoDescription: simPackages.seoDescription,
                 features: simPackages.features,
+                translations: simPackages.translations,
                 publishedAt: simPackages.publishedAt,
                 provider: {
                     id: simProviders.id,
@@ -209,6 +218,7 @@ export const getPackageById = async (req: Request, res: Response) => {
 
 export const createPackage = async (req: Request, res: Response) => {
     const { packageName, slug, providerId, featureImage, price, duration, about, ctaLink, seoTitle, seoDescription, status, features } = req.body;
+    const translations = sanitizeTranslations(req.body.translations, SIM_TRANSLATED_FIELDS);
 
 
     // Validate price
@@ -245,6 +255,7 @@ export const createPackage = async (req: Request, res: Response) => {
                 seoTitle,
                 seoDescription,
                 features,
+                translations,
                 status: status || "DRAFT",
                 publishedAt: (status === "PUBLISHED") ? new Date() : null,
             })
@@ -260,6 +271,7 @@ export const createPackage = async (req: Request, res: Response) => {
 export const updatePackage = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { packageName, slug, providerId, featureImage, price, duration, about, ctaLink, seoTitle, seoDescription, status, features } = req.body;
+    const translations = sanitizeTranslations(req.body.translations, SIM_TRANSLATED_FIELDS);
 
     let formattedPrice = price;
 
@@ -300,6 +312,7 @@ export const updatePackage = async (req: Request, res: Response) => {
                 seoTitle,
                 seoDescription,
                 features,
+                translations,
                 status,
                 publishedAt: (status === "PUBLISHED") ? new Date() : null,
                 updatedAt: new Date(),
