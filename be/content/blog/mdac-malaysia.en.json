@@ -1,0 +1,215 @@
+{
+  "title": "MDAC Malaysia: Fill In Your Arrival Card Before You Fly",
+  "slug": "mdac-malaysia",
+  "locale": "en",
+  "status": "PUBLISHED",
+  "metaDescription": "The MDAC is free, takes 5 minutes and opens 3 days before you land. Every field on the form, who is exempt, and what to do at KLIA2.",
+  "featureImage": null,
+  "contentBlocks": [
+    {
+      "blockType": "paragraph",
+      "content": "<p>The MDAC (Malaysia Digital Arrival Card) is a free online form that most foreign visitors must submit before they land in Malaysia. You fill it in at <a href=\"https://imigresen-online.imi.gov.my/mdac/main\">imigresen-online.imi.gov.my</a> within 3 days of your arrival, counting the day you submit. It takes about five minutes if your passport, flight number and hotel address are in front of you. At the immigration counter you show your MDAC confirmation with your passport. Singapore citizens, Malaysian permanent residents and a few other groups are exempt.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>This guide walks through every field on the MDAC Malaysia form as it looks today, the mistakes that get it rejected, who can use the autogate instead of the queue, and what to do once you are through immigration at KLIA2.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Key Takeaways"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>What is the MDAC?</strong> A free online arrival form that most foreign visitors to Malaysia must submit before arriving. It has been mandatory since 1 January 2024 (<a href=\"https://www.imi.gov.my/index.php/en/pengumuman/malaysia-digital-arrival-card-mdac-for-foreign-visitors-2/\">Immigration Department of Malaysia</a>).</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>When can I submit the MDAC?</strong> Within 3 days of your arrival date, counting the day you submit. If you land on a Saturday, the form accepts you from Thursday.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>Who does not need an MDAC?</strong> Singapore citizens, diplomatic and official passport holders, Malaysian permanent residents and Long Term Pass holders, and holders of certain Brunei, Thai and Indonesian border documents.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>Where do I submit it?</strong> On imigresen-online.imi.gov.my or in the MyNIISe app. It is free. A site that asks for card details is not the real form.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>What happens at KLIA2?</strong> Show your MDAC and passport at the immigration counter, or use the autogate if you are eligible. Then follow the signs to the Transportation Hub on Level 1 for buses into Kuala Lumpur and beyond.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "What the MDAC is, and who needs one"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Every foreign citizen entering Malaysia needs an MDAC unless they fall into one of the exempt groups. It replaced the paper arrival card and is separate from any visa. If your nationality needs a visa for Malaysia, you need both. The <a href=\"https://www.imi.gov.my/index.php/en/pengumuman/malaysia-digital-arrival-card-mdac-for-foreign-visitors-2/\">Immigration Department of Malaysia</a> exempts these travellers:</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ul><li>Citizens of Singapore</li><li>Diplomatic and official passport holders</li><li>Malaysian permanent residents and Long Term Pass holders</li><li>Holders of Brunei's General Certificate of Identity (GCI)</li><li>Brunei Malaysia Frequent Traveller Facility holders</li><li>Thailand Border Pass holders</li><li>Indonesia Cross Border Travel Document (PLB) holders</li></ul>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Two groups often get this wrong. Singapore permanent residents are not Singapore citizens, so they need an MDAC unless they hold a Malaysian Long Term Pass. And children are not exempt: every traveller in your group needs their own form, with their own passport number.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>You also need a new MDAC for every trip. The form is tied to one arrival date, so last year's confirmation does not cover this year's holiday.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "When to submit: the 3 day window"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>You can submit the MDAC from 3 days before your arrival, counting the day you submit. The form itself says so: \"your trip must be within 3 days (including the date of submission)\". Submit earlier and it will not accept your dates.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>In practice: if you land at KLIA2 on Saturday, you can submit on Thursday, Friday or Saturday. Thursday or Friday is the sensible choice. You are at home with good WiFi and your booking emails, not standing in a departure gate on a slow connection.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Arriving by bus or car from Singapore works the same way. Choose LAND as your mode of travel and put the date you cross.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Every field on the MDAC form, and what to type"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>The form at <a href=\"https://imigresen-online.imi.gov.my/mdac/main\">imigresen-online.imi.gov.my/mdac/main</a> has 22 fields in three groups. This is what each one wants, checked against the live form on 3 October 2026.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<div style=\"overflow-x:auto\"><table style=\"border-collapse:collapse;width:100%;font-size:0.95em\"><thead><tr><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">Field</th><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">What to type</th></tr></thead><tbody><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Name</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Exactly as printed in your passport.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Passport No.</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">From your passport photo page. Check it twice; this is the most common typo.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Date of Birth</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">From your passport.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Nationality / Citizenship</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">The country that issued your passport.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Place of Birth</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">The country, chosen from the list.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Sex</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Male or Female, as in your passport.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Date of Passport Expiry</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">From your passport. If it expires within six months, renew it before you travel.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Email Address, Confirm Email Address</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">An inbox you can open on your phone at the airport. Your confirmation goes here.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Country / Region Code, Mobile No.</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Your own phone number with its country code.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Date of Arrival</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">The date you land in Malaysia, local time. It must fall within the 3 day window.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Date of Departure</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">The date you plan to leave Malaysia. It is required, so use your return flight date or your best estimate.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Flight / Vessel / Transportation No.</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Your flight number from the booking, letters and digits only.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Mode of Travel</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">AIR, LAND or SEA.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Last Port of Embarkation before Malaysia</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Where your last flight to Malaysia takes off. If you connect in Bangkok, that is Thailand, not your home country.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Accommodation of Stay</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Hotel/Motel/Rest House, Residence of Friends/Relatives, or Others.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Address (In Malaysia)</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Your first night's address. Letters and numbers only, so drop commas, full stops and slashes.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">State</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">For central Kuala Lumpur, choose WP Kuala Lumpur. Petaling Jaya and Sepang are Selangor.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Postcode</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">The five digits from your hotel booking.</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">City</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Chosen from the list after you pick the state.</td></tr></tbody></table></div>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Before you can submit, you drag a slider to prove you are human (\"Drag to Verify\"). Then read every field once more. The portal menu offers Registration, Check Registration, Check Visit Pass and Check Egate Eligibility, but no edit option. If you spot a mistake after submitting, submit a new MDAC with the correct details, and check with the immigration officer at the counter if in doubt.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Save the confirmation email to your phone, and take a screenshot as well. Airport WiFi is not something to rely on at the immigration counter.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Only use the real MDAC site"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>The MDAC is free, and there are only two places to submit it: the Immigration Department portal at imigresen-online.imi.gov.my and the MyNIISe app, which Malaysia began rolling out from 31 March 2026 (<a href=\"https://www.mfa.gov.sg/travelling-overseas/travel-advisories-notices-and-visa-information/malaysia/\">Singapore Ministry of Foreign Affairs</a>). Lookalike sites copy the form and charge a \"processing fee\" for it. Some appear as paid ads above the real result in search.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Check the address bar before you type anything. The real form ends in <strong>imi.gov.my</strong>. It never asks for a card number. If you prefer the app, download MyNIISe from the official app stores via the <a href=\"https://www.imi.gov.my/index.php/en/now-it-easier-with-niise/\">Immigration Department's NIISe page</a>, not from a link in a message.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Autogate: who can skip the immigration queue"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Visitors from 63 countries can use the autogates at KLIA and KLIA2 for business and social visits, according to the <a href=\"https://imigresen-online.imi.gov.my/mdac/egate\">Immigration Department's eGate eligibility page</a>. You can check your own eligibility on that page with your passport details. Older posters and some travel sites still say 10 countries; that list is out of date.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>To use the autogate you need:</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ul><li>A passport from an eligible country, valid for at least six months</li><li>An MDAC submitted within the 3 day window (permanent residents and Long Term Pass holders are excused)</li><li>On your first visit, a stop at a manual counter to enrol and verify your passport</li></ul>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>After that first enrolment you can use the autogate when you leave, and on your next trip for both arrival and departure. Travellers from Thailand, Cambodia, Laos, the Philippines, Vietnam, Myanmar, Indonesia and Timor-Leste can use the autogate for departure only.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Singapore citizens are exempt from the MDAC, but if you want to enrol for the autogate you should still submit one three days before arrival (Singapore Ministry of Foreign Affairs).</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Through immigration at KLIA2: SIM, then your ride"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Once your passport is cleared, collect your bags, walk through customs and out into the arrivals hall. Two things are worth doing before you leave the building: get your phone working, and get on the right bus.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>If you booked a <a href=\"/travel-sim-malaysia\">Teeko travel SIM</a> before you flew, collect it at the tour centre in KLIA2 with the QR code from your booking. The exact counter details come with your booking confirmation. No ID is needed, and your maps and ride apps work before you step outside. Not sure whether your phone takes a SIM card or an eSIM? Our <a href=\"/blog/what-is-esim\">two minute eSIM guide</a> explains the difference.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Then follow the signs for buses to the KLIA2 Transportation Hub on Level 1. Express buses leave from here for KL Sentral, Pudu Sentral in the city centre, Lalaport BBCC in Bukit Bintang, and further out to Penang, Ipoh, Melaka and Genting Highlands. Taxis and cars with a driver can be booked for the same trip if you have a lot of luggage or a late arrival.</p>"
+    },
+    {
+      "blockType": "cta",
+      "content": {
+        "heading": "Landed at KLIA2? Book your bus or taxi",
+        "subheading": "Buses from the KLIA2 Transportation Hub to KL Sentral, Pudu Sentral, Bukit Bintang, Penang, Ipoh and Melaka. Pick your date and seat on ttklia.com.",
+        "buttonText": "Plan your ride on ttklia.com",
+        "url": "https://ttklia.com/?utm_source=teeko&utm_medium=blog&utm_campaign=mdac"
+      }
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Hungry after the flight? The <a href=\"/restaurants\">restaurant directory</a> has ratings and reservation links for places near KL Sentral, Bukit Bintang and the rest of the city.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Frequently Asked Questions"
+    },
+    {
+      "blockType": "h3",
+      "content": "Can I fill in the MDAC when I arrive in Malaysia?"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>No. The MDAC has to be submitted before you arrive, within 3 days of your arrival date. The grace period that allowed submission on arrival ended on 31 December 2023. Submit it the day before you fly so you are not relying on airport WiFi.</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "I made a mistake on my MDAC. Can I edit it?"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>There is no edit option on the MDAC portal. If you made a mistake, submit a new MDAC with the correct details and check with the immigration officer if in doubt.</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "Do children need their own MDAC?"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Yes. Every foreign traveller needs their own MDAC, including children and babies, because each form is tied to one passport number. Only the exempt groups, such as Singapore citizens, skip it.</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "Is the MDAC a visa?"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>No. The MDAC is an arrival declaration, not permission to enter. Travellers whose nationality needs a visa for Malaysia must get the visa as well as submitting the MDAC.</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "How much does the MDAC cost?"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>The MDAC is free. Submit it only at imigresen-online.imi.gov.my or in the MyNIISe app; any site charging a fee is a third party, not the Immigration Department.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Conclusion"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Submit your MDAC Malaysia form one or two days before you fly, on the real imi.gov.my site, with your passport, flight number and first night's address in front of you. Screenshot the confirmation. At KLIA2, clear immigration, collect your SIM, and head to the Transportation Hub on Level 1. <a href=\"https://ttklia.com/?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=mdac\">Book your bus or taxi from KLIA2 on ttklia.com</a> before you land, and you walk straight to your seat.</p>"
+    }
+  ]
+}

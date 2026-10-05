@@ -508,3 +508,102 @@ test("BM and 中文 dictionaries have no empty strings", () => {
     }
     assert.deepEqual(bad, [], `Empty dictionary values:\n${bad.join("\n")}`);
 });
+
+// ---------------------------------------------------------------------------
+// 8. Blog content files (be/content/blog), imported into the database on deploy
+// ---------------------------------------------------------------------------
+// Posts written in the repo go live through be/src/db/importContent.ts. They
+// are published copy, so the same rules apply as to source code.
+
+const CONTENT_DIR = join(FE_ROOT, "..", "be", "content", "blog");
+
+interface ContentPost {
+    file: string;
+    data: {
+        title: string;
+        slug: string;
+        locale: string;
+        metaDescription?: string;
+        contentBlocks: { blockType: string; content: string | Record<string, string> }[];
+    };
+}
+
+const CONTENT_POSTS: ContentPost[] = existsSync(CONTENT_DIR)
+    ? readdirSync(CONTENT_DIR)
+          .filter((n) => n.endsWith(".json"))
+          .map((n) => ({ file: `be/content/blog/${n}`, data: JSON.parse(readFileSync(join(CONTENT_DIR, n), "utf8")) }))
+    : [];
+
+/** The text a visitor reads: title, meta description, headings, paragraph text, cta copy. */
+function visibleText(p: ContentPost): string[] {
+    const out = [p.data.title, p.data.metaDescription ?? ""];
+    for (const b of p.data.contentBlocks) {
+        if (typeof b.content === "string") out.push(b.content.replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&"));
+        else out.push(b.content.heading ?? "", b.content.subheading ?? "", b.content.buttonText ?? "");
+    }
+    return out;
+}
+
+/** Every link target: paragraph hrefs and cta urls. */
+function links(p: ContentPost): string[] {
+    const out: string[] = [];
+    for (const b of p.data.contentBlocks) {
+        if (typeof b.content === "string") {
+            for (const m of b.content.matchAll(/href="([^"]+)"/g)) out.push(m[1].replace(/&amp;/g, "&"));
+        } else if (b.content.url) out.push(b.content.url);
+    }
+    return out;
+}
+
+test("content files are named <slug>.<locale>.json, one per language", () => {
+    const bad = CONTENT_POSTS.filter((p) => p.file !== `be/content/blog/${p.data.slug}.${p.data.locale}.json`).map((p) => p.file);
+    assert.deepEqual(bad, [], `Content files whose name does not match slug and locale:\n${bad.join("\n")}`);
+});
+
+test("content files contain no promissory or unverifiable claims", () => {
+    const bad: string[] = [];
+    for (const p of CONTENT_POSTS) {
+        for (const text of visibleText(p)) {
+            for (const { re, why } of BANNED_CLAIMS) {
+                if (re.test(text)) bad.push(`${p.file}  [${why}]  ${text.trim().slice(0, 100)}`);
+            }
+        }
+    }
+    assert.deepEqual(bad, [], `Banned claims found:\n${bad.join("\n")}`);
+});
+
+test("content files use no em or en dashes", () => {
+    // Copy voice, AGENTS.md "E - Em dash". Hyphens inside words and URLs are fine.
+    const bad = CONTENT_POSTS.flatMap((p) => visibleText(p).filter((t) => /[–—]/.test(t)).map((t) => `${p.file}  ${t.trim().slice(0, 100)}`));
+    assert.deepEqual(bad, [], `Em or en dashes in published copy:\n${bad.join("\n")}`);
+});
+
+test("content file links to ttklia.com use TTKLIA_URL", () => {
+    // Prose may name "ttklia.com"; every link to it must be the canonical URL
+    // so analytics attributes the conversion consistently.
+    const bad = CONTENT_POSTS.flatMap((p) =>
+        links(p)
+            .filter((u) => /ttklia\.com/i.test(u) && !(u === biz.TTKLIA_URL || u.startsWith(biz.TTKLIA_URL + "/") || u.startsWith(biz.TTKLIA_URL + "?")))
+            .map((u) => `${p.file}  ${u}`),
+    );
+    assert.deepEqual(bad, [], `ttklia.com links that are not TTKLIA_URL:\n${bad.join("\n")}`);
+});
+
+test("content file internal links resolve and carry the post's language prefix", async () => {
+    // Paragraph HTML is not run through pathFor(), so the author writes the
+    // prefix: English links are unprefixed, BM and 中文 links start /ms or /zh.
+    const prefixes = await rewritePrefixes();
+    const bad: string[] = [];
+    for (const p of CONTENT_POSTS) {
+        const want = p.data.locale === "en" ? "" : `/${p.data.locale}`;
+        for (const u of links(p).filter((l) => l.startsWith("/"))) {
+            const hasPrefix = /^\/(en|ms|zh)(\/|$)/.test(u);
+            if (want === "" ? hasPrefix : !u.startsWith(want + "/")) {
+                bad.push(`${p.file}  ${u}  (expected ${want || "no"} language prefix)`);
+                continue;
+            }
+            if (!resolves(u.slice(want.length) || "/", prefixes)) bad.push(`${p.file}  ${u}  (no such route)`);
+        }
+    }
+    assert.deepEqual(bad, [], `Content file links that break or drop the reader's language:\n${bad.join("\n")}`);
+});

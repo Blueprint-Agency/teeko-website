@@ -185,6 +185,11 @@ Persistence Chiro repo and adapted to a database-driven site.
 - **Content is edited in the admin panel** (`/admin`), not in source. Page copy that is
   framework chrome (hero, section headers, footer, legal) lives in components. If a client
   asks for a new blog post or package, that is admin-panel work, or a seed, never a `.tsx`.
+- **New blog posts can be published from the repo** (since 2026-10-05): a JSON file in
+  `be/content/blog/` (`<slug>.<locale>.json`) is created in the database on the next backend
+  deploy by `be/src/db/importContent.ts`, which only creates missing posts and never
+  overwrites. After that the database copy is live: edit it in the admin panel, not the file.
+  Format and checks: `be/content/blog/README.md`. Guarded in `fe/tests/guards.test.ts` §8.
 - **SEO switches live in the database**: `settings.googleIndexing` (site-wide, default
   `false`), `restaurants.isIndexed`, `locations.isIndexed`. The sitemap returns empty when
   indexing is off. Check the settings row before assuming a page should rank.
