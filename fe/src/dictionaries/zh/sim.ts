@@ -4,7 +4,7 @@ import type { DictionaryArea } from "../types";
 const sim: DictionaryArea<"sim"> = {
     meta: {
         title: "马来西亚旅游电话卡套餐",
-        description: "在线预订旅游电话卡，抵达 KLIA 2 后即可领取。按供应商和使用期限比较套餐。",
+        description: "在线预订旅游电话卡，抵达 KLIA2 后即可领取，也可以在 Bukit Bintang 的 Lalaport BBCC 领取。按供应商和使用期限比较套餐。",
     },
     breadcrumb: "马来西亚旅游电话卡",
     duration: {
@@ -21,8 +21,8 @@ const sim: DictionaryArea<"sim"> = {
                 body: "注册快捷简单。只需用电子邮箱注册即可开始。",
             },
             collection: {
-                title: "KLIA 2 领取",
-                body: "随时预订，抵达 KLIA 2 机场后即可领取电话卡。",
+                title: "KLIA2 或 Lalaport 领取",
+                body: "随时预订，然后到 KLIA2 或 Bukit Bintang 的 Lalaport BBCC 旅游服务中心领取电话卡。",
             },
             data: {
                 title: "5G 无限流量",
@@ -58,7 +58,7 @@ const sim: DictionaryArea<"sim"> = {
             },
             redeem: {
                 q: "如何领取我的旅游电话卡？",
-                a: "预订确认后，您会收到一封电子邮件和一个验证码。抵达 KLIA 2 机场后，向我们的工作人员出示预订验证码即可领取电话卡。",
+                a: "预订确认后，您会收到一封附有验证码和二维码的电子邮件。在 KLIA2 或 Lalaport BBCC 的旅游服务中心出示验证码，即可领取电话卡。",
             },
             cancel: {
                 q: "我可以取消旅游电话卡预订吗？",

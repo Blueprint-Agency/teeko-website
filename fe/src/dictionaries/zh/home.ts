@@ -6,7 +6,7 @@ const home: DictionaryArea<"home"> = {
         titleBefore: "与 Teeko 一起",
         titleHighlight: "轻松",
         titleAfter: "游马来西亚",
-        subtitle: "美食推荐、在 KLIA2 领取的旅游电话卡，以及实用旅行指南",
+        subtitle: "美食推荐、可在 KLIA2 或 Lalaport BBCC 领取的旅游电话卡，以及实用旅行指南",
         cta: "预订旅游电话卡",
         goToSlide: "前往第 {n} 张",
         stats: {
@@ -22,7 +22,7 @@ const home: DictionaryArea<"home"> = {
     },
     esim: {
         title: "旅游 SIM 卡供应商",
-        description: "在线预订数据套餐，抵达后在 KLIA2 领取",
+        description: "在线预订数据套餐，在 KLIA2 或 Lalaport BBCC 领取",
         bookNow: "立即预订",
         viewAll: "查看全部旅游 SIM 卡套餐",
         units: {

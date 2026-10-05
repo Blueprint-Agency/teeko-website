@@ -6,7 +6,7 @@ const home: DictionaryArea<"home"> = {
         titleBefore: "Melancong di Malaysia ",
         titleHighlight: "Mudah",
         titleAfter: " bersama Teeko",
-        subtitle: "Tempat makan, SIM pelancongan untuk diambil di KLIA2, dan panduan untuk perjalanan anda",
+        subtitle: "Tempat makan, SIM pelancongan untuk diambil di KLIA2 atau Lalaport BBCC, dan panduan untuk perjalanan anda",
         cta: "Tempah SIM pelancongan anda",
         goToSlide: "Pergi ke slaid {n}",
         stats: {
@@ -22,7 +22,7 @@ const home: DictionaryArea<"home"> = {
     },
     esim: {
         title: "Penyedia SIM Pelancongan",
-        description: "Pelan data yang anda tempah dalam talian dan ambil di KLIA2 sebaik tiba",
+        description: "Pelan data yang anda tempah dalam talian dan ambil di KLIA2 atau Lalaport BBCC",
         bookNow: "Tempah Sekarang",
         viewAll: "Lihat Semua Pakej SIM Pelancongan",
         units: {

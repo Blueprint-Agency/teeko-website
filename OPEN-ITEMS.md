@@ -39,6 +39,12 @@ Client answers 2026-10-03:
 - **ttklia.com does not sell KL Sentral to KLIA2 by bus, but private transport to the airport
   can be ordered.** The return-trip piece (tk106) links to the private transfer/taxi booking,
   not to a bus route.
+- **The taxi zone "Bukit Bintang, Bangsar" covers KL Sentral.** KLIA2 to KL Sentral content
+  (tk005) links `https://ttklia.com/taxi/klia2-to-bukit-bintang-bangsar` for the fixed-price taxi.
+- **KLIA2 on-site facts:** KLIA Ekspres / KLIA Transit ticket counters and machines are on
+  Level 2 of Gateway@klia2, platforms on Level 1 (supplied from a Google AI Overview, replacing
+  an earlier "G floor" answer; confirm on site). Grab pickup is at the Transportation Hub on the
+  LG floor (no door number).
 
 Still open: deep-link list, UTM convention, "ttklia" vs "Teeko" naming, the corporate
 relationship, and whether ttklia.com will sell Singapore to Lalaport (it sells only Lalaport to
@@ -192,8 +198,9 @@ runner when the first backend rule needs enforcing.
 
 Not supplied on 2026-09-19 and not derivable from the repo:
 - Social profiles (none linked anywhere on the site).
-- Named people (founder, support lead) for author bylines; `blogPosts.authorId` exists but
-  posts render without a visible author.
+- ~~Named people (founder, support lead) for author bylines.~~ **Client decision 2026-10-03:
+  blog bylines read "Teeko Content Team".** No named person; `blogPosts.authorId` exists but
+  posts still render without a visible author, so the byline is set in the admin editor.
 - ~~Whether "Unlimited 5G Data" on `/travel-sim-malaysia` is true for every package of every
   provider, or only some.~~ **Confirmed correct by the client 2026-10-03**, together with the
   other SIM page claims: "No ID Required", collection at KLIA2 on landing, and the FAQ's
@@ -201,6 +208,10 @@ Not supplied on 2026-09-19 and not derivable from the repo:
   Malaysia-only use. They may be used in SIM content in all three languages.
 - Which restaurant reservation partners are in play, if any, beyond the per-row
   `reservationUrl`.
+- **SIM collection points (partly answered 2026-10-03):** the tour centres at KLIA2 and Lalaport
+  BBCC. Exact location (level, landmark, counter name) and photos of both are to come from the
+  client with the marketing team's shot list. When they arrive: add the location to the SIM
+  confirmation email (`be/src/utils/email.ts`, which names no location today) and to the drafts.
 
 ## 12. Dead components that import fabricated sample data
 

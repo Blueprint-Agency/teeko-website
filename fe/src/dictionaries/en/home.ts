@@ -4,7 +4,7 @@ const home = {
         titleBefore: "Travel Malaysia ",
         titleHighlight: "Easy",
         titleAfter: " with Teeko",
-        subtitle: "Places to eat, a travel SIM to collect at KLIA2, and guides for your trip",
+        subtitle: "Places to eat, a travel SIM to collect at KLIA2 or Lalaport BBCC, and guides for your trip",
         cta: "Book your travel SIM",
         goToSlide: "Go to slide {n}",
         // Keyed by the English label in HERO_STATS (lib/business.ts); the figures stay there.
@@ -21,7 +21,7 @@ const home = {
     },
     esim: {
         title: "Our Travel SIM Providers",
-        description: "Data plans you book online and collect at KLIA2 when you land",
+        description: "Data plans you book online and collect at KLIA2 or Lalaport BBCC",
         bookNow: "Book Now",
         viewAll: "View All Travel SIM Packages",
         // Duration units as stored on a package; an unknown unit is shown as stored.

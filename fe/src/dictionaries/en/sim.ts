@@ -3,7 +3,7 @@
 const sim = {
     meta: {
         title: "Travel SIM Packages in Malaysia",
-        description: "Book a travel SIM online and collect it when you land at KLIA 2. Compare packages by provider and duration.",
+        description: "Book a travel SIM online and collect it at KLIA2 when you land, or at Lalaport BBCC in Bukit Bintang. Compare packages by provider and duration.",
     },
     breadcrumb: "Travel SIM Malaysia",
     duration: {
@@ -20,8 +20,8 @@ const sim = {
                 body: "Fast and easy signup. Just register with your email address to get started instantly.",
             },
             collection: {
-                title: "KLIA 2 Collection",
-                body: "Book anytime and collect your SIM immediately upon landing at KLIA 2 airport.",
+                title: "Collect at KLIA2 or Lalaport",
+                body: "Book anytime, then collect your SIM at the tour centre at KLIA2 or at Lalaport BBCC in Bukit Bintang.",
             },
             data: {
                 title: "Unlimited 5G Data",
@@ -57,7 +57,7 @@ const sim = {
             },
             redeem: {
                 q: "How do I redeem my Travel SIM card?",
-                a: "Upon booking confirmation, you will receive an email and a verification code. Just show our staff at KLIA 2 airport your booking code to receive your SIM immediately upon landing.",
+                a: "After you book, you receive an email with a verification code and QR code. Show it at the tour centre at KLIA2 or at Lalaport BBCC to collect your SIM.",
             },
             cancel: {
                 q: "Can I cancel my travel SIM booking?",

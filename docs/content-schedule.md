@@ -27,7 +27,7 @@ October 2026. 20 English pieces while the ttklia.com path and the locale layer a
 | tk002 | Locale layer: data model, routing, hreflang, switcher |  | Build |  | Live | Not counted in the 190. OPEN-ITEMS #2: every BM and 中文 piece depends on it |
 | tk003 | GA4 outbound-click event · restaurant page metadata · F1 cluster refresh |  | Build |  | Not started | Not counted in the 190. KPI 2 baseline and a quick ranking lift |
 | tk004 | MDAC: fill in Malaysia's arrival card before you fly | mdac malaysia | Transport · EN |  | Built | 14,800/mo · SD 32. Route: Homepage: plan the ride |
-| tk005 | KLIA2 to KL Sentral: bus, train, taxi and Grab compared | transport from klia2 to kl sentral | Transport · EN |  | Not started | 1,600/mo · SD 16. Route: Bus: KLIA2 → KL Sentral |
+| tk005 | KLIA2 to KL Sentral: bus, train, taxi and Grab compared | transport from klia2 to kl sentral | Transport · EN |  | Built | 1,600/mo · SD 16. Route: Bus: KLIA2 → KL Sentral. Publish after tk166 (links its Lalaport section) |
 | tk006 | Arriving at KLIA2: from the gate to your ride | klia2 arrival guide | Transport · EN |  | Not started | Route: Bus destinations list |
 | tk007 | KLIA2 taxi: counters, coupons and which door | klia2 taxi | Transport · EN |  | Not started | 170/mo · SD 15. Route: Taxi booking |
 | tk008 | KLIA2 to Bukit Bintang | klia2 to bukit bintang | Transport · EN |  | Not started | 140/mo · SD 13. Route: Bus: KLIA2 → Pudu Sentral |

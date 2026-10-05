@@ -4,7 +4,7 @@ import type { DictionaryArea } from "../types";
 const sim: DictionaryArea<"sim"> = {
     meta: {
         title: "Pakej SIM Pelancong di Malaysia",
-        description: "Tempah SIM pelancong secara dalam talian dan ambil sebaik sahaja anda mendarat di KLIA 2. Bandingkan pakej mengikut penyedia dan tempoh.",
+        description: "Tempah SIM pelancong secara dalam talian dan ambil di KLIA2 sebaik mendarat, atau di Lalaport BBCC, Bukit Bintang. Bandingkan pakej mengikut penyedia dan tempoh.",
     },
     breadcrumb: "SIM Pelancong Malaysia",
     duration: {
@@ -21,8 +21,8 @@ const sim: DictionaryArea<"sim"> = {
                 body: "Pendaftaran cepat dan mudah. Daftar dengan alamat e-mel anda dan terus bermula.",
             },
             collection: {
-                title: "Ambil di KLIA 2",
-                body: "Tempah bila-bila masa dan ambil SIM anda sebaik sahaja mendarat di lapangan terbang KLIA 2.",
+                title: "Ambil di KLIA2 atau Lalaport",
+                body: "Tempah bila-bila masa, kemudian ambil SIM anda di pusat pelancongan di KLIA2 atau di Lalaport BBCC, Bukit Bintang.",
             },
             data: {
                 title: "Data 5G Tanpa Had",
@@ -58,7 +58,7 @@ const sim: DictionaryArea<"sim"> = {
             },
             redeem: {
                 q: "Bagaimana saya menuntut SIM Pelancong saya?",
-                a: "Selepas tempahan disahkan, anda akan menerima e-mel dan kod pengesahan. Tunjukkan kod tempahan anda kepada kakitangan kami di lapangan terbang KLIA 2 untuk menerima SIM anda sebaik sahaja mendarat.",
+                a: "Selepas tempahan disahkan, anda akan menerima e-mel dengan kod pengesahan dan kod QR. Tunjukkan kod itu di pusat pelancongan di KLIA2 atau di Lalaport BBCC untuk mengambil SIM anda.",
             },
             cancel: {
                 q: "Bolehkah saya membatalkan tempahan SIM pelancong saya?",

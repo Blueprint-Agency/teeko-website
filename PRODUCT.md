@@ -38,6 +38,12 @@ What the site can truthfully say, in priority order. Nothing beyond this has bee
    only claim a generic SIM counter or transfer site cannot copy.
 2. **Collect at the airport.** SIM booking is confirmed online and collected on landing at
    KLIA2 with a QR code. Concrete, verifiable, and the reason the hero CTA exists.
+   **Collection points (client, 2026-10-03): the tour centre at KLIA2 (Terminal 2) and the tour
+   centre at Lalaport BBCC.** Exact counter details are sent with the booking; copy names the
+   tour centre and says "details come with your booking", never a level or counter number until
+   the client supplies one. Booking asks only for a collection date (no location choice), so a
+   SIM booked online can be collected at either point. The confirmation email does not yet say
+   where to collect.
 3. **Restaurants with real third-party ratings.** Listings carry Google and TripAdvisor
    figures, not Teeko's own star ratings.
 
@@ -47,7 +53,7 @@ Deliberately not positioning: app.teeko.ai (the AI chatbot). It is linked, not l
 
 - Legal operator, address, emails: `fe/src/lib/business.ts`. The registered office is a
   company address in Kota Damansara, not a walk-in location; the only physical touchpoint the
-  site implies is SIM collection at KLIA2.
+  site implies is SIM collection at the KLIA2 and Lalaport BBCC tour centres.
 - Sister properties: ttklia.com (bus, taxi, car charter, tours; EN/ZH/MS) and app.teeko.ai.
 - Phone and hours appear only in the copied `/terms` and are **unconfirmed** (OPEN-ITEMS #3).
 - Content is edited in the admin panel and stored in Postgres. Source code holds chrome and
