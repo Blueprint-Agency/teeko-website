@@ -46,6 +46,9 @@ October 2026. 20 English pieces while the ttklia.com path and the locale layer a
 | tk173 | KLIA2 to your KL hotel by private transfer: sedan, MPV or van | kl airport transfer | Transport · EN |  | Not started | 50/mo in Malaysia, 70/mo in Singapore · SD 42. Retargeted 3 Oct: “klia2 private transfer” measured 0. Route: taxi transfer · /taxi/klia2-to-klia |
 | tk174 | Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work | private driver kuala lumpur | Transport · EN |  | Not started | 70/mo · SD 31. Route: /car-charter |
 | tk175 | Genting Highlands by private driver: a day trip from KL | genting day trip | Transport · EN |  | Not started | 50/mo · SD 30. Retargeted 3 Oct: “private driver genting” and “kl to genting taxi” measured 0–10. Route: /car-charter. Client confirmed 3 Oct: the charter covers Genting. Genting van is Coming Soon, so not linked |
+| tk196 | KLIA2 bus station: how to walk there from arrivals | klia2 bus station | Transport · EN | /blog/klia2-bus-station | Built | 320/mo · SD 18 (“klia2 bus terminal” the same). Added 6 Oct 2026 at the client’s request, embeds ttklia’s TikTok walk-through. Narrower than tk006, which should link to it. Route: /guide/how-to-get-from-klia2 |
+| tk197 | Terminal bas KLIA2 (KLIA2 bus station: how to walk there from arrivals) | terminal bas klia2 | Transport · BM | /ms/blog/terminal-bas-klia2 | Built | 720/mo · SD 16. Route: /guide/how-to-get-from-klia2 |
+| tk198 | 吉隆坡机场巴士 (KLIA2 bus station: how to walk there from arrivals) | 吉隆坡机场巴士 | Transport · ZH | /zh/blog/klia2-bus-station | Built | 10/mo · SD 50; the only Chinese variant with measured volume (“klia2 巴士”, “klia2 巴士站” measured nothing). Route: /guide/how-to-get-from-klia2 |
 
 ## Month 2: KL Food + Genting
 
