@@ -29,7 +29,7 @@ October 2026. 20 English pieces while the ttklia.com path and the locale layer a
 | tk004 | MDAC: fill in Malaysia's arrival card before you fly | mdac malaysia | Transport · EN | /blog/mdac-malaysia | Live | 14,800/mo · SD 32. Route: Homepage: plan the ride |
 | tk005 | KLIA2 to KL Sentral: bus, train, taxi and Grab compared | transport from klia2 to kl sentral | Transport · EN | /blog/klia2-to-kl-sentral | Live | 1,600/mo · SD 16. Route: Bus: KLIA2 → KL Sentral. Publish after tk166 (links its Lalaport section) |
 | tk006 | Arriving at KLIA2: from the gate to your ride | klia2 arrival guide | Transport · EN |  | Not started | Route: Bus destinations list |
-| tk007 | KLIA2 taxi: counters, coupons and which door | klia2 taxi | Transport · EN |  | Not started | 170/mo · SD 15. Route: Taxi booking |
+| tk007 | KLIA2 airport taxi: how to find the taxi counter | airport taxi klia2 | Transport · EN | /blog/klia2-airport-taxi | Built | 210/mo · SD 21 (“klia2 taxi” 170/mo · SD 15, also in the title). Retitled 6 Oct 2026 around ttklia’s TikTok walk to the Door 2 and Door 3 counters; coupons dropped, no source for how they work. Route: Taxi booking |
 | tk008 | KLIA2 to Bukit Bintang | klia2 to bukit bintang | Transport · EN |  | Not started | 140/mo · SD 13. Route: Bus: KLIA2 → Pudu Sentral |
 | tk009 | KLIA to KLIA2 transfer | klia to klia2 | Transport · EN |  | Not started | 260/mo · SD 23. Route: /bus/klia2-to-klia1 |
 | tk010 | Landing late at KLIA2: stay at the airport or ride now | klia2 capsule hotel | Transport · EN |  | Not started | 3,600/mo · SD 21. Route: Taxi booking |
@@ -69,7 +69,7 @@ November 2026. BM and 中文 launch with Month 1’s topics. The Lalaport and pr
 | tk024 | MDAC: fill in Malaysia's arrival card before you fly |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Homepage: plan the ride |
 | tk025 | KLIA2 ke KL Sentral (KLIA2 to KL Sentral: bus, train, taxi and Grab compared) | klia2 ke kl sentral | Transport · BM |  | Not started | 210/mo · SD 17. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk026 | Arriving at KLIA2: from the gate to your ride |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus destinations list |
-| tk027 | KLIA2 taxi: counters, coupons and which door |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi booking |
+| tk027 | Teksi KLIA2 (KLIA2 airport taxi: how to find the taxi counter) | teksi klia2 | Transport · BM | /ms/blog/teksi-klia2 | Built | 20/mo · SD 37. Route: Taxi booking |
 | tk028 | KLIA2 to Bukit Bintang |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → Pudu Sentral |
 | tk029 | KLIA to KLIA2 transfer |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/klia2-to-klia1 |
 | tk030 | Landing late at KLIA2: stay at the airport or ride now |  | Transport · BM |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi booking |
@@ -79,7 +79,7 @@ November 2026. BM and 中文 launch with Month 1’s topics. The Lalaport and pr
 | tk034 | MDAC: fill in Malaysia's arrival card before you fly |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Homepage: plan the ride |
 | tk035 | 吉隆坡机场到市区 (KLIA2 to KL Sentral: bus, train, taxi and Grab compared) | 吉隆坡机场到市区 | Transport · ZH |  | Not started | 30/mo · SD 42. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → KL Sentral |
 | tk036 | Arriving at KLIA2: from the gate to your ride |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus destinations list |
-| tk037 | KLIA2 taxi: counters, coupons and which door |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi booking |
+| tk037 | 吉隆坡机场德士 (KLIA2 airport taxi: how to find the taxi counter) | 吉隆坡机场德士 | Transport · ZH | /zh/blog/klia2-airport-taxi | Built | No Chinese variant measured volume (吉隆坡机场德士, 吉隆坡机场出租车, klia2德士 all 0); 德士 is the Malaysian usage. Route: Taxi booking |
 | tk038 | KLIA2 to Bukit Bintang |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Bus: KLIA2 → Pudu Sentral |
 | tk039 | KLIA to KLIA2 transfer |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: /bus/klia2-to-klia1 |
 | tk040 | Landing late at KLIA2: stay at the airport or ride now |  | Transport · ZH |  | Not started | Locale keyword measured at brief stage. Retitled to the locale’s own keyword, not translated. Route: Taxi booking |
