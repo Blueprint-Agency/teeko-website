@@ -580,10 +580,12 @@ test("content files use no em or en dashes", () => {
 
 test("content file links to ttklia.com use TTKLIA_URL", () => {
     // Prose may name "ttklia.com"; every link to it must be the canonical URL
-    // so analytics attributes the conversion consistently.
+    // so analytics attributes the conversion consistently. Matched on the host,
+    // so a link that only mentions it elsewhere (tiktok.com/@ttklia.com) is not one.
+    const toTtklia = /^(?:(?:https?:)?\/\/)?(?:[^/?#@]*\.)?ttklia\.com(?:[:/?#]|$)/i;
     const bad = CONTENT_POSTS.flatMap((p) =>
         links(p)
-            .filter((u) => /ttklia\.com/i.test(u) && !(u === biz.TTKLIA_URL || u.startsWith(biz.TTKLIA_URL + "/") || u.startsWith(biz.TTKLIA_URL + "?")))
+            .filter((u) => toTtklia.test(u) &&!(u === biz.TTKLIA_URL || u.startsWith(biz.TTKLIA_URL + "/") || u.startsWith(biz.TTKLIA_URL + "?")))
             .map((u) => `${p.file}  ${u}`),
     );
     assert.deepEqual(bad, [], `ttklia.com links that are not TTKLIA_URL:\n${bad.join("\n")}`);

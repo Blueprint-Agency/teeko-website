@@ -26,8 +26,8 @@ October 2026. 20 English pieces while the ttklia.com path and the locale layer a
 | tk001 | ttklia.com cta on all 12 existing posts + nav link |  | Build |  | Not started | Not counted in the 190. OPEN-ITEMS #1: waits on the client’s link plan and UTM convention |
 | tk002 | Locale layer: data model, routing, hreflang, switcher |  | Build |  | Live | Not counted in the 190. OPEN-ITEMS #2: every BM and 中文 piece depends on it |
 | tk003 | GA4 outbound-click event · restaurant page metadata · F1 cluster refresh |  | Build |  | Not started | Not counted in the 190. KPI 2 baseline and a quick ranking lift |
-| tk004 | MDAC: fill in Malaysia's arrival card before you fly | mdac malaysia | Transport · EN |  | Built | 14,800/mo · SD 32. Route: Homepage: plan the ride |
-| tk005 | KLIA2 to KL Sentral: bus, train, taxi and Grab compared | transport from klia2 to kl sentral | Transport · EN |  | Built | 1,600/mo · SD 16. Route: Bus: KLIA2 → KL Sentral. Publish after tk166 (links its Lalaport section) |
+| tk004 | MDAC: fill in Malaysia's arrival card before you fly | mdac malaysia | Transport · EN | /blog/mdac-malaysia | Live | 14,800/mo · SD 32. Route: Homepage: plan the ride |
+| tk005 | KLIA2 to KL Sentral: bus, train, taxi and Grab compared | transport from klia2 to kl sentral | Transport · EN | /blog/klia2-to-kl-sentral | Live | 1,600/mo · SD 16. Route: Bus: KLIA2 → KL Sentral. Publish after tk166 (links its Lalaport section) |
 | tk006 | Arriving at KLIA2: from the gate to your ride | klia2 arrival guide | Transport · EN |  | Not started | Route: Bus destinations list |
 | tk007 | KLIA2 taxi: counters, coupons and which door | klia2 taxi | Transport · EN |  | Not started | 170/mo · SD 15. Route: Taxi booking |
 | tk008 | KLIA2 to Bukit Bintang | klia2 to bukit bintang | Transport · EN |  | Not started | 140/mo · SD 13. Route: Bus: KLIA2 → Pudu Sentral |
@@ -36,7 +36,7 @@ October 2026. 20 English pieces while the ttklia.com path and the locale layer a
 | tk011 | Where to eat near KL Sentral | kl sentral food | Food · EN |  | Not started | 8,100/mo · SD 14. Route: Bus: KLIA2 → KL Sentral |
 | tk012 | Bukit Bintang food | bukit bintang food | Food · EN |  | Not started | 5,400/mo · SD 17. Route: Bus: KLIA2 → Pudu Sentral |
 | tk013 | Tourist SIM in Malaysia: collect at KLIA2 or use an eSIM | tourist sim card malaysia | SIM · EN |  | Not started | 320/mo · SD 17. Route: SIM booking, then bus |
-| tk166 | Singapore to KL by bus: arriving at Lalaport BBCC | singapore to kl bus | Transport · EN |  | Built | 6,600/mo in Singapore, 590/mo in Malaysia · SD 21. Route: return leg /bus/lalaport-to-bugis, then the onward ride. ⚑ ttklia.com does not sell Singapore → Lalaport (reverse URLs 404); client to confirm |
+| tk166 | Singapore to KL by bus: arriving at Lalaport BBCC | singapore to kl bus | Transport · EN | /blog/singapore-to-kl-bus | Live | 6,600/mo in Singapore, 590/mo in Malaysia · SD 21. Route: return leg /bus/lalaport-to-bugis, then the onward ride. ⚑ ttklia.com does not sell Singapore → Lalaport (reverse URLs 404); client to confirm |
 | tk167 | Lalaport BBCC Transportation Hub: finding your bus, lockers and lounge | lalaport transportation hub | Transport · EN |  | Not started | 1,000/mo · SD 14. The hub name “lalaport bbcc” gets 5,400/mo · SD 21; use it as the secondary keyword. Route: /guide/how-to-get-from-lalaport |
 | tk168 | Lalaport to Singapore by bus: choosing your drop-off point | lalaport to singapore bus | Transport · EN |  | Not started | 70/mo · SD 27, rising since the hub opened (260 in Jul 2026). Route: /bus/lalaport-to-bugis (+23 Singapore stops) |
 | tk169 | KLIA2 to Lalaport BBCC: from the plane to Bukit Bintang | klia2 to lalaport | Transport · EN |  | Not started | 10/mo · SD 20. Low search demand; kept because ttklia.com sells the route. Route: /bus/klia2-to-lalaport-bbcc |
@@ -46,6 +46,9 @@ October 2026. 20 English pieces while the ttklia.com path and the locale layer a
 | tk173 | KLIA2 to your KL hotel by private transfer: sedan, MPV or van | kl airport transfer | Transport · EN |  | Not started | 50/mo in Malaysia, 70/mo in Singapore · SD 42. Retargeted 3 Oct: “klia2 private transfer” measured 0. Route: taxi transfer · /taxi/klia2-to-klia |
 | tk174 | Hiring a private driver in KL and Selangor: how the 8- and 10-hour charters work | private driver kuala lumpur | Transport · EN |  | Not started | 70/mo · SD 31. Route: /car-charter |
 | tk175 | Genting Highlands by private driver: a day trip from KL | genting day trip | Transport · EN |  | Not started | 50/mo · SD 30. Retargeted 3 Oct: “private driver genting” and “kl to genting taxi” measured 0–10. Route: /car-charter. Client confirmed 3 Oct: the charter covers Genting. Genting van is Coming Soon, so not linked |
+| tk196 | KLIA2 bus station: how to walk there from arrivals | klia2 bus station | Transport · EN | /blog/klia2-bus-station | Built | 320/mo · SD 18 (“klia2 bus terminal” the same). Added 6 Oct 2026 at the client’s request, embeds ttklia’s TikTok walk-through. Narrower than tk006, which should link to it. Route: /guide/how-to-get-from-klia2 |
+| tk197 | Terminal bas KLIA2 (KLIA2 bus station: how to walk there from arrivals) | terminal bas klia2 | Transport · BM | /ms/blog/terminal-bas-klia2 | Built | 720/mo · SD 16. Route: /guide/how-to-get-from-klia2 |
+| tk198 | 吉隆坡机场巴士 (KLIA2 bus station: how to walk there from arrivals) | 吉隆坡机场巴士 | Transport · ZH | /zh/blog/klia2-bus-station | Built | 10/mo · SD 50; the only Chinese variant with measured volume (“klia2 巴士”, “klia2 巴士站” measured nothing). Route: /guide/how-to-get-from-klia2 |
 
 ## Month 2: KL Food + Genting
 

@@ -1,0 +1,135 @@
+{
+  "title": "吉隆坡机场巴士：从KLIA2入境大厅走到巴士站",
+  "slug": "klia2-bus-station",
+  "locale": "zh",
+  "status": "PUBLISHED",
+  "metaDescription": "KLIA2的机场巴士站在Level 1交通枢纽。跟着ttklia的视频，一步步从入境大厅走到巴士柜台和售票机。",
+  "featureImage": null,
+  "translationOf": {
+    "locale": "en",
+    "slug": "klia2-bus-station"
+  },
+  "contentBlocks": [
+    {
+      "blockType": "paragraph",
+      "content": "<p>KLIA2的机场巴士站在交通枢纽（Transportation Hub）的Level 1，就在入境大厅下面一层。从B门（Door B）走出入境大厅，穿过Gateway@klia2商场一直往前走，过了FamilyMart左转，搭自动步道下到Level 1，巴士柜台和自助售票机就在前面。全程都在室内，行李推车也可以上自动步道。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "重点速览"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>巴士站在几楼？</strong>Level 1，交通枢纽里。你下飞机后出来是在Level 2。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>从哪个门出入境大厅？</strong>B门。出来后跟着“Bus and Taxi（Bas dan Teksi）”的指示牌走。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>在哪里买巴士票？</strong>Level 1的巴士柜台或自助售票机。也可以出发前在ttklia.com订好，电子票存在手机里。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>Grab在哪里上车？</strong>也在交通枢纽，LG层。跟着e-hailing的指示牌走。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "先看一遍路线视频"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>ttklia拍了一段从KLIA2入境大厅走到巴士柜台的视频，不到一分钟。落地前先看一遍，到时候看到指示牌就不会陌生。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<div style=\"display:flex;justify-content:center\"><iframe src=\"https://www.tiktok.com/player/v1/7520098374696094994?music_info=0&amp;description=0&amp;rel=0\" title=\"从KLIA2入境大厅走到巴士柜台\" loading=\"lazy\" allow=\"fullscreen; encrypted-media\" style=\"width:100%;max-width:340px;aspect-ratio:9/16;border:0;border-radius:16px\"></iframe></div><p style=\"text-align:center;font-size:0.9em;margin-top:8px\">视频：<a href=\"https://www.tiktok.com/@ttklia.com/video/7520098374696094994\">ttklia的TikTok</a></p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "一步步走：从入境大厅到巴士柜台"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ol><li><strong>从B门出入境大厅。</strong>取完行李、过了海关，你会在Level 2出来。找柱子上的大字母B。</li><li><strong>直走</strong>，头顶是“Bus and Taxi（Bas dan Teksi）”的指示牌。</li><li><strong>经过绿色的AirAsia MOVE广告牌</strong>，继续走进Gateway@klia2商场。</li><li><strong>一直往前，经过Homeworld和ZUS Coffee。</strong></li><li><strong>找到写着“You Are Now At Level 2”的指示牌</strong>，FamilyMart在你左手边。</li><li><strong>在写着Level 1：Bus &amp; e-Hailing（巴士与网约车）的指示牌处左转。</strong></li><li><strong>搭自动步道往下</strong>，指示牌写着Transportation Hub，Level 1。推着行李车的话，先看一下入口处的推车安全须知。</li><li><strong>到了Level 1，朝交通枢纽的电梯方向走。</strong></li><li><strong>前面那一排带编号的窗口就是巴士柜台</strong>，在QMac店后面。自助售票机在同一排的另一头，靠近3号门（Pintu 3）。</li></ol>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>如果走迷糊了，就抬头看。KLIA2每块指示牌都会列出各楼层，巴士永远在Level 1，标着巴士图标和“Bas &amp; e-Hailing”。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "到了巴士柜台"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>KLIA2交通枢纽的巴士开往吉隆坡市内的KL Sentral、Pudu Sentral（订票网站上写作KL City Centre）、Lalaport BBCC和TBS，也开往KLIA Terminal 1，以及更远的Melaka、Ipoh、Penang、Johor Bahru和新加坡。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>到了现场可以在柜台或售票机买票。出发前订好就不用排队：出示手机里的电子票即可，不确定巴士从哪个门出发就问柜台。离开入境大厅前，先确认手机有网络。如果你订了<a href=\"/zh/travel-sim-malaysia\">Teeko旅游SIM卡</a>，顺路在KLIA2的旅游中心领取，具体柜台信息会随订单发给你。</p>"
+    },
+    {
+      "blockType": "cta",
+      "content": {
+        "heading": "落地前先订好KLIA2出发的巴士",
+        "subheading": "查看KLIA2交通枢纽出发的所有巴士路线，比较发车时间，车票直接存在手机里。",
+        "buttonText": "查看KLIA2出发的巴士",
+        "url": "https://ttklia.com/guide/how-to-get-from-klia2?utm_source=teeko&utm_medium=blog&utm_campaign=klia2_bus_station&utm_content=zh"
+      }
+    },
+    {
+      "blockType": "h2",
+      "content": "不坐巴士的话"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ul><li><strong>KLIA Ekspres和KLIA Transit机场快线。</strong>在Gateway@klia2的Level 2柜台或售票机买票，再往下一层到Level 1月台。</li><li><strong>Grab。</strong>上车点在交通枢纽LG层，过了Level 1继续跟着e-hailing指示牌往下走。</li><li><strong>预订的出租车。</strong>完全不用走去交通枢纽。<a href=\"https://ttklia.com/?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=klia2_bus_station&amp;utm_content=zh\">在ttklia.com预订的定价出租车</a>，司机会跟踪你的航班，举着名牌在KLIA2入境大厅等你。</li></ul>"
+    },
+    {
+      "blockType": "h2",
+      "content": "常见问题"
+    },
+    {
+      "blockType": "h3",
+      "content": "KLIA2的巴士站在哪里？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>KLIA2的巴士站在交通枢纽的Level 1。从Level 2的入境大厅出B门，穿过Gateway@klia2商场，过了FamilyMart左转，搭自动步道下去就到。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "KLIA2巴士站和交通枢纽是同一个地方吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>是的。KLIA2的指示牌把它叫作Transportation Hub（Hab Pengangkutan Awam）。巴士柜台、自助售票机和巴士出发的门都在它的Level 1。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "没有预订可以在KLIA2现场买巴士票吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>可以。Level 1有人工巴士柜台和一排自助售票机。提前在ttklia.com订票可以免排队，落地前就能看到发车时间。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "在KLIA2哪里搭Grab？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Grab上车点在交通枢纽LG层。先按同样的路线走到Level 1，再跟着e-hailing指示牌往下一层。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "总结"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>从KLIA2入境大厅到巴士站只隔一层楼：B门出，穿过Gateway@klia2直走，过FamilyMart左转，搭自动步道到Level 1。出发前先看一遍ttklia的视频，再<a href=\"https://ttklia.com/guide/how-to-get-from-klia2?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=klia2_bus_station&amp;utm_content=zh\">在ttklia.com选好巴士</a>，到柜台时车票已经在手。</p>"
+    }
+  ]
+}
