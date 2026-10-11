@@ -1,0 +1,176 @@
+{
+  "title": "Taxi to KLIA or KLIA2: Fixed Price Transfer, Grab or Bus",
+  "slug": "taxi-to-klia",
+  "locale": "en",
+  "status": "PUBLISHED",
+  "metaDescription": "Flying home from KL? Book a fixed price taxi to KLIA or KLIA2 from your hotel, or compare Grab and the Lalaport bus, and when to leave.",
+  "featureImage": null,
+  "contentBlocks": [
+    {
+      "blockType": "paragraph",
+      "content": "<p>To get from Kuala Lumpur to KLIA or KLIA2 for your flight, you have three options. Book a fixed price taxi on ttklia.com and your driver collects you at your hotel. Take a Grab if you would rather book on the day. Or take the airport bus from Lalaport BBCC in Bukit Bintang, where you pay per seat. The drive takes 45 to 60 minutes from central KL. Before you book anything, check which terminal your flight leaves from.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Key Takeaways"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>Which terminal do I need?</strong> Your e-ticket names it: KLIA Terminal 1 or KLIA2. They are separate buildings, so check before you book a ride.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>Can I book a taxi from my hotel the day before?</strong> Yes. On ttklia.com, pick Taxi, tap the red swap arrow so the airport is your destination, and type your hotel. The price is fixed when you book.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>What costs least?</strong> The bus from the Lalaport BBCC Transportation Hub in Bukit Bintang to KLIA2 or KLIA Terminal 1.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>How long is the drive?</strong> 45 to 60 minutes from central KL, longer at rush hour or in heavy rain.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Check your terminal first"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Kuala Lumpur International Airport has two terminals: KLIA Terminal 1 and KLIA2. They are separate buildings, one train stop apart, and going to the wrong one costs you time you may not have. Your airline can also change the terminal, so check your booking confirmation or the airline app the day before you fly.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>If you land at one terminal and fly out of the other on a connection, read the <a href=\"/blog/klia1-to-klia2\">KLIA to KLIA2 transfer guide</a>. Otherwise, note your terminal and pick your ride below.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Book a fixed price taxi from your hotel"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>ttklia.com sells taxi transfers from KL to the airport by sedan, MPV or van, picked up at your hotel door. The price is fixed when you book, and the service runs day and night. Booking takes a couple of minutes:</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ol><li><strong>Open ttklia.com</strong> and choose the <strong>Taxi</strong> tab.</li><li><strong>Tap the red swap arrow</strong> between Origin and Destination, so Kuala Lumpur International Airport becomes your destination.</li><li><strong>Type your hotel or address</strong> in the search box and pick it from the list.</li><li><strong>Choose your date and pickup time.</strong> Work back from your airline's check-in cut-off and allow for the drive.</li><li><strong>Pick a car that fits your bags</strong>, then pay.</li></ol>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>When your confirmation arrives, check that it shows the right terminal. If it does not, contact ttklia support through the WhatsApp chat linked on the site before the day.</p>"
+    },
+    {
+      "blockType": "cta",
+      "content": {
+        "heading": "Book your taxi to the airport",
+        "subheading": "Pick Taxi, tap the red swap arrow so the airport is your destination, and type your hotel. The price is fixed when you book.",
+        "buttonText": "Book a taxi to KLIA",
+        "url": "https://ttklia.com/?utm_source=teeko&utm_medium=blog&utm_campaign=taxi_to_klia&utm_content=en"
+      }
+    },
+    {
+      "blockType": "h2",
+      "content": "Grab to the airport"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Grab runs airport rides from anywhere in the city, and you can book one on the spot or schedule it ahead in the app. Grab fares move with demand, so the price at 5 AM on a rainy weekday can be very different from the price at noon. For one or two people with light bags, outside rush hour, it works well. Check the fare in the app the night before so you know what to expect.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "By bus from Bukit Bintang: Lalaport BBCC"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>If you are staying in or near Bukit Bintang, the airport bus from the Lalaport BBCC Transportation Hub lets you pay per seat instead of per car. ttklia.com sells seats on <a href=\"https://ttklia.com/bus/lalaport-to-klia2?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=taxi_to_klia&amp;utm_content=en\">Lalaport BBCC to KLIA2</a> and <a href=\"https://ttklia.com/bus/lalaport-to-klia1?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=taxi_to_klia&amp;utm_content=en\">Lalaport BBCC to KLIA Terminal 1</a>. Buses leave several times a day, but the timetable may not cover late night, so check the departure times when you book.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>The hub is indoors and linked to the Hang Tuah LRT and Monorail station. The <a href=\"/blog/lalaport-transportation-hub\">Lalaport BBCC Transportation Hub guide</a> shows where to wait, and <a href=\"/blog/bukit-bintang-to-klia2\">Bukit Bintang to KLIA2</a> walks through the trip. Keep your e-ticket on your phone and arrive early to find your platform.</p>"
+    },
+    {
+      "blockType": "cta",
+      "content": {
+        "heading": "Book the bus from Lalaport BBCC to KLIA2",
+        "subheading": "Seats from the Lalaport BBCC Transportation Hub in Bukit Bintang, with your ticket on your phone.",
+        "buttonText": "See Lalaport to KLIA2 buses",
+        "url": "https://ttklia.com/bus/lalaport-to-klia2?utm_source=teeko&utm_medium=blog&utm_campaign=taxi_to_klia&utm_content=en"
+      }
+    },
+    {
+      "blockType": "h2",
+      "content": "From KL Sentral: the KLIA Ekspres"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>There is no ttklia bus from KL Sentral to the airport. If your hotel is at KL Sentral, the KLIA Ekspres train takes about 33 minutes to KLIA2 and costs RM55 for an adult (<a href=\"https://www.kliaekspres.com/products-fares/klia-ekspres/\">KLIA Ekspres</a>). For a family, four train tickets can cost more than one taxi, so compare both. The <a href=\"/blog/klia2-to-kl-sentral\">KLIA2 and KL Sentral guide</a> has the full fares and timings.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Which ride suits you"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<div style=\"overflow-x:auto\"><table style=\"border-collapse:collapse;width:100%;font-size:0.95em\"><thead><tr><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">Your trip</th><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">Taxi booked on ttklia.com</th><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">Grab</th><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">Bus from Lalaport BBCC</th></tr></thead><tbody><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Pickup</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Your hotel door</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Your hotel door</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Lalaport BBCC Transportation Hub</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Price</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Fixed when you book, one fare per car</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Shown in the app, changes with demand</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Per seat</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Booking</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Ahead, on ttklia.com</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">On the spot or scheduled</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Ahead, on ttklia.com</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Suits</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Families, groups, heavy bags, early flights</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">One or two people, light bags</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Solo travellers near Bukit Bintang</td></tr></tbody></table></div>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Pick the column that matches your group, then book it the day before you fly.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "When to leave for the airport"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Start from your airline's check-in cut-off, then add the drive. From central KL the road trip takes 45 to 60 minutes, and longer at rush hour or in a heavy afternoon storm. The bus takes longer than a car, so check its journey time when you book. Set your pickup time on that basis, not on the departure time of your flight.</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Coming back to KL later in your trip? Read <a href=\"/blog/airport-transfer-kuala-lumpur\">KLIA2 to your KL hotel by private transfer</a> to book the arrival leg before you land.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Frequently Asked Questions"
+    },
+    {
+      "blockType": "h3",
+      "content": "How long does a taxi from KL to KLIA take?"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>A taxi from central KL to KLIA or KLIA2 takes 45 to 60 minutes, and longer at rush hour or in heavy rain. Set your pickup time from your airline's check-in cut-off.</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "Can I book a taxi to KLIA2 the night before?"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Yes, you can book a taxi to KLIA2 the night before on ttklia.com. Choose Taxi, tap the red swap arrow so the airport is the destination, then type your hotel and pickup time.</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "Is there a bus from KL Sentral to KLIA2 on ttklia.com?"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>No, ttklia.com does not sell a bus from KL Sentral to KLIA2. It sells buses from Lalaport BBCC in Bukit Bintang to KLIA2 and KLIA Terminal 1. From KL Sentral, take the KLIA Ekspres or a taxi.</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "Does Grab go to KLIA2?"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Yes, Grab goes to KLIA2 and KLIA Terminal 1. You can book on the spot or schedule the ride in the app. The fare changes with demand, so check it the night before.</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Conclusion"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>For a taxi to KLIA or KLIA2, check your terminal, then book a fixed price ride from your hotel the day before. Take the Lalaport BBCC bus if you are near Bukit Bintang and travelling light, or the KLIA Ekspres from KL Sentral. <a href=\"https://ttklia.com/?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=taxi_to_klia&amp;utm_content=en\">Book your taxi to the airport on ttklia.com</a>: pick Taxi, tap the red swap arrow, and type your hotel.</p>"
+    }
+  ]
+}
