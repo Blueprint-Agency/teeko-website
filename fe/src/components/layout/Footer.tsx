@@ -46,9 +46,15 @@ export function Footer() {
                             <ul className="space-y-3">
                                 {section.links.map((link) => (
                                     <li key={link.href}>
-                                        <Link href={link.englishOnly ? link.href : localePath(link.href)} className="text-sm hover:text-red-500 transition-colors">
-                                            {label(link.labelKey)}
-                                        </Link>
+                                        {link.external ? (
+                                            <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-sm hover:text-red-500 transition-colors">
+                                                {label(link.labelKey)}
+                                            </a>
+                                        ) : (
+                                            <Link href={link.englishOnly ? link.href : localePath(link.href)} className="text-sm hover:text-red-500 transition-colors">
+                                                {label(link.labelKey)}
+                                            </Link>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

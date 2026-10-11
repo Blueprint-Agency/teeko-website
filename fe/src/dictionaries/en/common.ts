@@ -5,6 +5,7 @@ const common = {
         restaurants: "Restaurants",
         travelSim: "Travel SIM",
         blog: "Blog",
+        airportTransfer: "Airport Transfer",
         signIn: "Sign In",
         myProfile: "My Profile",
         toggleMenu: "Open or close the menu",

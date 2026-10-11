@@ -8,6 +8,7 @@ const common: DictionaryArea<"common"> = {
         restaurants: "餐厅",
         travelSim: "旅游电话卡",
         blog: "博客",
+        airportTransfer: "机场交通",
         signIn: "登录",
         myProfile: "我的账户",
         toggleMenu: "打开或关闭菜单",
