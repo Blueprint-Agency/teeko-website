@@ -524,7 +524,7 @@ interface ContentPost {
         slug: string;
         locale: string;
         metaDescription?: string;
-        contentBlocks: { blockType: string; content: string | Record<string, string> }[];
+        contentBlocks: { blockType: string; content?: string | Record<string, string>; restaurantId?: string }[];
     };
 }
 
@@ -538,6 +538,7 @@ const CONTENT_POSTS: ContentPost[] = existsSync(CONTENT_DIR)
 function visibleText(p: ContentPost): string[] {
     const out = [p.data.title, p.data.metaDescription ?? ""];
     for (const b of p.data.contentBlocks) {
+        if (b.blockType === "restaurant" || !b.content) continue;
         if (typeof b.content === "string") out.push(b.content.replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&"));
         else out.push(b.content.heading ?? "", b.content.subheading ?? "", b.content.buttonText ?? "");
     }
@@ -548,6 +549,7 @@ function visibleText(p: ContentPost): string[] {
 function links(p: ContentPost): string[] {
     const out: string[] = [];
     for (const b of p.data.contentBlocks) {
+        if (b.blockType === "restaurant" || !b.content) continue;
         if (typeof b.content === "string") {
             for (const m of b.content.matchAll(/href="([^"]+)"/g)) out.push(m[1].replace(/&amp;/g, "&"));
         } else if (b.content.url) out.push(b.content.url);
@@ -589,6 +591,19 @@ test("content file links to ttklia.com use TTKLIA_URL", () => {
             .map((u) => `${p.file}  ${u}`),
     );
     assert.deepEqual(bad, [], `ttklia.com links that are not TTKLIA_URL:\n${bad.join("\n")}`);
+});
+
+test("content file restaurant cards name a restaurant by id", () => {
+    // Restaurant details come from the database (non-negotiable 2), so a card is
+    // only ever a restaurantId; the importer drops a card whose id is not in the
+    // database it runs against.
+    const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const bad = CONTENT_POSTS.flatMap((p) =>
+        p.data.contentBlocks
+            .filter((b) => b.blockType === "restaurant" && (!uuid.test(b.restaurantId ?? "") || b.content !== undefined))
+            .map((b) => `${p.file}  ${b.restaurantId ?? "(no restaurantId)"}`),
+    );
+    assert.deepEqual(bad, [], `Restaurant cards need a restaurantId and no content of their own:\n${bad.join("\n")}`);
 });
 
 test("content file internal links resolve and carry the post's language prefix", async () => {

@@ -29,7 +29,11 @@ is live its database copy is the one that counts: correct it in the admin panel
 
 - `translationOf` only on a BM or 中文 version; it joins the English post's translation group
   (hreflang and the language switcher). The original must exist first.
-- Block types: `h2`, `h3`, `h4`, `paragraph` (HTML), `image`, `cta`. Tables go in a
+- Block types: `h2`, `h3`, `h4`, `paragraph` (HTML), `image`, `cta`, `restaurant`.
+- A restaurant card is `{ "blockType": "restaurant", "restaurantId": "<uuid>" }`, no `content`.
+  The card shows the restaurant's own database row, so describe it in the paragraph around it
+  only from that row. A card whose restaurant is not in the database being imported into
+  (staging has different rows from production) is left out with a log line. Tables go in a
   `paragraph` block as HTML with inline styles; the site has no table styling of its own.
 - Internal links in BM and 中文 posts must carry `/ms` or `/zh`; paragraph HTML is not
   localised automatically.
