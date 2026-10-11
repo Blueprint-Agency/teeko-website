@@ -6,7 +6,7 @@ declined, the reason is recorded so it is not re-pitched every month.
 
 Numbers are referenced from code comments and `AGENTS.md`; do not renumber.
 
-Last updated **2026-10-03**, when the trilingual site went live (item 2), the client waived translation review (item 2) and confirmed the SIM claims (item 11), and the SIM payment cards were logged (item 13).
+Last updated **2026-10-11**, when the October content research raised items 14 and 15. Before that, **2026-10-03**, when the trilingual site went live (item 2), the client waived translation review (item 2) and confirmed the SIM claims (item 11), and the SIM payment cards were logged (item 13).
 
 ## 1. ttklia.com conversion path does not exist on the site
 
@@ -236,3 +236,57 @@ They contradict PRODUCT.md: the site collects no payment (packages are RM0 or li
 `ctaLink`), and "commission settlement" reads as partner-facing copy. Needed: the client
 confirms these payment methods are real for SIM collection at KLIA2, or the cards are removed
 so the page only shows payment methods from `simContentTemplates`.
+
+## 14. SIM claims vs the 2026 prepaid registration rules
+
+**Status: open. Owner: client. Raised 2026-10-11.**
+
+The client confirmed "No ID Required" on 2026-10-03 (item 11), and every package row's
+features say "No ID or passport registration is required". Since **27 Feb 2026** the MCMC
+prepaid standards require every non-Malaysian buyer to show an original passport (and visa
+if any), checked on a passport reader with a face match; photocopies and photos are refused
+(U Mobile and CMLink registration guides, read 2026-10-11; MCI Group news 2026-02-27). The
+claim may still be true if MyTeekoSIM is a foreign-issued roaming SIM, so this is a question,
+not a correction.
+
+Needed:
+- Is MyTeekoSIM a Malaysian prepaid line or a foreign roaming SIM? Which network?
+- Is the passport checked when the SIM is collected at the tour centre?
+- The live FAQ says packages run "12 hours to 7 days"; the database has 3 to 7 days only.
+  Is a 12-hour package coming, or should the FAQ change?
+- "Unlimited 5G Data" in the page chrome vs "4G/5G" in the package features, and no package
+  states a data allowance. What does each package include?
+
+Until answered, content (tk013 onward) does not repeat "no ID", "no passport" or "unlimited".
+
+## 15. ttklia.com: broken return-trip pages, prices behind login, unpublished charter terms
+
+**Status: open. Owner: client (ttklia). Raised 2026-10-11.**
+
+Found while researching the October transport pieces (2026-10-11):
+- **About 150 city-to-airport taxi pages 404.** Every zone with a multi-word slug fails, e.g.
+  `/taxi/bukit-bintang-bangsar-to-klia2`, which ttklia's own "Need the return trip?" button
+  links to. Single-word zones work (`/taxi/ampang-to-klia2`). Content links the homepage Taxi
+  tab until this is fixed; then switch tk172 to the zone page.
+- **Every fare and timetable search redirects to `/login`.** A Teeko visitor sent to ttklia.com
+  meets a login before seeing a price, and content cannot quote any bus or taxi fare. Needed:
+  the displayed fares per route and vehicle (day and night), or confirmation the login wall is
+  intended.
+- **Night taxi fares are about 50% higher** than daytime in ttklia's own price data, while the
+  pages say "no surge pricing". Content says "the price is fixed when you book".
+- **The to-airport taxi FAQ says the driver meets you "at the KLIA2 Arrival Hall"**, which is
+  wrong for that direction. Also: how does the driver know which terminal (the destination
+  field reads only "Kuala Lumpur International Airport")?
+- **`/bus/klia2-to-klia1`** has a page, but KLIA1 is not in the search dropdown and there is no
+  reverse page. Can the route be booked? (tk009 links the taxi pages meanwhile.)
+- **Car charter** (`/car-charter`): are fuel, tolls and parking included, what is the overtime
+  rate, what area is covered, does the drive to Genting count in the 8 or 10 hours, is 6% SST
+  added to the displayed price, and are the Alphard, Vellfire and BMW i7 still bookable (their
+  price rows carry a `deleted_at` of 2026-07-06 in the page data)? tk174 waits on this.
+- **Singapore stops**: the search dropdown shows 23 zones including "Ban San Street" (whose page
+  404s) and omits Mustafa Centre, Queen Street and Tampines (whose pages work). Which are live?
+- **Lalaport hub**: which pickup point should Grab users use (Drop Off 2 per Mitsui, Pudu
+  Entrance per BusOnlineTicket)? Where is the Teeko SIM counter at Lalaport, and its hours?
+- The mall's services page lists +6011 5587 2981 (the unconfirmed number in item 3) as the
+  airport-van hotline. Whose number is it?
+

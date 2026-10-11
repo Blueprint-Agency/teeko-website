@@ -16,22 +16,29 @@
  *     translationOf?: { locale, slug }, contentBlocks: [{ blockType, content, ... }] }
  * A `cta` block's content is an object { heading, subheading?, buttonText, url };
  * it is stored as the JSON string the frontend's CtaCard expects.
+ * A `restaurant` block is { blockType: "restaurant", restaurantId } with no
+ * content; it renders the restaurant card, as the admin editor's widget does.
+ * A card whose restaurant is not in this database (staging has different rows
+ * from production) is left out with a log line; the rest of the post imports.
  */
 import { readdirSync, readFileSync, existsSync } from "fs";
 import path from "path";
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "./index";
-import { blogPosts, blogContentBlocks, users } from "./schema";
+import { blogPosts, blogContentBlocks, restaurants, users } from "./schema";
 import { isLocale, type Locale } from "../utils/translations";
 
 export const CONTENT_DIR = path.resolve(__dirname, "../../content/blog");
 
-const BLOCK_TYPES = new Set(["h2", "h3", "h4", "paragraph", "image", "cta"]);
+const BLOCK_TYPES = new Set(["h2", "h3", "h4", "paragraph", "image", "cta", "restaurant"]);
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+// What the admin editor stores in a restaurant card's content column.
+const RESTAURANT_WIDGET = "[RESTAURANT WIDGET]";
 
 interface FileBlock {
     blockType: string;
-    content: string | Record<string, string>;
+    content?: string | Record<string, string>;
     imageSize?: "small" | "medium" | "large";
     locationId?: string;
     restaurantId?: string;
@@ -70,7 +77,11 @@ export function validate(data: any): string[] {
             errors.push(`block ${i}: blockType must be one of ${[...BLOCK_TYPES].join(", ")}`);
             return;
         }
-        if (b.blockType === "cta") {
+        if (b.blockType === "restaurant") {
+            if (typeof b.restaurantId !== "string" || !UUID.test(b.restaurantId)) {
+                errors.push(`block ${i}: restaurant needs a restaurantId (uuid)`);
+            }
+        } else if (b.blockType === "cta") {
             const c = b.content;
             if (!c || typeof c !== "object" || !c.heading || !c.buttonText || !c.url) {
                 errors.push(`block ${i}: cta content needs heading, buttonText and url`);
@@ -126,6 +137,18 @@ async function importOne(name: string, data: ContentFile, authorId: string | und
         translationGroupId = original.group ?? original.id;
     }
 
+    const cardIds = data.contentBlocks.filter((b) => b.blockType === "restaurant").map((b) => b.restaurantId!);
+    const known = new Set(
+        cardIds.length
+            ? (await db.select({ id: restaurants.id }).from(restaurants).where(inArray(restaurants.id, cardIds))).map((r) => r.id)
+            : [],
+    );
+    const blocks = data.contentBlocks.filter((b) => {
+        if (b.blockType !== "restaurant" || known.has(b.restaurantId!)) return true;
+        console.warn(`[content] ${name}: restaurant ${b.restaurantId} not in this database, card left out`);
+        return false;
+    });
+
     const status = data.status ?? "PUBLISHED";
     await db.transaction(async (tx) => {
         const [post] = await tx
@@ -147,10 +170,10 @@ async function importOne(name: string, data: ContentFile, authorId: string | und
             .set({ translationGroupId: translationGroupId ?? post.id })
             .where(eq(blogPosts.id, post.id));
         await tx.insert(blogContentBlocks).values(
-            data.contentBlocks.map((b, index) => ({
+            blocks.map((b, index) => ({
                 blogPostId: post.id,
                 blockType: b.blockType,
-                content: typeof b.content === "string" ? b.content : JSON.stringify(b.content),
+                content: b.blockType === "restaurant" ? RESTAURANT_WIDGET : typeof b.content === "string" ? b.content : JSON.stringify(b.content),
                 orderIndex: String(index),
                 locationId: b.locationId,
                 restaurantId: b.restaurantId,
