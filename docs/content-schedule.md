@@ -23,7 +23,7 @@ October 2026. 20 English pieces while the ttklia.com path and the locale layer a
 
 | ID | Piece | Primary keyword | Type | Slug | Status | Evidence |
 |---|---|---|---|---|---|---|
-| tk001 | ttklia.com cta on all 12 existing posts + nav link |  | Build |  | Not started | Not counted in the 190. OPEN-ITEMS #1: waits on the client’s link plan and UTM convention |
+| tk001 | ttklia.com cta on all 12 existing posts + nav link |  | Build |  | In progress | Not counted in the 190. 15 Oct 2026: ttklia cta block added in admin to the 9 older posts without one (the 3 F1 posts already link the F1 shuttle), UTM utm_medium=blog&utm_campaign=<slug>&utm_content=en. Nav link “Airport Transfer” (utm_medium=nav) is on staging (branch feat/ttklia-nav), not yet on main. OPEN-ITEMS #1: the client has not confirmed the UTM convention |
 | tk002 | Locale layer: data model, routing, hreflang, switcher |  | Build |  | Live | Not counted in the 190. OPEN-ITEMS #2: every BM and 中文 piece depends on it |
 | tk003 | GA4 outbound-click event · restaurant page metadata · F1 cluster refresh |  | Build |  | Not started | Not counted in the 190. KPI 2 baseline and a quick ranking lift |
 | tk004 | MDAC: fill in Malaysia's arrival card before you fly | mdac malaysia | Transport · EN | /blog/mdac-malaysia | Live | 14,800/mo · SD 32. Route: Homepage: plan the ride |
