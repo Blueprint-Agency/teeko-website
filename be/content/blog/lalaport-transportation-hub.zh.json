@@ -1,0 +1,232 @@
+{
+  "title": "Lalaport BBCC交通枢纽：巴士、储物柜和休息室",
+  "slug": "lalaport-transportation-hub",
+  "locale": "zh",
+  "status": "PUBLISHED",
+  "metaDescription": "Lalaport BBCC里的Lalaport交通枢纽：从Hang Tuah站怎么走、登车、储物柜、休息室，以及从这里出发的所有巴士。",
+  "featureImage": "https://bucket.teeko.ai/teeko-prod/blogs/2026/10/1792064710495-feature-lalaport-hub-ticket-counter.jpg",
+  "translationOf": {
+    "locale": "en",
+    "slug": "lalaport-transportation-hub"
+  },
+  "contentBlocks": [
+    {
+      "blockType": "paragraph",
+      "content": "<p>Lalaport交通枢纽（Lalaport Transportation Hub）是Bukit Bintang的Lalaport BBCC商场里的巴士总站，位于东中庭（East Atrium）LG1层，地址是No. 2 Jalan Hang Tuah，24小时开放。从这里出发的长途巴士开往新加坡、Johor、Melaka、Seremban、Hat Yai，以及吉隆坡的两个机场。枢纽和Hang Tuah轻快铁及单轨火车站相连，由ttklia.com运营（<a href=\"https://www.straitstimes.com/asia/se-asia/taking-the-coach-to-kl-heres-what-you-can-expect-at-the-new-lalaport-transport-hub\">The Straits Times</a>）。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>这篇指南告诉你怎么在商场里找到枢纽、出发前要做什么、候车时有哪些设施，以及从这里能搭巴士去哪里。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "重点速览"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>Lalaport交通枢纽在哪里？</strong>在Lalaport Bukit Bintang City Centre（BBCC）东中庭LG1层，No. 2 Jalan Hang Tuah, Kuala Lumpur。"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>晚上开吗？</strong>开，24小时。商场的店铺和餐厅按一般营业时间，所以深夜的枢纽很安静。"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>可以寄放行李吗？</strong>可以。巴士车位附近有36个储物柜，24小时RM20到RM55，按大小收费。"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>搭火车怎么去？</strong>搭轻快铁或单轨火车到Hang Tuah站，走有盖通道进商场，再下到LG1。"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>Lalaport巴士开往哪里？</strong>新加坡、Johor、Melaka、Seremban、Hat Yai、KLIA2和KLIA Terminal 1，都可以在ttklia.com预订。"
+    },
+    {
+      "blockType": "h2",
+      "content": "在Lalaport BBCC商场里找到巴士总站"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Lalaport BBCC有三个中庭：西中庭、主中庭和东中庭。枢纽在东中庭的LG层。火车站的连接通道从商场另一头进来，初次去请多留几分钟。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "从Hang Tuah轻快铁或单轨火车站"
+    },
+    {
+      "blockType": "image",
+      "content": "{\"url\":\"https://bucket.teeko.ai/teeko-prod/blogs/2026/10/1792064707822-hang-tuah-station-gates-to-lalaport.jpg\",\"alt\":\"Hang Tuah站的闸门，上方是Bukit Bintang City Centre招牌，指示LaLaport在前方50米\"}",
+      "imageSize": "medium"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>从Hang Tuah站沿着有盖走道走到商场，大约三分钟（<a href=\"https://mitsui-shopping-park.com.my/LaLaportBBCC/About/aboutMall?dian_id=1&amp;id=44&amp;name=SERVICES\">LaLaport BBCC</a>）。通道把你带进西中庭Level 1。从那里下到LG层，再一直走到东中庭。带着行李的话有更快的走法：直走到max fashion店，搭店前的电梯下到LG。出电梯左转，经过一排食店，枢纽的指示牌就在你左手边（<a href=\"https://www.busonlineticket.com/blog/lalaport-transportation-guide/\">BusOnlineTicket</a>）。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "搭捷运（MRT）"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>搭捷运加影线（Kajang Line）在Merdeka站下车，从B出口出去，跟着往Hang Tuah和BBCC的指示牌走（<a href=\"https://www.busonlineticket.com/blog/lalaport-transportation-guide/\">BusOnlineTicket</a>）。这段路比从Hang Tuah站走过去远，行李重的话就叫Grab。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "搭Grab或德士"
+    },
+    {
+      "blockType": "image",
+      "content": "{\"url\":\"https://bucket.teeko.ai/teeko-prod/blogs/2026/10/1792064709531-lalaport-entrance-taxi-drop-off.jpg\",\"alt\":\"Lalaport BBCC的玻璃门入口，德士一般在这里下客\"}",
+      "imageSize": "medium"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>哪个下车点离枢纽最近，各方说法不同。商场说是LaLaport Drop Off 2，也就是Jalan Hang Tuah入口（<a href=\"https://mitsui-shopping-park.com.my/LaLaportBBCC/Events/eventDetail?id=3039&amp;dian_id=1\">LaLaport BBCC</a>）。BusOnlineTicket则说是G层的Pudu Entrance，那里有电梯和扶梯下到LG（<a href=\"https://www.busonlineticket.com/blog/lalaport-transportation-guide/\">BusOnlineTicket</a>）。在app里设其中一个，进去后跟着Transportation Hub的指示牌走。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "从枢纽出发"
+    },
+    {
+      "blockType": "image",
+      "content": "{\"url\":\"https://bucket.teeko.ai/teeko-prod/blogs/2026/10/1792064706944-lalaport-hub-ticket-kiosks.jpg\",\"alt\":\"Lalaport交通枢纽巴士售票柜台旁的自助售票机\"}",
+      "imageSize": "medium"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>能的话，到之前先买好票。枢纽有人工售票柜台和自助售票机，但手机里有票就不用排队。接着：</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ul><li><strong>核对上车资料。</strong>订单上写着巴士公司、时间和上车点。不同巴士公司的车位不一样。</li><li><strong>办理登车，在休息室等。</strong>售票柜台和餐厅旁有座位。快出发时办理登车，进候车休息室。</li><li><strong>留意屏幕。</strong>和机场一样的出发屏幕会显示每班巴士和它的状态。</li><li><strong>到你的车位上车。</strong>在闸口把订单给巴士公司职员看。</li></ul>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>去新加坡？初次搭的话请早点到，准备好护照和SG Arrival Card（新加坡入境卡）。<a href=\"/zh/blog/kl-to-singapore-bus\">吉隆坡到新加坡巴士指南</a>讲了过关流程。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "枢纽里有什么"
+    },
+    {
+      "blockType": "image",
+      "content": "{\"url\":\"https://bucket.teeko.ai/teeko-prod/blogs/2026/10/1792064707371-lalaport-hub-departure-board.jpg\",\"alt\":\"Lalaport BBCC中庭的巴士出发显示屏，列出新加坡各下车点，旁边有往1至6号月台的指示牌\"}",
+      "imageSize": "medium"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>枢纽启用之前，很多去新加坡的巴士在Berjaya Times Square路边上客。现在枢纽有11个巴士车位，约30家巴士公司在这里营运（<a href=\"https://mitsui-shopping-park.com.my/LaLaportBBCC/Events/eventDetail?id=3039&amp;dian_id=1\">LaLaport BBCC</a>）。候车时可以用这些设施：</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ul><li><strong>行李储物柜。</strong>巴士车位附近有36个，24小时RM20到RM55，按大小收费。24小时内开几次都不另外收费（<a href=\"https://www.straitstimes.com/asia/se-asia/taking-the-coach-to-kl-heres-what-you-can-expect-at-the-new-lalaport-transport-hub\">The Straits Times</a>）。</li><li><strong>候车休息室。</strong>有冷气，有插座给手机或手提电脑充电。</li><li><strong>Wi-Fi。</strong>枢纽内免费。</li><li><strong>现金。</strong>同一层有ATM和换钱柜台，方便换令吉或新加坡元。</li><li><strong>吃的。</strong>有CU便利店卖饮料和热食，商场里还有拉面、日式咖喱和韩式烧烤餐厅。</li><li><strong>厕所和祈祷室。</strong>枢纽内有厕所，LG层有男女分开的祈祷室（surau）。</li><li><strong>无障碍设施。</strong>为年长旅客和轮椅使用者提供设施，另有24小时保安监控。</li><li><strong>你的SIM卡。</strong>如果你订了<a href=\"/zh/travel-sim-malaysia\">Teeko旅游SIM卡</a>，可以到Lalaport BBCC的旅游中心（tour centre）领取。具体柜台资料会随订单发给你。</li></ul>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>记住，枢纽不关门，商场会关。如果你的巴士凌晨2点开，先趁餐厅还没打烊吃饱，包里备些零食。<a href=\"/zh/blog/supper-in-kuala-lumpur\">宵夜指南</a>列出了附近的深夜美食。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Lalaport巴士开往哪里"
+    },
+    {
+      "blockType": "image",
+      "content": "{\"url\":\"https://bucket.teeko.ai/teeko-prod/blogs/2026/10/1792064705208-lalaport-hub-bus-bays.jpg\",\"alt\":\"Lalaport BBCC里的Lalaport交通枢纽，长途巴士停在有编号的室内车位\"}",
+      "imageSize": "large"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>以下是ttklia.com在Lalaport枢纽出售的路线。先选目的地，再在预订页面选日期、时间和巴士公司。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<div style=\"overflow-x:auto\"><table style=\"border-collapse:collapse;width:100%;font-size:0.95em\"><thead><tr><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">地区</th><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">目的地</th></tr></thead><tbody><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">新加坡</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">24个下车点，从Bugis、HarbourFront到Woodlands、Jurong East。完整名单见<a href=\"/zh/blog/kl-to-singapore-bus\">吉隆坡到新加坡巴士指南</a>。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Johor和Melaka</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\"><a href=\"https://ttklia.com/bus/lalaport-to-jb-sentral?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">JB Sentral</a>、CIQ JB Sentral、<a href=\"https://ttklia.com/bus/lalaport-to-larkin-sentral?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">Larkin Sentral</a>、City Plaza、KSL Hotel、Johor Premium Outlet、Skudai、Tampoi、Taman Ungku Tun Aminah、Terminal Kota Iskandar、Tangkak、Yong Peng和<a href=\"https://ttklia.com/bus/lalaport-to-melaka-sentral?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">Melaka Sentral</a></td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Negeri Sembilan</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\"><a href=\"https://ttklia.com/bus/lalaport-to-seremban-terminal-one?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">Seremban Terminal One</a></td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">机场</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\"><a href=\"https://ttklia.com/bus/lalaport-to-klia2?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">KLIA2</a>和<a href=\"https://ttklia.com/bus/lalaport-to-klia1?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">KLIA Terminal 1</a></td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">泰国</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\"><a href=\"https://ttklia.com/bus/lalaport-to-hat-yai?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">Hat Yai</a></td></tr></tbody></table></div>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>往KLIA Terminal 1和KLIA2的接驳车（van）也从这里出发。如果你要搭飞机，<a href=\"/zh/blog/bukit-bintang-to-klia2\">Bukit Bintang到KLIA2指南</a>比较了巴士、火车和德士。</p>"
+    },
+    {
+      "blockType": "cta",
+      "content": {
+        "heading": "在Lalaport枢纽选巴士",
+        "subheading": "从Lalaport交通枢纽开往新加坡、Johor、Seremban、Hat Yai和吉隆坡两个机场的长途巴士。在ttklia.com选日期和巴士公司。",
+        "buttonText": "查看Lalaport出发的巴士",
+        "url": "https://ttklia.com/guide/how-to-get-from-lalaport?utm_source=teeko&utm_medium=blog&utm_campaign=lalaport_transportation_hub&utm_content=zh"
+      }
+    },
+    {
+      "blockType": "h2",
+      "content": "抵达Lalaport"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>巴士进站后，你在室内的LG1下车。如果酒店房间还没好，可以先把行李放进储物柜，领点现金，再上去搭火车。从新加坡过来？<a href=\"/zh/blog/singapore-to-kl-bus\">新加坡到吉隆坡巴士指南</a>讲了过关、MDAC，以及车票上要核对什么。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "从枢纽去市区各处"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Hang Tuah站有轻快铁Ampang线和Sri Petaling线，以及吉隆坡单轨火车。搭单轨火车两站就到Bukit Bintang，终点站是KL Sentral。短程的话，BOLEH BOLEH Ride按需接驳车覆盖Pudu、Bukit Bintang和Imbi，每位成人每趟RM4，在mobi app预订，高峰时段最多加RM2（<a href=\"https://mitsui-shopping-park.com.my/LaLaportBBCC/About/aboutMall?dian_id=1&amp;id=44&amp;name=SERVICES\">LaLaport BBCC</a>）。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>多待几天？看看<a href=\"/zh/blog/things-to-do-in-bukit-bintang\">Bukit Bintang好玩的地方</a>，每个地方怎么搭车或步行都写清楚了。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "常见问题"
+    },
+    {
+      "blockType": "h3",
+      "content": "Lalaport交通枢纽在哪里？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Lalaport交通枢纽在Lalaport BBCC商场东中庭LG1层，地址是No. 2 Jalan Hang Tuah, Bukit Bintang，有有盖走道连接Hang Tuah轻快铁和单轨火车站。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "Lalaport交通枢纽24小时开放吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>是的。Lalaport交通枢纽24小时开放，夜班巴士照常进出。Lalaport BBCC的店铺和餐厅按一般营业时间，吃饭要提前安排。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "Lalaport有行李储物柜吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>有。Lalaport枢纽的巴士车位附近有36个行李储物柜，24小时RM20到RM55，按大小收费，24小时内随时可以打开。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "搭Grab去Lalaport巴士总站，在哪里下车？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>商场说离巴士总站最近的e-hailing下车点是LaLaport Drop Off 2，也就是Jalan Hang Tuah入口。BusOnlineTicket建议Pudu Entrance。不管从哪个进去，都跟着指示牌下到东中庭LG1。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "可以从Lalaport搭巴士去机场吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>可以。Lalaport有巴士开往<a href=\"https://ttklia.com/bus/lalaport-to-klia2?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">KLIA2</a>和<a href=\"https://ttklia.com/bus/lalaport-to-klia1?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">KLIA Terminal 1</a>，可以在ttklia.com预订。先确认你的航班在哪个航站楼。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "总结"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Lalaport交通枢纽是Bukit Bintang一个24小时的室内巴士总站，就在火车线上。从Hang Tuah站进来，到东中庭LG1，时间多的话把行李放进储物柜。准备好出发，就<a href=\"https://ttklia.com/guide/how-to-get-from-lalaport?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=lalaport_transportation_hub&amp;utm_content=zh\">在ttklia.com预订Lalaport出发的巴士</a>。</p>"
+    }
+  ]
+}

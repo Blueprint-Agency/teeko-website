@@ -1,0 +1,219 @@
+{
+  "title": "马来西亚入境卡MDAC：出发前怎么填写",
+  "slug": "mdac-malaysia",
+  "locale": "zh",
+  "status": "PUBLISHED",
+  "metaDescription": "马来西亚入境卡MDAC免费，约5分钟填完，抵达前3天开放提交。逐栏讲解表格、谁可免填，以及到了KLIA2之后怎么走。",
+  "featureImage": null,
+  "translationOf": {
+    "locale": "en",
+    "slug": "mdac-malaysia"
+  },
+  "contentBlocks": [
+    {
+      "blockType": "paragraph",
+      "content": "<p>马来西亚入境卡MDAC（Malaysia Digital Arrival Card，马来西亚数字入境卡）是一份免费的网上表格，大多数外国旅客在抵达马来西亚之前都必须提交。你要在抵达前3天内（含提交当天）到<a href=\"https://imigresen-online.imi.gov.my/mdac/main\">imigresen-online.imi.gov.my</a>填写。护照、航班号和酒店地址都准备好的话，大约五分钟就能填完。过移民局柜台时，出示MDAC确认信和护照即可。新加坡公民、马来西亚永久居民等少数群体可以免填。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>这篇指南按表格现在的样子，逐栏讲解马来西亚入境卡填写方法、哪些错误会导致被拒、谁可以走自动通关闸口（autogate）免排队，以及在KLIA2过了移民局之后该做什么。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "重点速览"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>MDAC是什么？</strong>一份免费的网上入境表格，大多数外国旅客在抵达马来西亚前必须提交。自2024年1月1日起强制实施（<a href=\"https://www.imi.gov.my/index.php/en/pengumuman/malaysia-digital-arrival-card-mdac-for-foreign-visitors-2/\">马来西亚移民局</a>）。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>什么时候可以提交？</strong>抵达日期前3天内，提交当天也算在内。如果你星期六落地，星期四起就可以提交。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>谁不需要填MDAC？</strong>新加坡公民、持外交护照和公务护照者、马来西亚永久居民和长期准证（Long Term Pass）持有人，以及持特定文莱、泰国和印尼边境证件的人。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>在哪里提交？</strong>在imigresen-online.imi.gov.my网站或MyNIISe应用程序上提交，完全免费。要你输入银行卡资料的网站，都不是真正的表格。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>到了KLIA2怎么办？</strong>在移民局柜台出示MDAC和护照，符合条件的话也可以走自动通关闸口。之后跟着指示牌去Level 1的交通枢纽（Transportation Hub），搭巴士进吉隆坡或去其他城市。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "马来西亚入境卡是什么，谁需要填写"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>所有入境马来西亚的外国公民都需要MDAC，除非属于免填群体。它取代了以前的纸质入境卡，和签证是两回事。如果你的国籍去马来西亚需要签证，两样都要办。<a href=\"https://www.imi.gov.my/index.php/en/pengumuman/malaysia-digital-arrival-card-mdac-for-foreign-visitors-2/\">马来西亚移民局</a>规定以下旅客免填：</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ul><li>新加坡公民</li><li>持外交护照和公务护照者</li><li>马来西亚永久居民和长期准证持有人</li><li>持文莱身份证明书（General Certificate of Identity，GCI）者</li><li>持文莱马来西亚常旅客便利证（Brunei Malaysia Frequent Traveller Facility）者</li><li>持泰国边境通行证（Thailand Border Pass）者</li><li>持印尼跨境旅行证件（PLB）者</li></ul>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>有两类人常常搞错。新加坡永久居民不是新加坡公民，所以除非持有马来西亚长期准证，否则都要填MDAC。另外，小孩也不能免：同行的每个人都要各填一份，用各自的护照号码。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>每次入境都要重新填一份MDAC。表格只对应一个抵达日期，去年的确认信不能用在今年的旅行。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "什么时候提交：抵达前3天内"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>MDAC最早可以在抵达前3天提交，提交当天也算在内。表格上写得很清楚：“your trip must be within 3 days (including the date of submission)”，意思是行程必须在3天内，含提交当天。太早提交，系统不会接受你的日期。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>举个例子：你星期六在KLIA2落地，星期四、五、六都可以提交。建议星期四或星期五填好。那时你在家，WiFi稳定，订票邮件都在手边，不用站在登机口用很慢的网络赶着填。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>从新加坡搭巴士或开车入境也一样。交通方式选LAND（陆路），日期填你过关的那天。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "马来西亚入境卡填写：MDAC表格逐栏说明"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><a href=\"https://imigresen-online.imi.gov.my/mdac/main\">imigresen-online.imi.gov.my/mdac/main</a>上的表格共有22个栏位，分成三组。以下是每一栏要填什么，已在2026年10月3日对照线上表格核实。表格是英文的，所以栏位名称照原样列出。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<div style=\"overflow-x:auto\"><table style=\"border-collapse:collapse;width:100%;font-size:0.95em\"><thead><tr><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">栏位</th><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">怎么填</th></tr></thead><tbody><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Name（姓名）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">和护照上印的完全一致。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Passport No.（护照号码）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">照抄护照资料页。请检查两遍，这是最常见的打错之处。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Date of Birth（出生日期）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">照护照填写。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Nationality / Citizenship（国籍）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">签发你护照的国家。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Place of Birth（出生地）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">从列表中选国家。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Sex（性别）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">按护照选Male（男）或Female（女）。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Date of Passport Expiry（护照到期日）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">照护照填写。如果六个月内到期，出发前先换新护照。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Email Address, Confirm Email Address（电邮及确认电邮）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">填一个在机场能用手机打开的邮箱，确认信会发到这里。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Country / Region Code, Mobile No.（国家或地区代码、手机号码）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">你自己的手机号码，加上国家代码。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Date of Arrival（抵达日期）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">你在马来西亚落地的日期，按当地时间。必须在3天的提交期内。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Date of Departure（离境日期）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">你计划离开马来西亚的日期。这一栏必填，用回程航班日期或你估计的日期。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Flight / Vessel / Transportation No.（航班、船只或交通工具编号）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">订票记录上的航班号，只填字母和数字。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Mode of Travel（交通方式）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">AIR（航空）、LAND（陆路）或SEA（海路）。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Last Port of Embarkation before Malaysia（抵马前最后出发地）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">飞往马来西亚的最后一程从哪里起飞。如果在曼谷转机，就填泰国，不是你自己的国家。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Accommodation of Stay（住宿类型）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Hotel/Motel/Rest House（酒店、汽车旅馆、招待所）、Residence of Friends/Relatives（亲友家）或Others（其他）。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Address (In Malaysia)（马来西亚地址）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">第一晚住宿的地址。只能填字母和数字，所以要去掉逗号、句号和斜线。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">State（州属）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">住吉隆坡市中心就选WP Kuala Lumpur。Petaling Jaya和Sepang属于Selangor。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">Postcode（邮区编号）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">酒店订单上的五位数字。</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">City（城市）</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">选好州属后从列表中选择。</td></tr></tbody></table></div>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>提交前要拖动滑块证明你不是机器人（“Drag to Verify”）。然后把每一栏再核对一遍。网站菜单有Registration、Check Registration、Check Visit Pass和Check Egate Eligibility，但没有修改选项。如果提交后发现填错，就用正确资料重新提交一份MDAC，不确定的话到柜台问移民官。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>把确认邮件存到手机里，再截个图。到了移民局柜台，别指望机场WiFi。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "只在真正的MDAC网站填写"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>MDAC是免费的，提交渠道只有两个：移民局网站imigresen-online.imi.gov.my，以及马来西亚从2026年3月31日起分阶段推出的MyNIISe应用程序（<a href=\"https://www.mfa.gov.sg/travelling-overseas/travel-advisories-notices-and-visa-information/malaysia/\">新加坡外交部</a>）。有些仿冒网站照抄表格，再收一笔“手续费”。有的还以付费广告的形式出现在搜索结果里，排在真正的网站上面。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>输入任何资料前先看网址栏。真正的表格网址以<strong>imi.gov.my</strong>结尾，而且从来不会要你的银行卡号。想用应用程序的话，请通过<a href=\"https://www.imi.gov.my/index.php/en/now-it-easier-with-niise/\">移民局的NIISe页面</a>到正规应用商店下载MyNIISe，不要点讯息里的链接。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "自动通关闸口：谁可以不排队"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>根据<a href=\"https://imigresen-online.imi.gov.my/mdac/egate\">移民局的eGate资格页面</a>，来自63个国家的旅客以商务或社交访问目的入境时，可以在KLIA和KLIA2使用自动通关闸口。你可以在该页面输入护照资料，查询自己是否符合资格。一些旧海报和旅游网站还写着10个国家，那份名单已经过时。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>使用自动通关闸口需要：</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ul><li>来自符合资格国家的护照，有效期至少六个月</li><li>在3天提交期内提交的MDAC（永久居民和长期准证持有人除外）</li><li>第一次入境时，先到人工柜台登记并核实护照</li></ul>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>完成第一次登记后，离境时就可以走自动通关闸口，下次来马来西亚时入境和离境都能用。来自泰国、柬埔寨、老挝、菲律宾、越南、缅甸、印尼和东帝汶的旅客只能在离境时使用自动通关闸口。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>新加坡公民免填MDAC，但如果想登记使用自动通关闸口，仍应在抵达前三天提交一份（新加坡外交部）。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "在KLIA2过了移民局：先搞定SIM卡，再搭车"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>护照通关后，领取行李，过海关，走进入境大厅。离开航站楼前有两件事值得先做：让手机能上网，以及找对巴士。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>如果你出发前订了<a href=\"/zh/travel-sim-malaysia\">Teeko旅游SIM卡</a>，拿着订单上的二维码到KLIA2的旅游中心（tour centre）领取，具体柜台信息会随订单确认信发给你。领取不需要证件，走出机场前地图和叫车应用就能用。不确定你的手机用实体SIM卡还是eSIM？我们的<a href=\"/zh/blog/what-is-esim\">两分钟eSIM指南</a>讲清楚两者的区别。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>然后跟着巴士指示牌去Level 1的KLIA2交通枢纽。快速巴士从这里开往KL Sentral、市中心的Pudu Sentral、Bukit Bintang的Lalaport BBCC，还有更远的Penang、Ipoh、Melaka和Genting Highlands。行李多或者很晚才落地的话，同样的路线也可以预订德士或带司机的包车。</p>"
+    },
+    {
+      "blockType": "cta",
+      "content": {
+        "heading": "到了KLIA2？订好巴士或德士",
+        "subheading": "KLIA2交通枢纽出发的巴士，开往KL Sentral、Pudu Sentral、Bukit Bintang、Penang、Ipoh和Melaka。在ttklia.com选好日期和座位。",
+        "buttonText": "在ttklia.com安排行程",
+        "url": "https://ttklia.com/?utm_source=teeko&utm_medium=blog&utm_campaign=mdac&utm_content=zh"
+      }
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>下了飞机肚子饿？<a href=\"/zh/restaurants\">餐厅指南</a>收录了KL Sentral、Bukit Bintang和吉隆坡其他地区的餐厅评分和订位链接。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "常见问题"
+    },
+    {
+      "blockType": "h3",
+      "content": "可以到了马来西亚再填MDAC吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>不可以。MDAC必须在抵达前提交，也就是抵达日期前3天内。允许落地后补填的宽限期已在2023年12月31日结束。建议出发前一天填好，不用依赖机场WiFi。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "马来西亚入境卡填错了，可以修改吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>MDAC网站没有修改选项。如果填错了，就用正确资料重新提交一份，不确定的话问移民官。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "小孩需要单独填MDAC吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>需要。每位外国旅客都要有自己的MDAC，包括小孩和婴儿，因为每份表格对应一个护照号码。只有新加坡公民等免填群体不用填。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "MDAC是签证吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>不是。MDAC是入境申报，不是入境许可。如果你的国籍去马来西亚需要签证，签证照样要办，MDAC也要提交。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "填写马来西亚入境卡要钱吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>MDAC是免费的。只在imigresen-online.imi.gov.my或MyNIISe应用程序上提交；收费的网站都是第三方，不是移民局。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "总结"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>出发前一两天，到真正的imi.gov.my网站填写马来西亚入境卡，护照、航班号和第一晚的住宿地址放在手边。确认信截图保存。到了KLIA2，过移民局，领SIM卡，然后去Level 1的交通枢纽。落地前<a href=\"https://ttklia.com/?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=mdac&amp;utm_content=zh\">在ttklia.com订好KLIA2出发的巴士或德士</a>，到了就能直接上车。</p>"
+    }
+  ]
+}

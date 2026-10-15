@@ -1,0 +1,251 @@
+{
+  "title": "Bukit Bintang美食：吃什么、在哪吃",
+  "slug": "bukit-bintang-food",
+  "locale": "zh",
+  "status": "PUBLISHED",
+  "metaDescription": "Bukit Bintang美食，从路边摊到酒店餐厅：晚上的Jalan Alor、Lot 10 Hutong和日本料理、Pavilion，还有纯素餐厅。",
+  "featureImage": null,
+  "translationOf": {
+    "locale": "en",
+    "slug": "bukit-bintang-food"
+  },
+  "contentBlocks": [
+    {
+      "blockType": "paragraph",
+      "content": "<p>Bukit Bintang美食，几条街之内就能满足各种预算。Jalan Alor是小吃街，天黑后最热闹。Lot 10地下层有小贩美食广场，顶楼是日本餐厅。Pavilion Kuala Lumpur好几层都有餐厅。周围还有纯素餐馆、酒店餐厅，以及一家在Level 59的酒吧。这篇指南带你逐一认识，附上<a href=\"/zh/restaurants\">Teeko餐厅目录</a>里的店家，以及从KLIA2怎么过来。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "重点速览"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>想吃街头小吃去哪里？</strong>Jalan Alor。整条街都是海鲜餐馆、小贩摊和咖啡店，晚上最热闹（<a href=\"https://www.malaysia.travel/explore/bukit-bintang\">Tourism Malaysia</a>）。"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>Jalan Alor是清真的吗？</strong>情况不一。有些摊位卖猪肉，有些不卖，点餐前逐摊确认。"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>哪里可以在冷气里吃饭？</strong>Lot 10地下层的Lot 10 Hutong、Lot 10顶楼的日本餐厅，还有Pavilion的餐饮楼层。"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>有不含猪肉的拉面吗？</strong>有。Lot 10的TORIGEN用鸡汤做拉面，不含猪肉、不用猪油、不含酒精。店家称自己为无猪肉（pork-free），并非清真认证。"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<strong>从KLIA2怎么过来？</strong>搭巴士到Lalaport BBCC，离Bukit Bintang两站单轨火车；或看<a href=\"/zh/blog/klia2-to-bukit-bintang\">KLIA2到Bukit Bintang指南</a>了解所有选择。"
+    },
+    {
+      "blockType": "h2",
+      "content": "Jalan Alor：天黑后的Bukit Bintang美食"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Tourism Malaysia形容Jalan Alor是一条满是海鲜餐馆、小贩摊和咖啡店的街，供应马来西亚和各国美食，入夜后烤炉和炒锅就开火（<a href=\"https://www.malaysia.travel/explore/bukit-bintang\">Tourism Malaysia</a>）。露天摊位上有沙爹、烤海鲜、鸡翅、牛肉串、面食和油炸小吃。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "df56dd3c-751a-4ae5-9a47-10c7dcd317c7"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>想吃明火烤海鲜，Meng Kee Grill Fish就在Jalan Alor上。菜单以海鲜和烧烤为主，适合配冰饮料吃顿晚一点的饭。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "0b680be6-668d-42d4-b851-55b480ea6dfc"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>坐下之前先把整条街走一遍。如果你在意，记得逐摊问清楚有没有猪肉。半夜还饿？<a href=\"/zh/blog/supper-in-kuala-lumpur\">吉隆坡宵夜指南</a>列出更多深夜去处。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Lot 10：楼下小贩摊，楼上日本料理"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Lot 10购物中心位于50 Jalan Sultan Ismail。地下层是Lot 10 Hutong，把吉隆坡知名的小贩摊集中在同一个屋檐下（<a href=\"https://www.malaysia.travel/explore/bukit-bintang\">Tourism Malaysia</a>）。Lot 10自己的网站链接到Lot 10 Hutong的外卖页面，页面标明非清真（<a href=\"https://www.lot10.com.my/\">Lot 10</a>）。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>顶楼是J's Gate Dining，一整层都是日本餐厅，其中两家在Teeko目录里。TORIGEN Chicken Ramen的浓郁鸡汤拉面由日籍老板创制，不含猪肉、不用猪油、不含酒精。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "382f608a-a310-4141-b408-506c21c29513"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>同一层的Kuro Ramen卖豚骨拉面，用的是猪肉汤底。日籍老板Akira Nagata和一位拉面师傅一起研发了这个配方。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "e4193742-ea36-4583-bdf8-9f6bcb008fce"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>搭手扶梯上顶楼吃拉面，或下到地下层吃小贩美食。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Pavilion Kuala Lumpur：好几层都有吃的"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>根据Pavilion的餐饮目录，餐厅分布在Level 1的Gourmet Emporium、Level 3和4的Connection、Level 6（包括Tokyo Street），以及Level 8和9的Pavilion Elite（<a href=\"https://www.pavilion-kl.com/store-category/fb-restaurants/\">Pavilion Kuala Lumpur</a>）。商场很大，出发前先查好你想去的店。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Kampachi Pavilion在Level 6，是Kampachi在Equatorial Hotel以外开的首家分店。由日本厨师团队主理日本料理，食材来自日本，包括东京丰洲市场（Toyosu Market）的海鲜。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "c2bed047-050c-46dd-9913-c7f123443bae"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>计划去吃晚餐之前，先打开餐厅卡片看地址和路线。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Bukit Bintang附近的纯素和植物性餐厅"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Kusa Japanese Vegan Restaurant在2 Lorong Ceylon，卖日式纯素料理，从Bukit Bintang单轨火车站走路就到。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "ff60a8bf-eb47-4028-befd-61d80072eafa"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Minf Hauze Vegan Cafe是全植物性餐厅，烹调不用大蒜、洋葱、蛋、奶制品、味精、蜂蜜或酒。地址是88 Jalan Raja Chulan的Cosway Building 3楼，从Raja Chulan单轨火车站走几分钟就到。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "faedb3dc-c2b9-45c3-a5bf-2241336403e0"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>想找更多全城的植物性餐厅，请看<a href=\"/zh/blog/vegan-restaurant-kuala-lumpur\">吉隆坡素食餐厅指南</a>。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "特别日子的晚餐"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Li Yen是Jalan Imbi上The Ritz-Carlton里的中餐厅，供应经典中菜已超过20年，菜单由行政中餐总厨Alex Au设计，随季节更换。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "ec0ce8a2-9dce-45c3-93a1-1d81c7d72909"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Sushi Oribe是Jalan Kia Peng上的omakase餐厅，2014年开业。主厨Naoya Kawasaki供应季节菜单，食材每周从日本空运过来。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "e63b7c4f-dfc9-4c5f-a442-a434c702a090"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>打开每张卡片看地址和路线，出发前查好怎么订位。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "边喝边看风景"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Vertigo是位于2 Jalan Conlay、Level 59的酒吧，可以俯瞰吉隆坡。供应现点现调的鸡尾酒和东南亚tapas，还有DJ。</p>"
+    },
+    {
+      "blockType": "restaurant",
+      "restaurantId": "2911d9e1-e279-4799-a537-fecb1ce608c0"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>想找一整条酒吧街，就走到Changkat Bukit Bintang。Tourism Malaysia形容那里是热闹的lounge、酒吧和夜店街，很多都有现场音乐（<a href=\"https://www.malaysia.travel/explore/bukit-bintang\">Tourism Malaysia</a>）。更多去处请看<a href=\"/zh/blog/best-bars-in-kuala-lumpur\">吉隆坡酒吧指南</a>。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "从KLIA2去Bukit Bintang"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>KLIA2到Lalaport BBCC的巴士终点是Bukit Bintang City Centre的室内枢纽，24小时开放。从那里搭单轨火车两站，经过Imbi，就到Bukit Bintang。去Pudu Sentral的巴士终点靠近Merdeka MRT站，离Pavilion Kuala Lumpur Bukit Bintang站一站。定价德士从入境大厅送你到酒店，需要45到60分钟。<a href=\"/zh/blog/klia2-to-bukit-bintang\">KLIA2到Bukit Bintang指南</a>比较了这四种方式。</p>"
+    },
+    {
+      "blockType": "cta",
+      "content": {
+        "heading": "在KLIA2落地，到Bukit Bintang吃饭",
+        "subheading": "订KLIA2到Lalaport BBCC的巴士，在室内下车，离Bukit Bintang两站单轨火车。",
+        "buttonText": "查看KLIA2到Lalaport的巴士",
+        "url": "https://ttklia.com/bus/klia2-to-lalaport-bbcc?utm_source=teeko&utm_medium=blog&utm_campaign=bukit_bintang_food&utm_content=zh"
+      }
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>住在Chinatown附近？订<a href=\"https://ttklia.com/bus/klia2-to-kl-city-centre-pudu-sentral?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=bukit_bintang_food&amp;utm_content=zh\">KLIA2到Pudu Sentral的巴士</a>，ttklia.com上的名字是KL City Centre (Pudu Sentral)。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "常见问题"
+    },
+    {
+      "blockType": "h3",
+      "content": "Jalan Alor的食物是清真的吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Jalan Alor的食物有清真也有非清真。每个摊位和餐馆自定菜单，点餐前逐一问清楚。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "Bukit Bintang有美食广场吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>有。Bukit Bintang美食广场在Lot 10 Hutong，位于Lot 10购物中心地下层。Pavilion Kuala Lumpur的Level 1 Gourmet Emporium也有餐厅。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "在Bukit Bintang哪里吃得到无猪肉拉面？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>在Bukit Bintang，可以到Lot 10顶楼的TORIGEN Chicken Ramen吃无猪肉拉面。它用鸡汤，不含猪肉、不用猪油、不含酒精。它没有被描述为清真认证。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "Jalan Alor什么时候最热闹？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Jalan Alor晚上最热闹，摊位生火开烤，桌椅摆满整条街。天黑后去，才看得到整条街的样子。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "从KL Sentral怎么去Bukit Bintang？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>从KL Sentral去Bukit Bintang，在NU Sentral里的车站搭KL Monorail单轨火车，坐五站到Bukit Bintang。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "总结"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Bukit Bintang美食，从晚上Jalan Alor的摊位，到Lot 10地下的小贩美食广场、楼上的日本料理层、Pavilion的餐厅，还有附近几家纯素餐馆和酒店餐厅。要气氛就去街上，要冷气就去商场。带着家人或大件行李落地？<a href=\"https://ttklia.com/taxi/klia2-to-bukit-bintang-bangsar?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=bukit_bintang_food&amp;utm_content=zh\">在ttklia.com订KLIA2到Bukit Bintang的定价德士</a>，直接去吃晚餐。</p>"
+    }
+  ]
+}
