@@ -94,5 +94,29 @@
     "becomes": "<p><strong>几点去？</strong>傍晚以后。据CK Travels 2023年10月的文章，摊位大约下午4.30到5.30开始摆，午夜到凌晨1点左右收，周末更晚（<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>）。</p>",
     "reason": "Stall hours attributed to their October 2023 source",
     "date": "2026-11-05"
+  },
+  {
+    "locale": "en",
+    "slug": "klia2-food",
+    "block": "Airside, before immigration: mostly for flying out",
+    "becomes": "Airside, past departure immigration: for flying out",
+    "reason": "Airside heading said \"before immigration\"; airside is past departure immigration",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "ms",
+    "slug": "makan-di-klia2",
+    "block": "Airside, sebelum imigresen: untuk penumpang berlepas",
+    "becomes": "Airside, selepas imigresen berlepas: untuk penumpang berlepas",
+    "reason": "Airside heading said \"before immigration\"; airside is past departure immigration",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "zh",
+    "slug": "klia2-food",
+    "block": "禁区（入境前）：主要给出境旅客",
+    "becomes": "禁区（过了出境移民关卡）：给出境旅客",
+    "reason": "Airside heading said \"before immigration\"; airside is past departure immigration",
+    "date": "2026-11-05"
   }
 ]
