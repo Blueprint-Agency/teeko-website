@@ -3,10 +3,12 @@
  *
  * Posts are written in the repo as JSON (one file per post per language) and
  * pushed like code. This runs after the migrations and before the server
- * starts (see the Dockerfile). It only ever CREATES: a post whose
- * (locale, slug) already exists is left alone, so anything edited later in the
- * admin panel is never overwritten. To change a live post, edit it in the
- * admin panel.
+ * starts (see the Dockerfile). It CREATES missing posts. A post whose
+ * (locale, slug) already exists is never overwritten, with one exception that
+ * only ever adds photos (see addPhotos): it gets the file's featureImage when it
+ * has none, and the file's image blocks when it has no images yet and its other
+ * blocks are still exactly what the file holds (nobody has edited it in the
+ * admin panel). Any other change to a live post is made in the admin panel.
  *
  * A file that fails validation is skipped with a log line. Nothing here may
  * stop the server from starting, so the process always exits 0.
@@ -16,6 +18,8 @@
  *     translationOf?: { locale, slug }, contentBlocks: [{ blockType, content, ... }] }
  * A `cta` block's content is an object { heading, subheading?, buttonText, url };
  * it is stored as the JSON string the frontend's CtaCard expects.
+ * An `image` block's content is a URL string or an object { url, alt?, caption? }
+ * (caption is HTML, for photo credits); it is stored as fe/src/lib/blogImage.ts reads it.
  * A `restaurant` block is { blockType: "restaurant", restaurantId } with no
  * content; it renders the restaurant card, as the admin editor's widget does.
  * A card whose restaurant is not in this database (staging has different rows
@@ -86,6 +90,8 @@ export function validate(data: any): string[] {
             if (!c || typeof c !== "object" || !c.heading || !c.buttonText || !c.url) {
                 errors.push(`block ${i}: cta content needs heading, buttonText and url`);
             }
+        } else if (b.blockType === "image" && typeof b.content === "object" && b.content !== null) {
+            if (typeof b.content.url !== "string" || !b.content.url.trim()) errors.push(`block ${i}: image content needs a url`);
         } else if (typeof b.content !== "string" || !b.content.trim()) {
             errors.push(`block ${i}: content must be a non-empty string`);
         }
@@ -115,13 +121,85 @@ function readFiles(): { name: string; data: ContentFile }[] {
     return out.sort((a, b) => Number(!!a.data.translationOf) - Number(!!b.data.translationOf));
 }
 
-async function importOne(name: string, data: ContentFile, authorId: string | undefined): Promise<"created" | "exists" | "skipped"> {
+/** What a file block becomes in the blog_content_blocks content column. */
+function storedContent(b: FileBlock): string {
+    if (b.blockType === "restaurant") return RESTAURANT_WIDGET;
+    if (typeof b.content === "string") return b.content;
+    return JSON.stringify(b.content);
+}
+
+/** The file's blocks minus restaurant cards whose restaurant this database does not have. */
+async function keptBlocks(name: string, data: ContentFile): Promise<FileBlock[]> {
+    const cardIds = data.contentBlocks.filter((b) => b.blockType === "restaurant").map((b) => b.restaurantId!);
+    const known = new Set(
+        cardIds.length
+            ? (await db.select({ id: restaurants.id }).from(restaurants).where(inArray(restaurants.id, cardIds))).map((r) => r.id)
+            : [],
+    );
+    return data.contentBlocks.filter((b) => {
+        if (b.blockType !== "restaurant" || known.has(b.restaurantId!)) return true;
+        console.warn(`[content] ${name}: restaurant ${b.restaurantId} not in this database, card left out`);
+        return false;
+    });
+}
+
+function blockRows(postId: string, blocks: FileBlock[]) {
+    return blocks.map((b, index) => ({
+        blogPostId: postId,
+        blockType: b.blockType,
+        content: storedContent(b),
+        orderIndex: String(index),
+        locationId: b.locationId,
+        restaurantId: b.restaurantId,
+        imageSize: b.imageSize,
+    }));
+}
+
+/**
+ * Photos usually arrive after a post is live, so an existing post may take them
+ * from its file. This never changes text and never touches a post edited in the
+ * admin panel: the cover is set only when the post has none, and image blocks
+ * are added only when the post has no image block yet and every other block is
+ * still identical, in order, to the file's.
+ */
+async function addPhotos(name: string, postId: string, currentCover: string | null, data: ContentFile): Promise<boolean> {
+    let changed = false;
+    if (!currentCover && data.featureImage) {
+        await db.update(blogPosts).set({ featureImage: data.featureImage, updatedAt: new Date() }).where(eq(blogPosts.id, postId));
+        console.log(`[content] ${data.locale}/${data.slug}: cover image added`);
+        changed = true;
+    }
+
+    const fileBlocks = await keptBlocks(name, data);
+    if (!fileBlocks.some((b) => b.blockType === "image")) return changed;
+    const current = (await db.select().from(blogContentBlocks).where(eq(blogContentBlocks.blogPostId, postId)))
+        .sort((a, b) => Number(a.orderIndex) - Number(b.orderIndex));
+    if (current.some((b) => b.blockType === "image")) return changed;
+
+    const key = (type: string, content: string | null, restaurantId: string | null | undefined) =>
+        JSON.stringify([type, content, restaurantId ?? null]);
+    const now = current.map((b) => key(b.blockType, b.content, b.restaurantId));
+    const want = fileBlocks.filter((b) => b.blockType !== "image").map((b) => key(b.blockType, storedContent(b), b.restaurantId));
+    if (now.length !== want.length || now.some((k, i) => k !== want[i])) {
+        console.warn(`[content] ${name}: edited since import, image blocks not added (add them in the admin panel)`);
+        return changed;
+    }
+    await db.transaction(async (tx) => {
+        await tx.delete(blogContentBlocks).where(eq(blogContentBlocks.blogPostId, postId));
+        await tx.insert(blogContentBlocks).values(blockRows(postId, fileBlocks));
+        await tx.update(blogPosts).set({ updatedAt: new Date() }).where(eq(blogPosts.id, postId));
+    });
+    console.log(`[content] ${data.locale}/${data.slug}: image blocks added`);
+    return true;
+}
+
+async function importOne(name: string, data: ContentFile, authorId: string | undefined): Promise<"created" | "exists" | "updated" | "skipped"> {
     const [existing] = await db
-        .select({ id: blogPosts.id })
+        .select({ id: blogPosts.id, featureImage: blogPosts.featureImage })
         .from(blogPosts)
         .where(and(eq(blogPosts.locale, data.locale), eq(blogPosts.slug, data.slug)))
         .limit(1);
-    if (existing) return "exists";
+    if (existing) return (await addPhotos(name, existing.id, existing.featureImage, data)) ? "updated" : "exists";
 
     let translationGroupId: string | undefined;
     if (data.translationOf) {
@@ -137,17 +215,7 @@ async function importOne(name: string, data: ContentFile, authorId: string | und
         translationGroupId = original.group ?? original.id;
     }
 
-    const cardIds = data.contentBlocks.filter((b) => b.blockType === "restaurant").map((b) => b.restaurantId!);
-    const known = new Set(
-        cardIds.length
-            ? (await db.select({ id: restaurants.id }).from(restaurants).where(inArray(restaurants.id, cardIds))).map((r) => r.id)
-            : [],
-    );
-    const blocks = data.contentBlocks.filter((b) => {
-        if (b.blockType !== "restaurant" || known.has(b.restaurantId!)) return true;
-        console.warn(`[content] ${name}: restaurant ${b.restaurantId} not in this database, card left out`);
-        return false;
-    });
+    const blocks = await keptBlocks(name, data);
 
     const status = data.status ?? "PUBLISHED";
     await db.transaction(async (tx) => {
@@ -169,17 +237,7 @@ async function importOne(name: string, data: ContentFile, authorId: string | und
             .update(blogPosts)
             .set({ translationGroupId: translationGroupId ?? post.id })
             .where(eq(blogPosts.id, post.id));
-        await tx.insert(blogContentBlocks).values(
-            blocks.map((b, index) => ({
-                blogPostId: post.id,
-                blockType: b.blockType,
-                content: b.blockType === "restaurant" ? RESTAURANT_WIDGET : typeof b.content === "string" ? b.content : JSON.stringify(b.content),
-                orderIndex: String(index),
-                locationId: b.locationId,
-                restaurantId: b.restaurantId,
-                imageSize: b.imageSize,
-            })),
-        );
+        await tx.insert(blogContentBlocks).values(blockRows(post.id, blocks));
     });
     return "created";
 }
@@ -196,7 +254,7 @@ export async function importContent(): Promise<void> {
         .where(inArray(users.role, ["ADMIN", "SUPERADMIN"]))
         .limit(1);
 
-    const tally = { created: 0, exists: 0, skipped: 0 };
+    const tally = { created: 0, updated: 0, exists: 0, skipped: 0 };
     for (const { name, data } of files) {
         try {
             const result = await importOne(name, data, admin?.id);
@@ -207,7 +265,7 @@ export async function importContent(): Promise<void> {
             console.error(`[content] ${name}: failed`, e);
         }
     }
-    console.log(`[content] done: ${tally.created} created, ${tally.exists} already there, ${tally.skipped} skipped`);
+    console.log(`[content] done: ${tally.created} created, ${tally.updated} given photos, ${tally.exists} already there, ${tally.skipped} skipped`);
 }
 
 if (require.main === module) {

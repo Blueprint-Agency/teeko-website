@@ -4,7 +4,7 @@
   "locale": "en",
   "status": "PUBLISHED",
   "metaDescription": "Things to do in Genting Highlands: Awana SkyWay, Chin Swee Temple, SkyWorlds, Skytropolis, the outlets, free things and the bus from KLIA2.",
-  "featureImage": null,
+  "featureImage": "/images/blog/covers/things-to-do-in-genting.jpg",
   "contentBlocks": [
     {
       "blockType": "paragraph",
@@ -43,6 +43,15 @@
       "content": "<p>The Awana SkyWay carries you from Sky Sentral Station at mid hill to Genting Highlands Station at the peak in about 10 minutes. It runs from 7AM to 11PM (<a href=\"https://www.rwgenting.com/en/getting-here/cable-car.html\">Resorts World Genting</a>). As listed on 5 Nov 2026, a standard gondola costs RM11 one way or RM19 return. The glass floor gondola costs RM32 one way or RM54 return, or RM29 and RM48 when you buy online at least a day ahead. Tickets bought in advance stay valid for 30 days.</p>"
     },
     {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/awana-skyway.jpg",
+        "alt": "Awana SkyWay gondolas over the rainforest, with the hilltop resort behind",
+        "caption": "Photo: <a href=\"https://commons.wikimedia.org/wiki/File:201906_Awana_Skyway_05.jpg\">Jonashtand</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>, via Wikimedia Commons, resized"
+      }
+    },
+    {
       "blockType": "paragraph",
       "content": "<p>Each passenger can take one cabin size bag into the gondola. Coming straight from the airport with a big case? Leave it at the baggage counter on Level 2 of Sky Sentral, open 24 hours, from RM22 for a small bag.</p>"
     },
@@ -51,12 +60,30 @@
       "content": "<p>Get off halfway at Chin Swee Station. Chin Swee Caves Temple sits on a rocky slope near the peak. Look for the nine storey lamp lit pagoda, the open air SkyTerrace and the 15 metre statue of Buddha (<a href=\"https://www.rwgenting.com/en/things-to-do/attractions/chinswee.html\">Resorts World Genting</a>). Tourism Malaysia lists it at 4,600 feet, open 8AM to 7PM daily (<a href=\"https://www.malaysia.travel/explore/genting-highlands\">Tourism Malaysia</a>). Keep your ticket or QR code, because you need it to carry on to the top. Want the glass floor? Buy it online the day before you go.</p>"
     },
     {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/chin-swee-caves-temple.jpg",
+        "alt": "Carved doors and door guardians at Chin Swee Caves Temple",
+        "caption": "Photo: <a href=\"https://commons.wikimedia.org/wiki/File:Genting-Highlands_Malaysia_Chin-Swee-Caves-Temple-01.jpg\">CEphoto, Uwe Aranas</a>, <a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC BY-SA 3.0</a>, via Wikimedia Commons, resized"
+      }
+    },
+    {
       "blockType": "h2",
       "content": "Spend a day at Genting SkyWorlds"
     },
     {
       "blockType": "paragraph",
       "content": "<p>Genting SkyWorlds Theme Park is the outdoor park at the top. It opened in 2022 and is split into nine themed worlds, among them Rio, Ice Age, Epic and Eagle Mountain (<a href=\"https://www.malaysia.travel/explore/genting-highlands\">Tourism Malaysia</a>). As listed on 5 Nov 2026, it opens daily from 10 AM to 6 PM and closes every Tuesday, except Malaysian national public holidays and school holidays (<a href=\"https://www.gentingskyworlds.com/\">Genting SkyWorlds</a>).</p>"
+    },
+    {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/genting-skyworlds.jpg",
+        "alt": "Genting SkyWorlds Theme Park seen from above, with cable cars overhead",
+        "caption": "Photo: <a href=\"https://commons.wikimedia.org/wiki/File:Genting_SkyWorlds_Theme_Park.jpg\">Chongkian</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>, via Wikimedia Commons, resized"
+      }
     },
     {
       "blockType": "paragraph",
@@ -83,6 +110,15 @@
       "content": "<p>SkyAvenue is the mall at the top, with more than 100 brands and shops, open daily from 10am (<a href=\"https://www.rwgenting.com/en/things-to-do/shopping/skyavenue-complex.html\">Resorts World Genting</a>). It has lockers on Level 2, a currency exchange on Level 1 and a prayer room on Level G.</p>"
     },
     {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/skyavenue.jpg",
+        "alt": "The lit atrium inside SkyAvenue at the top of Genting Highlands",
+        "caption": "Photo: <a href=\"https://commons.wikimedia.org/wiki/File:SkyAvenue_(2022).jpg\">Chongkian</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>, via Wikimedia Commons, resized"
+      }
+    },
+    {
       "blockType": "paragraph",
       "content": "<p>Under Ripley's Adventureland, Resorts World Genting also lists the Jurassic Research Centre, the 4D Trick Art Museum, the Infinity Room and Snow World (<a href=\"https://www.rwgenting.com/en/theme-parks.html\">Resorts World Genting</a>). The 4D Trick Art Museum is inside SkyAvenue (<a href=\"https://www.rwgenting.com/en/things-to-do/shopping.html\">Resorts World Genting</a>). Snow World keeps its rooms below zero (<a href=\"https://www.malaysia.travel/explore/genting-highlands\">Tourism Malaysia</a>). Each one sells its own tickets, so check its site for prices and times on the day you plan to go.</p>"
     },
@@ -105,6 +141,15 @@
     {
       "blockType": "paragraph",
       "content": "<p>The outlets sit at mid hill next to Sky Sentral, where the Awana SkyWay starts (<a href=\"https://www.rwgenting.com/en/getting-here/cable-car.html\">Resorts World Genting</a>). There are more than 150 designer brands and stores, open daily from 10am to 10pm (<a href=\"https://www.rwgenting.com/en/things-to-do/shopping/ghpo.html\">Resorts World Genting</a>). Shop on the way down, so you are not carrying bags around the top all day.</p>"
+    },
+    {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/genting-highlands-premium-outlets.jpg",
+        "alt": "Entrance of Genting Highlands Premium Outlets at mid hill",
+        "caption": "Photo: <a href=\"https://commons.wikimedia.org/wiki/File:Genting_Highlands_Premium_Outlets_(2022).jpg\">Chongkian</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>, via Wikimedia Commons, resized"
+      }
     },
     {
       "blockType": "h2",

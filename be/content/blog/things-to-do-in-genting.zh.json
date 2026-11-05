@@ -4,7 +4,7 @@
   "locale": "zh",
   "status": "PUBLISHED",
   "metaDescription": "云顶景点一次看：Awana SkyWay缆车、Chin Swee Temple、SkyWorlds、Skytropolis、outlets、免费去处，以及KLIA2直达巴士。",
-  "featureImage": null,
+  "featureImage": "/images/blog/covers/things-to-do-in-genting.jpg",
   "translationOf": {
     "locale": "en",
     "slug": "things-to-do-in-genting"
@@ -47,6 +47,15 @@
       "content": "<p>Awana SkyWay从半山的Sky Sentral Station到山顶的Genting Highlands Station，约10分钟，营业时间早上7点到晚上11点（<a href=\"https://www.rwgenting.com/en/getting-here/cable-car.html\">Resorts World Genting</a>）。按2026年11月5日页面所列，标准缆车单程RM11、来回RM19。玻璃底缆车单程RM32、来回RM54，至少提前一天网上购买则是RM29和RM48。提前买的票30天内有效。</p>"
     },
     {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/awana-skyway.jpg",
+        "alt": "Awana SkyWay缆车掠过雨林，后方是山顶度假区",
+        "caption": "图片：<a href=\"https://commons.wikimedia.org/wiki/File:201906_Awana_Skyway_05.jpg\">Jonashtand</a>，<a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>，来自Wikimedia Commons，已调整尺寸"
+      }
+    },
+    {
       "blockType": "paragraph",
       "content": "<p>每位乘客可带一件登机箱大小的行李上缆车。从机场直接过去，带着大行李箱？可以寄放在Sky Sentral Level 2的行李柜台，24小时开放，小件RM22起。</p>"
     },
@@ -55,12 +64,30 @@
       "content": "<p>中途在Chin Swee Station下车。Chin Swee Caves Temple建在靠近山顶的岩坡上，可以看到九层灯塔、露天的SkyTerrace和15米高的佛像（<a href=\"https://www.rwgenting.com/en/things-to-do/attractions/chinswee.html\">Resorts World Genting</a>）。Tourism Malaysia列出寺庙海拔4,600英尺，每天上午8点到晚上7点开放（<a href=\"https://www.malaysia.travel/explore/genting-highlands\">Tourism Malaysia</a>）。车票或二维码要留好，继续上山时还要用。想坐玻璃底缆车？出发前一天在网上买。</p>"
     },
     {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/chin-swee-caves-temple.jpg",
+        "alt": "Chin Swee Caves Temple（清水岩庙）的雕花庙门和门神",
+        "caption": "图片：<a href=\"https://commons.wikimedia.org/wiki/File:Genting-Highlands_Malaysia_Chin-Swee-Caves-Temple-01.jpg\">CEphoto, Uwe Aranas</a>，<a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC BY-SA 3.0</a>，来自Wikimedia Commons，已调整尺寸"
+      }
+    },
+    {
       "blockType": "h2",
       "content": "在Genting SkyWorlds玩一整天"
     },
     {
       "blockType": "paragraph",
       "content": "<p>Genting SkyWorlds Theme Park是山顶的户外主题乐园，2022年开幕，分成九个主题区，包括Rio、Ice Age、Epic和Eagle Mountain（<a href=\"https://www.malaysia.travel/explore/genting-highlands\">Tourism Malaysia</a>）。按2026年11月5日页面所列，每天上午10点到下午6点开放，逢星期二休息，马来西亚全国公共假期和学校假期除外（<a href=\"https://www.gentingskyworlds.com/\">Genting SkyWorlds</a>）。</p>"
+    },
+    {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/genting-skyworlds.jpg",
+        "alt": "从高处看Genting SkyWorlds主题公园，上方有缆车经过",
+        "caption": "图片：<a href=\"https://commons.wikimedia.org/wiki/File:Genting_SkyWorlds_Theme_Park.jpg\">Chongkian</a>，<a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>，来自Wikimedia Commons，已调整尺寸"
+      }
     },
     {
       "blockType": "paragraph",
@@ -87,6 +114,15 @@
       "content": "<p>SkyAvenue是山顶的商场，有100多个品牌和商店，每天上午10点起营业（<a href=\"https://www.rwgenting.com/en/things-to-do/shopping/skyavenue-complex.html\">Resorts World Genting</a>）。Level 2有储物柜，Level 1有货币兑换。</p>"
     },
     {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/skyavenue.jpg",
+        "alt": "云顶山顶SkyAvenue商场内的灯光中庭",
+        "caption": "图片：<a href=\"https://commons.wikimedia.org/wiki/File:SkyAvenue_(2022).jpg\">Chongkian</a>，<a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>，来自Wikimedia Commons，已调整尺寸"
+      }
+    },
+    {
       "blockType": "paragraph",
       "content": "<p>Resorts World Genting在Ripley's Adventureland名下还列出Jurassic Research Centre、4D Trick Art Museum、Infinity Room和Snow World（<a href=\"https://www.rwgenting.com/en/theme-parks.html\">Resorts World Genting</a>）。4D Trick Art Museum就在SkyAvenue里面（<a href=\"https://www.rwgenting.com/en/things-to-do/shopping.html\">Resorts World Genting</a>）。Snow World是零下温度的冰雪馆（<a href=\"https://www.malaysia.travel/explore/genting-highlands\">Tourism Malaysia</a>）。每个景点各自卖票，出发当天先上各自的网站查票价和开放时间。</p>"
     },
@@ -109,6 +145,15 @@
     {
       "blockType": "paragraph",
       "content": "<p>Outlets在半山，紧邻Awana SkyWay的起点Sky Sentral（<a href=\"https://www.rwgenting.com/en/getting-here/cable-car.html\">Resorts World Genting</a>）。里面有150多个品牌和商店，每天上午10点到晚上10点营业（<a href=\"https://www.rwgenting.com/en/things-to-do/shopping/ghpo.html\">Resorts World Genting</a>）。下山时再买，就不用提着购物袋在山顶走一整天。</p>"
+    },
+    {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/genting-highlands-premium-outlets.jpg",
+        "alt": "半山的Genting Highlands Premium Outlets入口",
+        "caption": "图片：<a href=\"https://commons.wikimedia.org/wiki/File:Genting_Highlands_Premium_Outlets_(2022).jpg\">Chongkian</a>，<a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>，来自Wikimedia Commons，已调整尺寸"
+      }
     },
     {
       "blockType": "h2",

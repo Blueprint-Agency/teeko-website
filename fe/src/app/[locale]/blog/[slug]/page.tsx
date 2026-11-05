@@ -132,13 +132,19 @@ export default async function BlogPostPage({ params }: PageProps<"/[locale]/blog
                     const currentSize = block.imageSize || "large";
 
                     return (
-                        <div key={block.id} className="my-10 flex justify-center">
+                        <figure key={block.id} className="my-10 flex flex-col items-center">
                             <img
                                 src={image.url}
                                 alt={image.alt || post.title}
                                 className={`max-w-full h-auto object-contain rounded-3xl shadow-xl border border-gray-100 dark:border-zinc-800 ${sizeClasses[currentSize as keyof typeof sizeClasses]}`}
                             />
-                        </div>
+                            {image.caption && (
+                                <figcaption
+                                    className="mt-3 text-xs text-gray-500 dark:text-gray-400 text-center [&_a]:underline"
+                                    dangerouslySetInnerHTML={{ __html: image.caption }}
+                                />
+                            )}
+                        </figure>
                     );
                 case "cta":
                     return <CtaCard key={block.id} {...parseCtaContent(block.content)} locale={locale} />;

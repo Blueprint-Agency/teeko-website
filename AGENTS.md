@@ -187,8 +187,10 @@ Persistence Chiro repo and adapted to a database-driven site.
   asks for a new blog post or package, that is admin-panel work, or a seed, never a `.tsx`.
 - **New blog posts can be published from the repo** (since 2026-10-05): a JSON file in
   `be/content/blog/` (`<slug>.<locale>.json`) is created in the database on the next backend
-  deploy by `be/src/db/importContent.ts`, which only creates missing posts and never
-  overwrites. After that the database copy is live: edit it in the admin panel, not the file.
+  deploy by `be/src/db/importContent.ts`, which creates missing posts and never changes their
+  text. After that the database copy is live: edit it in the admin panel, not the file. The one
+  exception is photos: a cover or image blocks added to the file later reach a post that has
+  none, as long as it has not been edited in admin. Images live in `fe/public/images/blog/`.
   Format and checks: `be/content/blog/README.md`. Guarded in `fe/tests/guards.test.ts` §8.
 - **SEO switches live in the database**: `settings.googleIndexing` (site-wide, default
   `false`), `restaurants.isIndexed`, `locations.isIndexed`. The sitemap returns empty when

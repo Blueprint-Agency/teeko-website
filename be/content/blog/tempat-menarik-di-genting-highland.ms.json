@@ -4,7 +4,7 @@
   "locale": "ms",
   "status": "PUBLISHED",
   "metaDescription": "Tempat menarik di Genting Highland: Awana SkyWay, Chin Swee Temple, SkyWorlds, Skytropolis, outlet, aktiviti percuma dan bas dari KLIA2.",
-  "featureImage": null,
+  "featureImage": "/images/blog/covers/things-to-do-in-genting.jpg",
   "translationOf": {
     "locale": "en",
     "slug": "things-to-do-in-genting"
@@ -47,6 +47,15 @@
       "content": "<p>Awana SkyWay membawa anda dari Sky Sentral Station di pertengahan bukit ke Genting Highlands Station di puncak dalam kira-kira 10 minit. Ia beroperasi dari 7 pagi hingga 11 malam (<a href=\"https://www.rwgenting.com/en/getting-here/cable-car.html\">Resorts World Genting</a>). Seperti yang disenaraikan pada 5 Nov 2026, gondola standard berharga RM11 sehala atau RM19 pergi balik. Gondola lantai kaca berharga RM32 sehala atau RM54 pergi balik, atau RM29 dan RM48 kalau dibeli dalam talian sekurang-kurangnya sehari lebih awal. Tiket yang dibeli awal sah selama 30 hari.</p>"
     },
     {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/awana-skyway.jpg",
+        "alt": "Gondola Awana SkyWay di atas hutan hujan, dengan resort di puncak bukit di belakang",
+        "caption": "Foto: <a href=\"https://commons.wikimedia.org/wiki/File:201906_Awana_Skyway_05.jpg\">Jonashtand</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>, melalui Wikimedia Commons, saiz diubah"
+      }
+    },
+    {
       "blockType": "paragraph",
       "content": "<p>Setiap penumpang boleh bawa satu beg saiz kabin ke dalam gondola. Terus dari lapangan terbang dengan beg besar? Tinggalkan di kaunter bagasi di Aras 2 Sky Sentral, dibuka 24 jam, dari RM22 untuk beg kecil.</p>"
     },
@@ -55,12 +64,30 @@
       "content": "<p>Turun di tengah jalan, di Chin Swee Station. Chin Swee Caves Temple terletak di cerun berbatu dekat puncak. Cari pagoda sembilan tingkat yang diterangi lampu, SkyTerrace terbuka dan patung Buddha setinggi 15 meter (<a href=\"https://www.rwgenting.com/en/things-to-do/attractions/chinswee.html\">Resorts World Genting</a>). Tourism Malaysia menyatakan kuil ini berada pada ketinggian 4,600 kaki dan dibuka 8 pagi hingga 7 malam setiap hari (<a href=\"https://www.malaysia.travel/explore/genting-highlands\">Tourism Malaysia</a>). Simpan tiket atau kod QR, kerana anda perlukannya untuk teruskan ke puncak. Mahu gondola lantai kaca? Beli dalam talian sehari sebelum pergi.</p>"
     },
     {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/chin-swee-caves-temple.jpg",
+        "alt": "Pintu berukir dan penjaga pintu di Chin Swee Caves Temple",
+        "caption": "Foto: <a href=\"https://commons.wikimedia.org/wiki/File:Genting-Highlands_Malaysia_Chin-Swee-Caves-Temple-01.jpg\">CEphoto, Uwe Aranas</a>, <a href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC BY-SA 3.0</a>, melalui Wikimedia Commons, saiz diubah"
+      }
+    },
+    {
       "blockType": "h2",
       "content": "Sehari di Genting SkyWorlds"
     },
     {
       "blockType": "paragraph",
       "content": "<p>Genting SkyWorlds Theme Park ialah taman tema luar di puncak. Ia dibuka pada 2022 dan dibahagikan kepada sembilan dunia bertema, antaranya Rio, Ice Age, Epic dan Eagle Mountain (<a href=\"https://www.malaysia.travel/explore/genting-highlands\">Tourism Malaysia</a>). Seperti yang disenaraikan pada 5 Nov 2026, ia dibuka setiap hari dari 10 pagi hingga 6 petang dan tutup setiap Selasa, kecuali cuti umum kebangsaan Malaysia dan cuti sekolah (<a href=\"https://www.gentingskyworlds.com/\">Genting SkyWorlds</a>).</p>"
+    },
+    {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/genting-skyworlds.jpg",
+        "alt": "Genting SkyWorlds Theme Park dilihat dari atas, dengan kereta kabel di udara",
+        "caption": "Foto: <a href=\"https://commons.wikimedia.org/wiki/File:Genting_SkyWorlds_Theme_Park.jpg\">Chongkian</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>, melalui Wikimedia Commons, saiz diubah"
+      }
     },
     {
       "blockType": "paragraph",
@@ -87,6 +114,15 @@
       "content": "<p>SkyAvenue ialah pusat beli-belah di puncak, dengan lebih 100 jenama dan kedai, dibuka setiap hari dari 10 pagi (<a href=\"https://www.rwgenting.com/en/things-to-do/shopping/skyavenue-complex.html\">Resorts World Genting</a>). Ada loker di Aras 2, pengurup wang di Aras 1, dan surau di Aras G berhampiran pawagam.</p>"
     },
     {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/skyavenue.jpg",
+        "alt": "Atrium bercahaya di dalam SkyAvenue di puncak Genting Highlands",
+        "caption": "Foto: <a href=\"https://commons.wikimedia.org/wiki/File:SkyAvenue_(2022).jpg\">Chongkian</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>, melalui Wikimedia Commons, saiz diubah"
+      }
+    },
+    {
       "blockType": "paragraph",
       "content": "<p>Di bawah Ripley's Adventureland, Resorts World Genting turut menyenaraikan Jurassic Research Centre, 4D Trick Art Museum, Infinity Room dan Snow World (<a href=\"https://www.rwgenting.com/en/theme-parks.html\">Resorts World Genting</a>). 4D Trick Art Museum terletak dalam SkyAvenue (<a href=\"https://www.rwgenting.com/en/things-to-do/shopping.html\">Resorts World Genting</a>). Snow World menawarkan suhu bawah sifar (<a href=\"https://www.malaysia.travel/explore/genting-highlands\">Tourism Malaysia</a>). Setiap tarikan menjual tiket sendiri, jadi semak harga dan waktu di laman masing-masing untuk hari anda mahu pergi.</p>"
     },
@@ -109,6 +145,15 @@
     {
       "blockType": "paragraph",
       "content": "<p>Outlet ini terletak di pertengahan bukit, bersebelahan Sky Sentral, tempat Awana SkyWay bermula (<a href=\"https://www.rwgenting.com/en/getting-here/cable-car.html\">Resorts World Genting</a>). Ada lebih 150 jenama dan kedai berjenama, dibuka setiap hari dari 10 pagi hingga 10 malam (<a href=\"https://www.rwgenting.com/en/things-to-do/shopping/ghpo.html\">Resorts World Genting</a>). Membeli-belah semasa turun, supaya anda tidak menjinjing beg di puncak sepanjang hari.</p>"
+    },
+    {
+      "blockType": "image",
+      "imageSize": "large",
+      "content": {
+        "url": "/images/blog/things-to-do-in-genting/genting-highlands-premium-outlets.jpg",
+        "alt": "Pintu masuk Genting Highlands Premium Outlets di pertengahan bukit",
+        "caption": "Foto: <a href=\"https://commons.wikimedia.org/wiki/File:Genting_Highlands_Premium_Outlets_(2022).jpg\">Chongkian</a>, <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">CC BY-SA 4.0</a>, melalui Wikimedia Commons, saiz diubah"
+      }
     },
     {
       "blockType": "h2",

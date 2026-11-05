@@ -288,7 +288,7 @@ export function BlogContentEditor({ contentBlocks, setContentBlocks, locations }
                                                         className="w-full rounded-xl border border-gray-200 bg-white p-2.5 text-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white outline-none focus:border-red-400"
                                                         placeholder="Describe what is in the image, e.g. Coach at the LaLaport BBCC boarding point"
                                                         value={parseImageContent(block.content).alt}
-                                                        onChange={e => updateBlock(index, { content: serializeImageContent({ url: parseImageContent(block.content).url, alt: e.target.value }) })}
+                                                        onChange={e => updateBlock(index, { content: serializeImageContent({ ...parseImageContent(block.content), alt: e.target.value }) })}
                                                     />
                                                     <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1.5">Read by screen readers and search engines. Leave empty only for purely decorative images.</p>
                                                 </div>

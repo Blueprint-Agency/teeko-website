@@ -524,6 +524,7 @@ interface ContentPost {
         slug: string;
         locale: string;
         metaDescription?: string;
+        featureImage?: string | null;
         contentBlocks: { blockType: string; content?: string | Record<string, string>; restaurantId?: string }[];
     };
 }
@@ -534,25 +535,54 @@ const CONTENT_POSTS: ContentPost[] = existsSync(CONTENT_DIR)
           .map((n) => ({ file: `be/content/blog/${n}`, data: JSON.parse(readFileSync(join(CONTENT_DIR, n), "utf8")) }))
     : [];
 
-/** The text a visitor reads: title, meta description, headings, paragraph text, cta copy. */
+const stripTags = (html: string) => html.replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&");
+
+/** An image block's content: a URL, an object, or that object as a JSON string (as fe/src/lib/blogImage.ts reads it). */
+function imageContent(content: string | Record<string, string>): { url: string; alt: string; caption: string } {
+    let c: Record<string, string> | string = content;
+    if (typeof c === "string" && c.trim().startsWith("{")) {
+        try {
+            c = JSON.parse(c);
+        } catch {
+            // a URL that merely looks like JSON
+        }
+    }
+    if (typeof c === "string") return { url: c.trim(), alt: "", caption: "" };
+    return { url: c.url ?? "", alt: c.alt ?? "", caption: c.caption ?? "" };
+}
+
+/** The text a visitor reads: title, meta description, headings, paragraph text, cta copy, image alt and caption. */
 function visibleText(p: ContentPost): string[] {
     const out = [p.data.title, p.data.metaDescription ?? ""];
     for (const b of p.data.contentBlocks) {
         if (b.blockType === "restaurant" || !b.content) continue;
-        if (typeof b.content === "string") out.push(b.content.replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&"));
+        if (b.blockType === "image") {
+            const img = imageContent(b.content);
+            out.push(img.alt, stripTags(img.caption));
+        } else if (typeof b.content === "string") out.push(stripTags(b.content));
         else out.push(b.content.heading ?? "", b.content.subheading ?? "", b.content.buttonText ?? "");
     }
     return out;
 }
 
-/** Every link target: paragraph hrefs and cta urls. */
+/** Every link target: paragraph and caption hrefs, and cta urls. Image sources are checked separately. */
 function links(p: ContentPost): string[] {
     const out: string[] = [];
     for (const b of p.data.contentBlocks) {
         if (b.blockType === "restaurant" || !b.content) continue;
-        if (typeof b.content === "string") {
-            for (const m of b.content.matchAll(/href="([^"]+)"/g)) out.push(m[1].replace(/&amp;/g, "&"));
-        } else if (b.content.url) out.push(b.content.url);
+        const html = b.blockType === "image" ? imageContent(b.content).caption : typeof b.content === "string" ? b.content : "";
+        for (const m of html.matchAll(/href="([^"]+)"/g)) out.push(m[1].replace(/&amp;/g, "&"));
+        if (b.blockType === "cta" && typeof b.content !== "string" && b.content.url) out.push(b.content.url);
+    }
+    return out;
+}
+
+/** Cover and inline image sources. */
+function imageSources(p: ContentPost): string[] {
+    const out = p.data.featureImage ? [p.data.featureImage] : [];
+    for (const b of p.data.contentBlocks) {
+        if (b.blockType !== "image" || !b.content) continue;
+        out.push(imageContent(b.content).url);
     }
     return out;
 }
@@ -604,6 +634,20 @@ test("content file restaurant cards name a restaurant by id", () => {
             .map((b) => `${p.file}  ${b.restaurantId ?? "(no restaurantId)"}`),
     );
     assert.deepEqual(bad, [], `Restaurant cards need a restaurantId and no content of their own:\n${bad.join("\n")}`);
+});
+
+test("content file images exist: local paths are files in fe/public, remote ones are https", () => {
+    // Images live in fe/public/images/blog/ and are served by the frontend.
+    // A credited photo (Creative Commons) carries its credit in the image block's caption.
+    const bad: string[] = [];
+    for (const p of CONTENT_POSTS) {
+        for (const src of imageSources(p)) {
+            if (src.startsWith("/")) {
+                if (!existsSync(join(FE_ROOT, "public", src))) bad.push(`${p.file}  ${src}  (not in fe/public)`);
+            } else if (!src.startsWith("https://")) bad.push(`${p.file}  ${src}  (neither a local path nor https)`);
+        }
+    }
+    assert.deepEqual(bad, [], `Content file images that would not load:\n${bad.join("\n")}`);
 });
 
 test("content file internal links resolve and carry the post's language prefix", async () => {
