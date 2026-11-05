@@ -1,0 +1,203 @@
+{
+  "title": "KLIA2行李寄存：在机场哪里寄放行李",
+  "slug": "klia2-luggage-storage",
+  "locale": "zh",
+  "status": "PUBLISHED",
+  "metaDescription": "KLIA2行李寄存柜台在Level 1和Level 2，24小时营业。附官网列出的收费、不收的物品，以及吉隆坡Lalaport交通枢纽的储物柜。",
+  "featureImage": null,
+  "translationOf": {
+    "locale": "en",
+    "slug": "klia2-luggage-storage"
+  },
+  "contentBlocks": [
+    {
+      "blockType": "paragraph",
+      "content": "<p>KLIA2行李寄存在机场的公共区域，也就是过了移民局和海关之后的地方。Baggage Solutions在Gateway@klia2设有两个有人值守的柜台，一个在Level 2入境大厅旁，一个在Level 1巴士层，两个都24小时营业（<a href=\"https://baggagesolutions.com.my/services/\">Baggage Solutions</a>）。马来西亚机场（Malaysia Airports）官网还列出另一家寄存服务Smart Storage，位置在Level 2入境层的公共大厅（<a href=\"https://www.malaysiaairports.com.my/en/klia2/shop-dine-services/services/baggage-services\">Malaysia Airports</a>）。把大行李箱寄放在这里，背个小包搭巴士进吉隆坡，回程时再领回来。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "重点速览"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>KLIA2的行李寄存在哪里？</strong>在Gateway@klia2，Level 2（入境大厅那一侧）和Level 1（巴士、网约车和租车层）各有一个柜台。Smart Storage也在Level 2。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>晚上开吗？</strong>开。Baggage Solutions的两个柜台都是24小时营业。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>寄存要多少钱？</strong>Baggage Solutions按尺寸收费，每件每24小时计。根据2026年11月5日官网列出的价格，前六天小件每天RM18，大行李箱每天RM38。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>转机时可以用吗？</strong>要先过移民局入境才行。两家寄存服务都在机场的公共区域。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p><strong>要带什么？</strong>护照。工作人员会扫描护照作记录，然后给你一张取件收据。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "柜台在哪里"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Baggage Solutions的两个柜台都在Gateway@klia2的公共大厅，也就是你走出入境大厅后会经过的商场区域（<a href=\"https://baggagesolutions.com.my/services/\">Baggage Solutions</a>）：</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ul><li><strong>L2柜台，Lot L2-136。</strong>Level 2，入境大厅那一侧。一落地就想先放下行李，就去这个。</li><li><strong>L1柜台，Lot L1-8。</strong>Level 1，巴士、网约车和租车层。KLIA2的巴士柜台也在这一层，寄完行李直接走去搭巴士。</li></ul>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>马来西亚机场官网列出的Smart Storage位于S2-2-L11单位，Level 2入境层公共大厅（<a href=\"https://www.malaysiaairports.com.my/en/klia2/shop-dine-services/services/baggage-services\">Malaysia Airports</a>）。营业时间和收费请到柜台询问。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>第一次来KLIA2？<a href=\"/zh/blog/klia2-arrival-hall\">KLIA2入境大厅指南</a>介绍了各个出口，<a href=\"/zh/blog/klia2-bus-station\">KLIA2巴士站指南</a>带你从B门一路走到Level 1。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "寄存流程"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>这是有人值守的柜台，不是自助储物柜，不用预约，直接过去就行（<a href=\"https://baggagesolutions.com.my/\">Baggage Solutions</a>）。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<ol><li><strong>交出行李</strong>，说明要寄放多久。</li><li><strong>出示护照。</strong>工作人员扫描护照作交易记录。</li><li><strong>工作人员确认尺寸类别。</strong>他们可能会检查行李，也有权拒收。</li><li><strong>付款并保管好收据。</strong>取行李时要凭收据。离开前看清楚寄存到期的日期和时间。</li></ol>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>可用马币现金、信用卡、支付宝（Alipay）或Touch 'n Go eWallet付款。提早取件不退款。超过约定时间要另外收费，约定取件日期后超过三个月没领的行李可能会被处理掉（<a href=\"https://baggagesolutions.com.my/storage-rules/\">Baggage Solutions寄存规定</a>）。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "收费"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>以下是2026年11月5日Baggage Solutions官网列出的货架寄存价格，每件每24小时计（<a href=\"https://baggagesolutions.com.my/price-list/\">Baggage Solutions价目表</a>）。寄得越久，每天越便宜。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<div style=\"overflow-x:auto\"><table style=\"border-collapse:collapse;width:100%;font-size:0.95em\"><thead><tr><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">尺寸（约）</th><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">1至6天</th><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">7至14天</th><th style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top;font-weight:700\">15天或以上</th></tr></thead><tbody><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">小件，43 x 31 x 21 cm</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM18</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM15</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM13</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">中件，60 x 42 x 25 cm</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM28</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM22</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM20</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">大件，67 x 46 x 31 cm</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM38</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM32</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM30</td></tr><tr><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">特大件、脚车或冲浪板</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM48</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM42</td><td style=\"border:1px solid rgba(127,127,127,.35);padding:8px 10px;text-align:left;vertical-align:top\">RM40</td></tr></tbody></table></div>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>独立储物柜贵一些：前六天中型柜每天RM38，大型柜每天RM48。官网没有公布按小时计的价格，只寄几个小时的话，请到柜台问。最终类别由工作人员决定，业者也注明价格可能随时调整（<a href=\"https://baggagesolutions.com.my/price-list/\">Baggage Solutions价目表</a>）。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "不收的物品"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Baggage Solutions不收会发出气味的湿食物，尤其是肉类和奶制品，也不收需要冷藏的东西。活体动物、宠物和植物都不收。危险品、化学品、易燃易爆物品、武器和会漏液的物品也一样。护照、现金、笔记本电脑、珠宝等贵重物品请随身携带（<a href=\"https://baggagesolutions.com.my/storage-rules/\">Baggage Solutions寄存规定</a>）。</p>"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>交出行李前，先把手机充电器和回来之前要用的东西拿出来。行李寄存后，要领回才能再打开。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "什么情况适合在机场寄存行李"
+    },
+    {
+      "blockType": "h3",
+      "content": "转机时间长，想进吉隆坡市区"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>过了移民局，在Level 1柜台寄放行李，再走到同一层的巴士柜台。<a href=\"https://ttklia.com/bus/klia2-to-kl-sentral?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=klia2_luggage_storage&amp;utm_content=zh\">到KL Sentral的巴士</a>让你直接接上铁路网。<a href=\"/zh/blog/klia2-to-kl-sentral\">KLIA2到KL Sentral指南</a>比较了巴士、火车和Grab。记得预留足够时间回机场、领行李、再办登机。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "酒店还要好几个小时才能入住"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>清晨落地，房间却要下午才好？有两个办法。一是把行李寄在KLIA2，之后再回来拿；二是带进市区，请酒店代为保管。出发前先问酒店入住前能不能寄放行李，交行李时记得拿行李牌或收据。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "一日游或出去几晚"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>几天后还是从KLIA2飞走？大行李箱留在机场，只带小包出门。寄满六天后每天的价格会降低，行程长一点更划算。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "Bukit Bintang的Lalaport交通枢纽储物柜"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>如果你本来就要进市区，也可以把行李带着走，存进LaLaport BBCC里Lalaport交通枢纽（Lalaport Transportation Hub）的储物柜。巴士停靠区附近有36个储物柜，按大小每天RM20至RM55，24小时内可以随意开关多次（<a href=\"https://www.straitstimes.com/asia/se-asia/taking-the-coach-to-kl-heres-what-you-can-expect-at-the-new-lalaport-transport-hub\">The Straits Times</a>）。<a href=\"https://ttklia.com/bus/klia2-to-lalaport-bbcc?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=klia2_luggage_storage&amp;utm_content=zh\">KLIA2到Lalaport BBCC的巴士</a>直接在Bukit Bintang的交通枢纽下车。进去的路线和那里的其他设施，请看<a href=\"/zh/blog/lalaport-transportation-hub\">Lalaport交通枢纽指南</a>。</p>"
+    },
+    {
+      "blockType": "cta",
+      "content": {
+        "heading": "行李寄好了？选好进城的巴士",
+        "subheading": "巴士从KLIA2交通枢纽Level 1开往KL Sentral、Pudu Sentral、Lalaport BBCC和TBS。在ttklia.com查看班次并订票。",
+        "buttonText": "查看KLIA2出发的巴士",
+        "url": "https://ttklia.com/bus/destinations?utm_source=teeko&utm_medium=blog&utm_campaign=klia2_luggage_storage&utm_content=zh"
+      }
+    },
+    {
+      "blockType": "h2",
+      "content": "常见问题"
+    },
+    {
+      "blockType": "h3",
+      "content": "KLIA2有行李寄存吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>有。Baggage Solutions在Gateway@klia2有两个柜台，Level 2的Lot L2-136和Level 1的Lot L1-8，都是24小时营业。马来西亚机场官网也列出Smart Storage，在Level 2入境层公共大厅。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "KLIA2行李寄存多少钱？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>根据2026年11月5日Baggage Solutions官网列出的价格，前六天小件每天RM18，中件RM28，大件RM38，特大件RM48。寄得更久，每天的价格更低。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "KLIA2行李寄存是24小时的吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Baggage Solutions在KLIA2的两个柜台每天24小时营业。Smart Storage的营业时间请到柜台确认。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "在KLIA2转机可以寄存行李吗？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>要先过移民局入境。寄存柜台在机场的公共区域，必须入境马来西亚才能到达。</p>"
+    },
+    {
+      "blockType": "h3",
+      "content": "吉隆坡市区还有哪里可以寄放行李？"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>Bukit Bintang的Lalaport交通枢纽在巴士停靠区附近有36个储物柜，按大小每天RM20至RM55。从KLIA2可以直接搭巴士过去。</p>"
+    },
+    {
+      "blockType": "h2",
+      "content": "总结"
+    },
+    {
+      "blockType": "paragraph",
+      "content": "<p>KLIA2行李寄存很好找：Level 2入境大厅旁，或Level 1巴士旁边。带上护照，收好收据。然后<a href=\"https://ttklia.com/bus/destinations?utm_source=teeko&amp;utm_medium=blog&amp;utm_campaign=klia2_luggage_storage&amp;utm_content=zh\">在ttklia.com选好进吉隆坡的巴士</a>，轻装出发。</p>"
+    }
+  ]
+}
