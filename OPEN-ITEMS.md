@@ -6,7 +6,7 @@ declined, the reason is recorded so it is not re-pitched every month.
 
 Numbers are referenced from code comments and `AGENTS.md`; do not renumber.
 
-Last updated **2026-10-11**, when the October content research raised items 14 and 15. Before that, **2026-10-03**, when the trilingual site went live (item 2), the client waived translation review (item 2) and confirmed the SIM claims (item 11), and the SIM payment cards were logged (item 13).
+Last updated **2026-11-05**, when the November content raised item 16. Before that **2026-10-11**, when the October content research raised items 14 and 15. Before that, **2026-10-03**, when the trilingual site went live (item 2), the client waived translation review (item 2) and confirmed the SIM claims (item 11), and the SIM payment cards were logged (item 13).
 
 ## 1. ttklia.com conversion path does not exist on the site
 
@@ -290,3 +290,22 @@ Found while researching the October transport pieces (2026-10-11):
 - The mall's services page lists +6011 5587 2981 (the unconfirmed number in item 3) as the
   airport-van hotline. Whose number is it?
 
+
+## 16. Dated facts in the November posts, and what the client should still confirm
+
+**Status: open. Owner: Blueprint (refresh dates), client (confirmations). Raised 2026-11-05.**
+
+Fixed in code on 2026-11-05 (be/content/corrections.json): the past 12 to 16 October Awana SkyWay
+maintenance notice is gone from the Genting day-trip post (EN, BM, 中文), and the Jalan Alor stall
+hours now say they come from CK Travels' October 2023 article. The "broken character" reported in
+the Jalan Alor Food Street restaurant row was a false alarm: the row holds a correct apostrophe.
+
+Still to act on:
+- **31 Dec 2026: prices expire** in Things to do in Genting (tk023): Eufloria's introductory prices
+  and the Skytropolis Adventure Combo. Recheck rwgenting.com and update the post in January.
+- **Places named from Google Maps** (tk014, tk015, tk018, tk019, tk020, written 2026-11-05) are a
+  snapshot. Recheck that each is still open at the six-month refresh, or when the restaurant rows
+  are added in admin and the posts can switch to cards.
+- **Client to confirm, nothing published depends on it:** Jalan Alor stall hours and payment
+  habits (only private guides publish them); Smart Storage's hours and rates at KLIA2 (its site
+  was down on 2026-11-05).

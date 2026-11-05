@@ -266,6 +266,70 @@ export async function importContent(): Promise<void> {
         }
     }
     console.log(`[content] done: ${tally.created} created, ${tally.updated} given photos, ${tally.exists} already there, ${tally.skipped} skipped`);
+    await applyCorrections();
+}
+
+/**
+ * Text corrections to live posts, listed in be/content/corrections.json:
+ *   [{ locale, slug, block, becomes, reason, date }]
+ * `block` is the exact current content of one block; `becomes` is its new
+ * content, or null to remove the block. A correction applies only while a block
+ * still holds exactly `block`, so it runs once, never touches a block edited in
+ * admin since, and can stay in the file as a record. Update the post's content
+ * file the same way so the repo matches what is live.
+ */
+export const CORRECTIONS_FILE = path.resolve(__dirname, "../../content/corrections.json");
+
+interface Correction {
+    locale: Locale;
+    slug: string;
+    block: string;
+    becomes: string | null;
+    reason?: string;
+}
+
+async function applyCorrections(): Promise<void> {
+    if (!existsSync(CORRECTIONS_FILE)) return;
+    let list: Correction[];
+    try {
+        list = JSON.parse(readFileSync(CORRECTIONS_FILE, "utf8"));
+        if (!Array.isArray(list)) throw new Error("not an array");
+    } catch (e) {
+        console.error("[content] corrections.json unreadable, skipped", e);
+        return;
+    }
+    let applied = 0;
+    for (const c of list) {
+        if (!c || !isLocale(c.locale) || typeof c.slug !== "string" || typeof c.block !== "string" || !(typeof c.becomes === "string" || c.becomes === null)) {
+            console.error("[content] correction skipped, needs { locale, slug, block, becomes }", c?.slug);
+            continue;
+        }
+        try {
+            const [post] = await db
+                .select({ id: blogPosts.id })
+                .from(blogPosts)
+                .where(and(eq(blogPosts.locale, c.locale), eq(blogPosts.slug, c.slug)))
+                .limit(1);
+            if (!post) continue;
+            const blocks = await db.select().from(blogContentBlocks).where(eq(blogContentBlocks.blogPostId, post.id));
+            const target = blocks.find((b) => b.content === c.block);
+            if (!target) {
+                const done = c.becomes === null || blocks.some((b) => b.content === c.becomes);
+                if (!done) console.warn(`[content] correction for ${c.locale}/${c.slug} not applied: the block was edited since (${c.reason ?? ""})`);
+                continue;
+            }
+            await db.transaction(async (tx) => {
+                if (c.becomes === null) await tx.delete(blogContentBlocks).where(eq(blogContentBlocks.id, target.id));
+                else await tx.update(blogContentBlocks).set({ content: c.becomes }).where(eq(blogContentBlocks.id, target.id));
+                await tx.update(blogPosts).set({ updatedAt: new Date() }).where(eq(blogPosts.id, post.id));
+            });
+            applied++;
+            console.log(`[content] corrected ${c.locale}/${c.slug}: ${c.reason ?? ""}`);
+        } catch (e) {
+            console.error(`[content] correction for ${c.locale}/${c.slug} failed`, e);
+        }
+    }
+    console.log(`[content] corrections: ${applied} applied`);
 }
 
 if (require.main === module) {

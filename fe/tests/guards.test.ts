@@ -604,6 +604,34 @@ test("content files contain no promissory or unverifiable claims", () => {
     assert.deepEqual(bad, [], `Banned claims found:\n${bad.join("\n")}`);
 });
 
+test("corrections.json: well formed, clean copy, and mirrored in the post's content file", () => {
+    // be/content/corrections.json fixes live posts block by block on deploy
+    // (be/src/db/importContent.ts applyCorrections). The new text is published
+    // copy, and the content file must already hold it so the repo matches live.
+    const file = join(FE_ROOT, "..", "be", "content", "corrections.json");
+    if (!existsSync(file)) return;
+    const list = JSON.parse(readFileSync(file, "utf8")) as { locale: string; slug: string; block: string; becomes: string | null }[];
+    const bad: string[] = [];
+    for (const [i, c] of list.entries()) {
+        const id = `corrections.json[${i}] ${c?.locale}/${c?.slug}`;
+        if (!c || !["en", "ms", "zh"].includes(c.locale) || typeof c.slug !== "string" || typeof c.block !== "string" || !(typeof c.becomes === "string" || c.becomes === null)) {
+            bad.push(`${id}  needs { locale, slug, block, becomes: string | null }`);
+            continue;
+        }
+        if (c.becomes !== null) {
+            const text = stripTags(c.becomes);
+            if (/[–—]/.test(text)) bad.push(`${id}  em or en dash in the new text`);
+            for (const { re, why } of BANNED_CLAIMS) if (re.test(text)) bad.push(`${id}  ${re}: ${why}`);
+        }
+        const post = CONTENT_POSTS.find((p) => p.data.locale === c.locale && p.data.slug === c.slug);
+        if (!post) continue;
+        const contents = post.data.contentBlocks.map((b) => (typeof b.content === "string" ? b.content : ""));
+        if (contents.includes(c.block)) bad.push(`${id}  ${post.file} still holds the old block; update it too`);
+        if (c.becomes !== null && !contents.includes(c.becomes)) bad.push(`${id}  ${post.file} does not hold the new block`);
+    }
+    assert.deepEqual(bad, [], `Corrections that are malformed or out of step with the content files:\n${bad.join("\n")}`);
+});
+
 test("content files use no em or en dashes", () => {
     // Copy voice, AGENTS.md "E - Em dash". Hyphens inside words and URLs are fine.
     const bad = CONTENT_POSTS.flatMap((p) => visibleText(p).filter((t) => /[–—]/.test(t)).map((t) => `${p.file}  ${t.trim().slice(0, 100)}`));
@@ -665,6 +693,8 @@ test("content file internal links resolve and carry the post's language prefix",
             }
             if (!resolves(u.slice(want.length) || "/", prefixes)) bad.push(`${p.file}  ${u}  (no such route)`);
         }
+        // Place links go to Google Maps itself, not to a data provider's mirror of it.
+        for (const u of links(p).filter((l) => /maps\.firecrawl\.dev/.test(l))) bad.push(`${p.file}  ${u}  (link the Google Maps listing instead)`);
     }
     assert.deepEqual(bad, [], `Content file links that break or drop the reader's language:\n${bad.join("\n")}`);
 });

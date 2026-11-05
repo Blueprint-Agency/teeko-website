@@ -79,7 +79,11 @@ How the three versions are built and linked is in "Multilingual" below.
    counts, ratings, hours and photos all come from the database via the admin panel, never from
    source. `src/data/sampleRestaurants.ts` is a dev fixture and the guard fails if any route can
    reach it. Reason: the schema has real TripAdvisor-keyed rows; a plausible fake beside them is
-   indistinguishable to a visitor. See PRODUCT.md for the full absent list.
+   indistinguishable to a visitor. See PRODUCT.md for the full absent list. Blog prose may name a place that is
+   not in the database (user decision 2026-11-05, the November food pieces) only by linking its
+   public listing (Google Maps or its own site), stating only what that listing or another cited
+   source says, with no ratings or review counts, and calling it halal only when JAKIM or its own
+   certificate confirms it. Such a place gets no restaurant card until its row exists.
 3. **No promissory or unverifiable claims** in published copy: guarantees, "#1", "cheapest",
    "best in Malaysia", "official partner", "risk-free", "100% ...". The full regex list with a
    reason per pattern is in the guard. Carve-out: `/terms` and `/privacy` are excluded because
@@ -191,6 +195,8 @@ Persistence Chiro repo and adapted to a database-driven site.
   text. After that the database copy is live: edit it in the admin panel, not the file. The one
   exception is photos: a cover or image blocks added to the file later reach a post that has
   none, as long as it has not been edited in admin. Images live in `fe/public/images/blog/`.
+  A text fix to a live post can also ship from the repo, as an exact block replacement in
+  `be/content/corrections.json` (format in the README there).
   Format and checks: `be/content/blog/README.md`. Guarded in `fe/tests/guards.test.ts` §8.
 - **SEO switches live in the database**: `settings.googleIndexing` (site-wide, default
   `false`), `restaurants.isIndexed`, `locations.isIndexed`. The sitemap returns empty when

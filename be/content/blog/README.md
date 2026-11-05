@@ -12,6 +12,13 @@ file's `image` blocks when the post has no image yet and every other block is st
 what the file holds (nobody has edited it in admin). If it has been edited, the importer logs
 it and you add the photos in the admin editor instead.
 
+**Fixing text in a live post: `be/content/corrections.json`.** Each entry is
+`{ "locale", "slug", "block": "<exact current content of one block>", "becomes": "<new content>" | null, "reason", "date" }`.
+On deploy the importer replaces that block (or removes it when `becomes` is null) only while it
+still holds exactly `block`, so it runs once and never overwrites an edit made in admin since.
+Change the post's content file the same way; the guard fails if the file and the correction
+disagree. Entries stay in the file as the record of what was corrected and why.
+
 ## One file per post per language
 
 `<slug>.<locale>.json`, for example `mdac-malaysia.en.json`.

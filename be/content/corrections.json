@@ -1,0 +1,98 @@
+[
+  {
+    "locale": "en",
+    "slug": "jalan-alor-food",
+    "block": "<p>Jalan Alor restaurants open from lunchtime. The night market stalls set up from around 4.30pm to 5.30pm and close around midnight to 1am, later at weekends (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "becomes": "<p>Jalan Alor restaurants open from lunchtime. CK Travels, writing in October 2023, found the night market stalls setting up from around 4.30pm to 5.30pm and closing around midnight to 1am, later at weekends (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "reason": "Stall hours attributed to their October 2023 source",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "ms",
+    "slug": "makan-di-jalan-alor",
+    "block": "<p>Restoran di Jalan Alor buka dari tengah hari. Gerai pasar malam dipasang sekitar 4.30 hingga 5.30 petang dan tutup sekitar tengah malam hingga 1 pagi, lebih lewat pada hujung minggu (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "becomes": "<p>Restoran di Jalan Alor buka dari tengah hari. Menurut CK Travels pada Oktober 2023, gerai pasar malam dipasang sekitar 4.30 hingga 5.30 petang dan tutup sekitar tengah malam hingga 1 pagi, lebih lewat pada hujung minggu (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "reason": "Stall hours attributed to their October 2023 source",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "zh",
+    "slug": "jalan-alor-food",
+    "block": "<p>亚罗街的餐馆中午就开。夜市摊位大约下午4.30到5.30开始摆，午夜到凌晨1点左右收，周末更晚（<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>）。</p>",
+    "becomes": "<p>亚罗街的餐馆中午就开。据CK Travels 2023年10月的文章，夜市摊位大约下午4.30到5.30开始摆，午夜到凌晨1点左右收，周末更晚（<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>）。</p>",
+    "reason": "Stall hours attributed to their October 2023 source",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "en",
+    "slug": "genting-highlands-day-trip",
+    "block": "<p><strong>Maintenance, 12 to 16 October 2026.</strong> The Awana SkyWay closes for quarterly maintenance on those dates. The Genting SkyWay, the resort's other cable car, runs from 7AM to 11PM instead. If your trip falls in that window, ask your driver to take you to its station.</p>",
+    "becomes": null,
+    "reason": "Past maintenance notice (12 to 16 Oct 2026) removed",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "zh",
+    "slug": "genting-highlands-day-trip",
+    "block": "<strong>维修期：2026年10月12日至16日。</strong>Awana SkyWay在这几天关闭，进行季度维修。度假村的另一条缆车Genting SkyWay照常运行，时间是早上7点到晚上11点。如果你的行程落在这段时间，请司机载你去Genting SkyWay的车站。",
+    "becomes": null,
+    "reason": "Past maintenance notice (12 to 16 Oct 2026) removed",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "ms",
+    "slug": "cara-ke-genting-highlands",
+    "block": "<strong>Penyelenggaraan, 12 hingga 16 Oktober 2026.</strong> Awana SkyWay ditutup untuk penyelenggaraan suku tahunan pada tarikh tersebut. Genting SkyWay, kereta kabel resort yang satu lagi, beroperasi dari 7 pagi hingga 11 malam sebagai ganti. Kalau perjalanan anda jatuh dalam tempoh itu, minta pemandu bawa anda ke stesen Genting SkyWay.",
+    "becomes": null,
+    "reason": "Past maintenance notice (12 to 16 Oct 2026) removed",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "en",
+    "slug": "jalan-alor-food",
+    "block": "<p>The permanent restaurants open from lunchtime, but the street is quiet in the day. The night market stalls set up from around 4.30pm to 5.30pm and usually close around midnight to 1am, with many staying open later at weekends (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "becomes": "<p>The permanent restaurants open from lunchtime, but the street is quiet in the day. CK Travels, writing in October 2023, found the night market stalls setting up from around 4.30pm to 5.30pm and usually closing around midnight to 1am, with many staying open later at weekends. Each stall keeps its own hours (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "reason": "Stall hours attributed to their October 2023 source",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "ms",
+    "slug": "makan-di-jalan-alor",
+    "block": "<p>Restoran tetap dibuka dari waktu tengah hari, tetapi jalan ini sunyi pada siang hari. Gerai pasar malam mula dipasang sekitar 4.30 hingga 5.30 petang dan biasanya tutup sekitar tengah malam hingga 1 pagi. Banyak gerai buka lebih lewat pada hujung minggu (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "becomes": "<p>Restoran tetap dibuka dari waktu tengah hari, tetapi jalan ini sunyi pada siang hari. Menurut CK Travels pada Oktober 2023, gerai pasar malam mula dipasang sekitar 4.30 hingga 5.30 petang dan biasanya tutup sekitar tengah malam hingga 1 pagi. Banyak gerai buka lebih lewat pada hujung minggu, dan setiap gerai ada waktunya sendiri (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "reason": "Stall hours attributed to their October 2023 source",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "zh",
+    "slug": "jalan-alor-food",
+    "block": "<p>街上的固定餐馆中午就开，但白天整条街比较冷清。夜市摊位大约下午4.30到5.30开始摆，通常午夜到凌晨1点左右收，很多摊位周末开得更晚（<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>）。</p>",
+    "becomes": "<p>街上的固定餐馆中午就开，但白天整条街比较冷清。据CK Travels 2023年10月的文章，夜市摊位大约下午4.30到5.30开始摆，通常午夜到凌晨1点左右收，很多摊位周末开得更晚，各摊营业时间不一（<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>）。</p>",
+    "reason": "Stall hours attributed to their October 2023 source",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "en",
+    "slug": "jalan-alor-food",
+    "block": "<p><strong>When should I go?</strong> In the evening. Stalls set up from around 4.30pm to 5.30pm and close around midnight to 1am, later at weekends (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "becomes": "<p><strong>When should I go?</strong> In the evening. CK Travels, writing in October 2023, found stalls setting up from around 4.30pm to 5.30pm and closing around midnight to 1am, later at weekends (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "reason": "Stall hours attributed to their October 2023 source",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "ms",
+    "slug": "makan-di-jalan-alor",
+    "block": "<p><strong>Bila patut pergi?</strong> Waktu petang dan malam. Gerai mula dibuka sekitar 4.30 hingga 5.30 petang dan tutup sekitar tengah malam hingga 1 pagi, lebih lewat pada hujung minggu (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "becomes": "<p><strong>Bila patut pergi?</strong> Waktu petang dan malam. Menurut CK Travels pada Oktober 2023, gerai mula dibuka sekitar 4.30 hingga 5.30 petang dan tutup sekitar tengah malam hingga 1 pagi, lebih lewat pada hujung minggu (<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>).</p>",
+    "reason": "Stall hours attributed to their October 2023 source",
+    "date": "2026-11-05"
+  },
+  {
+    "locale": "zh",
+    "slug": "jalan-alor-food",
+    "block": "<p><strong>几点去？</strong>傍晚以后。摊位大约下午4.30到5.30开始摆，午夜到凌晨1点左右收，周末更晚（<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>）。</p>",
+    "becomes": "<p><strong>几点去？</strong>傍晚以后。据CK Travels 2023年10月的文章，摊位大约下午4.30到5.30开始摆，午夜到凌晨1点左右收，周末更晚（<a href=\"https://www.cktravels.com/jalan-alor-food-street-kuala-lumpur/\">CK Travels</a>）。</p>",
+    "reason": "Stall hours attributed to their October 2023 source",
+    "date": "2026-11-05"
+  }
+]
